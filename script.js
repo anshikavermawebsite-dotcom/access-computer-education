@@ -1952,7 +1952,7 @@ Object.keys(QB).forEach(k => QB[k] = QB[k].map((r, i) => {
 
 /* ===== Auto translation (Hindi <-> English) : question + options, cache ke saath ===== */
 const TRC = store.get('acec_tr2', {}); let _trT = 0;
-const saveTR = () => { clearTimeout(_trT); _trT = setTimeout(() => { const k = Object.keys(TRC); if (k.length > 5000) k.slice(0, 1500).forEach(x => delete TRC[x]); store.set('acec_tr2', TRC); }, 1500); };
+const saveTR = () => { clearTimeout(_trT); _trT = setTimeout(() => { const k = Object.keys(TRC); if (k.length > 7000) k.slice(0, 2000).forEach(x => delete TRC[x]); store.set('acec_tr2', TRC); }, 1500); };
 const needTr = (x, to) => !!x && /\s/.test(x.trim()) && (to === 'hi' ? (!isDev(x) && /[A-Za-z]{3,}/.test(x)) : isDev(x));
 async function gtr(x, to) {
   if (!needTr(x, to)) return x;
@@ -1978,6 +1978,82 @@ function ensureLang(b, to) {
 }
 const qOf = b => b.q[lang] ?? b.q[b.ol || 'en'];
 const oOf = b => b.o[lang] ?? b.o[b.ol || 'en'];
+
+/* ===== MS Office + Python Q&A : Hindi chunte hi saare question-answer Hindi me ===== */
+/* Kaam kaise karta hai: jo card screen ke paas aata hai, uska question + answer upar wale gtr() se Hindi me
+   badal jaata hai (cache ke saath, dobara internet nahi lagta). English chunte hi original wapas.
+   Code / short technical answers (jaise "Ctrl + B", ".docx", "print()") jaise ke taise rehte hain. */
+var qaS = { io: null, queue: [], busy: 0, touched: new Set(), chip: null, failed: false, hide: 0 };
+function qaIsHinglish(x) {
+  return /\b(kya|hai|hain|hota|hoti|kisliye|kyu|kaun|konsa|konsi|upyog|karne|karta|karte|ke liye|ka|ki|ko|aur|yeh|bhi)\b/i.test(x) && !/\b(what|which|how|the|is|are|of)\b/i.test(x);
+}
+function qaChip(msg, keep) {
+  if (!qaS.chip) { qaS.chip = document.createElement('div'); qaS.chip.className = 'trchip'; document.body.appendChild(qaS.chip); }
+  clearTimeout(qaS.hide);
+  if (!msg) { qaS.chip.classList.remove('show'); return; }
+  qaS.chip.textContent = msg; qaS.chip.classList.add('show');
+  if (!keep) qaS.hide = setTimeout(() => qaS.chip.classList.remove('show'), 3200);
+}
+function qaTextNodes(card) {
+  const out = [];
+  card.querySelectorAll('h4, p').forEach(el => {
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: n => (!n.nodeValue.trim() || (n.parentElement && n.parentElement.closest('code,strong,pre'))) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+    });
+    let n; while ((n = w.nextNode())) out.push(n);
+  });
+  return out;
+}
+const QA_SPLIT = /^(\s*(?:Q\d+\.\s*)?(?:\([A-Da-d]\)\s*)?)([\s\S]*?)(\s*)$/;
+async function qaCard(card) {
+  if (card.__qa || lang !== 'hi') return;
+  if (qaIsHinglish(card.textContent)) { card.__qa = 'skip'; return; }
+  card.__qa = 'busy'; qaS.touched.add(card);
+  let bad = 0;
+  const jobs = qaTextNodes(card).map(async n => {
+    const o = n.__o !== undefined ? n.__o : n.nodeValue, m = o.match(QA_SPLIT);
+    if (!m || !needTr(m[2], 'hi') || qaIsHinglish(m[2])) return;
+    const r = await gtr(m[2], 'hi');
+    if (r === null) { bad++; return; }
+    if (lang !== 'hi') return;
+    n.__o = o; n.nodeValue = m[1].replace(/Q(\d+)\./, 'प्र.$1') + r + m[3];
+  });
+  await Promise.all(jobs);
+  if (lang !== 'hi') { card.__qa = null; return; }
+  card.querySelectorAll('p strong').forEach(s => { if (s.textContent.trim() === 'Answer:') { s.__o = 'Answer:'; s.textContent = 'उत्तर:'; } });
+  card.querySelectorAll('h4').forEach(h => { const f = h.firstChild; if (f && f.nodeType === 3 && f.__o === undefined && /^\s*Q\d+\./.test(f.nodeValue)) { f.__o = f.nodeValue; f.nodeValue = f.nodeValue.replace(/Q(\d+)\./, 'प्र.$1'); } });
+  if (bad) { card.__qa = null; if (!qaS.failed) { qaS.failed = true; qaChip('⚠ अनुवाद नहीं हो पाया, इंटरनेट जाँचें (English दिख रहा है)'); setTimeout(() => qaS.failed = false, 20000); } }
+  else card.__qa = 'hi';
+}
+function qaPump() {
+  while (qaS.busy < 4 && qaS.queue.length) {
+    const c = qaS.queue.shift(); qaS.busy++;
+    qaCard(c).finally(() => { qaS.busy--; if (!qaS.queue.length && !qaS.busy) { if (lang === 'hi' && !qaS.failed) qaChip('✅ Q&A हिन्दी में तैयार'); } else qaPump(); });
+  }
+}
+function qaApplyLang() {
+  if (!qaS.io) {
+    qaS.io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return; qaS.io.unobserve(e.target);
+      if (lang === 'hi' && !e.target.__qa) { if (!qaS.queue.length && !qaS.busy) qaChip('🌐 Q&A हिन्दी में बदले जा रहे हैं…', true); qaS.queue.push(e.target); qaPump(); }
+    }), { rootMargin: '700px 0px' });
+  }
+  const cards = document.querySelectorAll('.mso-qa-list .qa-card');
+  if (lang === 'hi') {
+    cards.forEach(c => { if (!c.__qa) qaS.io.observe(c); });
+  } else {
+    qaS.queue.length = 0; qaChip('');
+    cards.forEach(c => qaS.io.unobserve(c));
+    qaS.touched.forEach(c => {
+      qaTextNodes(c).forEach(n => { if (n.__o !== undefined) { n.nodeValue = n.__o; n.__o = undefined; } });
+      c.querySelectorAll('strong').forEach(s => { if (s.__o) { s.textContent = s.__o; s.__o = undefined; } });
+      c.querySelectorAll('h4').forEach(h => { const f = h.firstChild; if (f && f.nodeType === 3 && f.__o !== undefined) { f.nodeValue = f.__o; f.__o = undefined; } });
+      c.__qa = null;
+    });
+    qaS.touched.clear();
+  }
+}
+
 
 /* Ek hi sahi-option number (index) 3 baar lagatar na aaye: test ka order is rule se set hota hai */
 const runsOf = (a, bank) => { let n = 0; for (let i = 2; i < a.length; i++) if (bank[a[i]].a === bank[a[i - 1]].a && bank[a[i]].a === bank[a[i - 2]].a) n++; return n; };
@@ -2243,6 +2319,7 @@ function applyLang() {
   renderTests(); paintUser(); paintResume(); paintLB();
   if (testOpen && T) { paintTitle(); if (!T.finished) showQ(); }
   if ($('#searchModal').classList.contains('open')) renderRes($('#sInp').value);
+  qaApplyLang();
   gtSync();
 }
 
@@ -2395,23 +2472,24 @@ const SLIDES = [
   })();
 })();
 
-/* ===== Particles (hero) ===== */
+/* ===== Embers (hero) : upar uthte hue sunehri chingaari ===== */
 (function () {
   const c = $('#fx'), x = c.getContext('2d'); let W, H, P = [];
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mk = (fresh) => ({ x: Math.random() * W, y: fresh ? Math.random() * H : H + 10, r: .8 + Math.random() * 2.2, vy: .25 + Math.random() * .85, ph: Math.random() * 6.28, sp: .01 + Math.random() * .03, hue: 28 + Math.random() * 28 });
   function size() {
     W = c.width = c.offsetWidth; H = c.height = c.offsetHeight;
-    P = Array.from({ length: W < 700 ? 28 : 60 }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .6, vy: (Math.random() - .5) * .6 }));
+    P = Array.from({ length: W < 700 ? 34 : 70 }, () => mk(true));
   }
   size(); addEventListener('resize', size);
   (function draw() {
     x.clearRect(0, 0, W, H);
     P.forEach((p, i) => {
-      p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
-      x.fillStyle = 'rgba(255,159,28,.85)'; x.beginPath(); x.arc(p.x, p.y, 2, 0, 6.283); x.fill();
-      for (let j = i + 1; j < P.length; j++) {
-        const q = P[j], d = Math.hypot(p.x - q.x, p.y - q.y);
-        if (d < 120) { x.strokeStyle = `rgba(46,196,182,${.35 * (1 - d / 120)})`; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke(); }
-      }
+      if (!calm) { p.y -= p.vy; p.ph += p.sp; p.x += Math.sin(p.ph) * .6; }
+      if (p.y < -10) P[i] = mk(false);
+      const a = .35 + .65 * Math.abs(Math.sin(p.ph * 1.7));
+      x.fillStyle = `hsla(${p.hue},100%,62%,${a * .22})`; x.beginPath(); x.arc(p.x, p.y, p.r * 3.4, 0, 6.283); x.fill();
+      x.fillStyle = `hsla(${p.hue + 8},100%,72%,${a})`; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill();
     });
     requestAnimationFrame(draw);
   })();
@@ -2441,6 +2519,170 @@ addEventListener('scroll', () => {
 $('#toTop').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
 addEventListener('load', () => $('#pre').classList.add('hide'));
 setTimeout(() => $('#pre').classList.add('hide'), 3000);
+
+
+/* ===== 🎆 DIWALI PATAKHE : Rocket 🚀, Anar, Chakri, Bomb (poore page par) ===== */
+(function () {
+  const cv = document.createElement('canvas'); cv.id = 'fxAll'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv);
+  const g = cv.getContext('2d'); let W = 0, H = 0, S = 1;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rs() { const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); S = Math.max(.7, Math.min(1.25, Math.min(W, H) / 650)); }
+  rs(); addEventListener('resize', rs);
+
+  const PAL = [[255, 209, 102], [255, 140, 26], [229, 56, 59], [224, 51, 139], [255, 255, 255], [110, 210, 255], [130, 255, 170], [190, 130, 255]];
+  const SPK = [[255, 209, 102], [255, 140, 26], [255, 255, 255]];
+  const rnd = (a, b) => a + Math.random() * (b - a), pick = a => a[Math.random() * a.length | 0];
+  const rockets = [], parts = [], fount = [], wheels = []; let flash = 0, run = false, last = 0;
+
+  /* ---- Awaaz (sirf button / click par bajti hai) ---- */
+  let AC = null, mute = store.get('acec_snd', 'on') === 'off';
+  function ac() { if (mute) return null; try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch { AC = null; } return AC; }
+  function whistle(d) {
+    const a = ac(); if (!a) return; const t = a.currentTime, o = a.createOscillator(), v = a.createGain();
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(380, t); o.frequency.exponentialRampToValueAtTime(1700, t + d);
+    v.gain.setValueAtTime(.0001, t); v.gain.linearRampToValueAtTime(.04, t + .08); v.gain.linearRampToValueAtTime(.0001, t + d);
+    o.connect(v); v.connect(a.destination); o.start(t); o.stop(t + d + .05);
+  }
+  function noise(dur, type, freq, vol) {
+    const a = ac(); if (!a) return; const n = a.sampleRate * dur | 0, buf = a.createBuffer(1, n, a.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, type === 'lowpass' ? 2.2 : 1);
+    const s = a.createBufferSource(), f = a.createBiquadFilter(), v = a.createGain(); s.buffer = buf; f.type = type; f.frequency.value = freq; v.gain.value = vol;
+    s.connect(f); f.connect(v); v.connect(a.destination); s.start();
+  }
+  const boom = (vol, dur) => noise(dur, 'lowpass', 700, vol), fizz = dur => noise(dur, 'bandpass', 3200, .05);
+
+  /* ---- Chingaariyan ---- */
+  function P(x, y, vx, vy, c, life, o) {
+    if (parts.length > 3200) return; o = o || {};
+    parts.push({ x, y, vx, vy, c, life, max: life, s: o.s || 1.8, gr: o.gr === undefined ? .05 : o.gr, dr: o.dr || .985, tw: o.tw, cr: o.cr || 0 });
+  }
+  function burst(x, y, type, snd) {
+    const c1 = pick(PAL), c2 = pick(PAL), k = S;
+    type = type || pick(['peony', 'peony', 'ring', 'heart', 'willow', 'double', 'crackle']);
+    if (type === 'peony' || type === 'crackle' || type === 'double') {
+      const n = 90 + (Math.random() * 40 | 0);
+      for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, sp = Math.sqrt(Math.random()) * 5.2 * k + .6; P(x, y, Math.cos(a) * sp, Math.sin(a) * sp, Math.random() < .25 ? c2 : c1, rnd(55, 85), { cr: type === 'crackle' ? .5 : 0, tw: Math.random() < .3 }); }
+    }
+    if (type === 'ring' || type === 'double') {
+      for (let i = 0; i < 64; i++) { const a = i / 64 * 6.283; P(x, y, Math.cos(a) * 4.6 * k, Math.sin(a) * 4.6 * k, type === 'double' ? c2 : c1, rnd(60, 80), { dr: .98, s: 2.1 }); }
+    }
+    if (type === 'heart') {
+      for (let i = 0; i < 90; i++) { const t = i / 90 * 6.283, hx = 16 * Math.pow(Math.sin(t), 3), hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t); P(x, y, hx * .27 * k, -hy * .27 * k, [255, 90, 140], rnd(70, 95), { dr: .985, gr: .035, s: 2.1 }); }
+    }
+    if (type === 'willow') {
+      for (let i = 0; i < 80; i++) { const a = Math.random() * 6.283, sp = rnd(1.4, 4.4) * k; P(x, y, Math.cos(a) * sp, Math.sin(a) * sp, [255, 209, 102], rnd(110, 150), { gr: .045, dr: .975, tw: true, s: 1.6 }); }
+    }
+    if (snd) boom(.5, .9);
+  }
+
+  /* ---- Rocket (asli 🚀 upar jaata hai, phir phoot-ta hai) ---- */
+  function rocket(tx, ty, o) {
+    o = o || {};
+    const sx = Math.min(W - 20, Math.max(20, o.sx !== undefined ? o.sx : tx + rnd(-90, 90))), a = .075, d = H + 20 - ty, vy = -Math.sqrt(2 * a * d), t = -vy / a;
+    const el = document.createElement('span'); el.className = 'rk-fly'; el.textContent = '🚀'; document.body.appendChild(el);
+    rockets.push({ x: sx, y: H + 20, vx: (tx - sx) / t, vy, a, ty, el, snd: !!o.snd, type: o.type });
+    if (o.snd) whistle(Math.min(1.8, t / 60));
+    start();
+  }
+  const salvo = (n, snd) => { for (let i = 0; i < n; i++) setTimeout(() => rocket(rnd(W * .12, W * .88), rnd(H * .12, H * .5), { snd }), i * 280); };
+
+  /* ---- Anar (zameen se phool-jhadi) ---- */
+  function anar(x, snd) { fount.push({ x, y: H - 6, t: 0, max: 210 }); if (snd) fizz(3.2); start(); }
+  /* ---- Chakri (ghoomta hua chakra) ---- */
+  function chakri(x, snd) { wheels.push({ x, y: H - 44, a: 0, t: 0, max: 200 }); if (snd) fizz(3.2); start(); }
+  /* ---- Bomb (dhamaka) ---- */
+  function bomb() {
+    const x = rnd(W * .3, W * .7), y = rnd(H * .25, H * .45); flash = .55;
+    document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 480);
+    for (let i = 0; i < 260; i++) { const a = Math.random() * 6.283, sp = Math.sqrt(Math.random()) * 8 * S + .8; P(x, y, Math.cos(a) * sp, Math.sin(a) * sp, pick(PAL), rnd(60, 100), { cr: .35, tw: Math.random() < .3 }); }
+    for (let i = 0; i < 110; i++) { const a = i / 110 * 6.283; P(x, y, Math.cos(a) * 10 * S, Math.sin(a) * 10 * S, [255, 236, 190], 34, { dr: .95, gr: 0, s: 2.4 }); }
+    boom(.9, 1.5); start();
+  }
+  const finale = () => { salvo(8, true); setTimeout(bomb, 1900); };
+
+  function start() { if (!run) { run = true; last = performance.now(); requestAnimationFrame(frame); } }
+  function frame(ts) {
+    const dt = Math.min((ts - last) / 16.67 || 1, 2.5); last = ts;
+    g.globalCompositeOperation = 'destination-out'; g.fillStyle = 'rgba(0,0,0,' + Math.min(.32 * dt, .9) + ')'; g.fillRect(0, 0, W, H);
+    g.globalCompositeOperation = 'lighter';
+    if (flash > 0) { g.fillStyle = 'rgba(255,230,190,' + flash + ')'; g.fillRect(0, 0, W, H); flash -= .035 * dt; }
+
+    for (let i = fount.length - 1; i >= 0; i--) {
+      const f = fount[i]; f.t += dt;
+      for (let k = 0; k < 5; k++) P(f.x + rnd(-3, 3), f.y, rnd(-1.7, 1.7), -rnd(5, 9.5) * S, pick(SPK), rnd(40, 75), { s: rnd(1, 2.4), gr: .13, dr: .99 });
+      g.fillStyle = 'rgba(255,170,40,.45)'; g.beginPath(); g.arc(f.x, f.y, 14, 0, 6.283); g.fill();
+      if (f.t > f.max) fount.splice(i, 1);
+    }
+    for (let i = wheels.length - 1; i >= 0; i--) {
+      const w = wheels[i]; w.t += dt; w.a += .55 * dt;
+      g.strokeStyle = 'rgba(255,209,102,.9)'; g.lineWidth = 2; g.beginPath();
+      for (let k = 0; k < 4; k++) {
+        const an = w.a + k * 1.5708, ca = Math.cos(an), sa = Math.sin(an);
+        g.moveTo(w.x, w.y); g.lineTo(w.x + ca * 16, w.y + sa * 16);
+        P(w.x + ca * 16, w.y + sa * 16, -sa * 3.4 + rnd(-.5, .5), ca * 3.4 + rnd(-.5, .5) - .4, pick(SPK), rnd(24, 42), { s: rnd(1, 2), gr: .035, dr: .985 });
+      }
+      g.stroke();
+      if (w.t > w.max) wheels.splice(i, 1);
+    }
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i];
+      r.x += r.vx * dt; r.y += r.vy * dt; r.vy += r.a * dt;
+      for (let k = 0; k < 3; k++) P(r.x + rnd(-1.5, 1.5), r.y + 12, rnd(-.4, .4), rnd(.6, 2), pick(SPK), rnd(14, 30), { s: rnd(1, 2.2), gr: .02, dr: .94 });
+      r.el.style.transform = 'translate(' + r.x + 'px,' + r.y + 'px) rotate(' + (Math.atan2(r.vy, r.vx) + Math.PI / 4) + 'rad)';
+      if (r.vy >= -.5 || r.y <= r.ty - 4) { r.el.remove(); rockets.splice(i, 1); burst(r.x, r.y, r.type, r.snd); }
+    }
+    let j = 0;
+    for (let i = 0; i < parts.length; i++) {
+      const p = parts[i];
+      p.vx *= p.dr; p.vy = p.vy * p.dr + p.gr * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
+      if (p.life > 0) {
+        parts[j++] = p;
+        if (p.tw && Math.random() < .22) continue;
+        const a = Math.min(1, p.life / p.max * 1.7);
+        g.fillStyle = 'rgba(' + p.c[0] + ',' + p.c[1] + ',' + p.c[2] + ',' + a + ')';
+        g.beginPath(); g.arc(p.x, p.y, p.s * (.55 + .45 * a), 0, 6.283); g.fill();
+      } else if (p.cr && Math.random() < p.cr) {
+        for (let k = 0; k < 3; k++) P(p.x, p.y, rnd(-1.6, 1.6), rnd(-1.6, 1.6), [255, 255, 255], rnd(10, 22), { s: 1.2, gr: .03 });
+      }
+    }
+    parts.length = j;
+    if (rockets.length || parts.length || fount.length || wheels.length || flash > 0) requestAnimationFrame(frame);
+    else { run = false; g.clearRect(0, 0, W, H); }
+  }
+
+  /* ---- Apne aap chalne wale rocket (sirf hero dikh raha ho tab, bina awaaz) ---- */
+  const hero = $('#home'); let amb = 0;
+  function ambient() {
+    if (!calm && !document.hidden && hero && scrollY < hero.offsetHeight * .7) {
+      const n = Math.random() < .3 ? 2 : 1;
+      for (let i = 0; i < n; i++) setTimeout(() => rocket(rnd(W * .08, W * .92), rnd(H * .12, H * .45)), i * 350);
+    }
+    amb = setTimeout(ambient, rnd(2600, 4800));
+  }
+  amb = setTimeout(ambient, 2600);
+
+  /* ---- Controls ---- */
+  if (hero) hero.addEventListener('click', e => { if (e.target.closest('a,button,.dots,.hcap,.s-btn')) return; rocket(e.clientX, e.clientY, { snd: true, sx: e.clientX + rnd(-60, 60) }); });
+  const rb = $('#rocketBtn'); if (rb) rb.onclick = () => salvo(5, true);
+  $$('[data-pk]').forEach(b => b.onclick = () => {
+    const k = b.dataset.pk;
+    if (k === 'rocket') salvo(3, true); else if (k === 'anar') anar(rnd(W * .2, W * .8), true); else if (k === 'chakri') chakri(rnd(W * .2, W * .8), true); else if (k === 'bomb') bomb();
+  });
+  const sb = $('#sndBtn');
+  function paintSnd() { if (!sb) return; sb.textContent = mute ? '🔇' : '🔊'; sb.setAttribute('aria-label', mute ? 'Awaaz chalu karein' : 'Awaaz band karein'); }
+  if (sb) sb.onclick = () => { mute = !mute; store.set('acec_snd', mute ? 'off' : 'on'); paintSnd(); };
+  paintSnd();
+
+  /* ---- Diwali welcome popup (ek session me ek baar) ---- */
+  function dwShow() {
+    try { if (sessionStorage.getItem('dw_seen')) return; sessionStorage.setItem('dw_seen', '1'); } catch { }
+    if (typeof testOpen !== 'undefined' && testOpen) return;
+    openModal('dwModal');
+  }
+  addEventListener('load', () => setTimeout(dwShow, 1400));
+  const go = $('#dwGo'); if (go) go.onclick = () => { closeModal('dwModal'); finale(); };
+})();
+
 
 /* ===== 3D tilt on cards (re-render ke baad bhi chalta hai) ===== */
 if (matchMedia('(hover:hover)').matches) {
