@@ -288,7 +288,7 @@ const QB = {
     ['In Calc which shortcut key is used to insert a function?', ['F2', 'F3', 'Ctrl+F2', 'Ctrl+F3'], 2],
     ['What is the default height of a Row in Calc?', ['0.18', '0.23', '0.25', '0.21'], 2],
     ['What is the default width of a column in Calc?', ['0.79', '0.84', '0.89', 'None of these'], 1],
-    ['In Calc the maximum zoom size is', ['200%', '400%', '500%', '600%'], 3],
+    ['In Calc the maximum zoom size is', ['200%', '400%', '500%', '600%'], 2],
     ['Which shortcut key is use to open the Format Cell?', ['Ctrl+1', 'Ctrl+3', 'Ctrl+4', 'Ctrl+2'], 0],
     ['Which is the last menu in Calc?', ['Help', 'Format', 'View', 'Sheet'], 0],
     ['Font Size, Font Face, Bold, Italic etc. options available in which Toolbar?', ['Standard', 'Formatting', 'Drawing', 'None of these'], 1],
