@@ -24,6 +24,7 @@
     <a href="#ccc" data-i18n="ccc">CCC Test</a>
     <a href="#olevel" data-i18n="ol">O-Level Test</a>
     <a href="#olcode" data-i18n="olcode">O-Level Coding</a>
+    <a href="#codepractice" data-i18n="codepr">Coding Practice</a>
     <a href="#typing" data-i18n="typing">Typing</a>
     <a href="#saturday" data-i18n="lb">Leaderboard</a>
     <a href="#contact" data-i18n="contact">Contact</a>
@@ -2150,6 +2151,84 @@
     </div>
   </div>
 </section>
+<!-- ================= CODING PRACTICE (VS Code style online editor) ================= -->
+<section class="sec" id="codepractice">
+  <div class="reveal">
+    <h2><span data-en="Coding" data-hi="कोडिंग">Coding</span> <span class="grad" data-en="Practice" data-hi="प्रैक्टिस">Practice</span></h2>
+    <p class="sub" data-en="Write HTML, CSS &amp; JavaScript right here and see the live output instantly, just like VS Code" data-hi="HTML, CSS और JavaScript यहीं लिखें और VS Code की तरह तुरंत लाइव आउटपुट देखें">Write HTML, CSS &amp; JavaScript right here and see the live output instantly, just like VS Code</p>
+  </div>
+
+  <div class="vsc notranslate" translate="no" id="vsc">
+    <div class="vsc-title">
+      <span class="vsc-dots"><i></i><i></i><i></i></span>
+      <b id="cpTitle">index.html — Coding Practice</b>
+      <button class="vsc-ib" id="cpTheme" type="button" title="Dark / Light mode"></button>
+      <button class="vsc-ib" id="cpFull" type="button" title="Full screen">⛶</button>
+    </div>
+
+    <div class="vsc-bar">
+      <button class="vsc-btn vsc-run" id="cpRun" type="button" title="Run (Ctrl+Enter)">▶ Run</button>
+      <select class="vsc-btn" id="cpEx" title="Examples">
+        <option value="">📂 Examples</option>
+        <option value="hello">Hello Page</option>
+        <option value="table">HTML Table</option>
+        <option value="form">HTML Form</option>
+        <option value="counter">JS Counter</option>
+      </select>
+      <button class="vsc-btn" id="cpFsM" type="button" title="Smaller text">A−</button>
+      <button class="vsc-btn" id="cpFsP" type="button" title="Bigger text">A+</button>
+      <button class="vsc-btn" id="cpCopy" type="button" title="Copy this file">⎘ Copy</button>
+      <button class="vsc-btn" id="cpDl" type="button" title="Download as .html">⬇ Download</button>
+      <button class="vsc-btn" id="cpNew" type="button" title="Open output in new tab">↗ New Tab</button>
+      <button class="vsc-btn" id="cpKb" type="button" title="Open keyboard">⌨ Keyboard</button>
+      <button class="vsc-btn" id="cpReset" type="button" title="Reset">↺ Reset</button>
+    </div>
+
+    <div class="vsc-main">
+      <div class="vsc-act" aria-hidden="true"><i class="on">🗂</i><i>🔍</i><i>⎇</i><i>🧩</i></div>
+      <aside class="vsc-side">
+        <p>EXPLORER</p>
+        <p class="vsc-fold">▾ MY-WEBSITE</p>
+        <button type="button" class="vsc-file on" data-f="index.html"><i class="fi h">&lt;&gt;</i>index.html</button>
+        <button type="button" class="vsc-file" data-f="style.css"><i class="fi c">#</i>style.css</button>
+        <button type="button" class="vsc-file" data-f="script.js"><i class="fi j">JS</i>script.js</button>
+        <p class="vsc-tip">Tab = auto write<br>Ctrl+Enter = Run<br>Ctrl+/ = Comment</p>
+      </aside>
+
+      <div class="vsc-work">
+        <div class="vsc-tabs">
+          <button type="button" class="vsc-tab on" data-f="index.html"><i class="fi h">&lt;&gt;</i>index.html</button>
+          <button type="button" class="vsc-tab" data-f="style.css"><i class="fi c">#</i>style.css</button>
+          <button type="button" class="vsc-tab" data-f="script.js"><i class="fi j">JS</i>script.js</button>
+        </div>
+        <div class="vsc-ed">
+          <div class="vsc-gut" id="cpGut"><pre id="cpGutIn"></pre></div>
+          <div class="vsc-code">
+            <div class="vsc-cl" id="cpCl"></div>
+            <pre id="cpPre" aria-hidden="true"></pre>
+            <textarea id="cpTa" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" inputmode="text" aria-label="Code editor"></textarea>
+            <div class="vsc-pop" id="cpPop"></div>
+            <span class="vsc-m" id="cpM">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+          </div>
+        </div>
+        <div class="vsc-symw"><div class="vsc-sym" id="cpSym"></div></div>
+      </div>
+
+      <div class="vsc-out">
+        <div class="vsc-oh"><span>● Live Output</span><span id="cpOutName">index.html</span></div>
+        <iframe id="cpFrame" title="Output" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+        <div class="vsc-oh vsc-ch"><span>Console <b id="cpCnt">0</b></span><button type="button" class="vsc-ib" id="cpClr">Clear</button></div>
+        <div class="vsc-con" id="cpCon"></div>
+      </div>
+    </div>
+
+    <div class="vsc-st">
+      <span>⎇ main</span><span id="cpPos">Ln 1, Col 1</span><span>Spaces: 2</span><span>UTF-8</span><span id="cpLang">HTML</span>
+      <button type="button" id="cpAuto" title="Live output on/off">⚡ Live: ON</button>
+    </div>
+  </div>
+</section>
+
 <!-- ===== Student Feedback & Review Section ===== -->
 <section id="reviews" class="review-section">
   <div class="container">
@@ -2203,6 +2282,8 @@
     </div>
   </div>
 </section>
+
+
 </main>
 <footer>
   <p class="dw-foot">🪔 शुभ दीपावली 🪔</p>

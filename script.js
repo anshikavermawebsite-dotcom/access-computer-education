@@ -10,8 +10,8 @@ const closeModal = id => $('#' + id).classList.remove('open');
 /* ===== Language (Hindi / English) ===== */
 let lang = store.get('acec_lang', 'en');
 const L = {
-  hi: { olcode: 'O-Level कोडिंग', x_rev: 'गलत जवाब देखें', x_retryW: 'गलत सवाल दोबारा', x_card: 'रिज़ल्ट कार्ड', x_share: 'WhatsApp पर शेयर', x_best: 'बेस्ट', x_yourA: 'आपका उत्तर', x_rightA: 'सही उत्तर', x_noWrong: 'वाह! एक भी जवाब गलत नहीं 🎉', x_trIng: '🌐 हिन्दी अनुवाद हो रहा है…', x_trFail: '⚠ अनुवाद नहीं हो सका (इंटरनेट जाँचें), मूल भाषा दिख रही है', x_skip: 'छोड़ा गया', home: 'होम', gallery: 'गैलरी', courses: 'कोर्सेस', faculty: 'फैकल्टी', ccc: 'CCC टेस्ट', ol: 'O-Level टेस्ट', typing: 'टाइपिंग', lb: 'लीडरबोर्ड', contact: 'संपर्क', cta1: 'CCC टेस्ट दें', cta2: 'कोर्स देखें', login: 'लॉगिन', satBtn: 'शनिवार टेस्ट शुरू करें', searchPh: 'टेस्ट, कोर्स या सवाल खोजें...', start: 'टेस्ट शुरू करें', nq: '{n} प्रश्न', soonS: 'जल्द आ रहा है', soon: 'इस चैप्टर के प्रश्न जल्द जोड़े जाएँगे', loginFirst: 'पहले लॉगिन करें', qOf: 'प्रश्न {i} / {n}', next: 'अगला प्रश्न ➔', result: 'परिणाम देखें', sat: 'शनिवार टेस्ट', back: 'वापस जाएँ', done: 'टेस्ट पूरा हुआ', sc: '{p}% स्कोर।', m1: 'शानदार प्रदर्शन! 🎉', m2: 'अच्छा प्रयास, थोड़ा और अभ्यास करें।', m3: 'कोई बात नहीं, दोबारा कोशिश करें।', exitT: 'टेस्ट छोड़ना चाहते हैं?', exitQ: 'क्या आप टेस्ट से बाहर आना चाहते हैं? आपकी प्रगति सेव रहेगी।', cancel: 'रद्द करें', yes: 'हाँ, बाहर जाएँ', resumeT: 'आपका टेस्ट अधूरा है', resumeQ: 'आपने {n} में से {i} प्रश्न हल किए हैं। वहीं से जारी रखें या शुरू से करें?', resume: '▶ Resume', restart: '↺ Starting से', noRes: 'कोई परिणाम नहीं मिला', sugg: 'लोकप्रिय टेस्ट', tTest: 'टेस्ट', tCourse: 'कोर्स', tSec: 'सेक्शन', tQ: 'प्रश्न', empty: 'अभी कोई एंट्री नहीं है। शनिवार टेस्ट देने वाले पहले बनें!', chap: 'चैप्टर', saved: 'सेव: {i}/{n}' },
-  en: { olcode: 'O-Level Coding', x_rev: 'Review wrong answers', x_retryW: 'Retry wrong questions', x_card: 'Result card', x_share: 'Share on WhatsApp', x_best: 'Best', x_yourA: 'Your answer', x_rightA: 'Correct answer', x_noWrong: 'Wow! No wrong answers 🎉', x_trIng: '🌐 Translating to English…', x_trFail: '⚠ Could not translate (check internet), showing original', x_skip: 'Skipped', home: 'Home', gallery: 'Gallery', courses: 'Courses', faculty: 'Faculty', ccc: 'CCC Test', ol: 'O-Level Test', typing: 'Typing', lb: 'Leaderboard', contact: 'Contact', cta1: 'Take CCC Test', cta2: 'View Courses', login: 'Login', satBtn: 'Start Saturday Test', searchPh: 'Search tests, courses or questions...', start: 'Start Test', nq: '{n} Questions', soonS: 'Coming soon', soon: 'Questions for this chapter will be added soon', loginFirst: 'Please login first', qOf: 'Question {i} / {n}', next: 'Next Question ➔', result: 'See Result', sat: 'Saturday Test', back: 'Go Back', done: 'Test Complete', sc: '{p}% score.', m1: 'Outstanding performance! 🎉', m2: 'Good effort, practise a little more.', m3: 'No worries, try again and improve.', exitT: 'Leave the test?', exitQ: 'Do you want to leave the test? Your progress will be saved.', cancel: 'Cancel', yes: 'Yes, leave', resumeT: 'You have an unfinished test', resumeQ: 'You have completed {i} of {n} questions. Resume from there or start over?', resume: '▶ Resume', restart: '↺ Start Over', noRes: 'No results found', sugg: 'Popular tests', tTest: 'Test', tCourse: 'Course', tSec: 'Section', tQ: 'Question', empty: 'No entries yet. Be the first to take the Saturday Test!', chap: 'Chapter', saved: 'Saved: {i}/{n}' }
+  hi: { olcode: 'O-Level कोडिंग', codepr: 'कोडिंग प्रैक्टिस', x_rev: 'गलत जवाब देखें', x_retryW: 'गलत सवाल दोबारा', x_card: 'रिज़ल्ट कार्ड', x_share: 'WhatsApp पर शेयर', x_best: 'बेस्ट', x_yourA: 'आपका उत्तर', x_rightA: 'सही उत्तर', x_noWrong: 'वाह! एक भी जवाब गलत नहीं 🎉', x_trIng: '🌐 हिन्दी अनुवाद हो रहा है…', x_trFail: '⚠ अनुवाद नहीं हो सका (इंटरनेट जाँचें), मूल भाषा दिख रही है', x_skip: 'छोड़ा गया', home: 'होम', gallery: 'गैलरी', courses: 'कोर्सेस', faculty: 'फैकल्टी', ccc: 'CCC टेस्ट', ol: 'O-Level टेस्ट', typing: 'टाइपिंग', lb: 'लीडरबोर्ड', contact: 'संपर्क', cta1: 'CCC टेस्ट दें', cta2: 'कोर्स देखें', login: 'लॉगिन', satBtn: 'शनिवार टेस्ट शुरू करें', searchPh: 'टेस्ट, कोर्स या सवाल खोजें...', start: 'टेस्ट शुरू करें', nq: '{n} प्रश्न', soonS: 'जल्द आ रहा है', soon: 'इस चैप्टर के प्रश्न जल्द जोड़े जाएँगे', loginFirst: 'पहले लॉगिन करें', qOf: 'प्रश्न {i} / {n}', next: 'अगला प्रश्न ➔', result: 'परिणाम देखें', sat: 'शनिवार टेस्ट', back: 'वापस जाएँ', done: 'टेस्ट पूरा हुआ', sc: '{p}% स्कोर।', m1: 'शानदार प्रदर्शन! 🎉', m2: 'अच्छा प्रयास, थोड़ा और अभ्यास करें।', m3: 'कोई बात नहीं, दोबारा कोशिश करें।', exitT: 'टेस्ट छोड़ना चाहते हैं?', exitQ: 'क्या आप टेस्ट से बाहर आना चाहते हैं? आपकी प्रगति सेव रहेगी।', cancel: 'रद्द करें', yes: 'हाँ, बाहर जाएँ', resumeT: 'आपका टेस्ट अधूरा है', resumeQ: 'आपने {n} में से {i} प्रश्न हल किए हैं। वहीं से जारी रखें या शुरू से करें?', resume: '▶ Resume', restart: '↺ Starting से', noRes: 'कोई परिणाम नहीं मिला', sugg: 'लोकप्रिय टेस्ट', tTest: 'टेस्ट', tCourse: 'कोर्स', tSec: 'सेक्शन', tQ: 'प्रश्न', empty: 'अभी कोई एंट्री नहीं है। शनिवार टेस्ट देने वाले पहले बनें!', chap: 'चैप्टर', saved: 'सेव: {i}/{n}' },
+  en: { olcode: 'O-Level Coding', codepr: 'Coding Practice', x_rev: 'Review wrong answers', x_retryW: 'Retry wrong questions', x_card: 'Result card', x_share: 'Share on WhatsApp', x_best: 'Best', x_yourA: 'Your answer', x_rightA: 'Correct answer', x_noWrong: 'Wow! No wrong answers 🎉', x_trIng: '🌐 Translating to English…', x_trFail: '⚠ Could not translate (check internet), showing original', x_skip: 'Skipped', home: 'Home', gallery: 'Gallery', courses: 'Courses', faculty: 'Faculty', ccc: 'CCC Test', ol: 'O-Level Test', typing: 'Typing', lb: 'Leaderboard', contact: 'Contact', cta1: 'Take CCC Test', cta2: 'View Courses', login: 'Login', satBtn: 'Start Saturday Test', searchPh: 'Search tests, courses or questions...', start: 'Start Test', nq: '{n} Questions', soonS: 'Coming soon', soon: 'Questions for this chapter will be added soon', loginFirst: 'Please login first', qOf: 'Question {i} / {n}', next: 'Next Question ➔', result: 'See Result', sat: 'Saturday Test', back: 'Go Back', done: 'Test Complete', sc: '{p}% score.', m1: 'Outstanding performance! 🎉', m2: 'Good effort, practise a little more.', m3: 'No worries, try again and improve.', exitT: 'Leave the test?', exitQ: 'Do you want to leave the test? Your progress will be saved.', cancel: 'Cancel', yes: 'Yes, leave', resumeT: 'You have an unfinished test', resumeQ: 'You have completed {i} of {n} questions. Resume from there or start over?', resume: '▶ Resume', restart: '↺ Start Over', noRes: 'No results found', sugg: 'Popular tests', tTest: 'Test', tCourse: 'Course', tSec: 'Section', tQ: 'Question', empty: 'No entries yet. Be the first to take the Saturday Test!', chap: 'Chapter', saved: 'Saved: {i}/{n}' }
 };
 const t = (k, v) => { let s = (L[lang] && L[lang][k]) ?? L.en[k] ?? k; if (v) for (const x in v) s = s.replace('{' + x + '}', v[x]); return s; };
 
@@ -112,7 +112,32 @@ const QB = {
     ['Computer का कार्य नहीं है?', ['Input', 'Understanding', 'Output', 'Controlling'], 1],
     ['DECIMAL Number System का आधार है?', ['10', '8', '3', 'None'], 0],
     ['निम्नलिखित स्टोरेज डिवाइस को एक स्थान से दूसरे स्थान पर आसानी से नहीं लेकर जा सकते है?', ['Pendrive', 'CD', 'DVD', 'Harddisk'], 3],
-    ['निम्नलिखित में कौनसा इंटरनेट से संबंधित नहीं है?', ['Links', 'Browser', 'Search Engine', 'Printer'], 3]
+    ['निम्नलिखित में कौनसा इंटरनेट से संबंधित नहीं है?', ['Links', 'Browser', 'Search Engine', 'Printer'], 3],
+    ["A floppy disk contains / फ्लॉपी डिस्क शामिल करता है:", ["Circular tracks only / केवल सरकुलर ट्रैक्स", "Sectors only / केवल सेक्टर", "Both circular tracks and sectors / सरकुलर ट्रैक्स और सेक्टर दोनों", "None of the above / उपरोक्त में से कोई नहीं"], 2],
+    ["Which of the following are latest IT Gadgets? / निम्नलिखित में से कौन से नवीनतम आईटी गैजेट्स हैं?", ["Pen with Camera / पेन विथ कैमरा", "Drone Camera / ड्रोन कैमरा", "Both a & b / तथा दोनों", "None of the above / उपर्युक्त में से कोई नहीं"], 2],
+    ["Hard disk is coated in both side above: / हार्डडिस्क दोनों तरफ ऊपर कोटेड होता है:", ["Magnetic Metallic Oxide / मैग्नेटिक मेटालिक ऑक्साइड", "Optical Metallic Oxide / ऑप्टिकल मेटालिक ऑक्साइड", "Carbon Layer / कार्बन लेयर", "All of the above / उपरोक्त सभी"], 0],
+    ["Which type of storage device is a BIOS? / इनमें से बायोस किस प्रकार की स्टोरेज डिवाइस है?", ["Primary / प्राइमरी", "Secondary / सेकंडण्डरी", "Tertiary / टेरीटरी", "Not a storage device / स्टोरेज डिवाइस नहीं है"], 0],
+    ["Which of the following devices can be used to input printed text? / निम्नलिखित में से कौन सी डिवाइस प्रिंटेड टेक्स्ट को इनपुट की तरह इस्तेमाल करता है?", ["OCR / ओ.सी.आर", "OMR / ओ.एम.आर", "MICR / एम.आई.सी.आर", "All of the above / उपरोक्त सभी"], 3],
+    ["The most common pointing input device is: / सबसे कॉमन पाइंट करने वाली इनपुट डिवाइस है:", ["Track ball / ट्रैक बाल", "Touch Pad / टच पैड", "Touch Screen / टच स्क्रीन", "Mouse / माउस"], 3],
+    ["..... is the result produced by a computer. / कंप्यूटर द्वारा ..... परिणाम उत्पन्न होता है।", ["Data / डाटा", "Memory / मेमोरी", "Output / आउटपुट", "Input / इनपुट"], 2],
+    ["Which of the following memories allows simultaneous read and write operations? / निम्नलिखित में कौन सी मेमोरी रीड एवं राइट ऑपरेशन को साथ-साथ करने की अनुमति देता है?", ["ROM / रोम", "RAM / रैम", "EPROM / ई.पी. रोम", "None / कोई नहीं"], 1],
+    ["Which of the following is the first supercomputer? / इनमें से कौन पहला सुपर कम्प्यूटर है?", ["PARAM1000 / परम 1000", "CRAY-1 / क्रे-1", "PARAM8000 / परम 8000", "CORE i7 / कोर आई 7"], 1],
+    ["Which component of computer is also considered as its Heart? / इनमें से कंप्यूटर का कौन-सा कंपोनेंट हृदय माना जाता है?", ["Monitor / मॉनीटर", "Keyboard / कीबोर्ड", "Scanner / स्कैनर", "Microprocessor / माइक्रोप्रोसेसर"], 3],
+    ["The most common input device used today is the: / आजकल ज्यादातर प्रयोग में आने वाला इनपुट डिवाइस है:", ["Motherboard / मदरबोर्ड", "CPU / सीपीयू", "Key Board / की बोर्ड", "System Unit / सिस्टम यूनिट"], 2],
+    ["When a computer prints a report, this output is called: / जब कोई कंप्यूटर कोई रिपोर्ट प्रिंट करता है तो वह आउटपुट कहलाता है:", ["Hard Copy / हार्ड कॉपी", "Soft Copy / साफ्ट कॉपी", "Com / कॉम", "None / कोई नहीं"], 0],
+    ["USB is which type of storage device? / यूएसबी इनमें से किस प्रकार की स्टोरेज डिवाइस है?", ["Primary / प्राइमरी", "Secondary / सेकंडण्डरी", "Tertiary / टेरीटरी", "None / कोई नहीं"], 2],
+    [".... is the high speed memory used in the computer. / कंप्यूटर में.... हाई स्पीड मेमोरी के रूप में प्रयोग होती है।", ["RAM / रैम", "BIOS / बायोस", "Hard disk / हार्ड डिस्क", "Cache / कैचे"], 3],
+    ["The output devices make it possible to: / आउटपुट डिवाइसें संभव करती हैं:", ["Viewing and printing data / डेटा को देखना एवं प्रिंट करना", "Storing data / डेटा को स्टोर करना", "Input data / डेटा को इनपुट करना", "None of these / इनमें से कोई नहीं"], 0],
+    ["In computer terminology, information means: / कंप्यूटर शब्दकोष के अन्तर्गत सूचना का अर्थ है:", ["Data only / केवल डेटा", "Data important and understandable / डाटा महत्वपूर्ण और समझने योग्य", "Alphanumeric data / अल्फान्यूमेरिक डेटा", "The program / प्रोग्राम"], 1],
+    ["The set of processed data is called? / प्रोसेस डेटा के सेट को कहा जाता है?", ["Data / डेटा", "Data Processing / डेटा प्रोसेसिंग", "Database / डाटाबेस", "Information / इंफॉर्मेशन"], 3],
+    ["Which of the following is an output device? / इनमें से कौन-सी आउटपुट डिवाइस है?", ["Plotter / प्लॉटर", "Scanner / स्कैनर", "Joystick / जॉयस्टिक", "Light Pen / लाइट पेन"], 0],
+    ["Which of the following is used in calculation work? / गणना कार्य के लिए निम्नलिखित में से किसका उपयोग किया जाता है?", ["CU / सीयू", "Mouse / माउस", "ALU / एएलयू", "CPU / सीपीयू"], 2],
+    ["Which of the following is the largest unit of storage? / निम्न में से कोई भंडारण की सबसे बड़ी यूनिट है:", ["MB / एमबी", "TB / टीबी", "GB / जीबी", "KB / केबी"], 1],
+    ["DVD is based on: / डीवीडी .... पर आधारित है:", ["USB Pen technology / यूएसबी पेन तकनीक", "Magnetic Disk Technology / मैग्नेटिक डिस्क तकनीक", "Media to store Video data only / केवल वीडियो संग्रह करने वाला माध्यम", "Optical Disk Technology / ऑप्टिकल डिस्क तकनीक"], 3],
+    ["Which one of these stores more data than a DVD? / इनमें से डीवीडी से ज्यादा डेटा स्टोर होता है...।", ["CD ROM / सीडी रोम", "Floppy / फ्लॉपी", "Blue Ray Disk / ब्लू रे डिस्क", "Red Ray Disk / रेड रे डिस्क"], 2],
+    ["Which of the following memories has the shortest access times? / निम्नलिखित में किस मेमोरी को एक्सेस करने में सबसे कम समय लगता है?", ["Cache Memory / कैश मेमोरी", "Magnetic bubble Memory / मैग्नेटिक बबल मेमोरी", "Blue Ray Disk / ब्लू रे डिस्क", "RAM / रैम"], 0],
+    ["... has a limitation that we can only write information to it but cannot modify it. / ...की परिसीमा यह है कि हम उसे केवल सूचना दे सकते हैं लेकिन उसे मिटा या रूपांतरण नहीं कर सकते।", ["Tape Drive / टेप ड्राइव", "Floppy Disk / फ्लॉपी डिस्क", "CD ROM / सीडी रोम", "Hard Disk / हार्ड डिस्क"], 2],
+    ["What is the name of first super computer of India? / इण्डिया का पहला सुपर कंप्यूटर का नाम है?", ["Saga 220 / सागा 220", "PARAM 8000 / परम 8000", "ENIAC / इनियाक", "PARAM 6000 / परम 6000"], 1]
   ],
   c2: [
     ['Linux ऑपरेटिंग सिस्टम में कर्नेल (Kernel) का मुख्य कार्य क्या है?', ['Hardware & Software Management', 'Web Browsing', 'Antivirus Scanning', 'Text Editing'], 0],
@@ -164,7 +189,32 @@ const QB = {
     ['थ्रेड (Thread) को क्या कहा जाता है?', ['Sub Routine', 'Heavy Process', 'Lightweight Process', 'System Call'], 2],
     ['निम्नलिखित में से कौन-सा एक प्रोप्राइटरी (Proprietary) ऑपरेटिंग सिस्टम है?', ['Microsoft Windows', 'Ubuntu', 'Debian', 'Fedora'], 0],
     ['Linux में वर्तमान यूजर का नाम जानने के लिए कौन-सी कमांड है?', ['currentuser', 'myname', 'user', 'whoami'], 3],
-    ['थ्रैशिंग (Thrashing) की समस्या किससे संबंधित है?', ['Excessive Paging / Virtual Memory', 'CPU Overheating', 'Hard Disk Failure', 'Network Congestion'], 0]
+    ['थ्रैशिंग (Thrashing) की समस्या किससे संबंधित है?', ['Excessive Paging / Virtual Memory', 'CPU Overheating', 'Hard Disk Failure', 'Network Congestion'], 0],
+    ["Operating Systems for Mobile Phone and Tablets are / मोबाइल फोन और टैबलेट के लिए ऑपरेटिंग सिस्टम हैं-", ["Windows OS - विण्डोज ओएस", "Android OS - एंड्रायड ओएस", "iOS - आईओएस", "All of the Above - उपर्युक्त सभी"], 3],
+    ["Linux kernel was invented by / लिनक्स कर्नल द्वारा अविष्कार किया गया था-", ["Linux Van Pelt - लिनक्स वेन पेल्ट", "Linux Torvalds - लिनक्स टोरवाल्डा", "Linux Pauling - लिनक्स पावलिंग", "None - कोई नहीं"], 1],
+    ["GUI is used as an interface between. / जीयूआई किन दो के मध्य इन्टरफेस के लिए प्रयोग किया जाता है-", ["Hardware & Software - हार्डवेयर और सॉफ्टवेयर", "Man & Machine - व्यक्ति और मशीन", "Software & User - सॉफ्टवेयर और यूजर", "None of These - इनमें से कोई नहीं"], 2],
+    ["Linux is a.......and.........operating system. / लिनक्स एक ..... एवं ........ ऑपरेटिंग सिस्टम है", ["Multiuser, Single tasking / मल्टीयूजर, सिंगल टास्किंग", "Multiuser, Multitasking / मल्टीयूजर, मल्टीटास्किंग", "Single user, Multitasking / सिंगल यूजर, मल्टीटास्किंग", "None of These - इनमें से कोई नहीं"], 1],
+    ["The most popular computer operating system in use today is. / आज सबसे लोकप्रिय कम्प्यूटर ऑपरेटिंग सिस्टम उपयोग में है।", ["Linux", "Unix", "Windows", "Macintosh"], 2],
+    ["Which of the following is internal command / निम्नलिखित में कौन सा आंतरिक कमांड है।", ["Ver", "Dir", "Edit", "Both a and b"], 3],
+    ["Which of the following is not based on UNIX? / इनमें से कौन - सा यूनिक्स आधारित नहीं है?", ["MacOS", "Fedora", "MS DOS", "None"], 2],
+    ["Computer system consists of...... / कम्प्यूटर सिस्टम शामिल करता है.........।", ["Hardware - हार्डवेयर", "Software - सॉफ्टवेयर", "Both a & b - a तथा b दोनों", "None - कोई नहीं"], 2],
+    ["Operating System manages. / ऑपरेटिंग सिस्टम ....... का प्रबंधन करता है।", ["Memory - मेमोरी", "I/O Devices - इनपुट / आउटपुट डिवाइस", "Processor - प्रोसेसर", "All of the options - उपरोक्त सभी"], 3],
+    ["Which of the following operating system does not implement multitasking truly? / निम्नलिखित में से कौन सा ऑपरेटिंग सिस्टम मल्टीटास्किंग वास्तव में लागू नहीं करता है?", ["Windows 98 - विण्डोज 98", "MS DOS - एमएस डॉस", "Windows XP - विण्डोज एक्सपी", "Windows NT - विण्डोज एनटी"], 1],
+    ["Which extension is used for standard bitmapped format for storing graphics.... / ग्राफिक्स को स्टोर करने के लिए स्टैंडर्ड बिटमैप फ़ॉर्मेट के लिए .... एक्सटेंशन का उपयोग किया जाता है।", [".bmp", ".wav", ".xls", ".jpeg"], 0],
+    ["Which of the following is an example of system software? / निम्नलिखित में सिस्टम सॉफ्टवेयर का उदाहरण है।", ["Operating system - ऑपरेटिंग सिस्टम", "Loader - लोडर", "Linker - लिंकूर", "All of the above - उपरोक्त सभी"], 3],
+    ["The operating system for a computer does the following.. / किसी कम्प्यूटर का ऑपरेटिंग सिस्टम निम्न कार्य करता है।", ["Manages disk and file / डिस्क एवं फाइल मैनेज करता है", "Manages computer resources / कम्प्यूटर रिसोर्सेज को मैनेज करता है", "Manages computer memory / कम्प्यूटर की मेमोरी को मैनेज करता है", "All of the above / उपरोक्त सभी"], 3],
+    ["Does Ubuntu need Antivirus? / क्या उबंटू को एंटीवायरस की जरूरत है?", ["Yes - हां", "No - नहीं", "Partial - आंशिक", "None - कोई नहीं"], 1],
+    ["Operating system is used in .......... / ऑपरेटिंग सिस्टम का प्रयोग........... में होता है।", ["ATM card - एटीएम कार्ड", "Smart card - स्मार्ट कार्ड", "Computer system - कम्प्यूटर सिस्टम", "Microwave Oven - माइक्रोवेव ओवेन"], 2],
+    ["In Linux a user can load or upload / लिनक्स में एक यूजर लोड या अपलोड कर सकता है।", ["I/O Modules - आई/ओ मॉड्यूल्स", "I/O Devices - आई/ओ डिवाइस", "Kernel Modules - कर्नल मॉड्यूल्स", "File Base I/O - फाइल बेस आई/ओ"], 2],
+    ["A telephone number, a birth date, and a customer name are all examples of _ / टेलीफोन संख्या, जन्मतिथि और ग्राहक का नाम.......का उदाहरण है", ["A File", "A Database", "Data", "A Record"], 3],
+    ["Screen that comes on when you turn on your computer that shows all the icons is called _ / कम्प्यूटर के आरंभ होने पर सभी आइकॉन को दिखाने वाली स्क्रीन को....... कहते हैं।", ["Carl", "Smurfs", "Spreadsheet", "Desktop"], 3],
+    ["Which command is used to copy files? / कौन सा কमाण्ड फाइल कॉपी करने के लिए होता है", ["Copy Command - कॉपी कमांड", "Diskcopy - डिस्ककॉपी", "Ctrl+C", "All of Above - उपरोक्त सभी"], 3],
+    ["To select non-adjacent files, press and hold the _ key while selecting individual files. / नॉन एडजसेन्ट फाइल को सेलेक्ट करने के लिए प्रेस... key...", ["Shift - शिफ्ट", "Tab - टैब", "Ctrl - कंट्रोल", "Windows - विण्डोज"], 2],
+    ["The collection of related files is called _ / संबंधित फाइलों के संग्रह को ...... कहते हैं।", ["Data", "Database", "Register", "Datum"], 1],
+    ["What is the Default File Extension after .(Dot) in Web files- / वेब फाइल में डॉट के बाद डिफॉल्ट फाइल एक्सटेंशन क्या होता है?", [".gtml", ".html or .htm", ".com", ".xtml"], 1],
+    ["Which among following is responsible for finding and loading operating system into RAM? / निम्न में से कौन ऑपरेटिंग सिस्टम को रैम में सर्च एवं लोड करने के लिए रिस्पांसिबल है?", ["Bootstrap Loader", "CMOS", "DMOS", "BIOS"], 0],
+    ["Aqua user interface was appeared with? / एक्वा यूजर इंटरफेस के साथ दिखाई देता है-", ["Windows", "Shells", "MAC OS", "Bourne Shell"], 2],
+    ["OS does not boot itself when a system is _ / सिस्टम के...... होने पर ओ एस स्वतः बुट नहीं होता है।", ["Shutdown", "Reset", "Powered on", "Restarted"], 0]
   ],
   c3: [
     ['LibreOffice Writer में बाय डिफ़ॉल्ट फ़ॉन्ट साइज़ (Font Size) कितना होता है?', ['10', '11', '12', '14'], 1],
@@ -266,7 +316,32 @@ const QB = {
     ['LibreOffice Writer में किसी ऑब्जेक्ट को डिलीट करने के लिए किस कुंजी का प्रयोग होता है?', ['Delete', 'Backspace', 'Both Delete and Backspace', 'Ctrl+D'], 2],
     ['LibreOffice Writer में पैराग्राफ इंडेंट बढ़ाने की शॉर्टकट की क्या है?', ['Ctrl+M', 'Tab', 'Ctrl+Shift+M', 'Shift+Tab'], 1],
     ['LibreOffice Writer में बुलेट लिस्ट से बाहर आने के लिए या दो बार Enter दबाने से क्या होता है?', ['बुलेट लिस्ट समाप्त हो जाती है', 'नया पेज बन जाता है', 'टेक्स्ट बोल्ड हो जाता है', 'कुछ नहीं होता'], 0],
-    ['LibreOffice Writer के संबंध में इनमें से कौन सा कथन असत्य है?', ['आप पासवर्ड से सुरक्षित डॉक्यूमेंट सेव कर सकते हैं', 'इसमें मेल मर्ज का विकल्प होता है', 'यह एक फ्री और ओपन सोर्स सॉफ्टवेयर है', 'इसमें स्प्रेडशीट जैसी फॉर्मूला बार होती है'], 3]
+    ['LibreOffice Writer के संबंध में इनमें से कौन सा कथन असत्य है?', ['आप पासवर्ड से सुरक्षित डॉक्यूमेंट सेव कर सकते हैं', 'इसमें मेल मर्ज का विकल्प होता है', 'यह एक फ्री और ओपन सोर्स सॉफ्टवेयर है', 'इसमें स्प्रेडशीट जैसी फॉर्मूला बार होती है'], 3],
+    ["Key used to Centered the text in LibreOffice writer. / लिब्रेऑफिस राइटर में टेक्स्ट को सेन्टर करने के लिए 'की' का इस्तेमाल होता है।", ["Ctrl + E", "Ctrl + P", "Ctrl + Z", "Ctrl + O"], 0],
+    ["Which function Key is used for Spell check.. / स्पेल चेक के लिए किस फंक्शन की इस्तेमाल होता है..", ["F7", "Ctrl + C", "Shift +C", "Ctrl + F7"], 0],
+    ["........ Key is used to select at the beginning of the line in LibreOffice writer. / लिब्रेऑफिस राइटर में लाइन की शुरुआत से सेलेक्ट करने के लिए 'की' का इस्तेमाल होता है-", ["Home+shift", "Ctrl+Home", "Alt+Home", "Shift +C"], 0],
+    ["Which of the following shortcut Key is used for Save As. / इनमें से किस शॉर्टकट का प्रयोग Save As करने के लिए किया जाता है।", ["F7", "Ctrl + C", "Shift +Ctrl+S", "Ctrl + F7"], 2],
+    ["Key used for find and replace the text in LibreOffice writer. / लिब्रेऑफिस राइटर में टेक्स्ट को फाइंड एंड रिप्लेस करने के लिए 'की' का इस्तेमाल होता है-", ["Ctrl + H", "Ctrl + P", "Ctrl + Z", "Ctrl + O"], 0],
+    ["In LibreOffice writer which of the following shortcut is used to justify the document. / लिब्रेऑफिस राइटर में टेक्स्ट को जड़िसफाई करने के लिए 'की' का प्रयोग होता है-", ["Ctrl + J", "Ctrl + P", "Ctrl + Z", "Ctrl + O"], 0],
+    ["Key is used to go to beginning of the line in LibreOffice writer / लिब्रेऑफिस राइटर में लाइन की शुरुआत में जाने के लिए 'की' का इस्तेमाल होता है-", ["Ctrl+Home", "Home", "Alt+Home", "Shift +Home"], 1],
+    ["Open source software is software whose source code is available for modification or enhancement by anyone. Which of the following is an example of open source software? / ओपन सोर्स सॉफ्टवेयर वह सॉफ्टवेयर है जिसका सोर्स कोड किसी के द्वारा संशोधन या वृद्धि के लिए उपलब्ध है। निम्नलिखित में से कौन सा ओपन सोर्स सॉफ्टवेयर का एक उदाहरण है?", ["Adobe Photoshop - एडॉबे फोटोशॉप", "MS Word - एमएस वर्ड", "LibreOffice - लिब्रेऑफिस", "Skype - स्काइप"], 2],
+    ["... Key is used to Left align the text in LibreOffice writer. / 'की' का उपयोग लिब्रेऑफिस राइटर में टेक्स्ट को बाएँ एलाइन करने के लिए किया जाता है।", ["Ctrl + M", "Ctrl + P", "Ctrl + L", "Ctrl + O"], 2],
+    ["... Key is used to Right align the text in LibreOffice writer. / 'की' का उपयोग लिब्रेऑफिस राइटर में टेक्स्ट को दाएँ एलाइन करने के लिए किया जाता है।", ["Ctrl + P", "Ctrl + R", "Ctrl + M", "Ctrl + ~"], 1],
+    ["Alignment buttons are available on... of LibreOffice writer. / लिब्रेऑफिस राइटर के ... पर एलाइगमेंट बटन उपलब्ध होती है-", ["Formating Toolbar - फार्मेटिंग टूलबार", "Status bar - स्टेटस बार", "Standard Toolbar - स्टैण्डर्ड टूलबार"], 0],
+    ["What is the hyperlink shortcut key in LibreOffice Writer? / लिब्रेऑफिस राइटर में हाइपरलिंक की शॉर्टकट की क्या है?", ["Ctrl + H", "Ctrl + I", "Ctrl + K", "Ctrl + shift + h"], 2],
+    ["Shortcut key used for line break without changing the paragraph in LibreOffice writer. / लिब्रेऑफिस राइटर में बिना पैराग्राफ बदले लाईन ब्रेक करने के लिए शॉर्टकट की का इस्तेमाल होता है-", ["Ctrl + M", "Ctrl + P", "Shift +Enter", "Ctrl + O"], 2],
+    ["Minimum font size in libreoffice writer? / लिब्रेऑफिस राइटर में न्यूनतम फोंट आकार होता है?", ["2", "3", "1", "0"], 0],
+    ["What do you see at the bottom of MS Word and Writer window? / एम एस वर्ड और राइटर में सबसे नीचे जो दिखाई देता है उसे क्या बोलते हैं?", ["Title bar - टाईटल बार", "Status bar - स्टेटस बार", "Task bar - टास्क बार", "Menu bar - मेनू बार"], 1],
+    ["What is the print preview shortcut key in LibreOffice Writer? / लिब्रेऑफिस राइटर में प्रिंट प्रीव्यू की शॉर्टकट की क्या है?", ["Ctrl+Shift+P", "Ctrl+F2", "Ctrl+Shift+O", "Ctrl+P"], 2],
+    ["Key used for Subscript the text in LibreOffice writer. / लिब्रेऑफिस राइटर में टेक्स्ट को सबस्क्रिप्ट करने के लिए 'की' का इस्तेमाल होता है-", ["Ctrl +Shift+B", "Ctrl + P", "Ctrl + M", "Ctrl + O"], 0],
+    ["Key used to open find box in LibreOffice writer. / लिब्रेऑफिस राइटर में फाइंड बॉक्स ओपन करने के लिए 'की' का इस्तेमाल होता है-", ["Ctrl + F", "Ctrl + T", "Ctrl + F1", "Ctrl + O"], 0],
+    ["Key used for exits appliations LibreOffice writer. / लिब्रेऑफिस राइटर में एप्लीकेशन को बन्द करने के लिए 'की' का इस्तेमाल होता है-", ["Ctrl + O", "Ctrl + T", "Ctrl + F1", "Ctrl + Q"], 3],
+    ["Key used to Save a document in LibreOffice writer, Calc and Impress. / लिब्रेऑफिस राइटर, कैल्क और इम्प्रेस में डॉक्यूमेंट को सेव करने के लिए 'की' का इस्तेमाल होता है-", ["Ctrl + F1", "Ctrl + T", "Ctrl + S", "Ctrl + O"], 2],
+    ["Which one of the following shortcut Key is used to insert a page break. / पेज ब्रेक के लिए निम्न में से कौन सा शॉर्टकट 'की' का उपयोग किया जाता है।", ["Ctrl + F1", "Ctrl + T", "Ctrl + S", "Ctrl+Enter"], 3],
+    ["Maximum font size in libreoffice writer? / लिब्रेऑफिस राइटर में अधिकतम फोंट आकार होता है?", ["22", "99", "100", "96"], 1],
+    ["Shortcut key used to Go to start of document in LibreOffice writer. / लिब्रेऑफिस राइटर में डॉक्यूमेंट के स्टार्ट में जाने के लिए शॉर्टकट की का इस्तेमाल होता है-", ["Ctrl + M", "Ctrl + P", "Ctrl+Home", "Ctrl + O"], 2],
+    ["Which is the type of page orientation. / इनमें से पेज ओरिएंटेशन का प्रकार है।", ["Portrait - पोर्ट्रेट", "Landscape - लैण्डस्केप", "Both a & b - a तथा b दोनों", "Slide - स्लाइड"], 2],
+    ["Short cut Key used to Open a document LibreOffice writer. / लिब्रेऑफिस राइटर में डॉक्यूमेंट को ओपन करने के लिए 'की' का इस्तेमाल होता है", ["Ctrl + O", "Ctrl + P", "Ctrl + F", "Ctrl + Q"], 0]
   ],
   c4: [
     ['In Calc, Rename Sheet option available in which menu?', ['File', 'Sheet', 'Data', 'Format'], 1],
@@ -338,7 +413,32 @@ const QB = {
     ['Spreadsheets allow us to organize, analyze, and store data in tabular form.', ['True', 'False'], 0],
     ['In LibreOffice Calc a number is in Left alignment and an alphabet is in Right alignment.', ['True', 'False'], 1],
     ['LibreOffice Calc by default provides an auto calculator feature that displays values in a selected range.', ['True', 'False'], 0],
-    ['Ctrl + D have the same function in LibreOffice calc and Writer.', ['True', 'False'], 0]
+    ['Ctrl + D have the same function in LibreOffice calc and Writer.', ['True', 'False'], 0],
+    ["Number of Rows in LibreOffice Calc spreadsheet? / लिब्रेऑफिस कैल्क स्प्रेडशीट में रो की संख्या कितनी होती है?", ["1,048,576", "256", "2,048,571", "1111"], 0],
+    ["Number of Columns in LibreOffice Calc spreadsheet? / लिब्रेऑफिस कैल्क स्प्रेडशीट में कॉलम की संख्या कितनी होती है?", ["256", "1024", "1,048,576", "210"], 2],
+    ["Shortcut Key used for superscript in LibreOffice Calc. / लिब्रेऑफिस कैल्क में सुपरस्क्रिप्ट के लिए शॉर्टकट की का इस्तेमाल होता है-", ["Ctrl + shift+p", "Ctrl + 5", "Ctrl + A", "Ctrl + Shift+v"], 0],
+    ["Shortcut Key used for help. / हेल्प के लिए शॉर्टकट की का उपयोग होता है-", ["Ctrl + F1", "Ctrl + F2", "F1", "F7"], 2],
+    ["Extension of LibreOffice calc spreadsheet. / लिब्रेऑफिस कैल्क का एक्सटेंशन है-", [".ods", ".xls", ".odp", ".odt"], 0],
+    ["Short cut used for print preview LibreOffice Calc. / लिब्रेऑफिस कैल्क में प्रिन्ट प्रिव्यू करने शॉर्टकट की का इस्तेमाल होता है-", ["Ctrl + Shift +O", "Ctrl + P", "Ctrl + F", "Ctrl + 0"], 0],
+    ["How many spreadsheets on Libreoffice calc by default? / डिफॉल्ट रूप में लिब्रेऑफिस कैल्क में कितने वर्कशीट होते हैं?", ["2", "3", "1", "0"], 2],
+    ["What will result from adding =A1+A2 to Calc? / कैल्क में =A1+A2 को ऐड करने से क्या परिणाम आएगा?", ["#VALUE!", "5", "1", "0"], 3],
+    ["What is the shortcut of date in LibreOffice Calc. / लिब्रेऑफिस कैल्क में डेट का शॉर्टकट होता है।", ["Ctrl + D", "Ctrl + Shift + :", "Ctrl + ;", "None - कोई नहीं"], 2],
+    ["What is the maximum number of spreadsheets in Calc? / कैल्क में अधिकतम वर्कशीट कितनी होती है?", ["32000", "1000", "5000", "255"], 0],
+    ["Calc formula will start from which of the following symbol.. / कैल्क फॉर्मूला निम्नलिखित में से किस सिम्बल से शुरू होगा?", ["@", "=", "$", "&"], 1],
+    ["What is the maximum number of cell spreadsheets in calc? / कैल्क में अधिकतम सेल एक नवर्सheet में कितने हैं?", ["10737741824", "1000", "6000", "1,048,576"], 0],
+    ["What is the maximum number of Characters in one cell in calc spreadsheet? / कैल्क स्प्रेडशीट में एक सेल में कैरेक्टर की अधिकतम संख्या क्या है?", ["32767", "1024", "6000", "255"], 0],
+    ["Moves the cursor to the first cell (A1) in the sheet in LibreOffice. / लिब्रेऑफिस में शीट में कर्सर को पहली सेल (A1) पर ले जाया जाता है-", ["Ctrl + Home", "Ctrl + F1", "Alt + F1", "Ctrl + 0"], 0],
+    ["Minimum zoom % in Calc is.... / कैल्क में न्यूनतम जूम प्रतिशत होता है।", ["20%", "0%", "10%", "15%"], 0],
+    ["Key used to Opens Manage Template in LibreOffice Calc. / लिब्रेऑफिस कैल्क में Manage Template के लिए 'की' का इस्तेमाल होता है-", ["Ctrl + Shift + N", "Ctrl + T", "Ctrl + F1", "Ctrl + 0"], 0],
+    ["Key used to Print a document in LibreOffice Calc. / लिब्रेऑफिस कैल्क में डाक्यूमेंट को प्रिंट करने के लिए 'की' का इस्तेमाल होता है-", ["Ctrl + P", "Ctrl + T", "Ctrl + F1", "Ctrl + 0"], 0],
+    ["Can't maximize libreoffice calc zoom? / लिब्रेऑफिस कैल्क को अधिकतम जूम नहीं कर सकते?", ["200", "300", "500", "400"], 2],
+    ["Shortcut key used to opens the Function Wizard in LibreOffice Calc. / लिब्रेऑफिस कैल्क में फंक्शन विजार्ड को ओपन करने के लिए शॉर्टकट की है-", ["Alt + F1", "Ctrl + F6", "F2", "Ctrl + F2"], 3],
+    ["Shortcut key used to increase width of current cell in LibreOffice Calc. / लिब्रेऑफिस कैल्क में करेंट सेल की चौड़ाई बढ़ाने के लिए शॉर्टकट की है-", ["Alt + Right Arrow", "Alt + End", "F2", "Ctrl + F2"], 0],
+    ["Reduce the cell width of the current cell. / वर्तमान सेल की सेल चौड़ाई कम करें।", ["Alt + End", "Alt + Left Arrow Key", "F2", "Ctrl + F2"], 1],
+    ["Shortcut key used to decrease height of current row in LibreOffice Calc. / शॉर्टकट की का उपयोग लिब्रेऑफिस कैल्क में करेंट रो की हाइट को कम करने के लिए किया जाता है।", ["Alt + up Arrow", "Alt + End", "F2", "Ctrl+F2"], 0],
+    ["Shortcut key for reach to last edit cell in LibreOffice calc? / लिब्रेऑफिस कैल्क में अंतिम एडिट सेल तक पहुँचने के लिए शॉर्टकट की है-", ["Ctrl + Home", "Alt+Ctrl +0", "Ctrl+End", "Ctrl+H"], 2],
+    ["The combination of the column letter and row number for a cell in an Calc spreadsheet is called. / कैल्क स्प्रेडशीट के किसी सेल के कॉलम लेटर और रो नंबर का कांबिनेशन कहलाता है-", ["Cell across - सेल एक्सॉस", "Cell Identification Number - सेल आइडेंटिफिकेशन नम्बर", "Cell Reference - सेल रिफरेन्स", "Cell Identify - सेल आइडेंटिफ़िकाई"], 2],
+    ["Output of the Calc expression is =100/10/2 / कैल्क एक्सप्रेसप्रेशन =100/10/2 का आउटपुट है।", ["5", "50", "35", "200"], 0]
   ],
   c5: [
     ['What is the maximum number of views you can add to a Slide?', ['2', '4', '6', '10'], 1],
@@ -420,7 +520,32 @@ const QB = {
     ['A hidden slide is a slide that cannot be shown to the audience while running a slide show?', ['True', 'False'], 0],
     ['You cannot create Custom Page Style in LibreOffice Impress?', ['True', 'False'], 1],
     ['Slide animations are similar to transitions, but they applicable to individual elements in a single slide?', ['True', 'False'], 0],
-    ['In LibreOffice Impress you can create a photo album from a set of images, usually with one photo per Slide.', ['True', 'False'], 0]
+    ['In LibreOffice Impress you can create a photo album from a set of images, usually with one photo per Slide.', ['True', 'False'], 0],
+    ["Maximum Zoom in Impress are- / इम्प्रेस में अधिकतम जूम कितना होता है?", ["300%", "3000%", "450%", "500%"], 1],
+    ["Master Slide Function in which LibreOffice Impress Menu. / लिब्रेऑफिस इम्प्रेस में मास्टर स्लाइड फंक्शन किस मेन्यू में उपलब्ध है?", ["Slide Show - स्लाइड शो", "Slide - स्लाइड", "Format - फॉर्मेट", "Tools - टूल्स"], 1],
+    ["It is used to determine the timing on a slide in a presentation / इसका उपयोग प्रेजेंटेशन में स्लाइड पर समय निर्धारित करने के लिए किया जाता है।", ["Slide timer", "Slide timing tool", "Slide tool", "rehearsal"], 1],
+    ["What is a presentation in LibreOffice? / लिब्रेऑफिस में प्रेजेंटेशन क्या है?", ["Calc - कैल्क", "Impress - इम्प्रेस", "Writer - राइटर", "None - कोई नहीं"], 1],
+    ["...menus are found in LibreOffice Impress? / लिब्रे ऑफिस इम्प्रेस में मेन्यू की संख्या है?", ["10", "12", "9", "7"], 0],
+    ["Help Key used in Libre Office? / लिब्रेऑफिस में हेल्प की का शॉर्टकट है?", ["F2", "F7", "F1", "F8"], 0],
+    ["What is the minimum zoom size in LibreOffice Impress? / लिब्रेऑफिस इम्प्रेस में जूम का न्यूनतम साइज क्या होता है?", ["5%", "6%", "30%", "100%"], 0],
+    ["Slide Transition command found in which menu of LibreOffice Impress? / स्लाईड ट्रांजिशन कमांड लिब्रेऑफिस इम्प्रेस में किस मेन्यू में मिलता है?", ["File - फाइल", "Slide - स्लाइड", "Format - फॉर्मेट", "F7"], 1],
+    ["Which of the following is found in LibreOffice Impress? / निम्नलिखित में से कौन लिब्रेऑफिस इम्प्रेस में पाये जाते हैं?", ["Standard Tool Bar-स्टैण्डर्ड टूल बार", "Single Toolbar-सिंगल टूलबार", "Tabbed देख्स", "All of above / उपयुक्त सभी"], 3],
+    ["In LibreOffice Impress, what combinations of commands are used for copy and paste? / लिब्रेऑफिस इम्प्रेस में कॉपी और पेस्ट के लिए निम्न कौन से कमाण्ड कांबिनेशन का उपयोग होता है?", ["CTRL+X and CTRL+P", "Invoke find dialog box - इनकावोक फाइंड डायलॉग बॉक्स", "CTRL+X and CTRL+5", "CTRL+C and CTRL+V"], 3],
+    ["Key used to Opens Templates and Documents dialog in LibreOffice Impress. / लिब्रेऑफिस इम्प्रेस में टेम्पलेट को ओपन करने के लिए किस की का इस्तेमाल होता है-", ["Ctrl+Shift+N", "Ctrl + T", "Ctrl + F1", "Ctrl + O"], 0],
+    ["Key used to Print a document in LibreOffice Impress. / लिब्रेऑफिस इम्प्रेस में डाक्यूमेंट को प्रिंट करने के लिए किस की का इस्तेमाल होता है-", ["Ctrl + P", "Ctrl + T", "Ctrl + F1", "Ctrl + O"], 0],
+    ["Which command brings you to the first slide in your presentation? / कौन-सा कमांड का प्रयोग आप प्रेजेंटेशन में फर्स्ट स्लाइड पर जाने के लिए करते हैं।", ["Next slide button - नेक्स्ट स्लाइड बटन", "Page up - पेज अप", "Ctrl+Home", "Ctrl + End"], 2],
+    ["Which of the following extensions are related to LibreOffice impress? / निम्नलिखित में से कौन सी एक्सटेंशन लिब्रेऑफिस इम्प्रेस से सम्बन्धित हैं?", [".odt", ".ods", ".rtf", ".odp"], 3],
+    ["In LibreOffice impress which of the following key is used to end presentation. / लिब्रेऑफिस इम्प्रेस में किस की का प्रयोग प्रेजेंटेशन को समाप्त करने के लिए होता है?", ["Ctrl+X", "Ctrl+Home", "Esc", "Shift +End"], 2],
+    ["In LibreOffice Impress, slide sorter command is found under which menu. / पावरप्वाइंट में किस मेन्यू के अन्तर्गत स्लाइड शार्टर कमांड पाया जाता है?", ["File - फाईल", "Tools - टूल्स", "View - व्यू", "Edit - एडिट"], 2],
+    ["The default name of the Impress presentation is ... / इम्प्रेस प्रेजेंटेशन का डिफॉल्ट नाम है.........", ["Calc - कैल्क", "Untitled1- LibreOffice Impress - अनटाइटल्ड 1- लिब्रेऑफिस इम्प्रेस", "Slide1 - स्लाइड 1", "Writer - राइटर"], 1],
+    ["You can create a new presentation using all of the following except. / किसके अतिरिक्त आप नया प्रेजेंटेशन तैयार कर सकते हैं?", ["Ctrl + N", "Click on New Icon", "Ctrl + O", "File menu > New Presentation"], 2],
+    ["The ______ keyboard combination can be used to open a presentation file. / किसी प्रेजेंटेशन को ओपन करने के लिए किस संयोजन का उपयोग किया जाता है...", ["Ctrl+F", "Alt+P", "F1", "Ctrl+O"], 3],
+    ["The maximum number of slide can be printed on A4 size page. / स्लाइडों की मैकिसमम नम्बर ए4 आकार के पेज पर प्रिंट की जा सकती है।", ["1", "5", "9", "4"], 2],
+    ["You use ___ in your slides to hold text, art, and charts. / अपनी स्लाइड में टेक्स्ट, क्लिप आर्ट और चार्ट को होल्ड के लिए ..... उपयोग करें।", ["Textbox - टेक्स्ट बॉक्स", "Drawing box - ड्रॉइंग बॉक्स", "Placeholders - प्लेस होल्डर", "Window - विण्डो"], 2],
+    ["Key used to insert new slide LibreOffice Impress. / लिब्रेऑफिस इम्प्रेस में नई स्लाइड इंसर्ट करने के लिए किस की का उपयोग होता है-", ["Ctrl + O", "Ctrl + M", "Ctrl + F1", "Ctrl + S"], 1],
+    ["Menu command to create a text box on a slide. / स्लाइड पर टेक्स्ट बॉक्स बनाने के लिए यह मेन्यू कमाण्ड है।", ["Tool/Text box - टूल/टेक्स्ट बॉक्स", "View/Text box - व्यू/टेक्स्ट बॉक्स", "Insert/Text box - इंसर्ट/टेक्स्ट बॉक्स", "Formate/Text box - फॉर्मेट/टेक्स्ट बॉक्स"], 2],
+    ["In LibreOffice Impress in order to see all the slides on one screen use- / एक स्क्रीन उपयोग पर सभी स्लाइड देखने के लिए लिब्रेऑफिस इम्प्रेस में......", ["View, slide sorter - व्यू, स्लाइड सॉर्टर", "View, slide - व्यू, स्लाइड", "View, master - व्यू, मास्टर", "View, slide show - व्यू, स्लाइड शो"], 0],
+    ["Which of the following shortcut key is used to start Slide Show from Current Slide. / इम्प्रेस में किस शॉर्टकट की का प्रयोग करेंर स्लाइड शो से प्रारम्भ करने के लिए है?", ["F5", "Ctrl+F5", "Shift+F5", "Shift+F2"], 2]
   ],
   c6: [
     ['ARPANET ka poora naam kya hai?', ['Advanced Research Projects Agency Network', 'Advanced Research Project Authority Network', 'Automated Research Projects Agency Network', 'None of these'], 0],
@@ -522,7 +647,32 @@ const QB = {
     ['Cookies kya hoti hain?', ['Virus type', 'Chhoti text files jo website dwara user ke browser par store ki jati hain session track karne ke liye', 'Hardware part', 'Internet speed booster'], 1],
     ['Cache memory browser me kyu hoti hai?', ['Frequently visited web pages ko fast load karne ke liye', 'Virus rakhne ke liye', 'RAM badhane ke liye', 'None'], 0],
     ['Web scraping ka kya arth hai?', ['Website hack karna', 'Website delete karna', 'Websites se automatic tarike se data extract karna', 'None'], 2],
-    ['Internet of Things (IoT) me devices aapas me kiske madhyam se judti hain?', ['Manual switch से', 'Sirf wires ke madhyam se', 'Bluetooth ke alawa kuch nahi', 'Internet aur sensors ke madhyam se'], 3]
+    ['Internet of Things (IoT) me devices aapas me kiske madhyam se judti hain?', ['Manual switch से', 'Sirf wires ke madhyam se', 'Bluetooth ke alawa kuch nahi', 'Internet aur sensors ke madhyam se'], 3],
+    ["Unreserved Ticketing System (UTS) through App launched by Railway Ministry in..... / रेलवे मंत्रालय के द्वारा एप के माध्यम से अनरिजर्व्ड टिकटिंग सिस्टम (UTS)........ में लॉन्च किया गया", ["January 2019 - जनवरी 2019", "Februay 2019 - फरवरी 2019", "January 2018 - जनवरी 2018", "None of above - इनमें से कोई नहीं"], 3],
+    ["Which one of the following is a Web browsing software / निम्नलिखित में से कौन सा वेब ब्राउजिंग साफ्टवेयर है।", ["Google Chrome - गूगल क्रोम", "Mozilla Firefox - मोजिला फॉयरफॉक्स", "Apple Safari - एप्पल सफारी", "all of above - उपर्युक्त सभी"], 3],
+    ["The World Wide Web is composed of / वर्ल्ड वाइड वेब बनाया जाता है।", ["1 page - 1 पेज", "only 100 Web pages - केवल 100 वेब पेजेस", "500 Web pages - 500 वेब पेजेस", "Millions of Web pages - दस लाख वेब पेजेस"], 3],
+    ["Webpage can be developed by using language / भाषा के उपयोग से वेब पेज बनाए जा सकते हैं।", ["HTML - एचटीएमएल", "WWW - डब्लू डब्लू डब्लू", "Web browser - वेब ब्राउजर", "Internet Explorer - इंटरनेट एक्सप्लोरर"], 0],
+    ["WAIS stands for / WAIS का पूर्ण अर्थ है:", ["Wide area information server - वाइड एरिया इनफॉरमेशन सर्वर", "Wide area Internet service - वाइड एरिया इंटरनेट सर्विस", "Wide Area information system - वाइड एरिया इंफॉर्मेशन सिस्टम", "None of the above - उपर्युक्त में से कोई नहीं"], 2],
+    ["The internet was originally developed by / इंटरनेट वास्तविक रूप से... द्वारा विकसित हुआ था।", ["A corporation - एक कॉर्पोरेशन", "Computer hackers - कंप्यूटर हैकर", "U.S. Department of Defense - यू.एस. का रक्षा विभाग", "The University of Michigan - मिशिगन विश्वविद्यालय"], 2],
+    ["Software which allows user to view the webpage is called.... / एक सॉफ्टवेयर जिसके द्वारा वेबपेज को देखा जा सकता है।", ["Website - वेबसाइट", "Interpreter - इंटरप्रेटर", "Internet browser - इंटरनेट ब्राउजर", "Operating system - ऑपरेटिंग सिस्टम"], 2],
+    ["A specifice page of web is known as / वेब का स्पेसिफिक पेज जाना जाता है।", ["worksheet - वर्कशीट", "Document - डॉक्यूमेंट", "Webpage - वेबपेज", "None of above - उपर्युक्त में से कोई नहीं"], 2],
+    ["Which of the following is considered as first web browser? / निम्नलिखित में से कौन सा पहला वेब ब्राउजर के रूप में माना जाता है?", ["Nexus - नेक्सस", "Internet Explorer - इंटरनेट एक्सप्लोरर", "Netscape Navigator - नेटस्केप नेविगेटर", "Mosaic - मोजेक"], 0],
+    ["The Internet uses..... / इंटरनेट प्रयोग करता है....।", ["Circuit switching - सर्किट स्विचिंग", "Packet switching - पैकेट स्विचिंग", "Hybrid Switching - हाइब्रिड स्विचिंग", "None of the above - इनमें से कोई नहीं"], 1],
+    ["The first page of website is known as.. / वेबसाइट का प्रथम पेज जाना जाता है...।", ["Main page - मेन पेज", "Home page - होम पेज", "Both a & b - a तथा b दोनों", "None of above - उपर्युक्त कोई नहीं"], 1],
+    ["Who was the father of Internet? / इंटरनेट का जनक किसे कहा गया ?", ["Chares Babbage - चार्ल्स बैबेज", "Vint Cerf - विन्ट सर्फ", "Denis Riche - डेनिस रिच", "Martin Cooper - मार्टिन कूपर"], 1],
+    ["The communication protocol used by Internet is / इंटरनेट के द्वारा कम्यूनिकेशन प्रोटोकॉल प्रयोग होता है।", ["HTTP - एचटीटीपी", "TELNET - टेलनेट", "UTP - यूटीपी", "TCP/IP - टीसीपी/आईपी"], 3],
+    ["A dial up connection to the internet / इंटरनेट के लिए डायल-अप कनेक्शन", ["There is a connection that is found in most homes. - एक कनेक्शन है जो ज्यादातर घरों में पाया जाता है।", "Allows for fast data exchange between end-points. - एंड-पॉइंट्स के मध्य फास्ट डाटा एक्सचेंज करने की अनुमति देता है।", "A good expert medium that Internet over LAN. - एक अच्छा एक्सपर्ट माध्यम जो लेन से इंटरनेट करता है।", "Both b and c - दोनों b एवं c"], 3],
+    ["ISP stands for- / आई.एस.पी. का पूर्ण अर्थ है।", ["Internal Service Provider - इन्टरनल सर्विस प्रोवाइडर", "International service provider - इंटरनेशनल सर्विस प्रोवाइडर", "Internet service Provider - इंटरनेट सर्विस प्रोवाइडर", "Intranet service provider - इंट्रानेट सर्विस प्रोवाइडर"], 2],
+    ["Internet is... / इंटरनेट है...", ["Complex System - काम्प्लेक्स सिस्टम", "Decentralized System - डीसेन्ट्रेलाइज्ड सिस्टम", "Dynamic System - डायनेमिक सिस्टम", "All above - उपरोक्त सभी"], 3],
+    ["Each computer connected to the internet is called.. / इंटरनेट से कनेक्ट प्रत्येक कम्प्यूटर कहलाता है", ["Client/server - क्लाइंट/सर्वर", "Search engine - सर्च इंजन", "Web browser - वेब ब्राउजर", "None of above - उपर्युक्त में से कोई नहीं"], 0],
+    ["Internet has the characteristic...... / इंटरनेट की विशेषता होती है।", ["To streamline corporate communication - कॉरपोरेट कम्युनिकेशन को सुव्यवस्थित करना।", "Cross-platform easement - क्रास-प्लेटफार्म आसान करना", "Establish contact with people within the organization - संस्था के अन्तर्गत ही लोगों तक सम्पर्क स्थापित करना", "All of the above - उपरोक्त सभी"], 3],
+    ["A client program used to access the Internet services and resources available through the World Wide Web. / एक क्लाइंट प्रोग्राम जो वर्ल्ड वाइड वेब के थ्रू उपलब्ध रिसोर्स एवं इंटरनेट सर्विस को एक्सेस करता है-", ["ISP - आईएसपी", "Web Browser - वेब ब्राउजर", "Web Server - वेब सर्वर", "None - कोई नहीं"], 1],
+    ["A host on the Internet finds another host by its.. / इंटरनेट पर एक होस्ट दूसरे होस्ट को तलाश करता है...", ["From his postal address - उसके पोस्टल एड्रेस से", "From electronic address - इलेक्ट्रॉनिक एड्रेस से", "From IP address - आई० पी० एड्रेस से", "No one - कोई नहीं"], 2],
+    ["Internet explorer is a type of? / इंटरनेट एक्सप्लोरर एक प्रकार है-", ["Of Operating System - ऑपरेटिंग सिस्टम का", "Of Compiler - कम्प्लाइर का", "Of IP Address - आईपी ऐड्रेस का", "Of Browser - ब्राउजर का"], 3],
+    ["Which of the following is related to internet security? / इनमें से कौन इंटरनेट सुरक्षा से संबंधित है?", ["W3C", "CERT", "MIT", "DSL"], 1],
+    ["IP stands for.. / आईपी का पूर्ण अर्थ है।", ["Internet Mass Protocol - इंटरनेट मास प्रोटोकॉल", "Internet Priority Protocol - इंटरनेट प्रायोरिटी प्रोटोकॉल", "Internet Protocol - इंटरनेट प्रोटोकॉल", "Internet Property Protocol - इंटरनेट प्रॉपर्टी प्रोटोकॉल"], 2],
+    ["The following is NOT an Internet search engine. / निम्न में से कौन-सा सर्च इंजन नहीं है...।", ["Google - गूगल", "Crawler - क्रावलर", "Excite - एक्ससाइट", "Scientia ans - साइंटिया एंस"], 3],
+    ["______ are the two more widely used protocol for LANs. / LAN के लिए व्यापक रूप से प्रयोग होने वाले दो प्रोटोकॉल हैं।", ["TCP/IP and Ethernet - टीसीपी/आईपी और इथरनेट", "ASP/IP and TCP/IP - एएसपी/आईपी और टीसीपी/आईपी", "Token ring and ASP/IP - टोकन रिंग और एएसपी/आईपी", "Ethernet and token ring - इथरनेट और टोकन रिंग"], 3]
   ],
   c7: [
     ['UMANG App ka poora naam kya hai?', ['Unified Mobile Application for New-age Governance', 'Universal Mobile Access Network Governance', 'Unified Master Application Network Guide', 'None of these'], 0],
@@ -624,7 +774,32 @@ const QB = {
     ['Virtual ID (VID) [Aadhaar Redacted] me kitne digit ki hoti hai?', ['8 digits', '12 digits', '10 digits', '16 digits'], 3],
     ['[Aadhaar Redacted] Letter ya PVC card par diya gaya QR code kisliye hota hai?', ['Game khelne ke liye', 'Payment ke liye', 'Quick offline verification aur demographic details ke liye', 'None'], 2],
     ['e-Governance me "SMART" governance ka kya arth hai?', ['Simple, Moral, Accountable, Responsive, and Transparent', 'Speed, Mobile, Advanced, Reliable, Technical', 'System, Machine, Auto, Routine, Tool', 'None'], 0],
-    ['National e-Governance Division (NeGD) ki sthapna kab ki gayi thi?', ['2009', '2006', '2012', '2015'], 0]
+    ['National e-Governance Division (NeGD) ki sthapna kab ki gayi thi?', ['2009', '2006', '2012', '2015'], 0],
+    ["In which year was the first email sent? / किस वर्ष पहला ईमेल भेजा गया था..........", ["1982", "1992", "1977", "1971"], 3],
+    ["With the email we can attach the file / ईमेल के साथ हम.......फाइल संलग्न कर सकते हैं", ["Not more than one - एक से अधिक नहीं", "Not more than two - दो से अधिक नहीं", "one - एक", "None of these - इनमें से कोई नहीं"], 3],
+    ["Which of the following protocols is used by internet mail? / निम्नलिखित में कौन सा प्रोटोकॉल इंटरनेट मेल के लिए इस्तेमाल किया जाता है?", ["HTTP - एचटीटीपी", "TCP/IP - टीसीपी/आईपी", "FTP - एफटीपी", "None of these - इनमें से कोई नहीं"], 0],
+    ["Which of the following is not an e-mail server. / निम्नलिखित में से कौन एक ई-मेल सर्वर नहीं हैं।", ["Rediff mail", "Outlook", "Both a & b", "Linkden"], 3],
+    ["A valid e-mail address is. / एक वैध ई-मेल का पता है।", ["Vml@india.com", "@vrm@india.com", "Vrm.india.com", "vrm@india.com"], 3],
+    ["The domain name in an URL refers to the - / यूआरएल में डोमेन नाम को संदर्भित करता है", ["protocol - प्रोटोकॉल", "server - सर्वर", "filename - फाइल नेम", "directory - डायरेक्टरी"], 1],
+    ["E-mail component of Internet Explorer is called. / इंटरनेट एक्सप्लोरर के ईमेल कम्पोनेन्ट को कहा जाता है", ["Message box - मैसेज बॉक्स", "Outlook Express - आउटलुक एक्सप्रेस", "Messenger Mailbox - मैसेंजर मेलबॉक्स", "None of the above उपयुक्त में से कोई नहीं"], 1],
+    ["The convenient place to store contact information for quick retrieval is..... / कान्टैक्ट इनफॉर्मेशन स्टोर करने के लिए सुविधाजनक स्थान जहाँ इनफॉर्मेशन जल्दी से निकाला जा सके है", ["Address box - एड्रेस बॉक्स", "Message box - मैसेज बॉक्स", "Address book - एड्रेस बुक", "None of the above - इनमें से कोई नहीं"], 2],
+    [".......is the exchange of computer stored messages by telecommunication. / टेलीकम्यूनिकेशन द्वारा कम्प्यूटर द्वारा संग्रहीत संदेशों का आदान-प्रदान।", ["E-Web", "E-mail", "E-net", "E-chart"], 1],
+    ["What does the following emotion display? / निम्नलिखित इमोरन क्या प्रदर्शित करती है?", ["Confused face - कम्फ्यूज्ड फेस", "Happy face - हैपी फेस", "Shocked face - शाक्ड फेस", "Amazed face - अमेज़्ड फेस"], 1],
+    ["A simple protocol used for fetching e-mail from a mailbox is.. / मेलबॉक्स से ई-मेल लाने के लिए उपयोग किए जाने वाला एक सिंपल प्रोटोकॉल है..", ["POP2", "POP3", "imap", "None of these - इनमें से कोई नहीं"], 1],
+    ["Which of these should be avoided in an E-mail? / ई-मेल में किसकी एडवाईस करने से बचना चाहिए?", ["Wrong E-mail address", "Subject line - सब्जेक्ट लाइन", "Smileys - स्माइल", "Re-reading - री-रीडिंग"], 0],
+    ["Messenger Mailbox is present in..... / मैसेंजर मेलबॉक्स मौजूद होता है......", ["Internet Explorer - इंटरनेट एक्सप्लोरर", "Netscape Communicator - नेटस्केप कम्युनिकेटर", "Both a and b - a तथा b दोनों", "None of the above - उपर्युक्त में से कोई नहीं"], 1],
+    ["E-mail message can be protected by / ई-मेल संदेश को प्रोटेक्ट किया जा सकता है", ["Mirroring", "Caching", "Encryption", "Resending"], 2],
+    ["IRC stands for.... / IRC का पूर्ण अर्थ है।", ["Internet Resource Channel - इंटरनेट रिसोर्स चैनल", "Internet Routing Channel - इंटरनेट राउटिंग चैनल", "Internet Rights Council - इंटरनेट राइट्स काउंसिल", "Internet Relay Chat - इंटरनेट रीले चैट"], 3],
+    ["Which of these do not provide free E-mail? / इनमें से कौन सा मुफत ई-मेल प्रदान नहीं करता है?", ["Hotmail", "Rediff", "WhatsApp", "Yahoo"], 2],
+    ["Which of these is the easiest way of communication? / इनमें से कौन सा संचार का सबसे आसान तरीका है?", ["E-mail", "Telephone", "Fax", "Letter"], 0],
+    ["SMTP is associated with... / एसएमटीपी के साथ जुड़ा हुआ है।", ["TCP/IP - टीसीपी/आईपी", "Electronic Mail - इलेक्ट्रॉनिक मेल", "Internet Explorer - इंटरनेट एक्सप्लोरर", "WWW - डब्ल्यू डब्ल्यू डब्ल्यू"], 1],
+    ["Indicates copies of the message were sent to additional people. The recipient does not know the message has been sent to others. / संदेश की प्रतियों को अतिरिक्त लोगों को भेजा गया था। प्राप्तकर्ता को पता नहीं है कि संदेश दूसरों को भेजा गया है।", ["URL - यूआरएल", "Cc - सीसी", "End - इंड", "Bcc - बीसीसी"], 3],
+    ["What is the term used for talking on net with the help of typed text? / टाइप किए गए टेक्स्ट की मदद से नेट पर बात करने के लिए किस शब्द का उपयोग किया जाता है", ["New group", "E-mail", "Chatting", "None"], 2],
+    ["If an email is received by an unknown person then / यदि किसी अज्ञात व्यक्ति द्वारा ईमेल प्राप्त किया जाता है", ["One should open it and responding asking their personal information. - एक को इसे खोलना चाहिए और व्यक्तिगत जानकारी के बारे में पूछना चाहिए।", "One should open it and responding saying you don't know them. - किसी को इसे खोलना चाहिए और यह कहना चाहिए कि आप उन्हें नहीं जानते", "It should be deleted without opening - इसे बिना खोले डिलीट कर देना चाहिए", "It should be forwarded to police - इसे पुलिस को भेज दिया जाना चाहिए"], 2],
+    ["In email address, the symbol that is used to separate the user name with the ISP address is.. / ईमेल पते में, आईएसपी पते के साथ उपयोगकर्ता नाम को अलग करने के लिए उपयोग किया जाने वाला प्रतीक है।", ["#", "&", "@", "%"], 2],
+    ["MIME stands for.... / MIME का पूर्ण अर्थ है।", ["Multipurpose Internet Extension - मल्टीपर्पस इंटरनेट एक्सटेंशन", "Multiple internet Mail Extension - मल्टीपल इंटरनेट मेल एक्सटेंशन", "Multiple international Mail Extension - मल्टीपल इंटरनेशनल मेल एक्सटेंशन", "None of these - इनमें से कोई नहीं"], 0],
+    ["E-mail address is made up of...... / एक ई-मेल एड्रेस बना होता है।", ["In First part", "In two parts", "In Third Part", "None"], 1],
+    ["The Internet standard is.. / इंटरनेट स्टैण्डर्ड है।", ["MIME", "BIN HEX", "UNENCODING", "None25"], 0]
   ],
   c8: [
     ['Industry 4.0 (Fourth Industrial Revolution) ka mukhya adhar kya hai?', ['Sirf manual labor', 'Cyber-Physical Systems, AI, IoT, aur Cloud Computing', 'Steam engines aur electricity', 'Mainframe computers'], 1],
@@ -726,7 +901,32 @@ const QB = {
     ['AI me Chatbot ka udaharan kaun sa hai?', ['MS Paint', 'ChatGPT, Gemini, Alexa, Siri', 'Notepad', 'VLC Player'], 1],
     ['Blockchain me har ek block me kya hota hai?', ['Normal text', 'Sirf ek password', 'Transactions ka data, timestamp, aur pichle block ka cryptographic hash (pointer)', 'None'], 2],
     ['Cyber Security ke sandarbh me \'Patch\' kya hota hai?', ['Software ki kisi security vulnerability ya bug ko thik karne ke liye chhota update ya code fix', 'Kapde ka tukda', 'Virus', 'None'], 0],
-    ['National Cyber Security Policy (India) kis varsh jari ki gayi thi?', ['2013', '2008', '2015', '2020'], 0]
+    ['National Cyber Security Policy (India) kis varsh jari ki gayi thi?', ['2013', '2008', '2015', '2020'], 0],
+    ["QR code stand for... / क्यूआर कोड का अर्थ है.....", ["Quick Response Code - क्विवक रिस्पॉन्स कोड", "Quick Result Code - क्विवक रिजल्ट कोड", "Quick Restore Code - क्विवक रिस्टोर कोड", "None of above - उपरोक्त में से कोई नहीं"], 0],
+    ["ATM means..... / एटीएम का अर्थ.....", ["Any Time Money - एनी टाईम मनी", "Auto Truck of Mahindra - ऑटो ट्रक ऑफ महिन्द्रा", "Automated Teller Machine - ऑटोमेटेड टेलर मशीन", "None - कोई नहीं"], 2],
+    ["KYC means......? / केवाईसी का मतलब होता है......?", ["Know your customer - नो योर कस्टमर", "Know your character - नो योर कैरेक्टर", "Both of the above - उपरोक्त दोनों", "None of these - कोई नहीं"], 0],
+    ["Which is type of credit card / कौन सा क्रेडिट कार्ड का प्रकार है?", ["Master Card - मास्टर कार्ड", "VISA - वीजा", "Both a & b - a तथा b दोनों", "None of these - इनमें से कोई नहीं"], 2],
+    ["Which of the following is known as online banking? / निम्नलिखित में से किसे ऑनलाइन बैंकिंग के रूप में जाना जाता है?", ["Net Banking - नेट बैंकिंग", "Internet Banking - इंटरनेट बैंकिंग", "Both a & b - a तथा b दोनों", "None of above - उपरोक्त में से कोई नहीं"], 2],
+    ["Can Illiterate person be issued Debit card? / क्या अनपढ़ व्यक्ति को डेबिट कार्ड इश्यू किया जा सकता है?", ["No - नहीं", "Yes - हां", "Only in case of joint account - केवल संयुक्त खाता होने की दशा में", "Only in case he is head of family - केवल परिवार का मुखिया होने की दशा में"], 1],
+    ["Interest on Savings Deposit is paid / बैंक बचत जमा पर ब्याज दिया जाता है।", ["Yearly - वार्षिक", "Every Month - प्रति माह", "Half yearly - अर्द्धवार्षिक", "Quarterly - त्रैमासिक"], 2],
+    ["Under PMSBY, accidental death claim is available for: / पीएमएसबीवाई के अन्तर्गत दुर्घटना मृत्यु पर क्षतिपूर्ति उपलब्ध है:", ["Rs. 1 lac - 1 लाख रुपये", "Rs. 2 lac - 2 लाख रुपये", "Rs. 3 lac - 3 लाख रुपये", "None - कोई नहीं"], 1],
+    ["The Indian rupee symbol '₹' officially adopted in / भारतीय रुपये का चिन्ह ₹ है, जिसे मान्यता मिली है", ["2009", "2010", "2012", "2015"], 1],
+    ["In which year NEFT services has been started? / NEFT सेवा किस वर्ष में प्रारम्भ की गयी थी?", ["2005", "2002", "2001", "2006"], 0],
+    ["The amount of money to be charged for a certain amount of insurance coverage is called? / किसी बीमा में जमा होने वाली किस्त को किस नाम से जाना जाता है?", ["Token Money - टोकन मनी", "Premium - प्रीमियम", "Cash - नकद", "Insured Money - बीमा धन"], 1],
+    ["Main security of internet banking is - / इंटरनेट बैंकिंग में मुख्य सुरक्षा किससे होती है.", ["Password - पासवर्ड", "User name - यूजर के नाम से", "User address - यूजर के पता से", "User mobile number - यूजर के मोबाइल नंबर"], 0],
+    ["Through ....... App you can transfer the money and do any payment as bill/shopping. / ....... ऐप के माध्यम से आप पैसे ट्रांसफर कर सकते हैं और बिल/खरीदारी के कार्य में कोई भुगतान कर सकते हैं।", ["BHIM - भीम", "Paytm - पेटीएम", "Both a & b - a तथा b दोनों", "None - कोई नहीं"], 2],
+    ["Atal Pension Yojna is open to Indian citizens whose age are between? / अटल पेंशन योजना किस वर्ष तक के नागरिकों के लिए है?", ["18-40", "25-40", "18-25", "18-30"], 0],
+    ["Which mobile wallet does not permit cash withdrawal / किस मोबाइल वॉलेट से नकद भुगतान सम्भव नहीं है", ["Open wallet - ओपन वॉलेट", "Semi Closed wallet - सेमी क्लोज्ड वॉलेट", "Semi Open wallet - सेमी ओपन वॉलेट", "None - कोई नहीं"], 0],
+    ["CVV Stand for? / CVV का अर्थ है?", ["Code Verification Value - कोड वेरिफिकेशन वैल्यू", "Card Validate Value - कार्ड वेलिडे्ट वैल्यू", "Code Verification Value - कार्ड वेरिफिकेशन वैल्यू", "None of these - कोई नहीं"], 2],
+    ["Which type of deposits earns highest interest rate? / किस तरह की जमाओं में अधिक ब्याज मिलता है?", ["Current account - चालू खाता", "Fixed Deposits - मियादी जमा", "None of the options - उपरोक्त में से कोई नहीं", "Savings Account - बचत खाता"], 1],
+    ["In Pradhan Mantri Mudra Yojana, under SHISHU category loan amount is / प्रधानमंत्री मुद्रा योजना के अन्तर्गत शिशु के जाने वाली ऋण की राशि है-", ["Up to 30,000 - 30,000 तक", "Up to 50,000 - 50,000 तक", "Up to 90,000 - 90,000 तक", "Up to 10,000 - 10,000 तक"], 1],
+    ["Pradhan Mantri Suraksha Bima (PMSBY) was launched on- / प्रधानमंत्री सुरक्षा जीवन बीमा योजना प्रारम्भ हुआ था-", ["May 9, 2015 - 9 मई 2015", "April 9, 2015 - 9 अप्रैल 2015", "May 20, 2015 - 20 मई 2015", "May 1, 2018 - 1 मई 2018"], 0],
+    ["UPI payment interface Developed by / यूपीआई पेमेन्ट इन्टरफेस किसके द्वारा डेवलप किया गया है-", ["National Payment Corporation - नेशनल पेमेन्ट कार्पोरेशन", "Finance Ministry - वित्त मंत्रालय", "Bank - बैंक", "None - कोई नहीं"], 0],
+    ["Bank pays interest on / बैंक किस पर ब्याज देता है", ["None of the options - कोई नहीं", "Deposits - जमाओं", "Both Deposits & Loans - दोनों जमाओं एवं ऋणों", "Loans - ऋणों"], 1],
+    ["Account payee cheques can be paid / आदाता खाता चेक का भुगतान किया जा सकता है।", ["At cash counter of Bank - बैंक के नकद काउंटर पर", "At ATM - एटीएम द्वारा", "By deposit in Bank account - बैंक खाते में जमा करके", "None of the options - उपरोक्त में से कोई नहीं"], 2],
+    ["What is validity period of cheque? / चेक की वैधता अवधि होती है।", ["4 months from date of issue - जारी दिनांक से 4 माह तक", "3 months from date of issue - जारी दिनांक से 3 माह तक", "1 months from date of issue - जारी दिनांक से 1 माह तक"], 1],
+    ["Full form of DFT is..../ डीएफटी का पूर्ण रूप है..", ["Dynamic Financial Tools - डॉयनॉमिक फाईनेंसियल टूल्स", "Digital Financial Tools - डिजिटल फाईनेंसियल टूल्स", "Digital Funds Tools - डिजिटल फण्ड्स टूल्स", "Double Finance tools - डबल फाइनेंस टूल्स"], 1],
+    ["Bank does not give loan against / बैंक लोन नहीं देता है...।", ["Gold Ornaments - सोने के आभूषण", "LIC Policy - एलआईसी पॉलिसी", "Lottery ticket - लॉटरी टिकट", "NSC - एनएससी"], 2]
   ],
   c9: [
     ['Bhashini (National Language Translation Mission) ka mukhya uddeshya kya hai?', ['Computer hardware banana', 'Bharat ki sabhi bhashao me digital content aur services ko aasan banana (AI-based translation)', 'Sirf English sikhana', 'None'], 1],
@@ -828,7 +1028,32 @@ const QB = {
     ['OCR software me Font aur Style ki pehchan kis par nirbhar karti hai?', ['Audio input par', 'Random guessing par', 'Pattern matching aur feature extraction algorithms par', 'None'], 2],
     ['MICR technology me paper par jo ink use hoti hai usme kiska powder hota hai?', ['Iron oxide (magnetic particles) ka', 'Carbon dust', 'Plastic powder', 'None'], 0],
     ['QR code me kitne direction finder patterns (corners par bade squares) hote hain?', ['Koi nahi', '4 corners par', 'Sirf 1 corner par', '3 corners par (alignment ke liye)'], 3],
-    ['E-Commerce me COD (Cash on Delivery) ka kya arth hai?', ['Saman prapt hone par nagad (cash) ya digital payment delivery boy ko dena', 'Pehle payment karna', 'Udhar saman lena', 'None'], 0]
+    ['E-Commerce me COD (Cash on Delivery) ka kya arth hai?', ['Saman prapt hone par nagad (cash) ya digital payment delivery boy ko dena', 'Pehle payment karna', 'Udhar saman lena', 'None'], 0],
+    ["In computer security, ............ means that the information in a computer system only be accessible viewing by authorised parities. / कंप्यूटर सुरक्षा में, ............ का अर्थ है कि कंप्यूटर प्रणाली में सूचना केवल अधिकृत पार्टिज द्वारा देखने योग्य हो।", ["availability - उपलब्धता", "Integrity - इंटीग्रिटी", "confidentiality - गोपनीयता", "All of the above - उपर्युक्त में से सभी"], 2],
+    ["Encryption techniques improve a network's / एन्क्रिप्शन तकनीक एक नेटवर्क.... को बेहतर बनाती है।", ["Performance - परफॉर्मेंस", "Security - सिक्योरिटी", "Reliability - विश्वसनीयतता", "None of above - उपर्युक्त में से कोई नहीं"], 1],
+    ["Which protection method is used to monitoring who can access the data for what purpose? / किस सुरक्षा विधि का उपयोग निगरानी के लिए किया जाता है कि कौन और किस उद्देश्य के लिए डेटा एक्सेस कर सकता है?", ["System Access Control - सिस्टम एक्सेस कंट्रोल", "System Design - सिस्टम डिजाईन", "Data Access Control - डेटा एक्सेस कंट्रोल", "None of above - उपर्युक्त में से कोई नहीं"], 2],
+    ["The main goals of secure computing is / सुरक्षित कंप्यूटिंग का मुख्य लक्ष्य है............", ["Confidentiality - गोपनीयता", "interruption - व्यवधान", "modification - परिवर्तन", "All of these - इनमें से सभी"], 0],
+    ["............ means that sender must not be able to deny sending a message that he sent. / ............ इसका मतलब है कि प्रेषक को एक मैसेज भेजने से इनकार करने में सक्षम नहीं होना चाहिए जो उसने भेजा था।", ["Non-repudiation - नॉन रेपुडेशन", "Integrity - इंटीग्रिटी", "Authentication - ऑथेन्टिकेशन"], 0],
+    ["In computer security, .......... means that computer system assets can be modified only by authorised parities. / कंप्यूटर सुरक्षा में, .......... का अर्थ है कि कंप्यूटर सिस्टम की संपत्ति को केवल अधिकृत पार्टिज द्वारा संशोधित किया जा सकता है।", ["confidentiality - गोपनीयता", "availability - उपलब्धता", "Integrity - इंटीग्रिटी", "All of the above - उपर्युक्त में से सभी"], 3],
+    ["Which of the following is not a method to provide protection? / निम्नलिखित में से कौन सुरक्षा प्रदान करने की एक विधि नहीं है?", ["System Design -सिस्टम डिजाईन", "Data Access Controls - डेटा एक्सेस कंट्रोल", "System Access Controls - सिस्टम एक्सेस कंट्रोल", "None of the above - उपरोक्त कोई नहीं"], 0],
+    ["In computer security, integrity refer to / कंप्यूटर सुरक्षा में, इंटीग्रिटी को देखें", ["viewing and printing of data - डेटा को देखना औ प्रिंट करना", "access to computing resources without difficulties - कठिनाइयों के बिना कम्प्यूटिंग संसाधनों तक पहुंच", "separation and protection of the resources data - संसाधनों के डेटा का पृथक्करण और संरक्षण", "All of the above - उपर्युक्त में से सभी"], 2],
+    ["........... refers to the situation in which services or data become unavailable, unusable and destroyed. / ............ उस स्थिति को संदर्भित करता है जिसमें सेवाएँ या डेटा अनुपलब्ध, अनुपयोगी और नष्ट हो जाते हैं।", ["Confidentiality - गोपनीयता", "Interruption - व्यवधान", "Integrity - इंटीग्रिटी", "All of these - इनमें से सभी"], 1],
+    ["Authentication is .... / प्रमाणीकरण है ....", ["hard to assure identity of user on a remote system / एक दूरस्थ प्रणाली पर उपयोगकर्ताओं की पहचान का आश्वासन देना मुश्किल है", ["disrupt computer operation - कम्प्यूटर ऑपरेशन बाधित"], ["gather sensitive information - संवेदनशील जानकारी इकट्ठा करें"], ["Both a & b - a तथा b दोनों"]], 0],
+    ["Which of the following means that the receiver is ensured that the massage is coming from the intended sender, not an imposter? / निम्न में से किस का अर्थ है कि रिसीवर सुनिश्चित करता है है कि मैसेज किसी प्रेषक से नहीं बल्कि इच्छित प्रेषक से हो रही है", ["Availability - उपलब्धता", "Access Control - एक्सेस कंट्रोल", "Authentication - ऑथेन्टिकेशन", "All of the above - उपर्युक्त में से सभी"], 2],
+    ["............... means to prove/verify the identity of the entity that tries to access the system's resources. / ................ का मतलब उस संस्था की पहचान को प्रमाणित/सत्यापित करना है जो सिस्टम के संसाधनों तक पहुंचने की कोशिश करती है।", ["Message authentication - मैसेज ऑथेन्टिकेशन", "Password authentication - पासवर्ड ऑथेन्टिकेशन", "Entity authentication - इंटिटी ऑथेन्टिकेशन", "All of the above - उपर्युक्त में से सभी"], 2],
+    ["Software programs that close potential security breaches in an operating systems known as / सॉफ्टवेयर प्रोग्राम जो एक ऑपरेटिंग सिस्टम में संभावित सुरक्षा ब्रिचेस के रूप में जाने जाते हैं।", ["security patches - सिक्युरिटी पैचेस", "refresh patches - रिफ्रेश पैचेस", "security breath fixes - सिक्युरिटी ब्रेथ फिक्सेज", "All of the above - उपर्युक्त में से सभी"], 0],
+    ["A major security problem for operation system is- / सिस्टम ऑपरेशन के लिए एक बड़ी सुरक्षा समस्या है-", ["physical problem - फिजिकल समस्या", "human problem - मानवीय समस्या", "authentication problem - सत्यापन की समस्या", "All of the above - उपर्युक्त में से सभी"], 3],
+    ["Malware is used to / मैलवेयर का उपयोग किया जाता है-", ["disrupt computer operation - कम्प्यूटर ऑपरेशन बाधित", "gather sensitive information - संवेदनशील जानकारी इकट्ठा करें", "Both a & b - a तथा b दोनों", "All of the above - उपर्युक्त में से सभी"], 2],
+    ["The aspect of security that fails, when an email in intercepted is / सुरक्षा का वह पहलू जो विफल हो जाता है, जब ईमेल का इंटरसेप्ट किया जाता है", ["integrity - इंटीग्रिटी", "privacy - प्राइवेसी", "authentication - ऑथेन्टिकेशन", "All of these - इनमें से सभी"], 1],
+    ["The creeper virus was eventually deleted by a program known as .......... / क्रीपर वायरस को अंततः ........ नामक एक कार्यक्रम द्वारा हटा दिया गया था।", ["the weaper - दी वीपर", "the reaper - दी रीपर", "the seaper - दी सीपर", "None of abvoe - इनमें से कोई नहीं"], 1],
+    ["For secure Electronic Data Interchange (EDI) transmission on internet used.......... / इंटरनेट पर सुरक्षित इलेक्ट्रॉनिक डाटा इंटरचेंज (EDI) ट्रांसमिशन के लिए उपयोग किया जाता है ... I", ["TCP/IP - टीसीपी/आईपी", "MIME - एमआईएमई", "S/MIME - एस/एमआईएमई", "None of above - उपर्युक्त में से कोई नहीं"], 2],
+    ["What are the three basic component of computer security? / कंप्यूटर सुरक्षा के तीन बुनियादी घटक क्या हैं?", ["Confidentiality, integrity, availability - गोपनीयता, इंटीग्रिटी, उपलब्धता", "Control, intelligence, action - कंट्रोल, इंटेलीजेंस, एक्शन", "Central, intelligence, agency - सेन्ट्रल, इंटेलीजेंस, एजेंसी", "Confidence, integrity, action - गोपनियता, इंटीग्रिटी, एक्शन"], 0],
+    ["The Secure Electronic Transaction Protocol is used for which type of payment..... / सुरक्षित इलेक्ट्रॉनिक लेनदेन प्रोटोकॉल का उपयोग किस प्रकार के भुगतान के लिए किया जाता है .....", ["Credit card - क्रेडिट कार्ड", "NEFT - एनईएफटी", "cheque - चेक"], 0],
+    ["What is Cyber security? / साइबर सिक्योरिटी क्या है?", ["Cyber Security provides security against malware - साइबर सुरक्षा मैलवेयर से सुरक्षा प्रदान करती है", "Cyber Security provides security against cyber-terrorists - साइबर सुरक्षा साइबर आतंकवादियों से सुरक्षा प्रदान करती है", "Cyber Security protects a system from cyber attacks - साइबर सुरक्षा किसी सिस्टम को साइबर हमलों से बचाती है", "All of the above - उपर्युक्त में से सभी"], 3],
+    ["Which of the following is/are threat(s) for electronic payment system? / निम्नलिखित में से कौन इलेक्ट्रॉनिक भुगतान प्रणाली के लिए खतरा है?", ["Computer virus - कम्प्यूटर वायरस", "Trojan horse - ट्रोजन हॉर्स", "Computer worms - कम्प्यूटर वार्म्स", "All of the above - उपर्युक्त में से कोई नहीं"], 3],
+    ["In SET protocol a customer sends a purchase order / SET प्रोटोकॉल में एक ग्राहक एक खरीद आदेश भेजता है", ["Using digital signature system - डिजिटल सिग्नेचर प्रणाली का इस्तेमाल करके", "In a plain text form - एक 'प्लेन टेक्स्ट' फॉर्म के रूप में", "Encrypted with his public key - उसकी सार्वजनिक कुंजी के साथ इन्क्रिप्टेड", "None of above - इनमें से कोई नहीं"], 0],
+    ["Which is a class of computer threat / कौन सा कंप्यूटर खतरे का एक वर्ग है", ["Soliciting - सालीिसिटिंग", "Stalking - स्टाकिंग", "DoS attack - डॉस अटैक", "All of these - इनमें से सभी"], 2],
+    ["This is not a type of cyber attacks. / निम्न में से कौन साइबर सुरक्षा का प्रकार नहीं है-", ["Attacks on confidentiality - गोपनीयता पर हमला", "Attacks on integrity - संप्रलि पर हमला", "Attacks on property - इंटीग्रिटी पर हमला", "All of the above - उपर्युक्त सभी"], 3]
   ],
   o1: [
     ['Pehle se shuru computer ko dobara se shuru karna kehlata hai?', ['Log off', 'Cold booting', 'Warm booting', 'Shut down'], 2],
@@ -2285,7 +2510,7 @@ function buildIdx() {
   [...CCC, ...OL].forEach(c => items.push({ k: 'tTest', ic: '📝', t: ttl(c), h: (c[1] + ' ' + (CH_HI[c[0]] || '') + ' test ccc o level olevel').toLowerCase(), go: () => openTest(c[0]) }));
   items.push({ k: 'tTest', ic: '🏆', t: t('sat'), h: 'saturday test weekly mock शनिवार टेस्ट', go: () => openTest('SAT') });
   COURSES.forEach(c => items.push({ k: 'tCourse', ic: c[0], t: c[1], sub: c[2], h: (c[1] + ' ' + c[2] + ' course').toLowerCase(), go: () => jump('courses') }));
-  [['faculty', '👨‍🏫', 'faculty teacher mentor sir madam फैकल्टी शिक्षक', 'faculty'], ['typing', '⌨️', 'typing game speed टाइपिंग गेम', 'typing'], ['saturday', '🥇', 'leaderboard rank topper लीडरबोर्ड', 'lb'], ['gallery', '🖼️', 'gallery photos library फोटो गैलरी', 'gallery'], ['contact', '📞', 'contact phone whatsapp address संपर्क फोन', 'contact'], ['olcode', '💻', 'o level m2-r5 coding html css javascript कोडिंग', 'olcode']]
+  [['faculty', '👨‍🏫', 'faculty teacher mentor sir madam फैकल्टी शिक्षक', 'faculty'], ['typing', '⌨️', 'typing game speed टाइपिंग गेम', 'typing'], ['saturday', '🥇', 'leaderboard rank topper लीडरबोर्ड', 'lb'], ['gallery', '🖼️', 'gallery photos library फोटो गैलरी', 'gallery'], ['contact', '📞', 'contact phone whatsapp address संपर्क फोन', 'contact'], ['olcode', '💻', 'o level m2-r5 coding html css javascript कोडिंग', 'olcode'], ['codepractice', '⌨️', 'coding practice vs code editor html css javascript playground कोडिंग प्रैक्टिस', 'codepr']]
     .forEach(s => items.push({ k: 'tSec', ic: s[1], t: t(s[3]), h: s[2], go: () => jump(s[0]) }));
   if (_ql !== lang) { _ql = lang; _qi = []; Object.keys(QB).forEach(k => QB[k].forEach(q => _qi.push({ k: 'tQ', ic: '❓', t: qOf(q), sub: chTitle(k), h: ((q.q.en || '') + ' ' + (q.q.hi || '')).toLowerCase(), go: () => openTest(k) }))); }
   items.push(..._qi);
@@ -2430,7 +2655,7 @@ const SLIDES = [
   { img: 'slide2.jpeg', tag: 'Library', title: 'Books ka Bada Collection', pos: 'center' },
   { img: 'slide5.jpeg', tag: 'Sigma boy', title: 'Practicle + theory expert teacher', pos: 'center' },
   { img: 'slide3.jpeg', tag: 'Railway station', title: 'Welcome to railway station', pos: 'center side' },
-  { img: 'sigma.jpeg', tag: 'Website creator', title: 'crush is not important in my life but cash is very important', pos: 'center side' },
+  { img: 'sigma.jpeg', tag: 'My Institute', title: ' Access Computer Education Center', pos: 'center side' },
   { img: 'slide8.jpeg', tag: 'Bachhrawan', title: 'welcome to bachhrawan', pos: 'center side' },
   { img: 'slide9.jpeg', tag: 'Bachhrawan', title: 'Best look in railway station side ', pos: 'center side' }
   
@@ -2909,3 +3134,396 @@ document.addEventListener('keydown', e => {
     const bs = $$('#tBody .opt'); if (j >= 0 && bs[j]) bs[j].click();
   } else if (e.key === 'Enter' || e.key === 'ArrowRight') { const nb = $('#tBody .btn.sm'); if (nb) nb.click(); }
 });
+
+// ================= CODING PRACTICE: VS Code style editor =================
+(function () {
+  const root = $('#vsc'); if (!root) return;
+  const ta = $('#cpTa'), pre = $('#cpPre'), gutIn = $('#cpGutIn'), cl = $('#cpCl'), pop = $('#cpPop'), fr = $('#cpFrame'), con = $('#cpCon'), sym = $('#cpSym'), code = $('.vsc-code', root), meas = $('#cpM');
+  const NAMES = ['index.html', 'style.css', 'script.js'], LN = { html: 'HTML', css: 'CSS', js: 'JavaScript' };
+  const VOID = new Set(['br', 'hr', 'img', 'input', 'meta', 'link', 'area', 'base', 'col', 'embed', 'source', 'track', 'wbr']);
+  const PAIR = { '(': ')', '[': ']', '{': '}', '"': '"', "'": "'", '`': '`' };
+
+  /* ---------- Examples ---------- */
+  const EX = {
+    hello: {
+      'index.html': '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <h1>Hello, Access Computer!</h1>\n  <p>Ye meri pehli web page hai.</p>\n  <button onclick="greet()">Click Me</button>\n  <script src="script.js"></script>\n</body>\n</html>\n',
+      'style.css': 'body {\n  font-family: Arial, sans-serif;\n  text-align: center;\n  background: #fff8e1;\n}\nh1 {\n  color: #e65100;\n}\nbutton {\n  padding: 10px 24px;\n  border: 0;\n  border-radius: 8px;\n  background: #ff9800;\n  color: #fff;\n}\n',
+      'script.js': 'function greet() {\n  alert("Welcome to Access Computer Education Centre!");\n  console.log("Button clicked");\n}\n'
+    },
+    table: {
+      'index.html': '<h2>Student Marks</h2>\n<table border="1">\n  <tr>\n    <th>Name</th>\n    <th>Marks</th>\n  </tr>\n  <tr>\n    <td>Anshika</td>\n    <td>92</td>\n  </tr>\n  <tr>\n    <td>Rahul</td>\n    <td>85</td>\n  </tr>\n</table>\n',
+      'style.css': 'table {\n  border-collapse: collapse;\n  width: 60%;\n}\nth, td {\n  padding: 8px;\n  text-align: center;\n}\nth {\n  background: #1976d2;\n  color: #fff;\n}\n',
+      'script.js': '// Table me JavaScript lagana ho to yahan likho\nconsole.log("Table ready");\n'
+    },
+    form: {
+      'index.html': '<h2>Registration Form</h2>\n<form>\n  <label>Name:</label><br>\n  <input type="text" placeholder="Apna naam">\n  <br><br>\n  <label>Course:</label><br>\n  <select>\n    <option>CCC</option>\n    <option>O-Level</option>\n  </select>\n  <br><br>\n  <input type="submit" value="Submit">\n</form>\n',
+      'style.css': 'form {\n  max-width: 280px;\n  margin: 20px auto;\n  padding: 16px;\n  border: 2px solid #4caf50;\n  border-radius: 10px;\n}\ninput, select {\n  width: 100%;\n  padding: 8px;\n}\n',
+      'script.js': 'document.querySelector("form").addEventListener("submit", function (e) {\n  e.preventDefault();\n  alert("Form submit ho gaya!");\n});\n'
+    },
+    counter: {
+      'index.html': '<h1 id="count">0</h1>\n<button id="add">+1</button>\n<button id="reset">Reset</button>\n',
+      'style.css': 'body {\n  text-align: center;\n  font-family: sans-serif;\n}\nbutton {\n  font-size: 20px;\n  padding: 8px 20px;\n}\n',
+      'script.js': 'let n = 0;\nconst show = document.getElementById("count");\n\ndocument.getElementById("add").addEventListener("click", function () {\n  n++;\n  show.textContent = n;\n});\n\ndocument.getElementById("reset").onclick = function () {\n  n = 0;\n  show.textContent = n;\n};\n'
+    }
+  };
+
+  /* ---------- Suggestion data  (name, 'English|हिन्दी', snippet) ---------- */
+  const TG = [
+    ['!DOCTYPE', 'Tells browser it is HTML5|ब्राउज़र को बताता है कि HTML5 है', '!DOCTYPE html>'], ['html', 'Root of the whole page|पूरे पेज का रूट'], ['head', 'Page info (title, links)|पेज की जानकारी'],
+    ['title', 'Browser tab title|ब्राउज़र टैब का नाम'], ['body', 'Visible page content|पेज का दिखने वाला हिस्सा'], ['h1', 'Biggest heading|सबसे बड़ा हेडिंग'], ['h2', 'Heading level 2|हेडिंग 2'],
+    ['h3', 'Heading level 3|हेडिंग 3'], ['h4', 'Heading level 4|हेडिंग 4'], ['h5', 'Heading level 5|हेडिंग 5'], ['h6', 'Smallest heading|सबसे छोटा हेडिंग'], ['p', 'Paragraph|पैराग्राफ'],
+    ['br', 'Line break|नई लाइन'], ['hr', 'Horizontal line|आड़ी लाइन'], ['a', 'Link to another page|दूसरे पेज का लिंक', 'a href="$0"></a>'], ['img', 'Show an image|इमेज दिखाता है', 'img src="$0" alt="">'],
+    ['div', 'Box / container|बॉक्स / कंटेनर'], ['span', 'Small inline container|इनलाइन कंटेनर'], ['ul', 'Bullet list|बुलेट लिस्ट'], ['ol', 'Numbered list|नंबर वाली लिस्ट'], ['li', 'List item|लिस्ट का आइटम'],
+    ['table', 'Table|टेबल बनाता है', 'table border="1">\n  <tr>\n    <td>$0</td>\n  </tr>\n</table>'], ['tr', 'Table row|टेबल की रो'], ['td', 'Table cell|टेबल का सेल'], ['th', 'Table heading cell|टेबल का हेडिंग सेल'],
+    ['form', 'Form for user input|यूज़र इनपुट फ़ॉर्म'], ['input', 'Input box|इनपुट बॉक्स', 'input type="$0">'], ['button', 'Clickable button|क्लिक बटन'], ['label', 'Label of an input|इनपुट का लेबल'],
+    ['select', 'Dropdown list|ड्रॉपडाउन लिस्ट'], ['option', 'Dropdown item|ड्रॉपडाउन आइटम'], ['textarea', 'Multi-line text box|मल्टी-लाइन बॉक्स'],
+    ['style', 'CSS code inside page|पेज के अंदर CSS', 'style>\n  $0\n</style>'], ['script', 'JavaScript code|JavaScript कोड', 'script>\n  $0\n</script>'],
+    ['link', 'Attach a CSS file|CSS फ़ाइल जोड़ता है', 'link rel="stylesheet" href="$0">'], ['meta', 'Page settings|पेज सेटिंग', 'meta charset="UTF-8">'],
+    ['header', 'Top part of page|पेज का ऊपरी भाग'], ['nav', 'Navigation links|नेविगेशन लिंक'], ['section', 'Section of page|पेज का सेक्शन'], ['footer', 'Bottom part of page|पेज का निचला भाग'],
+    ['b', 'Bold text|बोल्ड टेक्स्ट'], ['i', 'Italic text|इटैलिक टेक्स्ट'], ['u', 'Underline text|अंडरलाइन टेक्स्ट'], ['strong', 'Important text (bold)|ज़रूरी टेक्स्ट'], ['em', 'Emphasis (italic)|ज़ोर वाला टेक्स्ट'],
+    ['center', 'Center the content|बीच में करता है'], ['marquee', 'Scrolling text|चलता हुआ टेक्स्ट'], ['pre', 'Text as it is written|जैसा लिखा वैसा'], ['iframe', 'Page inside a page|पेज के अंदर पेज'],
+    ['video', 'Play a video|वीडियो चलाता है'], ['audio', 'Play audio|ऑडियो चलाता है'], ['!--', 'HTML comment|कमेंट (दिखता नहीं)', '!-- $0 -->']
+  ].map(a => ({ k: 'tag', n: a[0], d: a[1], s: a[2] }));
+  const AT = [['class', 'CSS class name|CSS क्लास'], ['id', 'Unique id|यूनिक आईडी'], ['style', 'Inline CSS|इनलाइन CSS'], ['href', 'Link address|लिंक का पता'], ['src', 'File / image path|फ़ाइल / इमेज का पाथ'],
+    ['alt', 'Text if image fails|इमेज न दिखे तो टेक्स्ट'], ['width', 'Width|चौड़ाई'], ['height', 'Height|ऊँचाई'], ['type', 'Type of input|इनपुट का प्रकार'], ['name', 'Name of field|फ़ील्ड का नाम'], ['value', 'Default value|डिफ़ॉल्ट वैल्यू'],
+    ['placeholder', 'Hint inside box|बॉक्स के अंदर हिंट'], ['target', 'Where to open link|लिंक कहाँ खुले'], ['rel', 'Relation (stylesheet)|रिलेशन'], ['title', 'Tooltip text|टूलटिप'], ['colspan', 'Merge columns|कॉलम मर्ज'],
+    ['rowspan', 'Merge rows|रो मर्ज'], ['border', 'Border size|बॉर्डर'], ['bgcolor', 'Background color|बैकग्राउंड रंग'], ['align', 'Alignment|अलाइनमेंट'], ['required', 'Must be filled|भरना ज़रूरी'],
+    ['onclick', 'Run JS on click|क्लिक पर JS चले'], ['action', 'Form target|फ़ॉर्म कहाँ जाएगा'], ['method', 'get / post|get / post'], ['for', 'Label for id|लेबल किसके लिए']].map(a => ({ k: 'attr', n: a[0], d: a[1], s: a[0] + '="$0"' }));
+  const CP = [['color', 'Text color|टेक्स्ट का रंग'], ['background', 'Background|बैकग्राउंड'], ['background-color', 'Background color|बैकग्राउंड रंग'], ['font-size', 'Text size|टेक्स्ट साइज़'], ['font-family', 'Font name|फ़ॉन्ट'],
+    ['font-weight', 'Bold / normal|बोल्ड / नॉर्मल'], ['text-align', 'Align text|टेक्स्ट अलाइन'], ['margin', 'Outer space|बाहर की जगह'], ['padding', 'Inner space|अंदर की जगह'], ['border', 'Border line|बॉर्डर'],
+    ['border-radius', 'Round corners|गोल कोने'], ['width', 'Width|चौड़ाई'], ['height', 'Height|ऊँचाई'], ['display', 'Display type|डिस्प्ले टाइप'], ['position', 'Position type|पोज़िशन'], ['top', 'Distance from top|ऊपर से दूरी'],
+    ['left', 'Distance from left|बाएँ से दूरी'], ['right', 'Distance from right|दाएँ से दूरी'], ['bottom', 'Distance from bottom|नीचे से दूरी'], ['justify-content', 'Flex main axis|फ्लेक्स अलाइन'], ['align-items', 'Flex cross axis|फ्लेक्स अलाइन'],
+    ['flex-direction', 'Row / column|रो / कॉलम'], ['gap', 'Space between items|आइटम के बीच जगह'], ['box-shadow', 'Shadow|परछाई'], ['text-decoration', 'Underline etc.|अंडरलाइन आदि'], ['line-height', 'Line spacing|लाइन की दूरी'],
+    ['opacity', 'Transparency|पारदर्शिता'], ['overflow', 'Extra content|ज़्यादा कंटेंट'], ['cursor', 'Mouse pointer|माउस पॉइंटर'], ['transition', 'Smooth change|स्मूद बदलाव'], ['transform', 'Rotate / scale|घुमाना / बड़ा करना'],
+    ['z-index', 'Layer order|लेयर का क्रम'], ['float', 'Float left/right|फ्लोट'], ['max-width', 'Maximum width|अधिकतम चौड़ाई'], ['list-style', 'List bullets|लिस्ट बुलेट']].map(a => ({ k: 'css', n: a[0], d: a[1], s: a[0] + ': $0;' }));
+  const VAL = { display: 'block inline inline-block flex grid none', position: 'static relative absolute fixed sticky', 'text-align': 'left center right justify', 'font-weight': 'normal bold bolder 600',
+    'justify-content': 'flex-start center flex-end space-between space-around', 'align-items': 'center flex-start flex-end stretch', 'flex-direction': 'row column', cursor: 'pointer default', overflow: 'hidden auto scroll visible',
+    'text-decoration': 'none underline line-through', float: 'left right none', border: 'solid 1px dashed', 'list-style': 'none disc circle square' };
+  const JS = [['console.log', 'Print in console|कंसोल में प्रिंट', 'console.log($0);'], ['document.getElementById', 'Get element by id|id से एलिमेंट', 'document.getElementById("$0")'],
+    ['document.querySelector', 'Get element (CSS selector)|एलिमेंट खोजो', 'document.querySelector("$0")'], ['document.write', 'Write on page|पेज पर लिखो', 'document.write($0);'], ['addEventListener', 'Listen to event|इवेंट सुनो', 'addEventListener("click", function () {\n  $0\n});'],
+    ['function', 'Create a function|फ़ंक्शन बनाओ', 'function $0() {\n  \n}'], ['const', 'Constant variable|कॉन्स्टेंट वेरिएबल', 'const $0 = '], ['let', 'Variable|वेरिएबल', 'let $0 = '], ['var', 'Old variable|पुराना वेरिएबल', 'var $0 = '],
+    ['if', 'Condition|कंडीशन', 'if ($0) {\n  \n}'], ['else', 'Else part|else भाग', 'else {\n  $0\n}'], ['for', 'For loop|फॉर लूप', 'for (let i = 0; i < $0; i++) {\n  \n}'], ['while', 'While loop|वाइल लूप', 'while ($0) {\n  \n}'],
+    ['switch', 'Switch case|स्विच केस', 'switch ($0) {\n  case 1:\n    break;\n  default:\n}'], ['return', 'Return value|वैल्यू लौटाओ', 'return $0;'], ['alert', 'Popup message|पॉपअप संदेश', 'alert("$0");'],
+    ['prompt', 'Ask user input|यूज़र से इनपुट', 'prompt("$0")'], ['confirm', 'OK / Cancel box|OK / Cancel बॉक्स', 'confirm("$0")'], ['parseInt', 'Text to integer|टेक्स्ट से पूर्णांक', 'parseInt($0)'],
+    ['parseFloat', 'Text to decimal|टेक्स्ट से दशमलव', 'parseFloat($0)'], ['setTimeout', 'Run after delay|देर से चलाओ', 'setTimeout(function () {\n  $0\n}, 1000);'], ['setInterval', 'Repeat again & again|बार-बार चलाओ', 'setInterval(function () {\n  $0\n}, 1000);'],
+    ['Math.random', 'Random number|रैंडम नंबर', 'Math.random()'], ['Math.floor', 'Round down|नीचे राउंड', 'Math.floor($0)'], ['try', 'Catch errors|एरर पकड़ो', 'try {\n  $0\n} catch (e) {\n  console.log(e);\n}']]
+    .map(a => ({ k: 'js', n: a[0], d: a[1], s: a[2] }));
+  const MEM = [['innerHTML', 'HTML inside element|एलिमेंट का HTML'], ['textContent', 'Text of element|एलिमेंट का टेक्स्ट'], ['value', 'Input value|इनपुट की वैल्यू'], ['style', 'CSS style|CSS स्टाइल'], ['length', 'Length|लंबाई'],
+    ['push', 'Add to array|ऐरे में जोड़ो'], ['toUpperCase', 'To CAPITAL|बड़े अक्षर'], ['toLowerCase', 'To small|छोटे अक्षर'], ['classList', 'Class list|क्लास लिस्ट'], ['onclick', 'Click handler|क्लिक हैंडलर']].map(a => ({ k: 'js', n: a[0], d: a[1] }));
+  const BOILER = '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Document</title>\n</head>\n<body>\n  \n</body>\n</html>\n';
+  const TNAMES = new Set(TG.filter(t => /^[a-z]/.test(t.n)).map(t => t.n));
+
+  /* ---------- Syntax highlighting ---------- */
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const sp = (c, s) => s ? '<span class="hl-' + c + '">' + esc(s) + '</span>' : '';
+  const KW = new Set('var let const function return if else for while do switch case break continue new this typeof class try catch finally throw in of async await default'.split(' '));
+  const LIT = new Set(['true', 'false', 'null', 'undefined', 'NaN']);
+  function hlJS(s) {
+    let o = '', m; const re = /\/\/[^\n]*|\/\*[\s\S]*?(?:\*\/|$)|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?|`(?:\\[\s\S]|[^`\\])*`?|\b\d[\d.]*\b|[A-Za-z_$][\w$]*|[\s\S]/g;
+    while ((m = re.exec(s))) {
+      const t = m[0], c = t[0];
+      if (c === '/' && (t[1] === '/' || t[1] === '*')) o += sp('c', t);
+      else if (c === '"' || c === "'" || c === '`') o += sp('st', t);
+      else if (/\d/.test(c)) o += sp('n', t);
+      else if (/[A-Za-z_$]/.test(c)) o += KW.has(t) ? sp('k', t) : LIT.has(t) ? sp('n', t) : s[re.lastIndex] === '(' ? sp('f', t) : esc(t);
+      else o += esc(t);
+    }
+    return o;
+  }
+  function hlCSS(s) {
+    let o = '', d = 0, val = false, m; const re = /\/\*[\s\S]*?(?:\*\/|$)|"[^"\n]*"?|'[^'\n]*'?|[{}:;]|[^{}:;"'\/]+|\//g;
+    while ((m = re.exec(s))) {
+      const t = m[0], c = t[0];
+      if (c === '/' && t[1] === '*') o += sp('c', t);
+      else if (c === '"' || c === "'") o += sp('st', t);
+      else if (c === '{') { d++; val = false; o += sp('pc', t); }
+      else if (c === '}') { d = d > 0 ? d - 1 : 0; val = false; o += sp('pc', t); }
+      else if (c === ':' && d > 0 && !val) { val = true; o += sp('pc', t); }
+      else if (c === ';') { val = false; o += sp('pc', t); }
+      else if (d === 0) o += sp('s', t);
+      else if (!val) o += sp('p', t);
+      else o += t.replace(/(#[0-9a-fA-F]{3,8}\b|-?\d*\.?\d+(?:px|em|rem|%|vh|vw|s|ms|deg|fr)?)|([^#\d.-]+|[\s\S])/g, (_, a, b) => a ? sp('n', a) : esc(b));
+    }
+    return o;
+  }
+  function hlHTML(s) {
+    const n = s.length, low = s.toLowerCase(); let o = '', i = 0, m;
+    const T = /<(\/?)(!?[A-Za-z][\w:-]*)/y, W = /\s+/y, AN = /[^\s=>\/"']+/y;
+    while (i < n) {
+      if (s[i] !== '<') { let e = s.indexOf('<', i); if (e < 0) e = n; o += sp('tx', s.slice(i, e)); i = e; continue; }
+      if (s.startsWith('<!--', i)) { let e = s.indexOf('-->', i + 4); e = e < 0 ? n : e + 3; o += sp('c', s.slice(i, e)); i = e; continue; }
+      T.lastIndex = i; m = T.exec(s);
+      if (!m) { o += sp('tx', '<'); i++; continue; }
+      o += sp('br', '<' + m[1]) + sp('tag', m[2]); i = T.lastIndex;
+      const nm = m[2].toLowerCase(); let eq = false;
+      while (i < n && s[i] !== '>') {
+        const c = s[i];
+        if (/\s/.test(c)) { W.lastIndex = i; W.exec(s); o += s.slice(i, W.lastIndex); i = W.lastIndex; }
+        else if (c === '/' || c === '?') { o += sp('br', c); i++; }
+        else if (c === '=') { o += sp('eq', c); i++; eq = true; }
+        else if (c === '"' || c === "'") { let e = s.indexOf(c, i + 1); e = e < 0 ? n : e + 1; o += sp('v', s.slice(i, e)); i = e; eq = false; }
+        else { AN.lastIndex = i; const mm = AN.exec(s); if (mm) { o += sp(eq ? 'v' : 'a', mm[0]); i = AN.lastIndex; eq = false; } else { o += esc(c); i++; } }
+      }
+      if (i < n) { o += sp('br', '>'); i++; if (!m[1] && (nm === 'script' || nm === 'style')) { let e = low.indexOf('</' + nm, i); if (e < 0) e = n; const inner = s.slice(i, e); o += nm === 'style' ? hlCSS(inner) : hlJS(inner); i = e; } }
+    }
+    return o;
+  }
+
+  /* ---------- State ---------- */
+  let F = store.get('acec_cp', null); if (!F || !NAMES.every(k => typeof F[k] === 'string')) F = { ...EX.hello };
+  let cur = 'index.html', auto = store.get('acec_cp_auto', true), fs = store.get('acec_cp_fs', 14), cw = 8.4, lh = 22, busy = false, rt, st, items = [], sel = 0, popFrom = 0, lastLn = -1;
+  const lang = () => cur.endsWith('.css') ? 'css' : cur.endsWith('.js') ? 'js' : 'html';
+  const hi = () => document.documentElement.lang === 'hi' ? 1 : 0;
+  const coarse = matchMedia('(pointer:coarse)').matches;
+
+  function setFs(n) {
+    fs = Math.max(coarse ? 16 : 11, Math.min(26, n)); store.set('acec_cp_fs', fs);
+    lh = Math.round(fs * 1.6); root.style.setProperty('--fs', fs + 'px'); root.style.setProperty('--lh', lh + 'px');
+    cw = meas.getBoundingClientRect().width / 50 || fs * 0.6; draw();
+  }
+
+  /* ---------- Render ---------- */
+  function draw() {
+    const v = ta.value, L = lang();
+    pre.innerHTML = (L === 'html' ? hlHTML(v) : L === 'css' ? hlCSS(v) : hlJS(v)) + (v.endsWith('\n') ? ' ' : '');
+    lastLn = -1; status(); syncScroll();
+  }
+  function status() {
+    const p = ta.selectionStart, b = ta.value.slice(0, p), ln = b.split('\n').length, col = p - b.lastIndexOf('\n');
+    $('#cpPos').textContent = 'Ln ' + ln + ', Col ' + col;
+    if (ln !== lastLn) {
+      lastLn = ln; const total = ta.value.split('\n').length; let g = '';
+      for (let i = 1; i <= total; i++) g += (i === ln ? '<b>' + i + '</b>' : i) + '\n';
+      gutIn.innerHTML = g;
+    }
+    cl.style.top = (10 + (ln - 1) * lh - ta.scrollTop) + 'px';
+    syncScroll();
+  }
+  function syncScroll() {
+    pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft;
+    gutIn.style.transform = 'translateY(' + (-ta.scrollTop) + 'px)';
+    const ln = ta.value.slice(0, ta.selectionStart).split('\n').length;
+    cl.style.top = (10 + (ln - 1) * lh - ta.scrollTop) + 'px';
+  }
+
+  /* ---------- Open file / tabs ---------- */
+  function openFile(name, focus) {
+    cur = name; ta.value = F[name]; ta.scrollTop = ta.scrollLeft = 0;
+    $$('#vsc [data-f]').forEach(b => b.classList.toggle('on', b.dataset.f === name));
+    $('#cpTitle').textContent = name + ' — Coding Practice'; $('#cpLang').textContent = LN[lang()]; $('#cpOutName').textContent = name;
+    hide(); draw(); if (focus) ta.focus();
+  }
+  root.addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) openFile(b.dataset.f, true); });
+
+  /* ---------- Run / output ---------- */
+  function build(quiet, clean) {
+    let h = F['index.html'];
+    const st = '<style>' + F['style.css'].replace(/<\/style/gi, '<\\/style') + '</style>', sc = '<script>' + F['script.js'].replace(/<\/script/gi, '<\\/script') + '<\/script>';
+    let u1 = false, u2 = false;
+    h = h.replace(/<link[^>]*href=["']?\.?\/?style\.css["']?[^>]*>/i, () => { u1 = true; return st; });
+    h = h.replace(/<script[^>]*src=["']?\.?\/?script\.js["']?[^>]*>\s*<\/script>/i, () => { u2 = true; return sc; });
+    if (!u1) h = /<\/head>/i.test(h) ? h.replace(/<\/head>/i, () => st + '</head>') : st + h;
+    if (!u2) h = /<\/body>/i.test(h) ? h.replace(/<\/body>/i, () => sc + '</body>') : h + sc;
+    if (clean) return h;
+    const boot = '<script>(function(){var Q=' + (quiet ? 1 : 0) + ',P=function(t,a){try{parent.postMessage({cp:1,t:t,m:a.map(function(x){try{return typeof x==="object"?JSON.stringify(x):String(x)}catch(e){return String(x)}}).join(" ")},"*")}catch(e){}};["log","warn","error","info"].forEach(function(k){var o=console[k];console[k]=function(){P(k,[].slice.call(arguments));o.apply(console,arguments)}});window.addEventListener("error",function(e){P("error",[e.message+" (line "+e.lineno+")"])});window.addEventListener("unhandledrejection",function(e){P("error",[String(e.reason)])});if(Q){window.alert=function(m){P("info",["alert: "+m])};window.confirm=function(m){P("info",["confirm: "+m]);return true};window.prompt=function(m,d){P("info",["prompt: "+m]);return d||""}}})()<\/script>';
+    const re = /<head[^>]*>/i, re2 = /<html[^>]*>/i, re3 = /<!doctype[^>]*>/i;
+    return re.test(h) ? h.replace(re, x => x + boot) : re2.test(h) ? h.replace(re2, x => x + boot) : re3.test(h) ? h.replace(re3, x => x + boot) : boot + h;
+  }
+  function run(manual) { con.innerHTML = ''; $('#cpCnt').textContent = '0'; fr.srcdoc = build(!manual); }
+  function sched() {
+    clearTimeout(st); st = setTimeout(() => store.set('acec_cp', F), 600);
+    if (auto) { clearTimeout(rt); rt = setTimeout(() => run(false), 350); }
+  }
+  addEventListener('message', e => {
+    if (e.source !== fr.contentWindow || !e.data || !e.data.cp) return;
+    const d = document.createElement('div'); d.className = e.data.t; d.textContent = '› ' + e.data.m; con.appendChild(d); con.scrollTop = con.scrollHeight;
+    $('#cpCnt').textContent = con.children.length;
+  });
+
+  /* ---------- Edit helper (keeps native undo) ---------- */
+  function ins(txt, a, b, caret) {
+    if (a == null) { a = ta.selectionStart; b = ta.selectionEnd; }
+    ta.focus(); ta.setSelectionRange(a, b); let ok = false;
+    try { ok = document.execCommand('insertText', false, txt); } catch (e) { }
+    if (!ok) { ta.setRangeText(txt, a, b, 'end'); ta.dispatchEvent(new Event('input', { bubbles: true })); }
+    if (caret != null) { const p = a + caret; ta.setSelectionRange(p, p); }
+  }
+  function openTag(text) {
+    text = text.replace(/<!--[\s\S]*?-->/g, ''); const stack = []; let m; const re = /<(\/?)([a-zA-Z][\w-]*)[^<>]*?(\/?)>/g;
+    while ((m = re.exec(text))) {
+      const n = m[2].toLowerCase();
+      if (m[1]) { const k = stack.lastIndexOf(n); if (k >= 0) stack.length = k; }
+      else if (!m[3] && !VOID.has(n)) stack.push(n);
+    }
+    return stack.length ? stack[stack.length - 1] : null;
+  }
+  const inTag = b => { const lt = b.lastIndexOf('<'); return lt >= 0 && b.lastIndexOf('>') < lt; };
+
+  /* ---------- Auto close / auto pair (works with phone keyboards too) ---------- */
+  function typed(ch) {
+    const p = ta.selectionStart, v = ta.value, L = lang(), nx = v[p], pv = v[p - 2] || '';
+    if (')]}"\'`'.includes(ch) && nx === ch) { // type over closing char
+      ta.setRangeText('', p, p + 1, 'end'); return;
+    }
+    if (L === 'html') {
+      const b = v.slice(0, p);
+      if (ch === '>') {
+        const m = /<([a-zA-Z][\w-]*)(?:\s[^<>]*)?>$/.exec(b);
+        if (m && !/\/>$/.test(b) && !VOID.has(m[1].toLowerCase()) && v.slice(p, p + m[1].length + 3).toLowerCase() !== '</' + m[1].toLowerCase() + '>') ins('</' + m[1] + '>', p, p, 0);
+      } else if (ch === '/' && v[p - 2] === '<') { const n = openTag(v.slice(0, p - 2)); if (n) ins(n + '>', p, p); }
+      else if ((ch === '"' || ch === "'") && inTag(b) && !/\w/.test(pv) && (!nx || /[\s>\/]/.test(nx))) ins(ch, p, p, 0);
+      return;
+    }
+    if (PAIR[ch] && !(PAIR[ch] === ch && /\w/.test(pv)) && (!nx || /[\s)\]};,:]/.test(nx))) ins(PAIR[ch], p, p, 0);
+  }
+
+  /* ---------- Suggestions ---------- */
+  const starts = (a, pre) => a.n.toLowerCase().startsWith(pre.toLowerCase());
+  function suggest() {
+    const p = ta.selectionStart, v = ta.value, L = lang(); if (ta.selectionEnd !== p || document.activeElement !== ta) return hide();
+    const b = v.slice(0, p); let list = [], pf = '', m;
+    if (L === 'html') {
+      const lt = b.lastIndexOf('<');
+      if (lt >= 0 && b.lastIndexOf('>') < lt) {
+        const seg = b.slice(lt + 1);
+        if ((m = /^(!?[A-Za-z][\w-]*|!-*|)$/.exec(seg))) { pf = m[1]; list = pf ? TG.filter(t => starts(t, pf)) : TG.filter(t => 'div p h1 a img ul li table form input button span'.split(' ').includes(t.n)); }
+        else if (/^[A-Za-z][\w-]*\s/.test(seg)) { const r = seg.replace(/"[^"]*"|'[^']*'/g, 'Q'); if (!/["']/.test(r) && !/=\s*[\w-]*$/.test(r) && (m = /\s([\w-]+)$/.exec(r))) { pf = m[1]; list = AT.filter(t => starts(t, pf)); } }
+      }
+    } else if (L === 'css') {
+      const depth = (b.match(/{/g) || []).length - (b.match(/}/g) || []).length;
+      if (depth > 0) {
+        const s = b.slice(Math.max(b.lastIndexOf('{'), b.lastIndexOf(';'), b.lastIndexOf('}')) + 1);
+        if ((m = /^\s*([\w-]+)$/.exec(s))) { pf = m[1]; list = CP.filter(t => starts(t, pf)); }
+        else if ((m = /^\s*([\w-]+)\s*:\s*([\w-]*)$/.exec(s)) && VAL[m[1]]) { pf = m[2]; list = VAL[m[1]].split(' ').map(x => ({ k: 'css', n: x, d: '', s: x + (v[p] === ';' ? '' : ';') })).filter(t => starts(t, pf)); }
+      }
+    } else {
+      const ln = b.slice(b.lastIndexOf('\n') + 1);
+      if (!/\/\//.test(ln) && !((ln.match(/["'`]/g) || []).length % 2) && (m = /([A-Za-z_$][\w$.]*)$/.exec(b)) && m[1].length >= 2) {
+        pf = m[1]; list = JS.filter(t => starts(t, pf));
+        const d = pf.lastIndexOf('.'); if (!list.length && d >= 0) { pf = pf.slice(d + 1); list = pf ? MEM.filter(t => starts(t, pf)) : []; }
+      }
+    }
+    list = list.slice(0, 9);
+    if (!list.length) return hide();
+    items = list; sel = 0; popFrom = p - pf.length; showPop();
+  }
+  function showPop() {
+    const ic = { tag: '&lt;&gt;', attr: 'a=', css: '{ }', js: 'ƒ' };
+    pop.innerHTML = items.map((t, i) => '<div class="vsc-it' + (i === sel ? ' on' : '') + '" data-i="' + i + '"><i class="k-' + t.k + '">' + ic[t.k] + '</i><b>' + esc(t.n) + '</b><span>' + esc((t.d || '').split('|')[hi()] || (t.d || '').split('|')[0]) + '</span></div>').join('') +
+      '<div class="vsc-ph">↑↓ select · <b>Tab</b> / Enter = write · Esc = close</div>';
+    pop.classList.add('on'); place();
+  }
+  function place() {
+    const p = popFrom, b = ta.value.slice(0, p), ln = b.split('\n').length - 1, col = p - b.lastIndexOf('\n') - 1;
+    const x = 8 + col * cw - ta.scrollLeft, y = 10 + (ln + 1) * lh - ta.scrollTop;
+    pop.style.left = Math.max(4, Math.min(x, code.clientWidth - pop.offsetWidth - 4)) + 'px';
+    pop.style.top = Math.max(2, y + pop.offsetHeight > code.clientHeight ? y - lh - pop.offsetHeight : y) + 'px';
+  }
+  function hide() { pop.classList.remove('on'); items = []; }
+  const isOpen = () => pop.classList.contains('on') && items.length;
+  function accept(t) {
+    const p = ta.selectionStart, v = ta.value; let s = t.s, b = p;
+    if (t.k === 'tag') { s = t.s || (VOID.has(t.n) ? t.n + '>' : t.n + '>$0</' + t.n + '>'); if (v[b] === '>') b++; }
+    else if (!s) s = t.n;
+    const c = s.indexOf('$0'); s = s.replace('$0', ''); hide(); ins(s, popFrom, b, c < 0 ? s.length : c);
+  }
+  pop.addEventListener('mousedown', e => e.preventDefault());
+  pop.addEventListener('click', e => { const r = e.target.closest('.vsc-it'); if (r) { accept(items[+r.dataset.i]); ta.focus(); } });
+
+  /* ---------- Keyboard ---------- */
+  function indent(back) {
+    const v = ta.value, a = ta.selectionStart, b = ta.selectionEnd, s = v.lastIndexOf('\n', a - 1) + 1; let e = v.indexOf('\n', b > a && v[b - 1] === '\n' ? b - 1 : b); if (e < 0) e = v.length;
+    const out = v.slice(s, e).split('\n').map(l => back ? l.replace(/^( {1,2}|\t)/, '') : '  ' + l).join('\n'); ins(out, s, e); ta.setSelectionRange(s, s + out.length);
+  }
+  function comment() {
+    const L = lang(), [o, c] = L === 'html' ? ['<!-- ', ' -->'] : L === 'css' ? ['/* ', ' */'] : ['// ', ''], v = ta.value, a = ta.selectionStart, b = ta.selectionEnd, s = v.lastIndexOf('\n', a - 1) + 1; let e = v.indexOf('\n', b); if (e < 0) e = v.length;
+    const lines = v.slice(s, e).split('\n'), all = lines.every(l => !l.trim() || l.trim().startsWith(o.trim()));
+    const out = lines.map(l => {
+      if (!l.trim()) return l; const ind = /^\s*/.exec(l)[0]; let t = l.slice(ind.length);
+      if (all) { t = t.startsWith(o) ? t.slice(o.length) : t.slice(o.trim().length); if (c) t = t.replace(new RegExp('\\s?' + c.trim().replace(/[*\/]/g, '\\$&') + '$'), ''); return ind + t; }
+      return ind + o + t + c;
+    }).join('\n'); ins(out, s, e, out.length);
+  }
+  ta.addEventListener('keydown', e => {
+    const p = ta.selectionStart, v = ta.value, L = lang(), k = e.key;
+    if ((e.ctrlKey || e.metaKey) && k === 'Enter') { e.preventDefault(); run(true); return; }
+    if ((e.ctrlKey || e.metaKey) && k.toLowerCase() === 's') { e.preventDefault(); store.set('acec_cp', F); toast('Saved ✔'); return; }
+    if ((e.ctrlKey || e.metaKey) && k === '/') { e.preventDefault(); comment(); return; }
+    if (isOpen()) {
+      if (k === 'ArrowDown' || k === 'ArrowUp') { e.preventDefault(); sel = (sel + (k === 'ArrowDown' ? 1 : items.length - 1)) % items.length; showPop(); pop.children[sel].scrollIntoView({ block: 'nearest' }); return; }
+      if (k === 'Tab' || k === 'Enter') { e.preventDefault(); accept(items[sel]); return; }
+      if (k === 'Escape') { e.preventDefault(); hide(); return; }
+    }
+    if (k === 'Tab') {
+      e.preventDefault();
+      if (ta.selectionEnd !== p || e.shiftKey) { indent(e.shiftKey); return; }
+      if (L === 'html' && !inTag(v.slice(0, p))) { // emmet-lite: type  div + Tab  or  !  + Tab
+        const m = /(^|[\s>])(!|[a-zA-Z][a-zA-Z0-9]*)$/.exec(v.slice(0, p));
+        if (m) {
+          const w = m[2], a = p - w.length;
+          if (w === '!') { const ind = /^[ \t]*/.exec(v.slice(v.lastIndexOf('\n', a - 1) + 1))[0]; const t = BOILER.replace(/\n$/, '').split('\n').join('\n' + ind), c = t.indexOf('\n' + ind + '  \n'); ins(t, a, p, c + ind.length + 3); return; }
+          if (TNAMES.has(w.toLowerCase())) { const t = TG.find(x => x.n === w.toLowerCase()), s = t.s || (VOID.has(t.n) ? t.n + '>' : t.n + '>$0</' + t.n + '>'), c = s.indexOf('$0'), r = s.replace('$0', ''); ins('<' + r, a, p, 1 + (c < 0 ? r.length : c)); return; }
+        }
+      }
+      ins('  '); return;
+    }
+    if (k === 'Enter' && !e.ctrlKey && !e.altKey) {
+      e.preventDefault(); const ls = v.lastIndexOf('\n', p - 1) + 1, ind = /^[ \t]*/.exec(v.slice(ls, p))[0], pc = v[p - 1], nc = v[p]; let open = false, close = false;
+      if (pc && '{[('.includes(pc)) { open = true; close = nc === PAIR[pc]; }
+      else if (L === 'html' && pc === '>') { const m = /<([a-zA-Z][\w-]*)(?:\s[^<>]*)?>$/.exec(v.slice(ls, p)); if (m && !VOID.has(m[1].toLowerCase()) && !/\/>$/.test(v.slice(ls, p))) { open = true; close = v.slice(p, p + 2) === '</'; } }
+      if (open && close) ins('\n' + ind + '  \n' + ind, p, ta.selectionEnd, ind.length + 3); else ins('\n' + ind + (open ? '  ' : ''), p, ta.selectionEnd);
+      return;
+    }
+    if (k === 'Backspace' && ta.selectionEnd === p && p > 0 && PAIR[v[p - 1]] === v[p] && (L !== 'html' || '"\''.includes(v[p]))) { e.preventDefault(); ins('', p - 1, p + 1); return; }
+  });
+  ta.addEventListener('input', e => {
+    F[cur] = ta.value;
+    if (!busy && e.data && e.data.length === 1 && /^insert(Composition)?Text$/.test(e.inputType || 'insertText')) { busy = true; try { typed(e.data); } finally { busy = false; } }
+    F[cur] = ta.value; draw(); suggest(); sched();
+  });
+  ta.addEventListener('scroll', () => { syncScroll(); if (isOpen()) place(); });
+  ta.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== ta) hide(); }, 150));
+  ['click', 'keyup'].forEach(ev => ta.addEventListener(ev, () => { status(); if (ev === 'click') hide(); }));
+  document.addEventListener('selectionchange', () => { if (document.activeElement === ta) status(); });
+  $('.vsc-gut', root).addEventListener('click', () => ta.focus());
+
+  /* ---------- Phone symbol bar + keyboard ---------- */
+  const SYMS = ['Tab', '<', '>', '/', '=', '"', "'", '!', '(', ')', '{', '}', '[', ']', ';', ':', '.', ',', '#', '-', '_', '&', '+', '*', '$', '%', '@', '\\', '|', '?', '`', '~', '^', '←', '→'];
+  sym.innerHTML = SYMS.map(s => '<button type="button" tabindex="-1"' + (s.length > 1 ? ' class="w"' : '') + ' data-s="' + esc(s).replace(/"/g, '&quot;') + '">' + esc(s) + '</button>').join('');
+  sym.addEventListener('mousedown', e => e.preventDefault());
+  sym.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return; const s = b.dataset.s; ta.focus();
+    if (s === 'Tab') ta.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+    else if (s === '←' || s === '→') { const p = ta.selectionStart + (s === '←' ? -1 : 1); ta.setSelectionRange(Math.max(0, p), Math.max(0, p)); status(); }
+    else ins(s);
+  });
+  const vv = window.visualViewport, small = matchMedia('(hover:none),(max-width:1000px)');
+  function kb() {
+    const on = document.activeElement === ta && small.matches; sym.classList.toggle('kb', on);
+    sym.style.bottom = on && vv ? Math.max(0, innerHeight - vv.height - vv.offsetTop) + 'px' : '';
+  }
+  ta.addEventListener('focus', kb); ta.addEventListener('blur', () => setTimeout(kb, 120));
+  if (vv) { vv.addEventListener('resize', kb); vv.addEventListener('scroll', kb); }
+  $('#cpKb').onclick = () => ta.focus();
+
+  /* ---------- Toolbar ---------- */
+  const loadEx = k => { F = { ...EX[k] }; store.set('acec_cp', F); openFile(cur, true); run(true); };
+  $('#cpRun').onclick = () => run(true);
+  $('#cpEx').onchange = e => { const k = e.target.value; e.target.value = ''; if (k && confirm('Current code replace ho jayega. Continue?')) loadEx(k); };
+  $('#cpReset').onclick = () => { if (confirm('Sab code reset karke starter code laga du?')) loadEx('hello'); };
+  $('#cpFsM').onclick = () => setFs(fs - 1); $('#cpFsP').onclick = () => setFs(fs + 1);
+  $('#cpCopy').onclick = () => { const t = ta.value; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).catch(() => { ta.select(); document.execCommand('copy'); }).then(() => toast('Copied ✔'), () => toast('Copied ✔')); };
+  $('#cpDl').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([build(false, true)], { type: 'text/html' })); a.download = 'my-page.html'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 600); };
+  $('#cpNew').onclick = () => window.open(URL.createObjectURL(new Blob([build(false, true)], { type: 'text/html' })), '_blank');
+  $('#cpClr').onclick = () => { con.innerHTML = ''; $('#cpCnt').textContent = '0'; };
+  $('#cpAuto').onclick = () => { auto = !auto; store.set('acec_cp_auto', auto); $('#cpAuto').textContent = '⚡ Live: ' + (auto ? 'ON' : 'OFF'); if (auto) run(false); };
+  $('#cpFull').onclick = () => { const f = root.classList.toggle('full'); document.body.style.overflow = f ? 'hidden' : ''; $('#cpFull').textContent = f ? '✕' : '⛶'; setTimeout(draw, 50); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && root.classList.contains('full') && !isOpen()) $('#cpFull').click(); });
+  const tb = $('#cpTheme'), syn = () => { tb.textContent = document.documentElement.dataset.theme === 'light' ? '🌙 Dark' : '☀️ Light'; };
+  new MutationObserver(syn).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); syn();
+  tb.onclick = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+  $('#cpAuto').textContent = '⚡ Live: ' + (auto ? 'ON' : 'OFF');
+
+  /* ---------- Init ---------- */
+  setFs(fs); openFile('index.html', false); run(false);
+})();
