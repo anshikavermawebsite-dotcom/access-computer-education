@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ACCESS COMPUTER EDUCATION CENTRE | SIGMA BOY</title>
 <meta name="description" content="Access Computer Education Centre - CCC, O-Level, ADCA, PGDCA, Tally, MS Office, Python, Web Development ki best coaching aur online test series.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪔</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&family=Yatra+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&family=Yatra+One&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="nav">
-  <a href="#home" class="brand"><span class="logo">🪔</span><b>ACCESS COMPUTER EDUCATION CENTRE<small>| SIGMA BOY</small></b></a>
+  <a href="#home" class="brand"><span class="logo">💻</span><b>ACCESS COMPUTER EDUCATION CENTRE<small>| SIGMA BOY</small></b></a>
   <nav id="menu">
     <a href="#home" data-i18n="home">Home</a>
     <a href="#gallery" data-i18n="gallery">Gallery</a>
@@ -25,12 +25,20 @@
     <a href="#olevel" data-i18n="ol">O-Level Test</a>
     <a href="#olcode" data-i18n="olcode">O-Level Coding</a>
     <a href="#codepractice" data-i18n="codepr">Coding Practice</a>
+   <a href="#battle-arena" data-i18n="battle" onclick="switchTab('battle-arena')"><i class="fa-solid fa-gamepad"></i> Sigma Battle Arena</a>
+    <a href="#resume" data-en="Resume Builder" data-hi="रेज़्यूमे बिल्डर">Resume Builder</a>
     <a href="#typing" data-i18n="typing">Typing</a>
     <a href="#saturday" data-i18n="lb">Leaderboard</a>
+    
+    <a href="#shortcuts">Shortcuts &amp; Quiz</a>
+    <a href="#cloudsuite">Cloud Suite</a>
+    <a href="#resultshub">Results Hub</a>
+    <a href="#toolsupgrade">Resume &amp; Fee Receipt</a>
     <a href="#contact" data-i18n="contact">Contact</a>
     <button class="m-only" id="themeBtn2" type="button" aria-label="Theme">🌙</button>
   </nav>
   <div class="acts">
+    <span class="live-pill" id="livePill" title="Abhi site par active users"><i></i><b id="liveN">1</b> live</span>
     <button class="ib" id="searchBtn" type="button" aria-label="Search" title="Search (Ctrl+K)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
     <div class="lang" hidden>
       <button class="ib" id="langBtn" type="button" aria-label="Language" title="Language"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><b id="langLbl">हिं</b></button>
@@ -44,7 +52,8 @@
     <button type="button" onclick="changeLanguage('hi')" class="btn-lang" data-l="hi">🇮🇳 हिन्दी</button>
     <button type="button" onclick="changeLanguage('en')" class="btn-lang" data-l="en">🇬🇧 English</button>
 </div>
-    <button class="ib" id="themeBtn" type="button" aria-label="Theme" title="Dark / Light">🌙</button>
+    <button class="ib" id="micBtn" type="button" aria-label="Voice Assistant" title="Voice Assistant 🎙️">🎙️</button>
+    <button class="ib theme-switch" id="themeBtn" type="button" role="switch" aria-checked="false" aria-label="Dark / Light theme" title="Dark / Light"><span class="ts-knob"></span></button>
     <button class="btn sm rs" id="resumeBtn" type="button" hidden>▶ Resume</button>
     <button class="btn sm" id="loginBtn" type="button" data-i18n="login">Login</button>
   </div>
@@ -56,20 +65,29 @@
 <section class="hero" id="home">
   <div class="hslides" id="hSlides"></div>
   <canvas id="fx"></canvas>
-  <div class="toran" aria-hidden="true"></div>
-  <div class="lanterns" aria-hidden="true"><div class="lantern"><i></i></div><div class="lantern"><i></i></div><div class="lantern"><i></i></div></div>
   <div class="hero-in">
-    <div class="dw-greet"><b>शुभ दीपावली</b><small>Happy Diwali from Access Computer Education Centre</small></div>
+    <div class="mc-stage mc-play" id="mcStage" aria-label="Welcome to Access Computer Center, Bachhrawan, RBL">
+      <div class="mc-floor" aria-hidden="true"></div>
+      <div class="mc-walker" aria-hidden="true">
+        <div class="mc-fig">
+          <img class="mc-boy" src="character.jpg" alt="Stylish boy walking in" width="84" height="156" decoding="async">
+        </div>
+      </div>
+      <div class="mc-box">
+        <span class="mc-kicker">✦ SYSTEM ONLINE ✦</span>
+        <h2 class="mc-text"><span>Welcome</span> <span>to</span> <span>Access</span> <span>Computer</span> <span>Center,</span> <span>Bachhrawan,</span> <span>RBL</span></h2>
+      </div>
+      <button type="button" class="mc-replay" id="mcReplay" aria-label="Replay welcome animation" title="Replay">↻</button>
+    </div>
     <span class="tag pulse">🎓 Admission Open</span>
     <h1>Code is my weapon,<br><span class="grad glitch" data-t="success is my game">success is my game</span></h1>
     <p class="typing">Hum sikhate hain: <b id="typed"></b><i class="cur">|</i></p>
-    <div class="cta"><a class="btn" href="#ccc" data-i18n="cta1">CCC Test Do</a><a class="btn ghost" href="#courses" data-i18n="cta2">Courses Dekhein</a><button class="btn rocket-btn" id="rocketBtn" type="button">🚀 <span data-en="Launch Rocket" data-hi="रॉकेट जलाओ">Launch Rocket</span></button></div>
+    <div class="cta"><a class="btn" href="#ccc" data-i18n="cta1">CCC Test Do</a><a class="btn ghost" href="#courses" data-i18n="cta2">Courses Dekhein</a></div>
   </div>
   <div class="hcap" id="hCap"></div>
   <button class="s-btn prev" id="sPrev" aria-label="Previous">&#10094;</button>
   <button class="s-btn next" id="sNext" aria-label="Next">&#10095;</button>
   <div class="dots" id="sDots"></div>
-  <div class="diyas" aria-hidden="true"><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i><i class="diya"></i></div>
   <div class="s-prog"><i id="sProg"></i></div>
 </section>
 
@@ -85,7 +103,7 @@
 <div class="marquee-container">
   <marquee behavior="scroll" direction="right" scrollamount="12">
     <span class="stylish-marquee">
-      <font face="broadway"> 🪔 शुभ दीपावली / Happy Diwali 🪔 &nbsp; | &nbsp; Manoj Kumar Singh + Sudha Singh &nbsp; | &nbsp; 💻🔥 Welcome to Access Computer Education Centre  &nbsp; | &nbsp; 🚀 </font>
+      <font face="broadway"> 💻 Access Computer Education Centre 💻 &nbsp; | &nbsp; Manoj Kumar Singh + Sudha Singh &nbsp; | &nbsp; 💻🔥 Welcome to Access Computer Education Centre  &nbsp; | &nbsp; 🚀 </font>
     </span>
   </marquee>
 </div>
@@ -125,6 +143,12 @@
   <div class="grid tests" id="olGrid"></div>
 </section>
 
+<section class="sec reveal alt" id="qotd">
+  <h2>Question of the <span class="grad">Day</span></h2>
+  <p class="sub">Roz ek naya sawal. Login karke sahi jawab do aur XP kamao ⭐ &middot; Naya sawal raat 12 baje</p>
+  <div class="qd-card" id="qdCard"><div class="qd-tag" id="qdTag"></div><h3 id="qdQ"></h3><div class="qd-opts" id="qdOpts"></div><div class="qd-res" id="qdRes"></div></div>
+</section>
+
 <section class="sec reveal" id="daily">
   <h2>Daily <span class="grad">Practice</span></h2>
   <p class="sub">Aaj ke important CCC aur O-Level questions</p>
@@ -134,11 +158,101 @@
 <section class="sec reveal alt" id="typing">
   <h2>Typing <span class="grad">Shooter Game(Anshika Verma)</span></h2>
   <p class="sub">Girte hue words ko type karke destroy karo aur speed badhao</p>
+  <div class="tg-tabs notranslate" translate="no" id="tgTabs">
+    <button type="button" data-g="0" class="on">🧨 Word Fire</button>
+    <button type="button" data-g="1">🐍 Snake</button>
+    <button type="button" data-g="2">🚇 Subway Run</button>
+    <button type="button" data-g="3">🏔️ Hill Climb</button>
+    <button type="button" data-g="4">🇮🇳 हिंदी Race</button>
+    <button type="button" data-ff="1" id="ffTabBtn">🔫 Free Fire Typing</button>
+  </div>
   <div class="game">
     <div class="hud"><span>Score: <b id="gScore">0</b></span><span>Lives: <b id="gLives">❤❤❤</b></span></div>
     <div class="arena" id="arena"><div class="overlay" id="gOverlay"><h3>Typing Mission Ready?</h3><p>Word type karo, bas.</p><button class="btn" id="gStart">Start Game</button></div></div>
     <input id="gInput" type="text" placeholder="Yahan type karein..." autocomplete="off" autocapitalize="off" spellcheck="false" disabled>
   </div>
+
+  <div class="game tgx notranslate" translate="no" id="tgx" hidden>
+    <div class="hud"><span>Score: <b id="tgScore">0</b></span><span>Best: <b id="tgBest">0</b></span><span id="tgInfo"></span></div>
+    <div class="tg-hint" id="tgHint"></div>
+    <div class="tg-stage"><canvas id="tgCv" width="640" height="320"></canvas>
+      <div class="overlay" id="tgOv"><h3></h3><p></p><button class="btn" id="tgGo" type="button">Start Game</button></div></div>
+    <input id="tgInp" type="text" placeholder="Yahan type karein... (ek galat key = Game Over)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled>
+  </div>
+
+  <!-- ================= 🔫 FREE FIRE STYLE 3D TYPING SHOOTER ================= -->
+  <div class="ffg notranslate" translate="no" id="ffg" hidden>
+    <div class="ff-top">
+      <div class="ff-sub" id="ffSub">
+        <button type="button" data-p="play" class="on">🎮 Play</button>
+        <button type="button" data-p="store">📦 Drop Store</button>
+        <button type="button" data-p="char">👤 Character</button>
+        <button type="button" data-p="shop">👕 Outfit Shop</button>
+      </div>
+      <div class="ff-wallet">🪙 <b id="ffCoins">0</b><button type="button" id="ffMute" class="ff-ib" title="Sound on/off">🔊</button></div>
+    </div>
+    <div class="ff-toast" id="ffToast"></div>
+
+    <!-- PLAY -->
+    <div class="ff-panel" id="ffP-play">
+      <div class="ff-hud">
+        <div class="ff-chip wide">🎯 <b id="ffWords">0</b>/100 <i class="ff-bar"><u id="ffBar"></u></i> <em id="ffLvl">EASY</em></div>
+        <div class="ff-chip">🪙 +<b id="ffRunCoins">0</b></div>
+        <div class="ff-chip">🔫 <b id="ffWpn">M1873</b></div>
+        <div class="ff-chip">💣 <b id="ffNades">0</b></div>
+        <div class="ff-chip">Chance <b id="ffLives">❤❤❤</b></div>
+        <div class="ff-chip">Galat <b id="ffWrong">0</b>/3</div>
+        <canvas id="ffAvatar" width="46" height="96" title="Aapka character"></canvas>
+      </div>
+      <div class="ff-stage" id="ffStage">
+        <canvas id="ffCv" width="800" height="450"></canvas>
+        <canvas id="ffMap" width="132" height="132" title="Mini-Map: laal points = targets"></canvas>
+        <span class="ff-maplbl">MINI-MAP</span>
+        <div class="ff-dpad">
+          <button type="button" data-k="up" class="u" aria-label="Aage">▲</button>
+          <button type="button" data-k="left" class="l" aria-label="Left">◀</button>
+          <button type="button" data-k="down" class="d" aria-label="Peeche">▼</button>
+          <button type="button" data-k="right" class="r" aria-label="Right">▶</button>
+        </div>
+        <button type="button" class="ff-nade" id="ffNade" aria-label="Grenade phenko">💣<small>Nade</small><b id="ffNadeN">0</b></button>
+        <button type="button" class="ff-pause" id="ffPause" aria-label="Pause">⏸</button>
+        <div class="ff-ov" id="ffOv"><h3></h3><div class="ff-ovp"></div><button class="btn" id="ffGo" type="button">▶ Mission Start</button></div>
+      </div>
+      <div class="ff-hint" id="ffHint"></div>
+      <input id="ffInp" type="text" placeholder="Yahan type karein... (Enter = Grenade 💣)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled>
+    </div>
+
+    <!-- DROP STORE -->
+    <div class="ff-panel" id="ffP-store" hidden>
+      <h4 class="ff-h">🪂 Drop Store &mdash; Weapons</h4>
+      <p class="ff-note">Har word = 5 coins. Har 5 words par aapke <b>owned weapons</b> me se agla weapon automatic lag jaata hai.</p>
+      <div class="ff-grid" id="ffWeapons"></div>
+      <h4 class="ff-h">💣 Grenades (Nades) &mdash; aapke paas: <b id="ffNadeHave">0</b></h4>
+      <div class="ff-grid" id="ffNadeShop"></div>
+    </div>
+
+    <!-- CHARACTER -->
+    <div class="ff-panel" id="ffP-char" hidden>
+      <h4 class="ff-h">👤 Character Select</h4>
+      <div class="ff-char">
+        <div class="ff-charcv" id="ffCharCv"></div>
+        <div class="ff-charinfo">
+          <div class="ff-gender" id="ffGender"><button type="button" data-gd="male" class="on">👨 Male</button><button type="button" data-gd="female">👩 Female</button></div>
+          <p class="ff-note">Abhi pehna hua outfit:<br><b id="ffOutName">Black Pant &amp; White Shirt</b></p>
+          <p class="ff-note">Default outfit: <b>Black Pant &amp; White Shirt</b>. Naye outfits Outfit Shop se coins dekar kharido &mdash; kharidte hi character par turant lag jaate hain.</p>
+          <button type="button" class="btn" id="ffGoShop">👕 Outfit Shop kholo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTFIT SHOP -->
+    <div class="ff-panel" id="ffP-shop" hidden>
+      <h4 class="ff-h">👕 Outfit Shop</h4>
+      <p class="ff-note">Coins se naya outfit kharido &mdash; character par <b>turant equip</b> ho jaayega (game me bhi aapke sleeves/haath me dikhega).</p>
+      <div class="ff-grid" id="ffOutfits"></div>
+    </div>
+  </div>
+
 </section>
 
 <section class="sec reveal" id="saturday">
@@ -152,6 +266,33 @@
     </table>
   </div>
 </section>
+
+
+<section class="sec reveal" id="shortcuts"><h2>Shortcut Keys <span class="grad">&amp; Quiz Master</span></h2>
+<p class="sub">Software chunein, saare professional shortcut keys dekhein, PDF cheat sheet lein aur 3D neon quiz se practice karein</p>
+<div class="sk-wrap">
+  <div class="sk-cards" id="skCards"></div>
+  <div class="sk-grid">
+    <div class="sk-panel">
+      <div class="sk-head" id="skHead"></div>
+      <div class="sk-search"><input id="skSearch" type="search" placeholder="🔍 Shortcut ya function search karein…" autocomplete="off" aria-label="Search shortcuts"></div>
+      <div class="sk-tablewrap" id="skTable"></div>
+    </div>
+    <div class="sk-quiz" id="skQuiz"></div>
+  </div>
+</div></section>
+
+<section class="sec reveal" id="cloudsuite"><h2>Online Cloud <span class="grad">Software Suite</span></h2>
+<p class="sub">Mobile ya PC se seedha Word, Excel, PowerPoint aur Tally practice karein</p>
+<div class="cs-wrap"><div class="cs-tabs" id="csTabs"></div><div class="cs-panel" id="csPanel"></div></div></section>
+
+<section class="sec reveal alt" id="resultshub"><h2>Results &amp; <span class="grad">Certificates Hub</span></h2>
+<p class="sub">CCC, O-Level result aur certificate verification</p>
+<div class="cs-wrap"><div class="cs-links" id="csResults"></div></div></section>
+
+<section class="sec reveal" id="toolsupgrade"><h2>Resume Builder &amp; <span class="grad">Fee Receipt</span></h2>
+<p class="sub">Template chunein, details bharein, PDF download karein</p>
+<div class="cs-wrap"><div class="cs-tabs" id="csTabs2"></div><div class="cs-panel" id="csPanel2"></div></div></section>
 
 <section class="sec reveal alt" id="contact">
   <h2>Contact <span class="grad">Karein</span></h2>
@@ -2100,10 +2241,38 @@
             <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>third</code></div>
             <figcaption><b>HTML Coding</b> &mdash; <span data-en="Scrolling text + Image &amp; type=&quot;Important coding&quot;" data-hi="All formating tag ">br tag use in line break &amp; br tag in use lineBreak</span></figcaption>
           </figure>
+   <figure class="olc-fig">
+            <img src="frameset.jpg" alt="HTML Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>third</code></div>
+            <figcaption><b>HTML Coding</b> &mdash; <span data-en="ik webpage ko kai bhago me divide krna &amp; no body tag use." data-hi="All formating tag ">br tag use in line break &amp; br tag in use lineBreak</span></figcaption>
+          </figure>
 
-
-
-
+<figure class="olc-fig">
+            <img src="cellpading.jpg" alt="HTML Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>third</code></div>
+            <figcaption><b>HTML Coding</b> &mdash; <span data-en="table tag attribute &amp; rowspan + colspan." data-hi="All formating tag ">br tag use in line break &amp; br tag in use lineBreak</span></figcaption>
+          </figure>
+<figure class="olc-fig">
+            <img src="audio.jpg" alt="HTML Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>third</code></div>
+            <figcaption><b>HTML Coding</b> &mdash; <span data-en="audio file insert &amp; play this audio." data-hi="All formating tag ">br tag use in line break &amp; br tag in use lineBreak</span></figcaption>
+          
+  <figure class="olc-fig">
+            <img src="video.jpg" alt="HTML Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>third</code></div>
+            <figcaption><b>HTML Coding</b> &mdash; <span data-en="video file insert &amp; play movie🤣😂" data-hi="All formating tag ">br tag use in line break &amp; br tag in use lineBreak</span></figcaption>
+          </figure></figure>
+<figure class="olc-fig">
+            <img src="article.jpg" alt="HTML Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>third</code></div>
+            <figcaption><b>HTML Coding</b> &mdash; <span data-en="html programing me  &amp; article tag" data-hi="All formating tag ">br tag use in line break &amp; br tag in use lineBreak</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="formcode.jpg" alt="HTML Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+              <img src="formresult.jpg" alt="HTML Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>third</code></div>
+            <figcaption><b>HTML Coding</b> &mdash; <span data-en="form coding &amp;most important." data-hi="All formating tag ">br tag use in line break &amp; br tag in use lineBreak</span></figcaption>
+          </figure>
 
 
         </div>
@@ -2117,15 +2286,66 @@
       <div class="olc-body" hidden>
         <div class="olc-grid">
           <figure class="olc-fig">
-            <img src="slide3.jpeg" alt="CSS Coding Example 1" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <img src="inline.jpg" alt="CSS Coding Example 1" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
             <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide3.jpeg</code></div>
-            <figcaption><b>CSS Coding</b> &mdash; <span data-en="Example 1: CSS Selectors, Colors &amp; Background" data-hi="उदाहरण 1: CSS सेलेक्टर्स, कलर और बैकग्राउंड">Example 1: CSS Selectors, Colors &amp; Background</span></figcaption>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="inline css &amp; Background" data-hi="50% use this language">Example 1: CSS Selectors, Colors &amp; Background</span></figcaption>
           </figure>
           <figure class="olc-fig">
-            <img src="slide4.jpeg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <img src="internal.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
             <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
-            <figcaption><b>CSS Coding</b> &mdash; <span data-en="Example 2: Flexbox Layout &amp; Navigation Bar" data-hi="उदाहरण 2: Flexbox लेआउट और नेविगेशन बार">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="internal css use best styling &amp; Navigation Bar" data-hi="98% use styling language">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
           </figure>
+<figure class="olc-fig">
+            <img src="external.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="External css use in big files &amp; Navigation Bar" data-hi="99.9%  use styling language">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="universalselector.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="cover full page &amp; Navigation Bar" data-hi="symbol(*(astrick))">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+
+<figure class="olc-fig">
+            <img src="idselector.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="singal element color &amp; Navigation Bar" data-hi="symbol(#(hash))">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="classselector.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="most useful multiple element &amp; Navigation Bar" data-hi="symbol(.(dot))">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="attributeselector.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="best use  &amp; Navigation Bar" data-hi="target use">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+           <figure class="olc-fig">
+            <img src="background.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="change background &amp; Navigation Bar" data-hi="image background me bhi lga skte hai.">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+           <figure class="olc-fig">
+            <img src="bg2.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="linear background &amp; Navigation Bar" data-hi=" flag style css😎😎">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+ <figure class="olc-fig">
+            <img src="border.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="wow intresting border &amp; Navigation Bar" data-hi="border property">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+           <figure class="olc-fig">
+            <img src="block.jpg" alt="CSS Coding Example 2" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide4.jpeg</code></div>
+            <figcaption><b>CSS Coding</b> &mdash; <span data-en="website tab bnana. &amp; Navigation Bar" data-hi="yess. bna dala na">Example 2: Flexbox Layout &amp; Navigation Bar</span></figcaption>
+          </figure>
+
+
+
+
+
         </div>
       </div>
     </div>
@@ -2155,7 +2375,7 @@
 <section class="sec" id="codepractice">
   <div class="reveal">
     <h2><span data-en="Coding" data-hi="कोडिंग">Coding</span> <span class="grad" data-en="Practice" data-hi="प्रैक्टिस">Practice</span></h2>
-    <p class="sub" data-en="Write HTML, CSS &amp; JavaScript right here and see the live output instantly, just like VS Code" data-hi="HTML, CSS और JavaScript यहीं लिखें और VS Code की तरह तुरंत लाइव आउटपुट देखें">Write HTML, CSS &amp; JavaScript right here and see the live output instantly, just like VS Code</p>
+    <p class="sub" data-en="Write HTML, CSS, JavaScript, Python &amp; Arduino (IoT) right here and see the live output instantly, just like VS Code" data-hi="HTML, CSS और JavaScript यहीं लिखें और VS Code की तरह तुरंत लाइव आउटपुट देखें">Write HTML, CSS &amp; JavaScript right here and see the live output instantly, just like VS Code</p>
   </div>
 
   <div class="vsc notranslate" translate="no" id="vsc">
@@ -2227,9 +2447,174 @@
       <button type="button" id="cpAuto" title="Live output on/off">⚡ Live: ON</button>
     </div>
   </div>
+
+  <!-- ===== Coding Practice: extra modes (Python + IoT / Arduino Simulator) ===== -->
+  <div class="px-wrap notranslate" translate="no" id="pxWrap">
+    <div class="px-tabs" role="tablist" aria-label="More practice modes">
+      <button type="button" class="px-tab on" data-px="py" role="tab" aria-selected="true">🐍 Python Coding</button>
+      <button type="button" class="px-tab" data-px="ard" role="tab" aria-selected="false">🔌 IoT / Arduino Simulator</button>
+    </div>
+
+    <!-- Python -->
+    <div class="px-panel on" id="pxPy">
+      <div class="px-bar">
+        <button class="px-btn run" id="pyRun" type="button" title="Run (Ctrl+Enter)">▶ Run</button>
+        <select class="px-btn" id="pyEx" title="Examples">
+          <option value="">📂 Examples</option><option value="hello">Hello &amp; Loop</option><option value="func">Function &amp; List</option>
+          <option value="inp">Input Calculator</option><option value="fib">Fibonacci</option><option value="dict">Dictionary</option>
+        </select>
+        <button class="px-btn" id="pyCopy" type="button">⎘ Copy</button>
+        <button class="px-btn" id="pyClr" type="button">🧹 Clear Output</button>
+        <button class="px-btn" id="pyReset" type="button">↺ Reset</button>
+        <span class="px-pill" id="pyStat">● Ready</span>
+      </div>
+      <div class="px-split">
+        <div class="px-col"><div class="px-ed" id="pyEd"></div><div class="px-sym" id="pySym"></div></div>
+        <div class="px-col"><div class="px-oh"><span>● Output Console</span><b id="pyCnt"></b></div><div class="px-con" id="pyCon" aria-live="polite"></div></div>
+      </div>
+      <p class="px-note">Asli Python engine (Pyodide) pehli Run par load hota hai (internet chahiye, ~10 MB). <code>input()</code> ke liye popup aayega. Ctrl+Enter = Run, Tab = indent.</p>
+    </div>
+
+    <!-- IoT / Arduino -->
+    <div class="px-panel" id="pxArd">
+      <div class="px-bar">
+        <button class="px-btn run" id="ardRun" type="button" title="Run (Ctrl+Enter)">▶ Upload &amp; Run</button>
+        <button class="px-btn stop" id="ardStop" type="button">■ Stop</button>
+        <select class="px-btn" id="ardEx" title="Examples">
+          <option value="">📂 Examples</option><option value="blink">Blink LED (pin 13)</option><option value="traffic">Traffic Light</option>
+          <option value="button">Button → LED</option><option value="fade">PWM Fade</option><option value="melody">Buzzer Melody</option>
+          <option value="pot">Potentiometer → Brightness</option><option value="ldr">Night Lamp (LDR)</option><option value="temp">Temperature Alarm</option>
+        </select>
+        <button class="px-btn" id="ardReset" type="button">↺ Reset</button>
+        <label class="px-chk"><input type="checkbox" id="ardLive" checked> ⚡ Live</label>
+        <label class="px-chk"><input type="checkbox" id="ardSnd" checked> 🔊</label>
+        <span class="px-pill" id="ardStat">● Stopped</span>
+      </div>
+      <div class="px-split">
+        <div class="px-col">
+          <div class="px-oh"><span>✎ Arduino / C++ Code</span><b>sketch.ino</b></div>
+          <div class="px-ed" id="ardEd"></div>
+          <div class="px-sym" id="ardSym"></div>
+          <div class="ard-msg" id="ardMsg" aria-live="polite"></div>
+          <div class="px-oh"><span>Serial Monitor</span><button class="px-mini" id="ardSerClr" type="button">Clear</button></div>
+          <pre class="px-con ard-ser" id="ardSer"></pre>
+        </div>
+        <div class="px-col">
+          <div class="px-oh"><span>● Virtual Practical Board</span><b>UNO + Breadboard</b></div>
+          <div class="ard-vis"><svg id="ardSvg" viewBox="0 0 620 560" role="img" aria-label="Arduino UNO with breadboard components"></svg></div>
+          <div class="ard-pins" id="ardPins" aria-label="Pin monitor"></div>
+          <details class="ard-det" open><summary>⚙ Wiring — har component ka pin chuno</summary><div class="ard-grid" id="ardWire"></div></details>
+          <details class="ard-det" open><summary>🎛 Sensors &amp; Button (khud badlo)</summary><div class="ard-grid" id="ardSens"></div></details>
+        </div>
+      </div>
+      <p class="px-note">Live ON ho to code sahi hote hi simulation khud restart hota hai. Galti par error niche editor ke neeche dikhega (line number ke saath).</p>
+    </div>
+  </div>
 </section>
 
 <!-- ===== Student Feedback & Review Section ===== -->
+<section class="sec" id="resume">
+  <div class="reveal">
+    <h2><span data-en="AI Resume &amp;" data-hi="AI रेज़्यूमे &amp;">AI Resume &amp;</span> <span class="grad" data-en="Portfolio Builder" data-hi="पोर्टफोलियो बिल्डर">Portfolio Builder</span></h2>
+    <p class="sub" data-en="Fill the form, pick a template, see the live preview and download your PDF instantly" data-hi="फ़ॉर्म भरें, टेम्पलेट चुनें, लाइव प्रीव्यू देखें और तुरंत PDF डाउनलोड करें">Fill the form, pick a template, see the live preview and download your PDF instantly</p>
+  </div>
+  <div class="rb-wrap">
+    <form class="rb-form" id="rbForm" autocomplete="off" onsubmit="return false">
+      <div class="rb-box">
+        <h4>🎯 Purpose / Category</h4>
+        <select id="rb_cat">
+          <option value="job">1. Professional Job Resume / CV</option>
+          <option value="teacher">2. School / College Teacher Job CV</option>
+          <option value="idcard">3. Student ID Card / Certificate Format</option>
+          <option value="leave">4. Urgent Leave Application (Chutti ki Application)</option>
+        </select>
+      </div>
+      <div class="rb-box">
+        <h4>👤 Personal Details</h4>
+        <div class="rb-grid">
+          <label>Full Name<input id="rb_name" type="text" placeholder="Abhay Kumar"></label>
+          <label>Phone<input id="rb_phone" type="tel" placeholder="98XXXXXXXX"></label>
+          <label>Email<input id="rb_email" type="email" placeholder="abhay@email.com"></label>
+          <label>Address<input id="rb_addr" type="text" placeholder="Lucknow, Uttar Pradesh"></label>
+        </div>
+        <div class="rb-photo">
+          <div class="rb-cropbox">
+            <canvas id="rbCrop" width="240" height="240" aria-label="Photo preview"></canvas>
+            <small>Photo ko drag karke adjust karein</small>
+          </div>
+          <div class="rb-cropctl">
+            <label class="rb-file">📷 Profile Photo Upload<input id="rbPhoto" type="file" accept="image/*"></label>
+            <label>Zoom <input id="rbZoom" type="range" min="1" max="3" step="0.01" value="1"></label>
+            <label>Left / Right <input id="rbX" type="range" min="-100" max="100" step="1" value="0"></label>
+            <label>Up / Down <input id="rbY" type="range" min="-100" max="100" step="1" value="0"></label>
+            <label>Photo Shape
+              <select id="rbShape"><option value="round">Round</option><option value="square">Rounded Square</option></select>
+            </label>
+            <button type="button" class="rb-mini" id="rbPhotoDel">🗑 Remove Photo</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="rb-box" data-cat="job teacher">
+        <h4>🎓 Academic &amp; Skills</h4>
+        <label>Career Objective / Summary<textarea id="rb_obj" rows="2" placeholder="Khali chhodne par auto-text lagega"></textarea></label>
+        <label>10th (School / Board, Year, %)<input id="rb_e10" type="text" placeholder="UP Board, 2018, 78%"></label>
+        <label>12th (School / Board, Year, %)<input id="rb_e12" type="text" placeholder="UP Board, 2020, 74%"></label>
+        <label>Graduation / BCA / Diploma<input id="rb_grad" type="text" placeholder="BCA, University of Lucknow, 2023, 7.8 CGPA"></label>
+        <label>CCC Grade / O-Level<input id="rb_ccc" type="text" placeholder="CCC - A Grade, O-Level - B Grade"></label>
+        <label>Technical Skills (comma se alag karein)<input id="rb_skills" type="text" placeholder="MS Office, Python, HTML, CSS, Tally"></label>
+        <label data-cat="teacher">Subjects / Classes Taught<input id="rb_subj" type="text" placeholder="Computer Science, Maths (Class 6-10)"></label>
+        <label>Experience (har line me ek)<textarea id="rb_exp" rows="3" placeholder="Computer Teacher - ABC School (2022-2024)"></textarea></label>
+        <label>Projects (har line me ek)<textarea id="rb_proj" rows="3" placeholder="Student Management System - Python + SQLite"></textarea></label>
+      </div>
+
+      <div class="rb-box" data-cat="idcard">
+        <h4>🪪 ID Card / Certificate Details</h4>
+        <div class="rb-grid">
+          <label>ID / Roll No.<input id="rb_idno" type="text" placeholder="ACE-2026-014"></label>
+          <label>Course / Class<input id="rb_course" type="text" placeholder="CCC / O-Level / ADCA"></label>
+          <label>Father's Name<input id="rb_father" type="text" placeholder="Shri Ramesh Kumar"></label>
+          <label>Date of Birth<input id="rb_dob" type="date"></label>
+          <label>Valid Upto<input id="rb_valid" type="date"></label>
+          <label>Grade / Result<input id="rb_result" type="text" placeholder="A Grade"></label>
+        </div>
+      </div>
+
+      <div class="rb-box" data-cat="leave">
+        <h4>📝 Leave Application Details</h4>
+        <div class="rb-grid">
+          <label>Letter Language<select id="rb_lang"><option value="en">English</option><option value="hi">हिन्दी</option></select></label>
+          <label>Class / Designation<input id="rb_role" type="text" placeholder="Class 10-A / Computer Teacher"></label>
+        </div>
+        <label>To (Kisko)<input id="rb_to" type="text" placeholder="The Principal, ABC Public School"></label>
+        <label>Subject<input id="rb_subject" type="text" placeholder="Application for leave"></label>
+        <div class="rb-grid">
+          <label>Leave From<input id="rb_from" type="date"></label>
+          <label>Leave Upto<input id="rb_upto" type="date"></label>
+        </div>
+        <label>Reason (Karan)<textarea id="rb_reason" rows="2" placeholder="bimari / family function / urgent kaam"></textarea></label>
+      </div>
+      <div class="rb-actions">
+        <button type="button" class="btn rb-mini" id="rbSample">✨ Sample Data</button>
+        <button type="button" class="btn rb-mini" id="rbClear">🧹 Clear</button>
+      </div>
+    </form>
+
+    <div class="rb-prev">
+      <div class="rb-bar">
+        <div class="rb-tabs" id="rbTabs">
+          <button type="button" data-t="minimal" class="on">Minimalist Clean</button>
+          <button type="button" data-t="sidebar">Modern Sidebar</button>
+          <button type="button" data-t="corporate">Professional Corporate</button>
+          <button type="button" data-t="creative">Creative Tech</button>
+        </div>
+        <button type="button" class="btn rb-dl" id="rbDl">⬇ Download PDF</button>
+      </div>
+      <div class="rb-stage" id="rbStage"><div class="rb-paper" id="rbPaper"></div></div>
+    </div>
+  </div>
+</section>
+
 <section id="reviews" class="review-section">
   <div class="container">
     <h2>Student <span>Reviews</span></h2>
@@ -2259,48 +2644,62 @@
     </div>
   </div>
 </section>
-<!-- Secret Admin Analytics Section (Sirf Ajay/Admin ko dikhega) -->
-<section id="admin-analytics" style="display: none; background: #111; color: #fff; padding: 20px; border-top: 3px solid #00ff88; margin-top: 30px; font-family: sans-serif;">
-  <div style="max-width: 900px; margin: 0 auto;">
-    <h2 style="color: #00ff88; margin-bottom: 10px;">📊 Admin Website Traffic Analytics</h2>
-    <p>Logged in as: <strong>Ajay Kumar (Web Developer)</strong></p>
-    
-    <div style="display: flex; gap: 20px; margin: 20px 0;">
-      <div style="background: #222; padding: 15px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid #333;">
-        <h3 style="margin: 0; font-size: 28px; color: #00e5ff;" id="today-visitors">0</h3>
-        <p style="margin: 5px 0 0 0; color: #aaa;">Aaj Ke Active Users (Today)</p>
-      </div>
-      <div style="background: #222; padding: 15px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid #333;">
-        <h3 style="margin: 0; font-size: 28px; color: #ff007f;" id="total-visitors">0</h3>
-        <p style="margin: 5px 0 0 0; color: #aaa;">Total Visits (All Time)</p>
-      </div>
+<!-- Secret Admin Analytics Section: keyboard par "sigma" likhte hi khulta hai -->
+<section id="admin-analytics" class="adm" style="display:none">
+  <div class="adm-in">
+    <div class="adm-top">
+      <h2>📊 Admin Live Traffic Panel</h2>
+      <div><button type="button" class="btn sm" id="admRefresh">🔄 Refresh</button> <button type="button" class="btn sm ghost" id="admClose">✖ Band</button></div>
     </div>
-
-    <h4 style="color: #fff; margin-top: 20px;">📅 Date-wise History:</h4>
-    <div id="analytics-history" style="max-height: 200px; overflow-y: auto; background: #1a1a1a; padding: 10px; border-radius: 6px;">
-      <!-- Date list yahan script se auto aayegi -->
+    <p class="adm-sub">Aaj raat <b>12:00 AM (IST)</b> se abhi tak &middot; <span id="adm-time">—</span> &middot; <span id="adm-status"></span></p>
+    <div class="adm-grid">
+      <div class="adm-c c1"><b id="today-visitors">0</b><span>Aaj ke Users (unique)</span></div>
+      <div class="adm-c c2"><b id="today-visits">0</b><span>Aaj ke Total Visits</span></div>
+      <div class="adm-c c3"><b id="today-logins">0</b><span>Aaj ke Logins</span></div>
+      <div class="adm-c c4"><b id="total-visitors">0</b><span>Total Users (All Time)</span></div>
+      <div class="adm-c c5"><b id="total-visits">0</b><span>Total Visits (All Time)</span></div>
     </div>
+    <h4>📅 Pichhle 7 din</h4>
+    <div id="analytics-history"></div>
+    <h4>🕵️ Visitor Interaction History <small>(is device ka log)</small></h4>
+    <div id="sigmaLog"></div>
+    <button type="button" class="btn sm ghost" id="sigmaClear">🗑 Log saaf karein</button>
+    <p class="adm-note">User = alag device/browser. Ek hi phone se baar-baar aane par user 1 hi ginta hai, visit badhta hai.</p>
   </div>
 </section>
 
 
 </main>
 <footer>
-  <p class="dw-foot">🪔 शुभ दीपावली 🪔</p>
   <p>© <span id="yr"></span> ACCESS COMPUTER EDUCATION CENTRE | SIGMA BOY. All rights reserved.</p>
   <p>CCC · O-Level · ADCA · PGDCA · Tally · Python · Web Development . Msoffice </p>
 </footer>
 
 <!-- Login -->
-<div class="modal" id="loginModal">
-  <div class="modal-box small">
-    <button class="close" data-close>&times;</button>
-    <h3>Student Login</h3>
-    <form id="loginForm">
-      <label>Full Name<input id="lName" required minlength="3" placeholder="Apna poora naam"></label>
-      <label>Mobile Number<input id="lMob" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit mobile number"></label>
-      <button class="btn full" type="submit">Login Karein</button>
-    </form>
+<div class="modal lg-modal" id="loginModal">
+  <div class="lg-bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="lg-wrap" id="lgWrap">
+    <button class="close" data-close aria-label="Close">&times;</button>
+    <div class="lg-gate" id="lgGate">
+      <div class="lg-logo">💻</div>
+      <h3>Student Login</h3>
+      <p>Aage badhne ke liye neeche tick karein ✔</p>
+      <label class="lg-tick"><input type="checkbox" id="lgTick"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span><b>Main Access Computer ka student hu</b></label>
+    </div>
+    <div class="lg-card" id="lgCard">
+      <div class="lg-side">
+        <div class="lg-logo sm">🎓</div>
+        <h3>Login karo,<br>rewards pao!</h3>
+        <ul><li>🎁 Roz ka Daily Gift</li><li>⭐ XP + Level system</li><li>🔥 Daily Streak &amp; Badges</li><li>🏆 Saturday Test Leaderboard</li></ul>
+      </div>
+      <form id="loginForm" class="lg-form">
+        <h3>Welcome 👋</h3>
+        <label class="lg-f"><span>👤</span><input id="lName" required minlength="3" placeholder="Apna poora naam" autocomplete="name"></label>
+        <label class="lg-f"><span>📱</span><input id="lMob" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit mobile number" autocomplete="tel"></label>
+        <button class="btn full lg-go" type="submit">Login Karein 🚀</button>
+        <small class="lg-note">Sirf naam aur mobile — koi password nahi.</small>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -2326,30 +2725,48 @@
 
 <!-- Search -->
 <div class="modal top" id="searchModal"><div class="modal-box sbox">
-  <div class="sfield"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="sInp" type="search" autocomplete="off" data-i18n-ph="searchPh" placeholder="Search..."><kbd>Esc</kbd></div>
+  <div class="sfield"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="sInp" type="search" autocomplete="off" data-i18n-ph="searchPh" placeholder="Search... "><kbd>Esc</kbd></div>
   <div id="sRes"></div>
 </div></div>
 
 <div class="toast" id="toast"></div>
 
-<!-- Patakha dock: kahin se bhi rocket / anar / chakri / bomb -->
-<div class="crackers notranslate" translate="no" role="group" aria-label="Patakhe">
-  <button type="button" data-pk="rocket" aria-label="Rocket">🚀<span class="lbl" data-en="Rocket" data-hi="रॉकेट">Rocket</span></button>
-  <button type="button" data-pk="anar" aria-label="Anar">🎇<span class="lbl" data-en="Anar" data-hi="अनार">Anar</span></button>
-  <button type="button" data-pk="chakri" aria-label="Chakri">🌀<span class="lbl" data-en="Chakri" data-hi="चकरी">Chakri</span></button>
-  <button type="button" data-pk="bomb" aria-label="Bomb">💥<span class="lbl" data-en="Bomb" data-hi="बम">Bomb</span></button>
-  <button type="button" class="snd" id="sndBtn" aria-label="Awaaz">🔊</button>
+<div id="scrollBar" aria-hidden="true"></div>
+<div class="fl-stack" id="flStack">
+  <button type="button" class="fl-b" id="topBtn" aria-label="Upar jaayein" title="Upar">⬆</button>
+  <button type="button" class="fl-b" id="shBtn" aria-label="Website share karein" title="Share">📤</button>
+  <button type="button" class="fl-b" id="stBtn" aria-label="Study timer" title="Study Timer">⏱</button>
 </div>
-
-<!-- Diwali welcome popup -->
-<div class="modal" id="dwModal"><div class="modal-box small">
+<div class="st-panel" id="stPanel" hidden>
+  <b>⏱ Study Timer</b>
+  <div class="st-time" id="stTime">25:00</div>
+  <div class="st-modes"><button type="button" data-m="25" class="on">Focus 25</button><button type="button" data-m="5">Break 5</button></div>
+  <div class="st-acts"><button type="button" class="btn sm" id="stGo">▶ Start</button><button type="button" class="btn sm ghost" id="stReset">↺</button></div>
+  <small>Focus poora hone par login user ko +10 XP</small>
+</div>
+<button type="button" class="enq-fab" id="enqBtn">📩 <span>Admission Enquiry</span></button>
+<div class="modal" id="enqModal"><div class="modal-box small">
   <button class="close" data-close aria-label="Close">&times;</button>
-  <div class="dw-lamp">🪔</div>
-  <h3 class="dw-big">शुभ दीपावली!</h3>
-  <p data-en="Happy Diwali from Access Computer Education Centre. May your life glow with success, just like these diyas." data-hi="एक्सेस कंप्यूटर एजुकेशन सेंटर की तरफ से आपको दीपावली की हार्दिक शुभकामनाएं। आपकी ज़िंदगी इन दीयों की तरह सफलता से जगमगाती रहे।">Happy Diwali from Access Computer Education Centre. May your life glow with success, just like these diyas.</p>
-  <button class="btn full rocket-btn" id="dwGo" type="button">🚀 <span data-en="Light the crackers" data-hi="पटाखे जलाओ">Light the crackers</span></button>
+  <h3>📩 Admission Enquiry</h3>
+  <form id="enqForm">
+    <label>Naam<input id="eqName" required minlength="3" placeholder="Apna naam"></label>
+    <label>Mobile<input id="eqMob" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit mobile number"></label>
+    <label>Course<select id="eqCourse"><option>CCC</option><option>O-Level</option><option>ADCA</option><option>PGDCA</option><option>Tally</option><option>MS Office</option><option>Python</option><option>Web Development</option><option>Typing</option><option>Other</option></select></label>
+    <button class="btn full" type="submit">WhatsApp par bhejein</button>
+  </form>
 </div></div>
-<script src="script.js"></script>
+<!-- Voice Assistant popup -->
+<div id="vaPanel" class="va-panel notranslate" translate="no" role="dialog" aria-live="polite" aria-label="Voice Assistant">
+  <div class="va-head"><b>🎙️ Voice Assistant</b><span><button type="button" id="vaLang" title="Bolne ki bhasha badlein">🗣️ EN</button><button type="button" id="vaClose" aria-label="Band karein">✕</button></span></div>
+  <div class="va-status" id="vaStatus">Mic dabakar bolein…</div>
+  <div class="va-heard" id="vaHeard"></div>
+  <div class="va-body" id="vaBody"></div>
+  <form class="va-type" id="vaForm" autocomplete="off"><input id="vaInp" type="text" placeholder="Ya yahan sawal type karein…" enterkeyhint="search"><button type="submit" aria-label="Search">➤</button></form>
+  <div class="va-tip">Bolein: <b>Home</b> · <b>CCC Test</b> · <b>Comment</b> · <b>Dark mode</b> · ya koi bhi sawal</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- script.js ab </body> se pehle load hota hai (Terminal, Utility Hub, Matrix canvas ke baad) -->
 <!-- Google Translate Script -->
 <script type="text/javascript">
 function googleTranslateElementInit() {
@@ -2364,5 +2781,167 @@ function googleTranslateElementInit() {
 <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <!-- Language switch ab script.js me hai (changeLanguage) -->
-</body>
+ <!-- Sigma Battle Arena & AI Duel Hub Tab -->
+<section id="battle-arena" class="tab-content">
+    <h2><i class="fa-solid fa-gamepad"></i> Sigma Battle Arena & AI Duel Hub</h2>
+    <p class="subtitle">Challenge Sigma Boy AI or compete live with your friend in computer syllabus modules!</p>
+
+    <div class="arena-card-container">
+        <!-- Step 1: Configuration Panel -->
+        <div id="arena-setup" class="arena-panel active">
+            <div class="form-grid">
+                <label>Player Name: <input type="text" id="p-name" placeholder="Enter Your Name"></label>
+                <label>Room Password / Code: <input type="password" id="p-pass" placeholder="Enter Room Password"></label>
+                
+                <label>Select Opponent Mode:
+                    <select id="battle-mode">
+                        <option value="bot">Play vs Sigma Boy (AI Robot)</option>
+                        <option value="friend">Play vs Friend (Live Room)</option>
+                    </select>
+                </label>
+
+                <label id="bot-diff-group">Sigma Boy Difficulty:
+                    <select id="bot-difficulty">
+                        <option value="normal">Normal (Easy Questions)</option>
+                        <option value="medium">Medium (Moderate)</option>
+                        <option value="hard">Hard (Unbeatable Sigma Boy)</option>
+                    </select>
+                </label>
+
+                <label>Select Module / Subject:
+                    <select id="quiz-module">
+                        <option value="m1">M1-R5 (IT Tools - 9 Chapters)</option>
+                        <option value="m2">M2-R5 (Web Design & Publishing - W3.CSS Focus)</option>
+                        <option value="m3">M3-R5 (Python Programming)</option>
+                        <option value="m4">M4-R5 (Internet of Things - IoT)</option>
+                    </select>
+                </label>
+
+                <label>Number of Questions:
+                    <select id="q-count">
+                        <option value="20">20 Questions</option>
+                        <option value="30">30 Questions</option>
+                        <option value="35">35 Questions</option>
+                        <option value="40">40 Questions</option>
+                        <option value="50">50 Questions</option>
+                        <option value="70">70 Questions</option>
+                        <option value="85">85 Questions</option>
+                        <option value="100">100 Questions</option>
+                        <option value="200">200 Questions</option>
+                        <option value="250">250 Questions</option>
+                    </select>
+                </label>
+            </div>
+            <button class="action-btn" onclick="startBattleArena()">Start Battle Arena 🚀</button>
+        </div>
+
+        <!-- Step 2: Live Quiz Arena -->
+        <div id="arena-quiz" class="arena-panel hidden">
+            <div class="quiz-top-bar">
+                <span id="player-hud">Player: <strong id="hud-name"></strong></span>
+                <span id="timer-hud">Time Left: <strong id="hud-timer">00:00</strong></span>
+                <span id="progress-hud">Q: <strong id="hud-qnum">1</strong>/<span id="hud-qtotal">20</span></span>
+            </div>
+            
+            <div class="question-box">
+                <h3 id="question-text">Question will appear here...</h3>
+                <div id="options-container" class="options-grid">
+                    <!-- Dynamic Options -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Game Over & Winner Modal / Box -->
+        <div id="arena-result" class="arena-panel hidden">
+            <div class="result-3d-box" id="result-box-content">
+                <!-- Dynamic 3D Celebration / Defeat Content -->
+            </div>
+            <button class="action-btn" onclick="resetArena()">Play Again 🔄</button>
+        </div>
+    </div>
+</section>
+<!-- Secret Sigma Command Terminal HTML -->
+<div id="sigma-terminal-overlay" class="sigma-terminal-hidden">
+    <div class="sigma-terminal-window">
+        <div class="sigma-terminal-header">
+            <span class="terminal-title">🟢 ACCESS_OS v4.0 - Secure Terminal [Sigma Mode]</span>
+            <button class="terminal-close-btn" onclick="toggleSigmaTerminal()">[X]</button>
+        </div>
+        <div id="sigma-terminal-body" class="sigma-terminal-body">
+            <div class="term-welcome">
+                Type <span class="term-highlight">'help'</span> to see available commands. Press <span class="term-highlight">'Ctrl + Alt + S'</span> or click the icon to toggle.
+            </div>
+        </div>
+        <div class="sigma-terminal-input-area">
+            <span class="term-prompt">sigma@access-pc:~$</span>
+            <input type="text" id="sigma-term-input" placeholder="Enter command..." autofocus autocomplete="off">
+        </div>
+    </div>
+</div>
+
+<!-- Floating Secret Hacker Icon -->
+<div id="sigma-secret-icon" onclick="toggleSigmaTerminal()" title="Secret Hacker Terminal">
+    <i class="fa-solid fa-terminal"></i>
+</div>
+
+<!-- ===== Sigma Utility Hub (Screenshot + Screen Recorder) ===== -->
+<div id="sx-hub" class="sx-hub" aria-label="Sigma Utility Hub">
+  <button id="sxToggle" class="sx-toggle" type="button" aria-expanded="false" aria-controls="sxPanel" title="Sigma Utility Hub — Screenshot & Screen Record">
+    <span class="sx-ico" aria-hidden="true">⚡</span>
+    <span class="sx-tlabel">UTILITY</span>
+    <span class="sx-mini" id="sxMini" aria-hidden="true">● 00:00</span>
+  </button>
+
+  <div id="sxPanel" class="sx-panel" role="dialog" aria-label="Sigma Utility Hub">
+    <span class="sx-corner tl"></span><span class="sx-corner tr"></span><span class="sx-corner bl"></span><span class="sx-corner br"></span>
+
+    <div class="sx-head">
+      <span class="sx-led" id="sxLed"></span>
+      <span class="sx-title">SIGMA <b>UTILITY HUB</b></span>
+      <button class="sx-x" id="sxClose" type="button" aria-label="Close hub">✕</button>
+    </div>
+
+    <div class="sx-sec">
+      <div class="sx-lbl">// CAPTURE</div>
+      <div class="sx-seg" id="sxSeg" role="group" aria-label="Screenshot mode">
+        <button type="button" class="on" data-mode="view" aria-pressed="true">VIEW</button>
+        <button type="button" data-mode="full" aria-pressed="false">FULL PAGE</button>
+        <button type="button" data-mode="screen" aria-pressed="false">SCREEN</button>
+      </div>
+      <button class="sx-btn" id="sxShot" type="button"><span>📸</span> TAKE SCREENSHOT</button>
+      <div class="sx-hint" id="sxShotHint">VIEW = jo abhi screen par dikh raha hai</div>
+    </div>
+
+    <div class="sx-sec">
+      <div class="sx-lbl">// RECORD</div>
+      <div class="sx-opts">
+        <label><input type="checkbox" id="sxSys"> 🔊 System audio</label>
+        <label><input type="checkbox" id="sxMic"> 🎤 Mic</label>
+      </div>
+      <div class="sx-timer" id="sxTimer">00:00</div>
+      <div class="sx-row">
+        <button class="sx-btn rec" id="sxRec" type="button"><span>●</span> START REC</button>
+        <button class="sx-btn ghost" id="sxPause" type="button" hidden>⏸ PAUSE</button>
+        <button class="sx-btn stop" id="sxStop" type="button" hidden>■ STOP</button>
+      </div>
+      <div class="sx-hint" id="sxRecHint">Browser pooche to tab/screen select karke Share dabayein</div>
+    </div>
+
+    <div class="sx-sec sx-prev" id="sxPrev" hidden>
+      <div class="sx-lbl">// LAST CAPTURE</div>
+      <div class="sx-media" id="sxMedia"></div>
+      <div class="sx-row">
+        <a class="sx-btn" id="sxSave" href="#" download="">⬇ SAVE</a>
+        <button class="sx-btn ghost" id="sxDrop" type="button">🗑 CLEAR</button>
+      </div>
+    </div>
+
+    <div class="sx-foot">Esc = close · Recording Desktop Chrome / Edge / Firefox me chalti hai</div>
+  </div>
+</div>
+
+<!-- Matrix Canvas for Matrix Effect -->
+<canvas id="matrix-canvas"></canvas>
+<script src="script.js"></script>
+ </body>
 </html>

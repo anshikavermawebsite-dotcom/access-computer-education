@@ -1,3 +1,270 @@
+/* ============================================================
+   🎙️ VOICE ASSISTANT  (Dark Mode button ke paas wala mic)
+   1) Login check  -> localStorage 'acec_user' (login na ho to login modal khulta hai)
+   2) Navigation   -> "Home", "CCC Test", "Comment" ... bolo, page smooth scroll hota hai
+   3) Question     -> poori website ke Q&A (QB + MS Office/Python qa-card + Daily) scan karke
+                      matching Question + Answer floating popup me dikhata hai
+   ============================================================ */
+(() => {
+  const el = id => document.getElementById(id);
+  const mic = el('micBtn'), panel = el('vaPanel');
+  if (!mic || !panel) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const statusEl = el('vaStatus'), heard = el('vaHeard'), body = el('vaBody'), inp = el('vaInp'), langBtn = el('vaLang');
+
+  /* ---------- 1) Login check ---------- */
+  const isLogged = () => { try { const u = JSON.parse(localStorage.getItem('acec_user')); return !!(u && u.name); } catch { return false; } };
+  let pendingLogin = false;
+  const needLogin = () => {
+    if (isLogged()) return false;
+    pendingLogin = true;
+    closePanel(); stopRec();
+    if (typeof toast === 'function') toast('Voice Assistant ke liye pehle Login karein 🔐');
+    if (typeof openModal === 'function') openModal('loginModal');
+    return true;
+  };
+
+  /* ---------- Helpers ---------- */
+  const siteHi = () => { try { return lang === 'hi'; } catch { return false; } };   // lang abhi bana na ho to bhi crash nahi
+  let sLang = null;                                   // speech language (null = site ki language follow kare)
+  const speechLang = () => sLang || (siteHi() ? 'hi-IN' : 'en-IN');
+  const paintLangBtn = () => { langBtn.textContent = '🗣️ ' + (speechLang() === 'hi-IN' ? 'हिन्दी' : 'English'); };
+  const norm = s => (s || '').toLowerCase().replace(/[\u200c\u200d]/g, '').replace(/[^\p{L}\p{N}\p{M}]+/gu, ' ').trim();
+  const cond = s => norm(s).replace(/\s+/g, '');
+  const setStatus = (t, cls) => { statusEl.textContent = t; statusEl.className = 'va-status' + (cls ? ' ' + cls : ''); };
+  const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+  const openPanel = () => { panel.classList.add('open'); };
+  function closePanel() { panel.classList.remove('open'); if (window.speechSynthesis) speechSynthesis.cancel(); }
+
+  /* ---------- 2) Navigation commands ---------- */
+  const NAV = [
+    ['olcode', 'O-Level Coding', ['o level coding', 'olevel coding', 'o level code', 'o level m2 r5', 'ओ लेवल कोडिंग', 'ओ लेवल कोड', 'ओलेवल कोडिंग']],
+    ['codepractice', 'Coding Practice', ['coding practice', 'code practice', 'code editor', 'online editor', 'editor', 'कोडिंग प्रैक्टिस', 'कोड एडिटर', 'एडिटर']],
+    ['olevel', 'O-Level Test', ['o level test', 'olevel test', 'o level', 'olevel', 'ओ लेवल टेस्ट', 'ओ लेवल', 'ओलेवल']],
+    ['ccc', 'CCC Test', ['ccc test', 'ccc', 'c c c', 'c c c test', 'सीसीसी टेस्ट', 'सीसीसी', 'सी सी सी']],
+    ['msoffice', 'MS Office', ['ms office', 'microsoft office', 'office', 'ms word', 'word', 'excel', 'ms excel', 'powerpoint', 'ms powerpoint', 'एमएस ऑफिस', 'ऑफिस', 'ऑफ़िस', 'वर्ड', 'एक्सेल', 'पावरपॉइंट']],
+    ['python-section', 'Python', ['python', 'python test', 'python chapters', 'पायथन', 'पाइथन', 'पायथॉन']],
+    ['home', 'Home', ['home', 'home page', 'main page', 'top', 'start', 'ghar', 'होम', 'घर', 'शुरू']],
+    ['gallery', 'Gallery', ['gallery', 'photos', 'गैलरी', 'फोटो']],
+    ['courses', 'Courses', ['courses', 'course', 'our courses', 'कोर्स', 'कोर्सेस', 'कोर्सेज']],
+    ['faculty', 'Faculty', ['faculty', 'teachers', 'teacher', 'फैकल्टी', 'शिक्षक', 'टीचर']],
+    ['typing', 'Typing', ['typing', 'typing game', 'typing games', 'टाइपिंग', 'टाइपिंग गेम']],
+    ['saturday', 'Leaderboard', ['leaderboard', 'saturday test', 'saturday', 'top 10', 'लीडरबोर्ड', 'शनिवार टेस्ट']],
+    ['daily', 'Daily Question', ['daily', 'daily question', 'roz ka sawal', 'रोज का सवाल', 'डेली']],
+    ['qotd', 'Question of the Day', ['qotd', 'question of the day', 'आज का सवाल']],
+    ['contact', 'Contact', ['contact', 'contact us', 'sampark', 'कॉन्टैक्ट', 'संपर्क', 'कांटेक्ट']],
+    ['reviews', 'Comment / Reviews', ['comment', 'comments', 'review', 'reviews', 'feedback', 'student reviews', 'कमेंट', 'कमेन्ट', 'रिव्यू', 'रिव्यु', 'फीडबैक', 'समीक्षा']]
+  ];
+  const FILL = new Set('go to open show me take please plz scroll navigate section page tab jao jaao chalo chal kholo kholiye dikhao dikha do karo kar par pe ko wala wali ka ki ke the my mujhe hume humein जाओ चलो खोलो खोलिए दिखाओ दिखा दो करो पर को का की के सेक्शन पेज'.split(' '));
+  const THEME = [['dark', ['dark mode', 'dark', 'night mode', 'डार्क मोड', 'डार्क', 'अंधेरा']], ['light', ['light mode', 'light', 'day mode', 'लाइट मोड', 'लाइट', 'उजाला']]];
+
+  function tryCommand(text) {
+    const rest = norm(text).split(' ').filter(w => w && !FILL.has(w)).join(' ');
+    if (!rest) return null;
+    const rc = rest.replace(/\s+/g, '');
+    for (const [mode, al] of THEME) if (al.some(a => norm(a) === rest || cond(a) === rc)) return { kind: 'theme', mode };
+    for (const [id, label, al] of NAV) if (al.some(a => norm(a) === rest || cond(a) === rc)) return { kind: 'nav', id, label };
+    return null;
+  }
+  function doCommand(c) {
+    if (c.kind === 'theme') {
+      if (typeof setTheme === 'function') setTheme(c.mode);
+      setStatus('✅ ' + (c.mode === 'dark' ? 'Dark' : 'Light') + ' mode on', 'ok'); setTimeout(closePanel, 1200); return;
+    }
+    const t = el(c.id);
+    if (!t || getComputedStyle(t).display === 'none') { setStatus('😕 "' + c.label + '" section abhi page par available nahi hai', 'bad'); return; }
+    setStatus('✅ "' + c.label + '" par le ja raha hu…', 'ok');
+    body.innerHTML = '';
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(closePanel, 1100);
+  }
+
+  /* ---------- 3) Question search (poori website scan) ---------- */
+  const STOP = new Set(('the a an is are was were of in on to for and or what which who whom how does do did kya hai hain tha the ka ki ke ko se me mein par pe kaun kaunsi kaunsa kaise kab kyu kyun ' +
+    'batao bataiye bataye bolo bolna sawal question questions answer ans jawab uttar chapter ccc test tell about called said full form ' +
+    'क्या है हैं था का की के को से में पर कौन कौनसा कौनसी कैसे कब क्यों बताओ बताइए बोलो सवाल प्रश्न उत्तर जवाब कहलाता कहलाती कहते').split(' '));
+  const toks = s => norm(s).split(' ').filter(w => w && !STOP.has(w) && (w.length > 1 || /\d/.test(w)));
+  const cleanQ = s => (s || '').replace(/^\s*Q\s*\.?\s*\d+\s*[.):\-–]*\s*/i, '').replace(/\s+/g, ' ').trim();
+  const cleanA = s => (s || '').replace(/^\s*(Answer|Ans|उत्तर|जवाब)\s*[:：\-]?\s*/i, '').replace(/\s+/g, ' ').trim();
+  const srcOfCard = c => {
+    const tab = c.closest('.mso-tab-content'), sec = c.closest('section');
+    const names = { 'msword-tab': 'MS Word', 'msexcel-tab': 'MS Excel', 'mspowerpoint-tab': 'MS PowerPoint' };
+    let s = sec && sec.id === 'python-section' ? '🐍 Python' : '🖥️ MS Office';
+    if (tab) { const h = tab.querySelector('.sub-heading'); s += ' › ' + (names[tab.id] || (h ? h.textContent.replace(/^[^A-Za-z0-9]+/, '').slice(0, 40) : tab.id)); }
+    return s;
+  };
+
+  /* Poori website se items jama karta hai (har baar fresh, taaki Hindi/English badalne par bhi sahi chale) */
+  function buildItems() {
+    const items = [];
+    // (a) Test question bank: CCC + O-Level chapters
+    if (typeof QB !== 'undefined') {
+      const chap = k => { const c = [...(typeof CCC !== 'undefined' ? CCC : []), ...(typeof OL !== 'undefined' ? OL : [])].find(x => x[0] === k); return c ? (k[0] === 'c' ? '📝 CCC › ' : '📝 O-Level › ') + (typeof ttl === 'function' ? ttl(c) : c[1]) : '📝 ' + k; };
+      Object.keys(QB).forEach(k => QB[k].forEach(b => {
+        if (!b || !b.q) return;
+        const hay = [b.q.en, b.q.hi].filter(Boolean).join(' ');
+        items.push({ type: 'qb', k, b, hay, src: chap(k) });
+      }));
+    }
+    // (b) Website ke andar likhe hue Q&A cards (MS Word / Excel / PowerPoint / Python ...)
+    document.querySelectorAll('.qa-card').forEach(c => {
+      const h = c.querySelector('h4'), p = c.querySelector('p');
+      if (!h || !p) return;
+      items.push({ type: 'card', el: c, q: cleanQ(h.textContent), a: cleanA(p.textContent), hay: cleanQ(h.textContent), src: srcOfCard(c) });
+    });
+    // (c) Daily question
+    if (typeof DAILY !== 'undefined') DAILY.forEach(d => items.push({ type: 'daily', q: d[0], a: d[1], hay: d[0], src: '📅 Daily Question' }));
+    return items;
+  }
+
+  function score(qt, qn, it) {
+    if (!it._t) { it._n = norm(it.hay); it._t = toks(it.hay); it._s = new Set(it._t); }
+    if (!it._t.length) return 0;
+    let m = 0;
+    for (const w of qt) {
+      if (it._s.has(w)) { m++; continue; }
+      if (w.length >= 4 && it._t.some(x => x.length >= 4 && (x.startsWith(w) || w.startsWith(x)))) m += .8;
+    }
+    const cov = m / qt.length, prec = m / it._t.length;
+    if (cov < (qt.length >= 3 ? .6 : .99)) return 0;          // chhote sawal (1-2 shabd) me saare shabd milne chahiye
+    let sc = .75 * cov + .25 * Math.min(1, prec);
+    if (qn.length > 6 && it._n.includes(qn)) sc += .3;
+    return sc;
+  }
+  function search(texts) {
+    const items = buildItems(), seen = new Map();
+    texts.forEach(txt => {
+      const qt = toks(txt), qn = norm(txt);
+      if (!qt.length) return;
+      items.forEach(it => {
+        const s = score(qt, qn, it);
+        if (s <= 0) return;
+        const key = (it._n || '').slice(0, 90);
+        const old = seen.get(key);
+        if (!old || old.sc < s) seen.set(key, { it, sc: s });
+      });
+    });
+    return [...seen.values()].sort((a, b) => b.sc - a.sc).slice(0, 5).map(x => x.it);
+  }
+
+  /* ---------- Popup me result dikhana ---------- */
+  let current = null;
+  const view = it => {
+    if (it.type === 'qb') {
+      const b = it.b, opts = typeof oOf === 'function' ? oOf(b) : b.o[b.ol || 'en'], q = typeof qOf === 'function' ? qOf(b) : (b.q.en || b.q.hi);
+      return { q, opts, a: opts[b.a], correct: b.a };
+    }
+    return { q: it.q, opts: null, a: it.a, correct: -1 };
+  };
+  function render(it, rest) {
+    current = it; body.innerHTML = '';
+    const v = view(it), card = mk('div', 'va-card');
+    card.append(mk('small', 'va-src', it.src), mk('div', 'va-q', '❓ ' + v.q));
+    if (v.opts) {
+      const ul = mk('ul', 'va-opts');
+      v.opts.forEach((o, i) => ul.append(mk('li', i === v.correct ? 'ok' : '', (i === v.correct ? '✔ ' : '') + String.fromCharCode(65 + i) + ') ' + o)));
+      card.append(ul);
+    }
+    card.append(mk('div', 'va-a', '✅ Answer: ' + v.a));
+    const act = mk('div', 'va-act');
+    const speak = mk('button', '', '🔊 Suno'); speak.type = 'button';
+    speak.onclick = () => {
+      if (!window.speechSynthesis) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(v.q + '. ' + (siteHi() || /[\u0900-\u097F]/.test(v.a) ? 'उत्तर: ' : 'Answer: ') + v.a);
+      u.lang = /[\u0900-\u097F]/.test(v.q + v.a) ? 'hi-IN' : 'en-IN'; speechSynthesis.speak(u);
+    };
+    act.append(speak);
+    if (it.type === 'card') {
+      const go = mk('button', '', '📍 Page par dikhao'); go.type = 'button';
+      go.onclick = () => reveal(it.el); act.append(go);
+    }
+    if (it.type === 'qb' && typeof openTest === 'function') {
+      const tb = mk('button', '', '📝 Is chapter ka test'); tb.type = 'button';
+      tb.onclick = () => { closePanel(); openTest(it.k); }; act.append(tb);
+    }
+    card.append(act); body.append(card);
+    if (rest && rest.length) {
+      body.append(mk('div', 'va-more', 'Milte-julte sawal:'));
+      rest.forEach((o, i) => {
+        const b = mk('button', 'va-alt', cleanQ(view(o).q).slice(0, 110)); b.type = 'button';
+        b.onclick = () => render(o, [it, ...rest.filter(x => x !== o)].slice(0, 3)); body.append(b);
+      });
+    }
+    // Agar Hindi/English me translation baaki hai to peeche se ho jayegi aur popup update ho jayega
+    if (it.type === 'qb' && typeof ensureLang === 'function' && typeof lang !== 'undefined' && lang !== (it.b.ol || 'en') && !(it.b.q[lang] && it.b.o[lang]))
+      ensureLang(it.b, lang).then(ok => { if (ok && current === it) render(it, rest); }).catch(() => { });
+  }
+  function reveal(c) {
+    const tab = c.closest('.mso-tab-content'), sec = c.closest('section');
+    if (tab && sec && typeof _tabs === 'function') {
+      _tabs(sec.id, null, tab.id);
+      sec.querySelectorAll('.mso-tab-btn').forEach(b => { if ((b.getAttribute('onclick') || '').includes("'" + tab.id + "'")) b.classList.add('active'); });
+    }
+    closePanel();
+    setTimeout(() => { c.scrollIntoView({ behavior: 'smooth', block: 'center' }); c.classList.add('va-flash'); setTimeout(() => c.classList.remove('va-flash'), 3200); }, 120);
+  }
+
+  /* ---------- Main handler ---------- */
+  function handle(texts) {
+    texts = texts.map(t => (t || '').trim()).filter(Boolean);
+    if (!texts.length) return;
+    if (needLogin()) return;
+    openPanel(); heard.textContent = '🗣️ "' + texts[0] + '"';
+    for (const t of texts) { const c = tryCommand(t); if (c) return doCommand(c); }
+    const res = search(texts);
+    if (!res.length) {
+      body.innerHTML = '';
+      body.append(mk('div', 'va-none', '😕 Is sawal ka jawab website me nahi mila. Thoda alag shabdon me bolein ya neeche type karke poochein.'));
+      setStatus('Koi match nahi mila', 'bad'); return;
+    }
+    setStatus('✅ ' + res.length + ' match mile', 'ok');
+    render(res[0], res.slice(1));
+  }
+
+  /* ---------- Mic (Speech Recognition) ---------- */
+  let rec = null, listening = false, gotFinal = false;
+  function stopRec() { try { rec && rec.stop(); } catch { } }
+  function startRec() {
+    if (!SR) { setStatus('⚠️ Is browser me voice support nahi hai (Chrome/Edge use karein). Neeche type karke poochein ⌨️', 'bad'); inp.focus(); return; }
+    rec = new SR(); rec.lang = speechLang(); rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 3;
+    gotFinal = false; heard.textContent = ''; body.innerHTML = '';
+    rec.onstart = () => { listening = true; mic.classList.add('listening'); setStatus('🎙️ Sun raha hu… boliye', 'live'); };
+    rec.onresult = e => {
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) { gotFinal = true; handle([...r].map(a => a.transcript)); }
+        else interim += r[0].transcript;
+      }
+      if (interim) heard.textContent = '🗣️ ' + interim + '…';
+    };
+    rec.onerror = e => {
+      const m = { 'not-allowed': '🚫 Mic ki permission band hai — browser me mic allow karein', 'service-not-allowed': '🚫 Mic ki permission band hai', 'no-speech': '🤷 Kuch sunai nahi diya, dobara try karein', 'audio-capture': '🎤 Mic nahi mila', 'network': '🌐 Internet check karein (voice ke liye zaruri hai)' };
+      if (e.error !== 'aborted') setStatus(m[e.error] || 'Voice error: ' + e.error, 'bad');
+    };
+    rec.onend = () => { listening = false; mic.classList.remove('listening'); if (!gotFinal && statusEl.classList.contains('live')) setStatus('Mic dabakar dobara boliye', ''); };
+    try { rec.start(); } catch { }
+  }
+
+  /* ---------- Events ---------- */
+  mic.addEventListener('click', () => {
+    if (needLogin()) return;
+    openPanel();
+    if (listening) { stopRec(); return; }
+    paintLangBtn(); startRec();
+  });
+  window.activateVoiceAssistant = () => mic.click();       // purana onclick naam bhi chalta rahe
+  el('vaClose').onclick = () => { stopRec(); closePanel(); };
+  langBtn.onclick = () => { sLang = speechLang() === 'hi-IN' ? 'en-IN' : 'hi-IN'; paintLangBtn(); if (listening) stopRec(); setTimeout(() => { if (isLogged()) startRec(); }, 250); };
+  el('vaForm').onsubmit = e => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; inp.value = ''; stopRec(); handle([v]); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) { stopRec(); closePanel(); } });
+  paintLangBtn();
+  // Login poora hote hi yaad dilao ki ab mic chalega
+  const lm = el('loginModal');
+  if (lm) new MutationObserver(() => { if (!lm.classList.contains('open') && pendingLogin && isLogged()) { pendingLogin = false; if (typeof toast === 'function') setTimeout(() => toast('✅ Login ho gaya! Ab 🎙️ mic dabakar bolein'), 600); } }).observe(lm, { attributes: true, attributeFilter: ['class'] });
+})();
+
 /* ===== Helpers ===== */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -2325,7 +2592,7 @@ function renderTests() {
 
 /* ===== Login ===== */
 let user = store.get('acec_user', null);
-function paintUser() { $('#loginBtn').textContent = user ? '👤 ' + user.name.split(' ')[0] : t('login'); }
+function paintUser() { $('#loginBtn').textContent = user ? '👤 ' + user.name.split(' ')[0] : t('login');  if (window.acPaint) window.acPaint(); }
 $('#loginBtn').onclick = () => {
   if (user) { if (confirm('Logout karna chahte hain?')) { user = null; localStorage.removeItem('acec_user'); paintUser(); toast('Logout ho gaye'); } }
   else openModal('loginModal');
@@ -2335,7 +2602,7 @@ $('#loginForm').onsubmit = e => {
   const name = $('#lName').value.trim(), mob = $('#lMob').value.trim();
   if (!/^[0-9]{10}$/.test(mob)) return toast('10 digit ka sahi mobile number likhein');
   user = { name, mob }; store.set('acec_user', user); paintUser(); closeModal('loginModal');
-  toast('Welcome, ' + name + '!');
+  if (window.acLoginFX) window.acLoginFX(user); else toast('Welcome, ' + name + '!');
 };
 
 /* ===== Popup dialog (Yes/Cancel, Resume/Starting) ===== */
@@ -2591,6 +2858,284 @@ $('#gInput').oninput = e => {
   if (hit) { hit.el.remove(); G.words.splice(G.words.indexOf(hit), 1); G.score++; if (G.score % 5 === 0) G.speed += .25; e.target.value = ''; paintHud(); }
 };
 
+/* ===== TYPING TAB: 4 naye game (Snake, Subway Run, Hill Climb, Hindi Race) + purana Word Fire = total 5 =====
+   Rules (sab naye games me): ek bhi galat key = turant Game Over | words repeat nahi hote |
+   beech me chhodne (scroll/tab change) par game pause hota hai aur "Resume" milta hai */
+(() => {
+  const el = id => document.getElementById(id);
+  const tabs = el('tgTabs'), orig = document.querySelector('#typing .game:not(.tgx)'), box = el('tgx');
+  if (!tabs || !orig || !box) return;
+  const cv = el('tgCv'), cx = cv.getContext('2d'), W = cv.width, H = cv.height;
+  const inp = el('tgInp'), ov = el('tgOv'), ovT = ov.querySelector('h3'), ovP = ov.querySelector('p'), ovB = el('tgGo');
+  const hS = el('tgScore'), hB = el('tgBest'), hI = el('tgInfo'), hint = el('tgHint');
+  const FONT = "'Poppins','Noto Sans Devanagari',sans-serif";
+
+  const ENG = [...new Set(('computer keyboard internet python memory monitor windows network browser storage cursor program shortcut database router server mouse printer scanner laptop desktop tablet mobile android ' +
+    'software hardware firmware kernel compiler variable function loop array string integer boolean object class method module package library framework website webpage domain hosting cloud backup restore update upgrade ' +
+    'install uninstall download upload folder directory file document sheet slide table column row cell formula chart graph image video audio speaker headphone camera battery charger cable socket switch hub modem wifi ethernet ' +
+    'bluetooth hotspot password username email inbox outbox attach forward reply delete recycle select copy paste cut undo redo bold italic underline font style margin border header footer paragraph page layout print preview ' +
+    'zoom scroll button icon menu toolbar ribbon dialog window taskbar wallpaper screensaver antivirus firewall malware phishing hacker encrypt decrypt binary decimal hexadecimal byte kilobyte megabyte gigabyte terabyte ' +
+    'processor cache register pixel resolution display graphics sound virus search engine google login logout signup profile account digital online offline').split(/\s+/).filter(Boolean))];
+
+  const HI = [['भारत', 'bharat'], ['देश', 'desh'], ['विद्यालय', 'vidyalaya'], ['शिक्षा', 'shiksha'], ['परीक्षा', 'pariksha'], ['परिणाम', 'parinaam'], ['प्रश्न', 'prashn'], ['उत्तर', 'uttar'], ['पुस्तक', 'pustak'], ['कलम', 'kalam'],
+    ['कागज', 'kaagaz'], ['विद्यार्थी', 'vidyarthi'], ['शिक्षक', 'shikshak'], ['कक्षा', 'kaksha'], ['ज्ञान', 'gyaan'], ['समय', 'samay'], ['मेहनत', 'mehnat'], ['सफलता', 'safalta'], ['अभ्यास', 'abhyaas'], ['सीखना', 'seekhna'],
+    ['लिखना', 'likhna'], ['पढ़ना', 'padhna'], ['बोलना', 'bolna'], ['सुंदर', 'sundar'], ['तेज', 'tez'], ['धीरे', 'dheere'], ['आसान', 'aasaan'], ['कठिन', 'kathin'], ['नया', 'naya'], ['पुराना', 'puraana'],
+    ['घर', 'ghar'], ['गाँव', 'gaanv'], ['शहर', 'shahar'], ['सड़क', 'sadak'], ['गाड़ी', 'gaadi'], ['रेल', 'rail'], ['पानी', 'paani'], ['भोजन', 'bhojan'], ['फल', 'phal'], ['सब्जी', 'sabzi'],
+    ['दूध', 'doodh'], ['रोटी', 'roti'], ['चावल', 'chaawal'], ['मिठाई', 'mithai'], ['दीपक', 'deepak'], ['दीपावली', 'deepawali'], ['पटाखे', 'pataakhe'], ['रोशनी', 'roshni'], ['खुशी', 'khushi'], ['परिवार', 'parivar'],
+    ['मित्र', 'mitra'], ['माता', 'maata'], ['पिता', 'pita'], ['भाई', 'bhai'], ['बहन', 'behen'], ['नमस्ते', 'namaste'], ['धन्यवाद', 'dhanyavaad'], ['स्वागत', 'swagat'], ['प्रणाम', 'pranaam'], ['आकाश', 'aakaash'],
+    ['सूरज', 'sooraj'], ['चाँद', 'chaand'], ['सितारा', 'sitaara'], ['नदी', 'nadi'], ['पहाड़', 'pahaad'], ['जंगल', 'jungle'], ['फूल', 'phool'], ['कंप्यूटर', 'computer'], ['इंटरनेट', 'internet'], ['माउस', 'mouse']]
+    .map(([h, r]) => [h.normalize('NFC'), r]);
+  const ROM = {}; HI.forEach(([h, r]) => ROM[h] = r);
+
+  const META = {
+    1: ['🐍 Snake Typing', 'Har sahi letter par snake ek kadam chalta hai. Word poora type karo to snake seb kha leta hai. Time khatam ya ek bhi galat key = Game Over!'],
+    2: ['🚇 Subway Typing Run', 'Rukawat aate hi uska word type karo — runner kood kar nikal jayega. Takkar ya ek bhi galat key = Game Over!'],
+    3: ['🏔️ Hill Climb Typing', 'Har letter par gadi ko boost milta hai, word poora hote hi petrol bharta hai. Petrol khatam ya galat key = Game Over!'],
+    4: ['🇮🇳 Hindi Typing Race', 'Hindi keyboard on karein (Windows: Win + Space, Mobile: Hindi keyboard). 25 words bina galti type karo. Time khatam ya galat akshar = Game Over!']
+  };
+
+  let gi = 0, st = 'idle', GM = null, bag = [], target = '', pos = 0, score = 0, last = 0, raf = 0, composing = false;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const bestOf = i => store.get('acec_tg_best' + i, 0);
+  const norm = s => { s = (s || '').normalize('NFC').replace(/\s+$/, ''); return gi === 4 ? s : s.toLowerCase(); };
+  const makeBag = () => { bag = shuffle(gi === 4 ? HI.map(x => x[0]) : ENG); };           // bag se nikla word dobara nahi aata
+  const pick = (mn, mx) => { let k = -1; for (let i = bag.length - 1; i >= 0; i--) if (bag[i].length >= mn && bag[i].length <= mx) { k = i; break; } if (k < 0) k = bag.length - 1; return k < 0 ? null : bag.splice(k, 1)[0]; };
+  const rr = (x, y, w, h, r) => { cx.beginPath(); cx.moveTo(x + r, y); cx.arcTo(x + w, y, x + w, y + h, r); cx.arcTo(x + w, y + h, x, y + h, r); cx.arcTo(x, y + h, x, y, r); cx.arcTo(x, y, x + w, y, r); cx.closePath(); };
+  const bg = (a, b) => { const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, a); g.addColorStop(1, b); cx.fillStyle = g; cx.fillRect(0, 0, W, H); };
+  const txt = (t, x, y, size, color, weight) => { cx.font = (weight || 700) + ' ' + size + 'px ' + FONT; cx.fillStyle = color; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText(t, x, y); };
+  const label = (t, x, y, hot) => { cx.font = '700 14px ' + FONT; const w = cx.measureText(t).width + 16; rr(x - w / 2, y - 12, w, 24, 8); cx.fillStyle = hot ? '#ffb703' : 'rgba(255,255,255,.18)'; cx.fill(); txt(t, x, y + 1, 14, hot ? '#1b0b00' : '#fff'); };
+
+  function setTarget(w) { target = w; pos = 0; inp.value = ''; paintTarget(); }
+  function paintTarget() {
+    hint.textContent = '';
+    if (!target) return;
+    const d = document.createElement('span'); d.className = 'd'; d.textContent = target.slice(0, pos);
+    hint.append(d, document.createTextNode(target.slice(pos)));
+    if (gi === 4 && ROM[target]) { const s = document.createElement('small'); s.textContent = ' (' + ROM[target] + ')'; hint.append(s); }
+  }
+  function setHud() { hS.textContent = score; hB.textContent = Math.max(bestOf(gi), score); }
+  function upInfo() { const s = GM && GM.info ? GM.info() : ''; if (hI.textContent !== s) hI.textContent = s; }
+  function showOv(t, p, b) { ovT.textContent = t; ovP.textContent = p; ovB.textContent = b; ov.classList.remove('hide'); }
+  function drawIdle() { bg('#10051a', '#2b0f3a'); txt(META[gi][0].split(' ')[0], W / 2, H / 2, 90, '#fff', 400); }
+  function draw() { if (GM) GM.draw(); else drawIdle(); }
+
+  /* ---------- Engine ---------- */
+  function loop(t) {
+    if (st !== 'run') return;
+    const dt = Math.min(.05, (t - last) / 1000); last = t;
+    GM.update(dt); if (st !== 'run') return;
+    GM.draw(); upInfo(); raf = requestAnimationFrame(loop);
+  }
+  function start() {
+    cancelAnimationFrame(raf); score = 0; target = ''; pos = 0; inp.value = ''; makeBag();
+    st = 'run'; GM = GAMES[gi](); ov.classList.add('hide'); inp.disabled = false;
+    GM.init(); setHud(); inp.focus({ preventScroll: true }); last = performance.now(); raf = requestAnimationFrame(loop);
+  }
+  function pause(why) { if (st !== 'run') return; st = 'pause'; cancelAnimationFrame(raf); inp.blur(); showOv('⏸️ Game Paused', why || 'Aap beech me chhod kar gaye the', '▶ Resume'); }
+  function resume() { if (st !== 'pause') return; st = 'run'; ov.classList.add('hide'); inp.focus({ preventScroll: true }); last = performance.now(); raf = requestAnimationFrame(loop); }
+  function over(msg, win) {
+    if (st !== 'run') return;
+    st = 'over'; cancelAnimationFrame(raf); draw();
+    if (score > bestOf(gi)) store.set('acec_tg_best' + gi, score);
+    setHud(); inp.disabled = true; inp.blur();
+    showOv(win ? '🏆 You Win! Score: ' + score : '💥 Game Over! Score: ' + score, msg, '🔄 Dobara Khelo');
+  }
+  ovB.onclick = () => (st === 'pause' ? resume() : start());
+
+  /* ---------- Typing check: ek bhi galat key = Game Over ---------- */
+  function check() {
+    if (st !== 'run' || !target) return;
+    const v = norm(inp.value);
+    if (!v) { pos = 0; paintTarget(); return; }
+    if (v === target) { const w = target; pos = 0; inp.value = ''; target = ''; GM.onDone(w); paintTarget(); return; }
+    if (!target.startsWith(v)) { if (composing) return; over('❌ Galat key! "' + v.slice(-1) + '" — sahi word tha: ' + target); return; }
+    const n = v.length - pos; pos = v.length; paintTarget();
+    if (n > 0 && GM.onKey) GM.onKey(n);
+  }
+  inp.addEventListener('compositionstart', () => { composing = true; });
+  inp.addEventListener('compositionend', () => { composing = false; check(); });
+  inp.addEventListener('input', check);
+
+  /* ---------- Games ---------- */
+  const GAMES = {
+    /* 1) SNAKE: har sahi letter = snake ka ek kadam (BFS se seb ki taraf) */
+    1() {
+      const C = 32, GW = W / C, GH = H / C;
+      let sn = [{ x: 5, y: 5 }, { x: 4, y: 5 }, { x: 3, y: 5 }], food = { x: 12, y: 5 }, left = 1, lim = 1;
+      const key = (x, y) => y * GW + x;
+      const path = () => {
+        const prev = new Map(), q = [[sn[0].x, sn[0].y]], blocked = new Set(sn.slice(0, -1).map(s => key(s.x, s.y)));
+        prev.set(key(sn[0].x, sn[0].y), null);
+        while (q.length) {
+          const [x, y] = q.shift();
+          if (x === food.x && y === food.y) { const out = []; let k = key(x, y); while (prev.get(k) !== null) { out.push([k % GW, (k / GW) | 0]); k = prev.get(k); } return out.reverse(); }
+          [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => {
+            const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= GW || ny >= GH) return;
+            const k = key(nx, ny); if (blocked.has(k) || prev.has(k)) return; prev.set(k, key(x, y)); q.push([nx, ny]);
+          });
+        }
+        return null;
+      };
+      const atFood = () => sn[0].x === food.x && sn[0].y === food.y;
+      const step = () => {
+        if (atFood()) return true;
+        const p = path(); if (!p || !p.length) { over('🐍 Snake fas gaya! Aage rasta nahi bacha'); return false; }
+        sn.unshift({ x: p[0][0], y: p[0][1] }); sn.pop(); return true;
+      };
+      const spawn = () => {
+        const w = pick(3, 7); if (!w) return over('Saare words khatam — Snake Champion! 🐍', true);
+        let c, t = 0;
+        do { c = { x: rnd(0, GW) | 0, y: rnd(0, GH) | 0 }; } while ((sn.some(s => s.x === c.x && s.y === c.y) || Math.abs(c.x - sn[0].x) + Math.abs(c.y - sn[0].y) < 4) && ++t < 300);
+        food = c; setTarget(w); lim = left = Math.max(2.6, 2 + w.length * .8 - Math.min(1.2, score / 60));
+        if (!path()) over('🐍 Snake fas gaya! Aage rasta nahi bacha');
+      };
+      return {
+        init() { sn = [{ x: 5, y: 5 }, { x: 4, y: 5 }, { x: 3, y: 5 }]; spawn(); },
+        update(dt) { left -= dt; if (left <= 0) over('⏰ Time khatam! Snake ko seb nahi mila'); },
+        onKey(n) { for (let i = 0; i < n; i++) if (!step()) return; },
+        onDone(w) {
+          let g = 0; while (!atFood() && g++ < 80) if (!step()) return;
+          score += w.length; sn.push({ ...sn[sn.length - 1] }); setHud(); spawn();
+        },
+        info: () => 'Length: ' + sn.length,
+        draw() {
+          bg('#0f2b1a', '#0b1a12');
+          cx.fillStyle = 'rgba(255,255,255,.045)'; for (let x = 0; x < GW; x++) for (let y = 0; y < GH; y++) if ((x + y) % 2) cx.fillRect(x * C, y * C, C, C);
+          txt('🍎', food.x * C + C / 2, food.y * C + C / 2 + 2, 26, '#fff', 400);
+          const ly = food.y === 0 ? food.y * C + C + 14 : food.y * C - 10; label(target || '', Math.min(W - 50, Math.max(50, food.x * C + C / 2)), ly, true);
+          sn.forEach((s, i) => { rr(s.x * C + 2, s.y * C + 2, C - 4, C - 4, 9); cx.fillStyle = i ? 'hsl(' + (140 - Math.min(i, 30) * 2) + ',68%,' + (46 - Math.min(i, 12)) + '%)' : '#9bff4f'; cx.fill(); });
+          const h = sn[0]; cx.fillStyle = '#111'; cx.beginPath(); cx.arc(h.x * C + 11, h.y * C + 12, 3, 0, 7); cx.arc(h.x * C + 21, h.y * C + 12, 3, 0, 7); cx.fill();
+          cx.fillStyle = '#ffb703'; cx.fillRect(0, 0, W * Math.max(0, left / lim), 5);
+        }
+      };
+    },
+
+    /* 2) SUBWAY RUN: rukawat ka word type karo to runner kood jata hai */
+    2() {
+      const LY = [140, 205, 270], RX = 120;
+      let obs = [], cleared = 0, noMore = false, scroll = 0, jump = 0, ly = LY[1], lane = 1, v = 110;
+      const pend = () => obs.filter(o => !o.done);
+      const fill = () => {
+        while (!noMore && pend().length < 2) {
+          const w = pick(4, 8); if (!w) { noMore = true; break; }
+          const lx = obs.length ? obs[obs.length - 1].x : W - 60, gapT = Math.max(1.8, 3.2 - cleared * .035) + rnd(0, .5);
+          obs.push({ x: Math.max(W + 30, lx + v * gapT), lane: rnd(0, 3) | 0, w, done: false });
+        }
+      };
+      const assign = () => { const c = pend()[0]; if (c && target !== c.w) setTarget(c.w); };
+      return {
+        init() { fill(); assign(); },
+        update(dt) {
+          v = Math.min(340, 110 + cleared * 7);
+          obs.forEach(o => { o.x -= v * dt; }); obs = obs.filter(o => o.x > -80); scroll += v * dt; if (jump > 0) jump -= dt;
+          fill(); assign();
+          const c = pend()[0];
+          if (c) lane = c.lane;
+          ly += (LY[lane] - ly) * Math.min(1, dt * 8);
+          if (c && c.x <= RX + 24) over('🚧 Takkar ho gayi! "' + c.w + '" type nahi hua');
+        },
+        onDone(w) {
+          const c = pend()[0]; if (c) c.done = true;
+          cleared++; score += w.length; jump = .45; setHud(); fill(); assign();
+          if (!pend().length && noMore) over('Saari rukawatein paar — Subway Champion! 🚇', true);
+        },
+        info: () => 'Speed: ' + Math.round(v) + ' km/h',
+        draw() {
+          bg('#12122b', '#3b1f4a');
+          cx.fillStyle = 'rgba(255,255,255,.07)'; for (let i = 0; i < 9; i++) { const x = ((i * 90 - scroll * .15) % (W + 90) + (W + 90)) % (W + 90) - 40, h = 50 + (i * 37) % 60; cx.fillRect(x, 105 - h, 54, h); }
+          LY.forEach(y => {
+            cx.fillStyle = '#2a2a3d'; cx.fillRect(0, y + 14, W, 26);
+            cx.fillStyle = '#6b6b85'; for (let x = -((scroll) % 36); x < W; x += 36) cx.fillRect(x, y + 17, 5, 20);
+            cx.fillStyle = '#c9c9dd'; cx.fillRect(0, y + 20, W, 3); cx.fillRect(0, y + 32, W, 3);
+          });
+          const cur = pend()[0];
+          obs.forEach(o => {
+            const y = LY[o.lane] + 6;
+            if (o.done) { cx.globalAlpha = .35; txt('🚧', o.x, y, 34, '#fff', 400); cx.globalAlpha = 1; }
+            else { txt('🚧', o.x, y, 38, '#fff', 400); label(o.w, o.x, y - 34, o === cur); }
+          });
+          const jy = jump > 0 ? -Math.sin(Math.PI * (1 - jump / .45)) * 62 : 0;
+          cx.save(); cx.translate(RX, ly + 6 + jy); cx.scale(-1, 1); txt('🏃', 0, 0, 40, '#fff', 400); cx.restore();
+        }
+      };
+    },
+
+    /* 3) HILL CLIMB: letter = boost, word = petrol */
+    3() {
+      let dist = 0, fuel = 100, v = 80;
+      const hgt = x => 215 + 38 * Math.sin(x * .011) + 22 * Math.sin(x * .027 + 1.3) + 10 * Math.sin(x * .06);
+      const nextW = () => { const w = pick(5, 9); if (!w) return over('Saare words khatam — Hill Climb Champion! 🏔️', true); setTarget(w); };
+      return {
+        init() { nextW(); },
+        update(dt) {
+          const sl = (hgt(dist + 12) - hgt(dist - 12)) / 24;
+          v += (-(v - 50) * 1.1 + sl * 90) * dt; v = Math.max(25, Math.min(420, v));
+          dist += v * dt; fuel -= (7 + Math.min(8, dist / 4000)) * dt;
+          if (fuel <= 0) over('⛽ Petrol khatam! Gadi ruk gayi');
+        },
+        onKey(n) { v = Math.min(420, v + 45 * n); },
+        onDone(w) { score += w.length; fuel = Math.min(100, fuel + 22 + w.length); setHud(); nextW(); },
+        info: () => 'Distance: ' + ((dist / 25) | 0) + ' m',
+        draw() {
+          bg('#1b2a4a', '#f2994a');
+          cx.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 0; i < 24; i++) cx.fillRect((i * 97) % W, (i * 53) % 110, 2, 2);
+          const CX = 150; cx.beginPath(); cx.moveTo(0, H);
+          for (let sx = 0; sx <= W; sx += 4) cx.lineTo(sx, hgt(dist - CX + sx));
+          cx.lineTo(W, H); cx.closePath(); const g = cx.createLinearGradient(0, 150, 0, H); g.addColorStop(0, '#4a8f3a'); g.addColorStop(.12, '#6b4a2b'); g.addColorStop(1, '#2a1a10'); cx.fillStyle = g; cx.fill();
+          for (let wx = Math.ceil((dist - CX) / 500) * 500; wx < dist + W; wx += 500) { const sx = wx - dist + CX, y = hgt(wx); cx.fillStyle = '#fff'; cx.fillRect(sx, y - 34, 2, 34); cx.fillStyle = '#e5383b'; cx.fillRect(sx + 2, y - 34, 16, 9); }
+          const y = hgt(dist), a = Math.atan2(hgt(dist + 10) - hgt(dist - 10), 20);
+          cx.save(); cx.translate(CX, y); cx.rotate(a);
+          rr(-30, -32, 60, 18, 6); cx.fillStyle = '#e5383b'; cx.fill(); rr(-12, -44, 28, 14, 5); cx.fillStyle = '#9ad1ff'; cx.fill();
+          [-19, 19].forEach(wx => { cx.beginPath(); cx.arc(wx, -9, 9, 0, 7); cx.fillStyle = '#111'; cx.fill(); cx.save(); cx.translate(wx, -9); cx.rotate(dist / 9); cx.fillStyle = '#ccc'; cx.fillRect(-1.5, -7, 3, 14); cx.fillRect(-7, -1.5, 14, 3); cx.restore(); });
+          cx.restore();
+          cx.fillStyle = 'rgba(0,0,0,.45)'; rr(10, 10, 190, 20, 8); cx.fill();
+          rr(12, 12, 186 * Math.max(0, fuel / 100), 16, 6); cx.fillStyle = fuel > 50 ? '#22c55e' : fuel > 25 ? '#ffb703' : '#ef4444'; cx.fill();
+          txt('⛽ ' + Math.max(0, Math.round(fuel)) + '%', 105, 21, 12, '#fff');
+        }
+      };
+    },
+
+    /* 4) HINDI TYPING RACE: 25 Hindi words, har word ki time-limit */
+    4() {
+      const GOAL = 25; let done = 0, left = 7, lim = 7, rx = 0;
+      const nextW = () => { const w = pick(2, 30); if (!w) return over('Saare Hindi words khatam! 🇮🇳', true); setTarget(w); lim = left = Math.max(3.4, 7.5 - done * .16); };
+      return {
+        init() { nextW(); },
+        update(dt) { left -= dt; rx += (done / GOAL * (W - 120) - rx) * Math.min(1, dt * 6); if (left <= 0) over('⏰ Time khatam! Word tha: ' + target); },
+        onDone() {
+          done++; score++; setHud();
+          if (done >= GOAL) { rx = W - 120; over('🎉 25 Hindi words bina galti ke type kiye — shabaash!', true); return; }
+          nextW();
+        },
+        info: () => 'Word ' + Math.min(GOAL, done + 1) + ' / ' + GOAL,
+        draw() {
+          bg('#10051a', '#2b0f3a');
+          cx.fillStyle = 'rgba(255,200,100,.5)'; for (let i = 0; i < 30; i++) cx.fillRect((i * 83) % W, (i * 47) % 150, 2, 2);
+          cx.fillStyle = '#2a2a3d'; cx.fillRect(0, 170, W, 56); cx.fillStyle = 'rgba(255,255,255,.35)'; for (let x = 0; x < W; x += 40) cx.fillRect(x, 197, 22, 3);
+          txt('🏁', W - 40, 160, 38, '#fff', 400); txt('🚀', 60 + rx, 190, 40, '#fff', 400);
+          cx.fillStyle = 'rgba(255,255,255,.15)'; rr(40, 260, W - 80, 14, 7); cx.fill();
+          const r = Math.max(0, left / lim); rr(40, 260, (W - 80) * r, 14, 7); cx.fillStyle = r > .5 ? '#22c55e' : r > .25 ? '#ffb703' : '#ef4444'; cx.fill();
+          txt('समय', W / 2, 295, 14, '#fff4df');
+        }
+      };
+    }
+  };
+
+  /* ---------- Tabs + auto-pause ---------- */
+  function select(i) {
+    cancelAnimationFrame(raf); if (typeof endGame === 'function') endGame(true);
+    gi = i; st = 'idle'; GM = null; target = ''; pos = 0; score = 0;
+    tabs.querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.g === i));
+    orig.style.display = i === 0 ? '' : 'none'; box.hidden = i === 0;
+    if (i === 0) return;
+    inp.value = ''; inp.disabled = true; inp.lang = i === 4 ? 'hi' : 'en'; hint.textContent = ''; hI.textContent = ''; setHud();
+    showOv(META[i][0], META[i][1], '▶ Start Game'); draw();
+  }
+  tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) select(+b.dataset.g); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause('Tab badal liya tha'); });
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) pause('Aap game se bahar chale gaye the'); }), { threshold: .25 }).observe(box);
+})();
+
 /* ===== UI misc ===== */
 function dismiss(m) {
   if (m.id === 'dlg') { if (dlgRes) dlgRes(-1); return; }
@@ -2633,7 +3178,7 @@ $('#tLang').onclick = () => { lang = lang === 'hi' ? 'en' : 'hi'; store.set('ace
 
 /* Theme */
 let theme = store.get('acec_theme', 'dark');
-function setTheme(m) { theme = m; document.documentElement.dataset.theme = m; store.set('acec_theme', m); $$('#themeBtn,#themeBtn2').forEach(b => b.textContent = m === 'dark' ? '☀️' : '🌙'); }
+function setTheme(m) { theme = m; document.documentElement.dataset.theme = m; store.set('acec_theme', m); $$('#themeBtn2').forEach(b => b.textContent = m === 'dark' ? '☀️' : '🌙'); const tsw = $('#themeBtn'); if (tsw) tsw.setAttribute('aria-checked', m === 'light' ? 'true' : 'false'); }
 $$('#themeBtn,#themeBtn2').forEach(b => b.onclick = () => setTheme(theme === 'dark' ? 'light' : 'dark'));
 setTheme(theme);
 
@@ -2697,11 +3242,11 @@ const SLIDES = [
   })();
 })();
 
-/* ===== Embers (hero) : upar uthte hue sunehri chingaari ===== */
+/* ===== Neon particles (hero) ===== */
 (function () {
   const c = $('#fx'), x = c.getContext('2d'); let W, H, P = [];
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const mk = (fresh) => ({ x: Math.random() * W, y: fresh ? Math.random() * H : H + 10, r: .8 + Math.random() * 2.2, vy: .25 + Math.random() * .85, ph: Math.random() * 6.28, sp: .01 + Math.random() * .03, hue: 28 + Math.random() * 28 });
+  const mk = (fresh) => ({ x: Math.random() * W, y: fresh ? Math.random() * H : H + 10, r: .8 + Math.random() * 2.2, vy: .25 + Math.random() * .85, ph: Math.random() * 6.28, sp: .01 + Math.random() * .03, hue: Math.random() < .6 ? 182 + Math.random() * 12 : 262 + Math.random() * 16 });
   function size() {
     W = c.width = c.offsetWidth; H = c.height = c.offsetHeight;
     P = Array.from({ length: W < 700 ? 34 : 70 }, () => mk(true));
@@ -2742,171 +3287,8 @@ addEventListener('scroll', () => {
   $('#toTop').classList.toggle('show', h.scrollTop > 600);
 }, { passive: true });
 $('#toTop').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
-addEventListener('load', () => $('#pre').classList.add('hide'));
-setTimeout(() => $('#pre').classList.add('hide'), 3000);
-
-
-/* ===== 🎆 DIWALI PATAKHE : Rocket 🚀, Anar, Chakri, Bomb (poore page par) ===== */
-(function () {
-  const cv = document.createElement('canvas'); cv.id = 'fxAll'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv);
-  const g = cv.getContext('2d'); let W = 0, H = 0, S = 1;
-  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function rs() { const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); S = Math.max(.7, Math.min(1.25, Math.min(W, H) / 650)); }
-  rs(); addEventListener('resize', rs);
-
-  const PAL = [[255, 209, 102], [255, 140, 26], [229, 56, 59], [224, 51, 139], [255, 255, 255], [110, 210, 255], [130, 255, 170], [190, 130, 255]];
-  const SPK = [[255, 209, 102], [255, 140, 26], [255, 255, 255]];
-  const rnd = (a, b) => a + Math.random() * (b - a), pick = a => a[Math.random() * a.length | 0];
-  const rockets = [], parts = [], fount = [], wheels = []; let flash = 0, run = false, last = 0;
-
-  /* ---- Awaaz (sirf button / click par bajti hai) ---- */
-  let AC = null, mute = store.get('acec_snd', 'on') === 'off';
-  function ac() { if (mute) return null; try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch { AC = null; } return AC; }
-  function whistle(d) {
-    const a = ac(); if (!a) return; const t = a.currentTime, o = a.createOscillator(), v = a.createGain();
-    o.type = 'sawtooth'; o.frequency.setValueAtTime(380, t); o.frequency.exponentialRampToValueAtTime(1700, t + d);
-    v.gain.setValueAtTime(.0001, t); v.gain.linearRampToValueAtTime(.04, t + .08); v.gain.linearRampToValueAtTime(.0001, t + d);
-    o.connect(v); v.connect(a.destination); o.start(t); o.stop(t + d + .05);
-  }
-  function noise(dur, type, freq, vol) {
-    const a = ac(); if (!a) return; const n = a.sampleRate * dur | 0, buf = a.createBuffer(1, n, a.sampleRate), d = buf.getChannelData(0);
-    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, type === 'lowpass' ? 2.2 : 1);
-    const s = a.createBufferSource(), f = a.createBiquadFilter(), v = a.createGain(); s.buffer = buf; f.type = type; f.frequency.value = freq; v.gain.value = vol;
-    s.connect(f); f.connect(v); v.connect(a.destination); s.start();
-  }
-  const boom = (vol, dur) => noise(dur, 'lowpass', 700, vol), fizz = dur => noise(dur, 'bandpass', 3200, .05);
-
-  /* ---- Chingaariyan ---- */
-  function P(x, y, vx, vy, c, life, o) {
-    if (parts.length > 3200) return; o = o || {};
-    parts.push({ x, y, vx, vy, c, life, max: life, s: o.s || 1.8, gr: o.gr === undefined ? .05 : o.gr, dr: o.dr || .985, tw: o.tw, cr: o.cr || 0 });
-  }
-  function burst(x, y, type, snd) {
-    const c1 = pick(PAL), c2 = pick(PAL), k = S;
-    type = type || pick(['peony', 'peony', 'ring', 'heart', 'willow', 'double', 'crackle']);
-    if (type === 'peony' || type === 'crackle' || type === 'double') {
-      const n = 90 + (Math.random() * 40 | 0);
-      for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, sp = Math.sqrt(Math.random()) * 5.2 * k + .6; P(x, y, Math.cos(a) * sp, Math.sin(a) * sp, Math.random() < .25 ? c2 : c1, rnd(55, 85), { cr: type === 'crackle' ? .5 : 0, tw: Math.random() < .3 }); }
-    }
-    if (type === 'ring' || type === 'double') {
-      for (let i = 0; i < 64; i++) { const a = i / 64 * 6.283; P(x, y, Math.cos(a) * 4.6 * k, Math.sin(a) * 4.6 * k, type === 'double' ? c2 : c1, rnd(60, 80), { dr: .98, s: 2.1 }); }
-    }
-    if (type === 'heart') {
-      for (let i = 0; i < 90; i++) { const t = i / 90 * 6.283, hx = 16 * Math.pow(Math.sin(t), 3), hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t); P(x, y, hx * .27 * k, -hy * .27 * k, [255, 90, 140], rnd(70, 95), { dr: .985, gr: .035, s: 2.1 }); }
-    }
-    if (type === 'willow') {
-      for (let i = 0; i < 80; i++) { const a = Math.random() * 6.283, sp = rnd(1.4, 4.4) * k; P(x, y, Math.cos(a) * sp, Math.sin(a) * sp, [255, 209, 102], rnd(110, 150), { gr: .045, dr: .975, tw: true, s: 1.6 }); }
-    }
-    if (snd) boom(.5, .9);
-  }
-
-  /* ---- Rocket (asli 🚀 upar jaata hai, phir phoot-ta hai) ---- */
-  function rocket(tx, ty, o) {
-    o = o || {};
-    const sx = Math.min(W - 20, Math.max(20, o.sx !== undefined ? o.sx : tx + rnd(-90, 90))), a = .075, d = H + 20 - ty, vy = -Math.sqrt(2 * a * d), t = -vy / a;
-    const el = document.createElement('span'); el.className = 'rk-fly'; el.textContent = '🚀'; document.body.appendChild(el);
-    rockets.push({ x: sx, y: H + 20, vx: (tx - sx) / t, vy, a, ty, el, snd: !!o.snd, type: o.type });
-    if (o.snd) whistle(Math.min(1.8, t / 60));
-    start();
-  }
-  const salvo = (n, snd) => { for (let i = 0; i < n; i++) setTimeout(() => rocket(rnd(W * .12, W * .88), rnd(H * .12, H * .5), { snd }), i * 280); };
-
-  /* ---- Anar (zameen se phool-jhadi) ---- */
-  function anar(x, snd) { fount.push({ x, y: H - 6, t: 0, max: 210 }); if (snd) fizz(3.2); start(); }
-  /* ---- Chakri (ghoomta hua chakra) ---- */
-  function chakri(x, snd) { wheels.push({ x, y: H - 44, a: 0, t: 0, max: 200 }); if (snd) fizz(3.2); start(); }
-  /* ---- Bomb (dhamaka) ---- */
-  function bomb() {
-    const x = rnd(W * .3, W * .7), y = rnd(H * .25, H * .45); flash = .55;
-    document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 480);
-    for (let i = 0; i < 260; i++) { const a = Math.random() * 6.283, sp = Math.sqrt(Math.random()) * 8 * S + .8; P(x, y, Math.cos(a) * sp, Math.sin(a) * sp, pick(PAL), rnd(60, 100), { cr: .35, tw: Math.random() < .3 }); }
-    for (let i = 0; i < 110; i++) { const a = i / 110 * 6.283; P(x, y, Math.cos(a) * 10 * S, Math.sin(a) * 10 * S, [255, 236, 190], 34, { dr: .95, gr: 0, s: 2.4 }); }
-    boom(.9, 1.5); start();
-  }
-  const finale = () => { salvo(8, true); setTimeout(bomb, 1900); };
-
-  function start() { if (!run) { run = true; last = performance.now(); requestAnimationFrame(frame); } }
-  function frame(ts) {
-    const dt = Math.min((ts - last) / 16.67 || 1, 2.5); last = ts;
-    g.globalCompositeOperation = 'destination-out'; g.fillStyle = 'rgba(0,0,0,' + Math.min(.32 * dt, .9) + ')'; g.fillRect(0, 0, W, H);
-    g.globalCompositeOperation = 'lighter';
-    if (flash > 0) { g.fillStyle = 'rgba(255,230,190,' + flash + ')'; g.fillRect(0, 0, W, H); flash -= .035 * dt; }
-
-    for (let i = fount.length - 1; i >= 0; i--) {
-      const f = fount[i]; f.t += dt;
-      for (let k = 0; k < 5; k++) P(f.x + rnd(-3, 3), f.y, rnd(-1.7, 1.7), -rnd(5, 9.5) * S, pick(SPK), rnd(40, 75), { s: rnd(1, 2.4), gr: .13, dr: .99 });
-      g.fillStyle = 'rgba(255,170,40,.45)'; g.beginPath(); g.arc(f.x, f.y, 14, 0, 6.283); g.fill();
-      if (f.t > f.max) fount.splice(i, 1);
-    }
-    for (let i = wheels.length - 1; i >= 0; i--) {
-      const w = wheels[i]; w.t += dt; w.a += .55 * dt;
-      g.strokeStyle = 'rgba(255,209,102,.9)'; g.lineWidth = 2; g.beginPath();
-      for (let k = 0; k < 4; k++) {
-        const an = w.a + k * 1.5708, ca = Math.cos(an), sa = Math.sin(an);
-        g.moveTo(w.x, w.y); g.lineTo(w.x + ca * 16, w.y + sa * 16);
-        P(w.x + ca * 16, w.y + sa * 16, -sa * 3.4 + rnd(-.5, .5), ca * 3.4 + rnd(-.5, .5) - .4, pick(SPK), rnd(24, 42), { s: rnd(1, 2), gr: .035, dr: .985 });
-      }
-      g.stroke();
-      if (w.t > w.max) wheels.splice(i, 1);
-    }
-    for (let i = rockets.length - 1; i >= 0; i--) {
-      const r = rockets[i];
-      r.x += r.vx * dt; r.y += r.vy * dt; r.vy += r.a * dt;
-      for (let k = 0; k < 3; k++) P(r.x + rnd(-1.5, 1.5), r.y + 12, rnd(-.4, .4), rnd(.6, 2), pick(SPK), rnd(14, 30), { s: rnd(1, 2.2), gr: .02, dr: .94 });
-      r.el.style.transform = 'translate(' + r.x + 'px,' + r.y + 'px) rotate(' + (Math.atan2(r.vy, r.vx) + Math.PI / 4) + 'rad)';
-      if (r.vy >= -.5 || r.y <= r.ty - 4) { r.el.remove(); rockets.splice(i, 1); burst(r.x, r.y, r.type, r.snd); }
-    }
-    let j = 0;
-    for (let i = 0; i < parts.length; i++) {
-      const p = parts[i];
-      p.vx *= p.dr; p.vy = p.vy * p.dr + p.gr * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
-      if (p.life > 0) {
-        parts[j++] = p;
-        if (p.tw && Math.random() < .22) continue;
-        const a = Math.min(1, p.life / p.max * 1.7);
-        g.fillStyle = 'rgba(' + p.c[0] + ',' + p.c[1] + ',' + p.c[2] + ',' + a + ')';
-        g.beginPath(); g.arc(p.x, p.y, p.s * (.55 + .45 * a), 0, 6.283); g.fill();
-      } else if (p.cr && Math.random() < p.cr) {
-        for (let k = 0; k < 3; k++) P(p.x, p.y, rnd(-1.6, 1.6), rnd(-1.6, 1.6), [255, 255, 255], rnd(10, 22), { s: 1.2, gr: .03 });
-      }
-    }
-    parts.length = j;
-    if (rockets.length || parts.length || fount.length || wheels.length || flash > 0) requestAnimationFrame(frame);
-    else { run = false; g.clearRect(0, 0, W, H); }
-  }
-
-  /* ---- Apne aap chalne wale rocket (sirf hero dikh raha ho tab, bina awaaz) ---- */
-  const hero = $('#home'); let amb = 0;
-  function ambient() {
-    if (!calm && !document.hidden && hero && scrollY < hero.offsetHeight * .7) {
-      const n = Math.random() < .3 ? 2 : 1;
-      for (let i = 0; i < n; i++) setTimeout(() => rocket(rnd(W * .08, W * .92), rnd(H * .12, H * .45)), i * 350);
-    }
-    amb = setTimeout(ambient, rnd(2600, 4800));
-  }
-  amb = setTimeout(ambient, 2600);
-
-  /* ---- Controls ---- */
-  if (hero) hero.addEventListener('click', e => { if (e.target.closest('a,button,.dots,.hcap,.s-btn')) return; rocket(e.clientX, e.clientY, { snd: true, sx: e.clientX + rnd(-60, 60) }); });
-  const rb = $('#rocketBtn'); if (rb) rb.onclick = () => salvo(5, true);
-  $$('[data-pk]').forEach(b => b.onclick = () => {
-    const k = b.dataset.pk;
-    if (k === 'rocket') salvo(3, true); else if (k === 'anar') anar(rnd(W * .2, W * .8), true); else if (k === 'chakri') chakri(rnd(W * .2, W * .8), true); else if (k === 'bomb') bomb();
-  });
-  const sb = $('#sndBtn');
-  function paintSnd() { if (!sb) return; sb.textContent = mute ? '🔇' : '🔊'; sb.setAttribute('aria-label', mute ? 'Awaaz chalu karein' : 'Awaaz band karein'); }
-  if (sb) sb.onclick = () => { mute = !mute; store.set('acec_snd', mute ? 'off' : 'on'); paintSnd(); };
-  paintSnd();
-
-  /* ---- Diwali welcome popup (ek session me ek baar) ---- */
-  function dwShow() {
-    try { if (sessionStorage.getItem('dw_seen')) return; sessionStorage.setItem('dw_seen', '1'); } catch { }
-    if (typeof testOpen !== 'undefined' && testOpen) return;
-    openModal('dwModal');
-  }
-  addEventListener('load', () => setTimeout(dwShow, 1400));
-  const go = $('#dwGo'); if (go) go.onclick = () => { closeModal('dwModal'); finale(); };
-})();
+/* instant start: preloader hides immediately */
+(() => { const p = $('#pre'); if (p) p.classList.add('hide'); })();
 
 
 /* ===== 3D tilt on cards (re-render ke baad bhi chalta hai) ===== */
@@ -3042,70 +3424,319 @@ Sudha ma'am और परिवार के आशीर्वाद से ह
     }
 });
 }
-// ==================== TRAFFIC & ACTIVE USER TRACKER ====================
-(function trackWebsiteVisitors() {
-    const todayStr = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-    const todayDay = new Date().toLocaleDateString('hi-IN', { weekday: 'long' });
+// ==================== ACCESS PLUS ====================
+// 1) Live visitor tracker (sab devices ki counting, server counter se)
+// 2) Secret admin panel: keyboard par "sigma" likhte hi khulta hai
+// 3) Login ke baad Welcome effect + XP / Streak / Badges / Daily Gift
+// 4) 5 naye features: Question of the Day, Study Timer, Admission Enquiry,
+//    Scroll progress + Back-to-top, Website Share
+(function () {
+  const NS = 'access-computer-netlify', API = 'https://api.counterapi.dev/v1/';
+  const istDate = d => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(d || new Date()); // YYYY-MM-DD (IST)
+  const today = () => istDate();
+  const ls = { get: k => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
+  const ss = { get: k => { try { return sessionStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch {} } };
+  const el = id => document.getElementById(id);
 
-    let analyticsData = JSON.parse(localStorage.getItem('access_analytics')) || {
-        totalVisits: 0,
-        dailyVisits: {}
-    };
-
-    // Total visits badhao
-    analyticsData.totalVisits += 1;
-
-    // Aaj ki date ke visits count karo
-    if (analyticsData.dailyVisits[todayStr]) {
-        analyticsData.dailyVisits[todayStr].count += 1;
-    } else {
-        analyticsData.dailyVisits[todayStr] = {
-            day: todayDay,
-            count: 1
-        };
+  /* ---------- Server counter ---------- */
+  const ctr = {
+    async up(n) { const r = await fetch(API + NS + '/' + n + '/up', { cache: 'no-store' }); if (!r.ok) throw new Error('up'); return +(await r.json()).count || 0; },
+    async get(n) {
+      try { const r = await fetch(API + NS + '/' + n + '/', { cache: 'no-store' }); if (r.status >= 500) return null; if (!r.ok) return 0; return +(await r.json()).count || 0; }
+      catch { return null; }
     }
+  };
+  async function once(store, key, names) {
+    if (store.get(key)) return;
+    try { for (const n of names) await ctr.up(n); store.set(key, '1'); } catch {}
+  }
+  (function track() {
+    const T = today();
+    once(ss, 'acec_v_' + T, ['visits-' + T, 'visits-all']);   // ek session = 1 visit
+    once(ls, 'acec_u_' + T, ['users-' + T]);                  // ek device = aaj ka 1 user
+    once(ls, 'acec_u_all', ['users-all']);                    // ek device = all-time 1 user
+  })();
 
-    // Storage me save karo
-    localStorage.setItem('access_analytics', JSON.stringify(analyticsData));
+  /* ---------- Live active users (2-minute heartbeat buckets) ---------- */
+  (function live() {
+    const BUCKET = 120000, node = el('liveN'), bk = () => Math.floor(Date.now() / BUCKET);
+    async function beat() {
+      const b = bk(), key = 'live-' + b;
+      if (ss.get('acec_live') !== String(b)) { try { await ctr.up(key); ss.set('acec_live', String(b)); } catch {} }
+      const cur = await ctr.get(key), prev = await ctr.get('live-' + (b - 1));
+      const n = (cur === null && prev === null) ? 1 : Math.max(cur || 0, prev || 0, 1);
+      if (node) node.textContent = n;
+    }
+    beat(); setInterval(() => { if (!document.hidden) beat(); }, 60000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) beat(); });
+  })();
 
-    // UI render function for Admin
-    window.renderAdminAnalytics = function() {
-        document.getElementById('today-visitors').innerText = analyticsData.dailyVisits[todayStr] ? analyticsData.dailyVisits[todayStr].count : 0;
-        document.getElementById('total-visitors').innerText = analyticsData.totalVisits;
+  /* ---------- Interaction history log (sigma panel) ---------- */
+  const HK = 'acec_hist';
+  const hist = {
+    all() { try { return JSON.parse(ls.get(HK) || '[]'); } catch { return []; } },
+    add(k, d) { const a = this.all(); a.push({ t: Date.now(), k, d: d || '' }); ls.set(HK, JSON.stringify(a.slice(-300))); }
+  };
+  if (!ss.get('acec_hv')) { ss.set('acec_hv', '1'); hist.add('🚪 Visit', document.referrer ? 'from ' + document.referrer : 'direct'); }
+  (function () {
+    const seen = new Set();
+    const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !seen.has(e.target.id)) { seen.add(e.target.id); hist.add('👁 Section', '#' + e.target.id); } }), { threshold: .4 });
+    document.querySelectorAll('main section[id]').forEach(s => io2.observe(s));
+    document.querySelectorAll('#menu a').forEach(a => a.addEventListener('click', () => hist.add('🧭 Menu', a.textContent.trim())));
+    new MutationObserver(() => hist.add('🎨 Theme', document.documentElement.dataset.theme)).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    const si = el('sInp'); let st;
+    if (si) si.addEventListener('input', () => {
+      const v = si.value.trim().toLowerCase();
+      if (v === 'sigma') { si.value = ''; const m = el('searchModal'); if (m) m.classList.remove('open'); openAdmin(); return; }
+      clearTimeout(st); st = setTimeout(() => { if (v.length >= 3) hist.add('🔎 Search', v.slice(0, 40)); }, 900);
+    });
+  })();
+  function renderHist() {
+    const box = el('sigmaLog'); if (!box) return; box.textContent = '';
+    const rows = hist.all().reverse().slice(0, 80);
+    if (!rows.length) { box.textContent = 'Abhi koi log nahi.'; return; }
+    rows.forEach(r => {
+      const d = document.createElement('div'); d.className = 'sg-row';
+      const t = document.createElement('time'); t.textContent = new Date(r.t).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'medium' });
+      const k = document.createElement('b'); k.textContent = r.k;
+      const x = document.createElement('span'); x.textContent = r.d;
+      d.append(t, k, x); box.append(d);
+    });
+  }
+  if (el('sigmaClear')) el('sigmaClear').onclick = () => { ls.set(HK, '[]'); renderHist(); };
 
-        const historyContainer = document.getElementById('analytics-history');
-        historyContainer.innerHTML = '';
+  /* ---------- Admin panel ---------- */
+  let admTimer = null;
+  window.renderAdminAnalytics = async function () {
+    const set = (id, v) => { const e = el(id); if (e) e.textContent = v; };
+    const T = today(), f = v => v === null ? '—' : v.toLocaleString('en-IN');
+    set('adm-time', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'medium' }));
+    set('adm-status', '⏳ load ho raha hai…');
+    const r = await Promise.all([ctr.get('users-' + T), ctr.get('visits-' + T), ctr.get('logins-' + T), ctr.get('users-all'), ctr.get('visits-all')]);
+    ['today-visitors', 'today-visits', 'today-logins', 'total-visitors', 'total-visits'].forEach((id, i) => set(id, f(r[i])));
+    set('adm-status', r.every(x => x === null) ? '⚠ Counter server se connect nahi hua (internet / adblock check karein)' : '🟢 Live');
+    const box = el('analytics-history'); if (!box) return;
+    const days = [...Array(7)].map((_, i) => istDate(new Date(Date.now() - i * 864e5)));
+    const rows = await Promise.all(days.map(async d => ({ d, u: await ctr.get('users-' + d), v: await ctr.get('visits-' + d), l: await ctr.get('logins-' + d) })));
+    const max = Math.max(1, ...rows.map(x => x.u || 0));
+    box.textContent = '';
+    rows.forEach(x => {
+      const row = document.createElement('div'); row.className = 'adm-row';
+      const day = new Date(x.d + 'T12:00:00+05:30').toLocaleDateString('hi-IN', { weekday: 'long', timeZone: 'Asia/Kolkata' });
+      const l = document.createElement('span'); l.textContent = '📅 ' + x.d + ' (' + day + ')';
+      const bar = document.createElement('i'); bar.style.setProperty('--w', Math.round((x.u || 0) / max * 100) + '%');
+      const n = document.createElement('b'); n.textContent = f(x.u) + ' users · ' + f(x.v) + ' visits · ' + f(x.l) + ' logins';
+      row.append(l, bar, n); box.append(row);
+    });
+  };
+  function openAdmin() {
+    const s = el('admin-analytics'); if (!s) return;
+    s.style.display = 'block'; window.renderAdminAnalytics(); renderHist(); hist.add('🔓 Sigma panel', 'unlocked');
+    setTimeout(() => s.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+    clearInterval(admTimer); admTimer = setInterval(() => { if (s.style.display !== 'none') window.renderAdminAnalytics(); else clearInterval(admTimer); }, 15000);
+  }
+  let buf = '';
+  document.addEventListener('keydown', e => {
+    const t = e.target; if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return; // form / code editor me type karte time na khule
+    if (e.ctrlKey || e.metaKey || e.altKey || !e.key || e.key.length !== 1) return;
+    buf = (buf + e.key.toLowerCase()).slice(-12);
+    if (buf.endsWith('sigma') || buf.endsWith('anshika')) { buf = ''; openAdmin(); }
+  });
+  // Mobile ke liye: logo par 5 baar jaldi-jaldi tap
+  (function () { const lg = document.querySelector('.brand .logo'); if (!lg) return; let n = 0, tm; lg.addEventListener('click', () => { n++; clearTimeout(tm); tm = setTimeout(() => n = 0, 1500); if (n >= 5) { n = 0; openAdmin(); } }); })();
+  if (el('admRefresh')) el('admRefresh').onclick = () => window.renderAdminAnalytics();
+  if (el('admClose')) el('admClose').onclick = () => { el('admin-analytics').style.display = 'none'; clearInterval(admTimer); };
 
-        const dates = Object.keys(analyticsData.dailyVisits).reverse();
-        dates.forEach(date => {
-            const item = analyticsData.dailyVisits[date];
-            const p = document.createElement('p');
-            p.style.margin = "5px 0";
-            p.style.borderBottom = "1px solid #333";
-            p.style.paddingBottom = "4px";
-            p.innerHTML = `<span style="color:#00ff88;">📅 ${date} (${item.day}):</span> <strong>${item.count} Active Users</strong>`;
-            historyContainer.appendChild(p);
-        });
+  /* ---------- Student progress: XP, streak, badges ---------- */
+  const TIPS = [
+    'Ctrl + Shift + S = Save As. Ctrl + S = Save.', 'CCC me Internet aur Cyber Security ke sawal zaroor aate hain, unhe pehle taiyaar karein.',
+    'HTML me sabse badi heading <h1> hoti hai aur sabse chhoti <h6>.', 'Typing me speed se pehle accuracy badhaiye. Speed apne aap aa jayegi.',
+    'Excel/Calc me formula hamesha = (equal) se shuru hota hai.', 'Test dene se pehle 5 minute purane galat jawab dekh lijiye.',
+    'Python me indentation (spaces) bahut zaroori hai, galti hui to error aayega.', 'F12 dabakar browser ka Inspect tool kholiye. Web design seekhne ka best tareeka.',
+    'Ctrl + Z = Undo, Ctrl + Y = Redo. Dono roz kaam aate hain.', 'Roz sirf 20 sawal solve karein. 30 din me 600 sawal ho jayenge!',
+    'Password me letters, numbers aur symbols mix karein, aur kisi ke saath share na karein.', 'Padhai ke beech 25 min focus + 5 min break (Pomodoro) sabse achha chalta hai.'
+  ];
+  const lvl = xp => Math.floor(xp / 200) + 1;
+  const pkey = u => 'acec_prog_' + (u && u.mob || 'guest');
+  const blank = () => ({ xp: 0, streak: 0, best: 0, last: '', welcomed: false, gift: '', q: '' });
+  const getP = u => { try { return Object.assign(blank(), JSON.parse(ls.get(pkey(u)) || '{}')); } catch { return blank(); } };
+  const saveP = (u, p) => ls.set(pkey(u), JSON.stringify(p));
+  const U = () => (typeof user !== 'undefined' ? user : null);
+  function badges(p) {
+    const b = [['🎓', 'Access Student']];
+    if (p.best >= 3) b.push(['🔥', '3 Din Streak']); if (p.best >= 7) b.push(['⚡', 'Weekly Warrior']);
+    if (p.xp >= 500) b.push(['🏅', '500 XP Club']); if (p.xp >= 1000) b.push(['👑', 'Champion']);
+    return b;
+  }
+  function dailyBonus(p) {
+    const t = today(); if (p.last === t) return 0;
+    const y = istDate(new Date(Date.now() - 864e5));
+    p.streak = p.last === y ? p.streak + 1 : 1; p.best = Math.max(p.best, p.streak); p.last = t;
+    const g = 25 + Math.min(p.streak, 7) * 5; p.xp += g; return g;
+  }
+  window.acAddXP = function (n, why) {
+    const u = U(); if (!u) { toast('Login karke XP kamayein ⭐'); return false; }
+    const p = getP(u); p.xp += n; saveP(u, p); window.acPaint(); toast('⭐ +' + n + ' XP · ' + why); return true;
+  };
+  window.acPaint = function () {
+    let chip = el('acChip');
+    if (!chip) { const b = el('loginBtn'); if (!b) return; chip = document.createElement('span'); chip.id = 'acChip'; chip.className = 'ac-chip'; chip.hidden = true; b.before(chip); }
+    const u = U(); if (!u) { chip.hidden = true; return; }
+    const p = getP(u); chip.hidden = false; chip.textContent = '⭐ ' + p.xp + ' · Lv ' + lvl(p.xp) + (p.streak ? ' · 🔥' + p.streak : '');
+    chip.title = 'XP ' + p.xp + ' | Level ' + lvl(p.xp) + ' | Streak ' + p.streak + ' din';
+  };
+
+  /* ---------- Login page: tick karte hi form khulta hai ---------- */
+  (function () {
+    const m = el('loginModal'), wrap = el('lgWrap'), tick = el('lgTick'); if (!m || !wrap || !tick) return;
+    const reset = () => { wrap.classList.remove('ok'); tick.checked = false; el('lgCard').setAttribute('inert', ''); };
+    tick.addEventListener('change', () => {
+      if (!tick.checked) return;
+      setTimeout(() => { wrap.classList.add('ok'); el('lgCard').removeAttribute('inert'); setTimeout(() => { const n = el('lName'); if (n) n.focus(); }, 650); }, 520);
+    });
+    new MutationObserver(() => { if (m.classList.contains('open')) reset(); }).observe(m, { attributes: true, attributeFilter: ['class'] });
+    reset();
+  })();
+
+  /* ---------- Login ke baad Welcome effect ---------- */
+  function confetti(cv, ms) {
+    const c = cv.getContext('2d'); let W = cv.width = innerWidth, H = cv.height = innerHeight;
+    const cols = ['#ffd166', '#ff9f1c', '#e5383b', '#22c55e', '#38bdf8', '#e0338b', '#fff'];
+    const ps = [...Array(170)].map(() => ({ x: W / 2, y: H * .38, vx: (Math.random() - .5) * 16, vy: -Math.random() * 15 - 3, s: 5 + Math.random() * 6, c: cols[Math.random() * cols.length | 0], r: Math.random() * 6, vr: (Math.random() - .5) * .4 }));
+    const t0 = performance.now();
+    (function f(t) {
+      const k = t - t0; c.clearRect(0, 0, W, H);
+      ps.forEach(p => { p.vy += .32; p.x += p.vx; p.y += p.vy; p.vx *= .992; p.r += p.vr; c.save(); c.globalAlpha = Math.max(0, 1 - k / ms); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.c; c.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); c.restore(); });
+      if (k < ms) requestAnimationFrame(f); else c.clearRect(0, 0, W, H);
+    })(t0);
+  }
+  function mk(tag, cls, txt) { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function showWelcome(u, p, first, daily, gain) {
+    const old = el('acWelcome'); if (old) old.remove();
+    const root = mk('div', 'acw'); root.id = 'acWelcome';
+    const cv = mk('canvas', 'acw-cv'); root.append(cv);
+    const card = mk('div', 'acw-card'); root.append(card);
+    card.append(mk('div', 'acw-ring', '🎓'));
+    const h = mk('h2'); h.append('Welcome, ', mk('b', '', u.name.split(' ')[0]), '! 🎉'); card.append(h);
+    card.append(mk('p', 'acw-sub', first ? 'Aapka account ban gaya. Rewards unlock ho gaye!' : 'Wapas aane par swagat hai! Aapka reward taiyaar hai.'));
+    const st = mk('div', 'acw-stats');
+    [[p.xp, 'Total XP'], ['Lv ' + lvl(p.xp), 'Level'], ['🔥 ' + p.streak, 'Din Streak']].forEach(a => { const d = mk('div'); d.append(mk('b', '', a[0]), mk('small', '', a[1])); st.append(d); });
+    card.append(st);
+    const pk = mk('ul', 'acw-perks');
+    if (first) pk.append(mk('li', '', '🎁 +100 XP Welcome Bonus'));
+    if (daily) pk.append(mk('li', '', '📅 +' + daily + ' XP Daily Login Bonus (streak ' + p.streak + ')'));
+    if (!first && !daily) pk.append(mk('li', '', '✅ Aaj ka daily bonus aap le chuke hain. Kal phir aayein!'));
+    pk.append(mk('li', '', '❓ Question of the Day se aur XP kamayein'));
+    pk.append(mk('li', '', '⏱ Study Timer ke focus session se +10 XP'));
+    badges(p).forEach(b => pk.append(mk('li', '', b[0] + ' Badge: ' + b[1])));
+    card.append(pk);
+    const gift = mk('button', 'acw-gift'); gift.type = 'button';
+    const claimed = p.gift === today();
+    gift.append(mk('span', 'g', claimed ? '🎀' : '🎁'), mk('small', '', claimed ? 'Aaj ka gift khul chuka hai' : 'Tap karke aaj ka Daily Gift kholein'));
+    gift.onclick = () => {
+      if (gift.dataset.done) return; gift.dataset.done = '1';
+      const pp = getP(u), tip = TIPS[(pp.xp + new Date().getDate()) % TIPS.length];
+      gift.classList.add('open'); gift.textContent = '';
+      gift.append(mk('span', 'g', '💡'), mk('b', '', tip));
+      if (pp.gift !== today()) { pp.gift = today(); pp.xp += 15; saveP(u, pp); gift.append(mk('small', '', '+15 XP mil gaye! ⭐')); window.acPaint(); confetti(cv, 1800); }
     };
+    card.append(gift);
+    const go = mk('button', 'btn full', 'Chalo Shuru Karein 🚀'); go.type = 'button'; go.onclick = () => { root.classList.remove('show'); setTimeout(() => root.remove(), 350); };
+    card.append(go);
+    document.body.append(root); requestAnimationFrame(() => root.classList.add('show'));
+    confetti(cv, 3600);
+  }
+  window.acLoginFX = function (u) {
+    if (!u) return;
+    const p = getP(u), first = !p.welcomed; let gain = 0;
+    if (first) { p.welcomed = true; p.xp += 100; gain += 100; }
+    const d = dailyBonus(p); gain += d; saveP(u, p); window.acPaint();
+    ctr.up('logins-' + today()).catch(() => {}); ctr.up('logins-all').catch(() => {});
+    showWelcome(u, p, first, d, gain);
+  };
+  // Pehle se login user: roz ka streak bonus
+  (function () { const u = U(); if (!u) { window.acPaint(); return; } const p = getP(u); const d = dailyBonus(p); saveP(u, p); window.acPaint(); if (d) setTimeout(() => toast('🔥 ' + p.streak + ' din streak! +' + d + ' XP'), 1200); })();
+
+  /* ---------- Feature 1: Question of the Day ---------- */
+  (function () {
+    const Q = el('qdQ'); if (!Q) return;
+    const keys = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'o1', 'o2', 'o3', 'o4', 'o5'];
+    let seed = 0; today().split('').forEach(ch => seed = (seed * 31 + ch.charCodeAt(0)) >>> 0);
+    let key = null, q = null;
+    for (let i = 0; i < keys.length && !q; i++) { const k = keys[(seed + i) % keys.length], b = getBank(k); if (b && b.length) { key = k; q = b[(seed * 7) % b.length]; } }
+    if (!q) { el('qdCard').style.display = 'none'; return; }
+    const topic = (CCC.concat(OL).find(c => c[0] === key) || [0, 'Computer'])[1];
+    el('qdTag').textContent = '📘 ' + topic + ' · ' + today();
+    Q.textContent = qOf(q);
+    const box = el('qdOpts'), res = el('qdRes'), memo = 'acec_qd_' + today();
+    const done = ls.get(memo);
+    oOf(q).forEach((o, i) => {
+      const b = mk('button', 'qd-o'); b.type = 'button'; b.textContent = String.fromCharCode(65 + i) + '. ' + o;
+      b.onclick = () => answer(i, true); box.append(b);
+    });
+    function answer(i, fresh) {
+      [...box.children].forEach((b, j) => { b.disabled = true; if (j === q.a) b.classList.add('ok'); else if (j === i) b.classList.add('bad'); });
+      const right = i === q.a;
+      res.textContent = right ? '✅ Bilkul sahi!' : '❌ Galat. Sahi jawab: ' + String.fromCharCode(65 + q.a);
+      if (fresh) { ls.set(memo, String(i)); if (U()) window.acAddXP(right ? 20 : 5, right ? 'Question of the Day sahi' : 'Question of the Day koshish'); else res.textContent += ' Login karke XP kamayein ⭐'; }
+    }
+    if (done !== null) answer(+done, false);
+  })();
+
+  /* ---------- Feature 2: Study Timer (Pomodoro) ---------- */
+  (function () {
+    const btn = el('stBtn'), pn = el('stPanel'); if (!btn || !pn) return;
+    let mins = 25, left = 25 * 60, tm = null;
+    const show = () => { el('stTime').textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0'); };
+    const beep = () => { try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.connect(g); g.connect(a.destination); o.frequency.value = 880; g.gain.value = .15; o.start(); setTimeout(() => { o.stop(); a.close(); }, 700); } catch {} };
+    const stop = () => { clearInterval(tm); tm = null; el('stGo').textContent = '▶ Start'; };
+    btn.onclick = () => { pn.hidden = !pn.hidden; };
+    el('stGo').onclick = () => {
+      if (tm) { stop(); return; }
+      el('stGo').textContent = '⏸ Pause';
+      tm = setInterval(() => {
+        left--; show();
+        if (left <= 0) { stop(); beep(); left = mins * 60; show(); if (mins === 25) { if (U()) window.acAddXP(10, 'Focus session poora'); else toast('🎉 Focus poora! Login karke XP kamayein'); } else toast('☕ Break khatam, wapas padhai!'); }
+      }, 1000);
+    };
+    el('stReset').onclick = () => { stop(); left = mins * 60; show(); };
+    pn.querySelectorAll('.st-modes button').forEach(b => b.onclick = () => { pn.querySelectorAll('.st-modes button').forEach(x => x.classList.toggle('on', x === b)); mins = +b.dataset.m; stop(); left = mins * 60; show(); });
+    show();
+  })();
+
+  /* ---------- Feature 3: Admission Enquiry (WhatsApp) ---------- */
+  (function () {
+    const b = el('enqBtn'), f = el('enqForm'); if (!b || !f) return;
+    b.onclick = () => { const u = U(); if (u) { el('eqName').value = u.name; el('eqMob').value = u.mob; } openModal('enqModal'); };
+    f.onsubmit = e => {
+      e.preventDefault();
+      const n = el('eqName').value.trim(), m = el('eqMob').value.trim(), c = el('eqCourse').value;
+      if (!/^[0-9]{10}$/.test(m)) return toast('10 digit ka sahi mobile number likhein');
+      const msg = 'Namaste Sir, main ' + n + ' (' + m + ') hu. Mujhe ' + c + ' course ke baare me jaankari chahiye.';
+      window.open('https://wa.me/916393512412?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+      closeModal('enqModal');
+    };
+  })();
+
+  /* ---------- Feature 4: Scroll progress + Back to top ---------- */
+  (function () {
+    const bar = el('scrollBar'), top = el('topBtn'); if (!bar || !top) return;
+    const on = () => { const h = document.documentElement, mx = h.scrollHeight - h.clientHeight; bar.style.width = (mx > 0 ? h.scrollTop / mx * 100 : 0) + '%'; top.classList.toggle('show', h.scrollTop > 600); };
+    addEventListener('scroll', on, { passive: true }); on();
+    top.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
+  })();
+
+  /* ---------- Feature 5: Website Share ---------- */
+  (function () {
+    const b = el('shBtn'); if (!b) return;
+    b.onclick = async () => {
+      const d = { title: 'Access Computer Education Centre', text: 'CCC, O-Level, Python, Typing ki best coaching aur free online test series!', url: location.href.split('#')[0] };
+      try { if (navigator.share) { await navigator.share(d); return; } } catch { return; }
+      window.open('https://wa.me/?text=' + encodeURIComponent(d.text + ' ' + d.url), '_blank', 'noopener');
+    };
+  })();
 })();
-// ==================== SECURE SECRET KEYWORD UNLOCK ====================
-let secretKeyBuffer = "";
-document.addEventListener('keydown', (e) => {
-    secretKeyBuffer += e.key.toLowerCase();
-    if (secretKeyBuffer.length > 15) secretKeyBuffer.slice(-15);
 
-    // Agar keyboard par 'sigma' ya 'anshika' type kiya jaye
-    if (secretKeyBuffer.includes("sigma") || secretKeyBuffer.includes("anshika")) {
-        secretKeyBuffer = ""; // Buffer reset kar do
-        
-        const adminSec = document.getElementById('admin-analytics');
-        if (adminSec) {
-            adminSec.style.display = 'block';
-            window.renderAdminAnalytics(); // Data load karega
-            alert("🔥 Welcome! Traffic Analytics Panel Unlocked Successfully.");
-        }
-    }
-});
 // ================= MS Office & Python tabs (ab dono alag-alag chalte hain) =================
 function _tabs(secId, evt, name) {
   const sec = document.getElementById(secId);
@@ -3151,7 +3782,7 @@ document.addEventListener('keydown', e => {
       'script.js': 'function greet() {\n  alert("Welcome to Access Computer Education Centre!");\n  console.log("Button clicked");\n}\n'
     },
     table: {
-      'index.html': '<h2>Student Marks</h2>\n<table border="1">\n  <tr>\n    <th>Name</th>\n    <th>Marks</th>\n  </tr>\n  <tr>\n    <td>Anshika</td>\n    <td>92</td>\n  </tr>\n  <tr>\n    <td>Rahul</td>\n    <td>85</td>\n  </tr>\n</table>\n',
+      'index.html': '<h2>Student Marks</h2>\n<table border="1">\n  <tr>\n    <th>Name</th>\n    <th>Marks</th>\n  </tr>\n  <tr>\n    <td>Anshika</td>\n    <td>92</td>\n  </tr>\n  <tr>\n    <td>Akshay</td>\n    <td>85</td>\n  </tr>\n</table>\n',
       'style.css': 'table {\n  border-collapse: collapse;\n  width: 60%;\n}\nth, td {\n  padding: 8px;\n  text-align: center;\n}\nth {\n  background: #1976d2;\n  color: #fff;\n}\n',
       'script.js': '// Table me JavaScript lagana ho to yahan likho\nconsole.log("Table ready");\n'
     },
@@ -3526,4 +4157,2628 @@ document.addEventListener('keydown', e => {
 
   /* ---------- Init ---------- */
   setFs(fs); openFile('index.html', false); run(false);
+})();
+
+/* =====================================================================
+   🔫 FREE FIRE STYLE 3D TYPING SHOOTER  (Typing section ka 6th tab)
+   - Pseudo-3D canvas world (perspective projection), Mini-Map, On-screen arrow controls
+   - 1 word = 5 coins | 5 words = weapon auto change | Grenade = saare words ek saath
+   - Drop Store (weapons + nades), Character (Male/Female), Outfit Shop
+   - 3 galat key tak theek, 4th galat key ya 3 failed chances = Game Over | 100 words = Mission Complete
+   ===================================================================== */
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const root = $('ffg'), tabs = $('tgTabs'), btn = $('ffTabBtn');
+  if (!root || !tabs || !btn) return;
+  const orig = document.querySelector('#typing .game:not(.tgx)'), box = $('tgx');
+  const cv = $('ffCv'), cx = cv.getContext('2d'), W = cv.width, H = cv.height;
+  const mapCv = $('ffMap'), mx = mapCv.getContext('2d'), MW = mapCv.width;
+  const inp = $('ffInp'), ov = $('ffOv'), ovT = ov.querySelector('h3'), ovP = ov.querySelector('.ff-ovp'), goBtn = $('ffGo');
+  const FONT = "'Poppins','Noto Sans Devanagari',sans-serif";
+
+  /* ---------- helpers ---------- */
+  const TAU = Math.PI * 2;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const ri = (a, b) => Math.floor(rnd(a, b + 1));
+  const pickOf = a => a[Math.floor(Math.random() * a.length)];
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const normA = a => { a %= TAU; if (a > Math.PI) a -= TAU; if (a < -Math.PI) a += TAU; return a; };
+  const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+  const rgbOf = hex => { const n = parseInt(hex.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
+  const HAZE = rgbOf('#c4708a');
+  /* amt: -1..1 (dark..light), fog: 0..1 (haze blend) */
+  const shade = (hex, amt, fog) => {
+    const c = rgbOf(hex), t = amt < 0 ? 0 : 255, p = Math.abs(amt || 0);
+    const r = c.map((v, i) => { let x = (t - v) * p + v; if (fog) x = (HAZE[i] - x) * fog + x; return Math.round(x); });
+    return 'rgb(' + r[0] + ',' + r[1] + ',' + r[2] + ')';
+  };
+  const rrect = (c, x, y, w, h, r) => { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); };
+  /* limb: ek tapering "haath/pair" ka hissa (s0..s1 = line ka kaun sa hissa) */
+  const limb = (c, ax, ay, bx, by, w0, w1, col, s0, s1) => {
+    s0 = s0 || 0; s1 = s1 == null ? 1 : s1;
+    const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
+    const wa = w0 + (w1 - w0) * s0, wb = w0 + (w1 - w0) * s1;
+    const ax1 = ax + dx * s0, ay1 = ay + dy * s0, bx1 = ax + dx * s1, by1 = ay + dy * s1;
+    c.beginPath(); c.moveTo(ax1 + nx * wa / 2, ay1 + ny * wa / 2); c.lineTo(bx1 + nx * wb / 2, by1 + ny * wb / 2);
+    c.lineTo(bx1 - nx * wb / 2, by1 - ny * wb / 2); c.lineTo(ax1 - nx * wa / 2, ay1 - ny * wa / 2); c.closePath(); c.fillStyle = col; c.fill();
+  };
+
+  /* ---------- save data ---------- */
+  const KEY = 'acec_ff_save_v1';
+  const defS = () => ({ coins: 0, owned: ['m1873', 'mp40'], weapon: 'm1873', nades: 1, outfits: ['default'], outfit: 'default', gender: 'male', best: 0, wins: 0, mute: false });
+  let S = defS();
+  try { const j = JSON.parse(localStorage.getItem(KEY) || 'null'); if (j && typeof j === 'object') S = Object.assign(defS(), j); } catch (e) { }
+  if (!Array.isArray(S.owned)) S.owned = ['m1873', 'mp40'];
+  if (!Array.isArray(S.outfits) || !S.outfits.includes('default')) S.outfits = ['default'].concat(S.outfits || []);
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } };
+
+  /* ---------- sound (WebAudio, koi file nahi chahiye) ---------- */
+  let AC = null;
+  const ac = () => { if (S.mute) return null; try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) { return null; } return AC; };
+  const tone = (f1, f2, dur, type, vol) => { const a = ac(); if (!a) return; const o = a.createOscillator(), g = a.createGain(), t = a.currentTime; o.type = type || 'square'; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(Math.max(30, f2), t + dur); g.gain.setValueAtTime(vol || .06, t); g.gain.exponentialRampToValueAtTime(.001, t + dur); o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur); };
+  const noise = (dur, vol) => { const a = ac(); if (!a) return; const n = Math.floor(a.sampleRate * dur), b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n); const s = a.createBufferSource(), g = a.createGain(); s.buffer = b; g.gain.value = vol || .2; s.connect(g); g.connect(a.destination); s.start(); };
+  const SFX = {
+    shot() { noise(.12, .22); tone(240, 60, .12, 'sawtooth', .08); }, key() { tone(820, 820, .025, 'square', .02); },
+    wrong() { tone(170, 80, .2, 'sawtooth', .08); }, boom() { noise(.7, .5); tone(120, 30, .55, 'sine', .22); },
+    hit() { noise(.35, .3); tone(200, 50, .4, 'sawtooth', .12); }, coin() { tone(1100, 1700, .1, 'square', .04); },
+    win() { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => tone(f, f, .22, 'triangle', .1), i * 140)); },
+    over() { [330, 262, 196, 130].forEach((f, i) => setTimeout(() => tone(f, f * .9, .25, 'sawtooth', .08), i * 170)); }
+  };
+
+  /* ---------- game data ---------- */
+  const WORLD = 58, FOV = 1.22, F = (W / 2) / Math.tan(FOV / 2), HOR = H * .44, CAMH = 1.65, NEAR = .35, WIN = 100, MAXWRONG = 3, MAXFAIL = 3;
+
+  const WEAPONS = [
+    { id: 'm1873', name: 'M1873', type: 'Pistol', price: 0, col: '#9aa5b1', acc: '#3a3f47', len: 40, bw: 13, rw: 46, rh: 92, mag: 0 },
+    { id: 'mp40', name: 'MP40', type: 'SMG', price: 0, col: '#6b7280', acc: '#2f3640', len: 70, bw: 11, rw: 48, rh: 140, mag: 1 },
+    { id: 'ump', name: 'UMP', type: 'SMG', price: 60, col: '#4b5563', acc: '#ffb703', len: 72, bw: 12, rw: 52, rh: 150, mag: 1 },
+    { id: 'm1014', name: 'M1014', type: 'Shotgun', price: 100, col: '#374151', acc: '#a16207', len: 108, bw: 14, rw: 50, rh: 130, mag: 0, dbl: true },
+    { id: 'deagle', name: 'Desert Eagle', type: 'Pistol', price: 120, col: '#d4af37', acc: '#1f2937', len: 50, bw: 15, rw: 48, rh: 95, mag: 0 },
+    { id: 'ak47', name: 'AK47', type: 'Assault Rifle', price: 150, col: '#7c4a1e', acc: '#1f2937', len: 120, bw: 12, rw: 50, rh: 150, mag: 2 },
+    { id: 'm4a1', name: 'M4A1', type: 'Assault Rifle', price: 180, col: '#2d3748', acc: '#38bdf8', len: 125, bw: 12, rw: 50, rh: 150, mag: 1 },
+    { id: 'scar', name: 'SCAR', type: 'Assault Rifle', price: 200, col: '#8b7d5a', acc: '#111827', len: 125, bw: 13, rw: 52, rh: 150, mag: 1 },
+    { id: 'groza', name: 'Groza', type: 'Assault Rifle', price: 250, col: '#1f2937', acc: '#ef4444', len: 130, bw: 13, rw: 54, rh: 155, mag: 1 },
+    { id: 'awm', name: 'AWM', type: 'Sniper', price: 300, col: '#1b4332', acc: '#d8f3dc', len: 165, bw: 11, rw: 46, rh: 160, mag: 0, scope: true }
+  ];
+  const NADES = [
+    { id: 'n1', name: 'Frag Grenade', qty: 1, price: 40 },
+    { id: 'n3', name: 'Grenade Pack', qty: 3, price: 100 },
+    { id: 'n5', name: 'Nade Crate', qty: 5, price: 150 }
+  ];
+  const OUTFITS = [
+    { id: 'default', name: 'Black Pant & White Shirt', price: 0, top: '#f4f4f2', pant: '#121212', shoe: '#1c1c1c', sleeve: 'short', hat: null, extra: 'shirt' },
+    { id: 'denim', name: 'Blue Jeans & Red Tee', price: 60, top: '#d62839', pant: '#2d5fa8', shoe: '#f1f1f1', sleeve: 'short', hat: 'cap', cap: '#d62839', extra: null },
+    { id: 'camo', name: 'Jungle Camo Soldier', price: 80, top: '#4b5d34', pant: '#3a4a28', shoe: '#2b2b2b', sleeve: 'long', hat: 'helmet', extra: 'camo' },
+    { id: 'ninja', name: 'Shadow Ninja', price: 120, top: '#17171f', pant: '#101015', shoe: '#0a0a0a', sleeve: 'long', hat: 'mask', band: '#d62839', extra: null },
+    { id: 'racer', name: 'Neon Racer Suit', price: 150, top: '#00c2e0', pant: '#6d28d9', shoe: '#ffffff', sleeve: 'long', hat: 'cap', cap: '#6d28d9', extra: 'stripe' },
+    { id: 'desert', name: 'Desert Commando', price: 180, top: '#c9a35b', pant: '#8a6d3b', shoe: '#4a3a22', sleeve: 'long', hat: 'bandana', band: '#7a2e1d', extra: 'vest' },
+    { id: 'gold', name: 'Royal Gold Tracksuit', price: 250, top: '#ffcc33', pant: '#e8a317', shoe: '#ffffff', sleeve: 'long', hat: null, extra: 'stripe' }
+  ];
+  const WP = id => WEAPONS.find(w => w.id === id) || WEAPONS[0];
+  const OUT = () => OUTFITS.find(o => o.id === S.outfit) || OUTFITS[0];
+  if (!WEAPONS.some(w => w.id === S.weapon && S.owned.includes(w.id))) S.weapon = S.owned[0] || 'm1873';
+  if (!OUTFITS.some(o => o.id === S.outfit && S.outfits.includes(o.id))) S.outfit = 'default';
+
+  const BASE = ('computer keyboard internet python memory monitor windows network browser storage cursor program shortcut database router server mouse printer scanner laptop desktop tablet mobile android ' +
+    'software hardware kernel compiler variable function loop array string integer boolean object class method module package library framework website domain hosting cloud backup update install download upload ' +
+    'folder document sheet slide table column formula chart image video audio speaker camera battery cable switch modem wifi bluetooth password username email inbox forward reply delete copy paste undo bold ' +
+    'italic font margin border header footer paragraph page layout print preview zoom scroll button icon menu toolbar ribbon dialog window taskbar antivirus firewall malware phishing hacker encrypt binary ' +
+    'decimal byte processor cache register pixel display graphics sound search login profile account digital online offline html css java script coding developer tally excel office').split(/\s+/).filter(w => w.length >= 3 && w.length <= 8);
+  const LEET = { a: '4', e: '3', i: '1', o: '0', s: '5', t: '7' }, SYMM = { a: '@', s: '$', i: '!', o: '0', e: '3', l: '1' };
+  function leet(b, map, mn, mx) {
+    const idx = []; for (let i = 1; i < b.length; i++) if (map[b[i]]) idx.push(i);
+    if (!idx.length) return null;
+    idx.sort(() => Math.random() - .5);
+    const n = Math.min(idx.length, ri(mn, mx)), a = b.split('');
+    for (let k = 0; k < n; k++) a[idx[k]] = map[a[idx[k]]];
+    return a.join('');
+  }
+  /* lvl 0 = simple words | 1 = numbers (score 20+) | 2 = special symbols + numbers (score 50+) */
+  function makeWord(lvl) {
+    const b = pickOf(BASE);
+    if (lvl === 0) return b;
+    if (lvl === 1) { const m = Math.random(); if (m < .4) return b + ri(2, 99); if (m < .8) return leet(b, LEET, 1, 2) || b + ri(1, 9); return b + ri(1, 9) + ri(1, 9) + ri(1, 9); }
+    let w = leet(b, SYMM, 1, 2) || b;
+    const m = Math.random(); w += m < .75 ? pickOf(['#', '!', '@', '$', '&', '*', '%']) + ri(1, 9) : pickOf(['#', '!', '@', '$', '&', '*', '%']);
+    return w;
+  }
+  const ECOL = ['#b91c1c', '#1d4ed8', '#15803d', '#7e22ce', '#c2410c', '#0f766e'];
+
+  /* ---------- world scenery (har baar same map) ---------- */
+  let seed = 20261106; const sr = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const SCN = [];
+  for (let i = 0, guard = 0; i < 56 && guard < 400; guard++) {
+    const t = sr(), x = (sr() * 2 - 1) * (WORLD - 5), z = (sr() * 2 - 1) * (WORLD - 5);
+    if (Math.hypot(x, z) < 10) continue;
+    i++;
+    if (t < .4) { const w = 1.8 + sr() * 1.6; SCN.push({ k: 'crate', x, z, w, d: w, h: 1.6 + sr() * 1.4, col: ['#8b5a2b', '#a0702f', '#6e4a25'][Math.floor(sr() * 3)], id: i }); }
+    else if (t < .72) SCN.push({ k: 'bld', x, z, w: 5 + sr() * 5, d: 5 + sr() * 5, h: 6 + sr() * 9, col: ['#4b5563', '#57534e', '#52525b', '#44403c'][Math.floor(sr() * 4)], id: i });
+    else SCN.push({ k: 'tree', x, z, w: 1, d: 1, h: 4 + sr() * 3, id: i });
+  }
+
+  /* ---------- state ---------- */
+  const P = { x: 0, z: 0, yaw: 0 };
+  let sinY = 0, cosY = 1, curW = S.weapon, G = newG(), panel = 'play', looping = false, raf = 0, lastT = 0, active = false, internal = false;
+  const ctrl = { up: 0, down: 0, left: 0, right: 0 }, kbd = { up: 0, down: 0, left: 0, right: 0 };
+  let drag = null, dragYaw = 0, dragMove = 0;
+
+  function newG() {
+    return { state: 'idle', words: 0, coins: 0, fails: 0, wrong: 0, typed: 0, correct: 0, en: [], lock: null, spawnT: 1, t: 0, time: 0,
+      shots: [], parts: [], pops: [], flash: 0, shake: 0, recoil: 0, muzzle: 0, bob: 0, mov: 0, banner: null, nade: 0, seen: {} };
+  }
+
+  /* ---------- camera math ---------- */
+  const toCam = (x, y, z) => { const dx = x - P.x, dz = z - P.z; return { l: dx * cosY - dz * sinY, y: y - CAMH, d: dx * sinY + dz * cosY }; };
+  const proj = c => [W / 2 + c.l / c.d * F, HOR - c.y / c.d * F];
+  function clipPoly(pts) {
+    const out = [];
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i], b = pts[(i + 1) % pts.length], ain = a.d >= NEAR, bin = b.d >= NEAR;
+      if (ain) out.push(a);
+      if (ain !== bin) { const t = (NEAR - a.d) / (b.d - a.d); out.push({ l: a.l + (b.l - a.l) * t, y: a.y + (b.y - a.y) * t, d: NEAR }); }
+    }
+    return out;
+  }
+  function poly3(verts, fill, stroke) {
+    const pts = clipPoly(verts.map(v => toCam(v[0], v[1], v[2])));
+    if (pts.length < 3) return;
+    cx.beginPath(); pts.forEach((p, i) => { const q = proj(p); i ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]); }); cx.closePath();
+    if (fill) { cx.fillStyle = fill; cx.fill(); }
+    if (stroke) { cx.strokeStyle = stroke; cx.lineWidth = 1; cx.stroke(); }
+  }
+  function line3(a, b) {
+    let p = toCam(a[0], a[1], a[2]), q = toCam(b[0], b[1], b[2]);
+    if (p.d < NEAR && q.d < NEAR) return;
+    if (p.d < NEAR) { const t = (NEAR - p.d) / (q.d - p.d); p = { l: p.l + (q.l - p.l) * t, y: p.y + (q.y - p.y) * t, d: NEAR }; }
+    else if (q.d < NEAR) { const t = (NEAR - q.d) / (p.d - q.d); q = { l: q.l + (p.l - q.l) * t, y: q.y + (p.y - q.y) * t, d: NEAR }; }
+    const a1 = proj(p), b1 = proj(q); cx.moveTo(a1[0], a1[1]); cx.lineTo(b1[0], b1[1]);
+  }
+
+  /* =================== SCENE DRAWING =================== */
+  function drawSky() {
+    let g = cx.createLinearGradient(0, 0, 0, HOR);
+    g.addColorStop(0, '#120a2a'); g.addColorStop(.55, '#5b2a6b'); g.addColorStop(1, '#ff9b6a');
+    cx.fillStyle = g; cx.fillRect(0, 0, W, HOR + 2);
+    // stars
+    cx.fillStyle = 'rgba(255,255,255,.7)';
+    for (let i = 0; i < 40; i++) { const a = normA(i * 2.399 - P.yaw), sx = W / 2 + a * F * .9, sy = (i * 53 % 97) / 97 * HOR * .6; if (sx > -4 && sx < W + 4) cx.fillRect(sx, sy, 1.6, 1.6); }
+    // sun
+    const sa = normA(.55 - P.yaw), sx = W / 2 + Math.tan(clamp(sa, -1.4, 1.4)) * F;
+    if (Math.abs(sa) < 1.2) { g = cx.createRadialGradient(sx, HOR - 24, 4, sx, HOR - 24, 90); g.addColorStop(0, 'rgba(255,240,180,1)'); g.addColorStop(.25, 'rgba(255,190,90,.8)'); g.addColorStop(1, 'rgba(255,140,80,0)'); cx.fillStyle = g; cx.fillRect(sx - 100, HOR - 130, 200, 130); }
+    // mountains (parallax)
+    cx.fillStyle = '#2a1840'; cx.beginPath(); cx.moveTo(0, HOR + 1);
+    for (let x = 0; x <= W; x += 10) { const a = P.yaw + Math.atan((x - W / 2) / F), h = 26 + 22 * Math.sin(a * 3 + 1) + 14 * Math.sin(a * 7.3 + 2) + 8 * Math.sin(a * 17); cx.lineTo(x, HOR - h); }
+    cx.lineTo(W, HOR + 1); cx.closePath(); cx.fill();
+  }
+  function drawGround() {
+    const g = cx.createLinearGradient(0, HOR, 0, H);
+    g.addColorStop(0, '#6a3f58'); g.addColorStop(.3, '#3a2440'); g.addColorStop(1, '#1b1126');
+    cx.fillStyle = g; cx.fillRect(0, HOR, W, H - HOR);
+    cx.beginPath(); cx.strokeStyle = 'rgba(255,183,3,.2)'; cx.lineWidth = 1;
+    for (let k = -WORLD; k <= WORLD; k += 8) { line3([k, 0, -WORLD], [k, 0, WORLD]); line3([-WORLD, 0, k], [WORLD, 0, k]); }
+    cx.stroke();
+  }
+  function drawWalls() {
+    const hh = 4.2, seg = 8;
+    for (let s = 0; s < 4; s++) {
+      for (let a = -WORLD; a < WORLD; a += seg) {
+        const b = a + seg, alt = (Math.round((a + WORLD) / seg) % 2) === 0;
+        let v;
+        if (s === 0) v = [[a, 0, WORLD], [b, 0, WORLD], [b, hh, WORLD], [a, hh, WORLD]];
+        else if (s === 1) v = [[a, 0, -WORLD], [b, 0, -WORLD], [b, hh, -WORLD], [a, hh, -WORLD]];
+        else if (s === 2) v = [[WORLD, 0, a], [WORLD, 0, b], [WORLD, hh, b], [WORLD, hh, a]];
+        else v = [[-WORLD, 0, a], [-WORLD, 0, b], [-WORLD, hh, b], [-WORLD, hh, a]];
+        const c = toCam((v[0][0] + v[1][0]) / 2, 0, (v[0][2] + v[1][2]) / 2);
+        poly3(v, shade(alt ? '#c2410c' : '#431407', 0, clamp((c.d - 20) / 70, 0, .6)), null);
+      }
+    }
+  }
+  const FACES = b => {
+    const hw = b.w / 2, hd = b.d / 2, h = b.h, x0 = b.x - hw, x1 = b.x + hw, z0 = b.z - hd, z1 = b.z + hd;
+    return [
+      { vis: P.z < z0, v: [[x0, 0, z0], [x1, 0, z0], [x1, h, z0], [x0, h, z0]], a: -.32, win: true },
+      { vis: P.z > z1, v: [[x1, 0, z1], [x0, 0, z1], [x0, h, z1], [x1, h, z1]], a: -.12, win: true },
+      { vis: P.x < x0, v: [[x0, 0, z1], [x0, 0, z0], [x0, h, z0], [x0, h, z1]], a: -.5, win: true },
+      { vis: P.x > x1, v: [[x1, 0, z0], [x1, 0, z1], [x1, h, z1], [x1, h, z0]], a: 0, win: true },
+      { vis: CAMH > h, v: [[x0, h, z0], [x1, h, z0], [x1, h, z1], [x0, h, z1]], a: .18, win: false }
+    ];
+  };
+  function drawBox(b, c) {
+    const fog = clamp((c.d - 18) / 55, 0, .65);
+    FACES(b).forEach((f, fi) => {
+      if (!f.vis) return;
+      poly3(f.v, shade(b.col, f.a, fog), 'rgba(0,0,0,.25)');
+      if (b.k === 'bld' && f.win && c.d < 48) {
+        const v0 = f.v[0], v1 = f.v[1], v3 = f.v[3], wl = Math.hypot(v1[0] - v0[0], v1[2] - v0[2]), cols = Math.max(2, Math.floor(wl / 1.7)), rows = Math.max(2, Math.floor(b.h / 2.3));
+        for (let i = 0; i < cols; i++) for (let j = 1; j < rows; j++) {
+          const u0 = (i + .22) / cols, u1 = (i + .78) / cols, w0 = (j + .1) / rows, w1 = (j + .6) / rows;
+          const P3 = (u, w) => [v0[0] + (v1[0] - v0[0]) * u + (v3[0] - v0[0]) * w, v0[1] + (v3[1] - v0[1]) * w, v0[2] + (v1[2] - v0[2]) * u + (v3[2] - v0[2]) * w];
+          const lit = ((b.id * 7 + fi * 13 + i * 5 + j * 11) % 5) < 2;
+          poly3([P3(u0, w0), P3(u1, w0), P3(u1, w1), P3(u0, w1)], lit ? shade('#ffd97a', -.05, fog) : shade('#27304a', 0, fog), null);
+        }
+      }
+    });
+  }
+  function drawTree(b, c) {
+    const s = F / c.d, sx = W / 2 + c.l / c.d * F, sy = HOR + CAMH / c.d * F, fog = clamp((c.d - 18) / 55, 0, .65);
+    limb(cx, sx, sy, sx, sy - b.h * .5 * s, .5 * s, .4 * s, shade('#5a3a22', 0, fog));
+    for (let i = 0; i < 3; i++) {
+      const w = (1.9 - i * .45) * s, y0 = sy - (b.h * .32 + i * b.h * .22) * s, hgt = b.h * .34 * s;
+      cx.fillStyle = shade(['#14532d', '#166534', '#15803d'][i], -.1, fog); cx.beginPath(); cx.moveTo(sx - w, y0); cx.lineTo(sx + w, y0); cx.lineTo(sx, y0 - hgt); cx.closePath(); cx.fill();
+    }
+  }
+  /* Enemy (Free Fire style human) */
+  function drawEnemy(e, sx, sy, s, d) {
+    const fog = clamp((d - 20) / 60, 0, .55), sw = Math.sin(G.t * 7 + e.ph) * .2, col = shade(e.col, 0, fog), dark = shade(e.col, -.45, fog), skin = shade('#d9a77c', 0, fog), pant = shade('#1f2937', 0, fog);
+    cx.fillStyle = 'rgba(0,0,0,.38)'; cx.beginPath(); cx.ellipse(sx, sy, .42 * s, .11 * s, 0, 0, TAU); cx.fill();
+    limb(cx, sx - .11 * s, sy - .85 * s, sx - .13 * s + sw * s * .7, sy, .19 * s, .15 * s, pant);
+    limb(cx, sx + .11 * s, sy - .85 * s, sx + .13 * s - sw * s * .7, sy, .19 * s, .15 * s, pant);
+    cx.fillStyle = shade('#0b0b0b', 0, fog); cx.fillRect(sx - .24 * s + sw * s * .7, sy - .07 * s, .2 * s, .07 * s); cx.fillRect(sx + .04 * s - sw * s * .7, sy - .07 * s, .2 * s, .07 * s);
+    cx.fillStyle = col; rrect(cx, sx - .3 * s, sy - 1.5 * s, .6 * s, .72 * s, .09 * s); cx.fill();
+    cx.fillStyle = dark; rrect(cx, sx - .22 * s, sy - 1.42 * s, .44 * s, .4 * s, .05 * s); cx.fill();
+    limb(cx, sx - .3 * s, sy - 1.42 * s, sx - .1 * s, sy - 1.08 * s, .15 * s, .12 * s, col);
+    limb(cx, sx + .3 * s, sy - 1.42 * s, sx + .16 * s, sy - 1.12 * s, .15 * s, .12 * s, col);
+    cx.fillStyle = shade('#111827', 0, fog); cx.fillRect(sx - .12 * s, sy - 1.2 * s, .34 * s, .08 * s);
+    cx.fillStyle = skin; cx.beginPath(); cx.arc(sx - .1 * s, sy - 1.08 * s, .06 * s, 0, TAU); cx.arc(sx + .16 * s, sy - 1.12 * s, .06 * s, 0, TAU); cx.fill();
+    cx.fillStyle = skin; cx.beginPath(); cx.arc(sx, sy - 1.64 * s, .14 * s, 0, TAU); cx.fill();
+    if (e.hat === 'helmet') { cx.fillStyle = dark; cx.beginPath(); cx.arc(sx, sy - 1.68 * s, .16 * s, Math.PI, TAU); cx.fill(); }
+    else if (e.hat === 'cap') { cx.fillStyle = col; cx.beginPath(); cx.arc(sx, sy - 1.68 * s, .15 * s, Math.PI, TAU); cx.fill(); cx.fillRect(sx - .16 * s, sy - 1.68 * s, .32 * s, .035 * s); }
+    else { cx.fillStyle = '#111'; cx.fillRect(sx - .14 * s, sy - 1.62 * s, .28 * s, .09 * s); }
+    cx.fillStyle = '#ff3b3b'; cx.fillRect(sx - .075 * s, sy - 1.66 * s, .05 * s, .03 * s); cx.fillRect(sx + .025 * s, sy - 1.66 * s, .05 * s, .03 * s);
+  }
+  function drawLabel(L) {
+    const e = L.e, locked = G.lock === e, fs = clamp(L.s * .34, 13, 28) * (locked ? 1.12 : 1), near = e.d < 12;
+    const y = L.sy - 1.95 * L.s - fs * .9;
+    cx.font = '700 ' + fs + 'px ' + FONT; const tw = cx.measureText(e.w).width, pw = tw + 16, ph = fs + 10;
+    rrect(cx, L.sx - pw / 2, y - ph / 2, pw, ph, 8);
+    cx.fillStyle = locked ? 'rgba(40,25,0,.85)' : 'rgba(8,8,20,.72)'; cx.fill();
+    cx.lineWidth = locked ? 2.5 : 1.2; cx.strokeStyle = locked ? '#ffd166' : near ? '#ff5252' : 'rgba(255,255,255,.35)'; cx.stroke();
+    cx.textAlign = 'left'; cx.textBaseline = 'middle';
+    const done = e.w.slice(0, e.pos), rest = e.w.slice(e.pos), x0 = L.sx - tw / 2, dw = cx.measureText(done).width;
+    cx.fillStyle = '#4ade80'; cx.fillText(done, x0, y + 1);
+    cx.fillStyle = near ? '#ffb3b3' : '#ffffff'; cx.fillText(rest, x0 + dw, y + 1);
+    if (locked) { cx.beginPath(); cx.arc(L.sx, L.sy - .85 * L.s, 1.25 * L.s, 0, TAU); cx.strokeStyle = 'rgba(255,209,102,.7)'; cx.lineWidth = 2; cx.setLineDash([8, 6]); cx.stroke(); cx.setLineDash([]); }
+  }
+
+  /* first-person gun + arms (outfit ka sleeve bhi dikhta hai) */
+  function drawVM() {
+    const w = WP(curW), o = OUT(), skin = '#e0aa82', bob = Math.sin(G.bob) * 5 * G.mov, rec = G.recoil;
+    const top = -w.rh, tip = top - w.len, rw = w.rw, bw = w.bw, sleeve = o.top;
+    cx.save(); cx.translate(W * .64 + bob * .6, H + 16 + Math.abs(bob) * .7 + rec * 18); cx.rotate(-.4 - rec * .03);
+    // left forearm (handguard ko pakadta hua)
+    const lx = -2, ly = tip + w.len * .35 + 12;
+    limb(cx, lx, ly, lx - 70, ly + 330, 40, 62, o.sleeve === 'long' ? sleeve : skin);
+    if (o.sleeve !== 'long') limb(cx, lx, ly, lx - 70, ly + 330, 40, 62, sleeve, .45, 1);
+    // gun body
+    let g = cx.createLinearGradient(-rw / 2, 0, rw / 2, 0); g.addColorStop(0, shade(w.col, -.5)); g.addColorStop(.5, shade(w.col, .1)); g.addColorStop(1, shade(w.col, -.55));
+    cx.beginPath(); cx.moveTo(-rw / 2, 0); cx.lineTo(rw / 2, 0); cx.lineTo(rw * .4, top); cx.lineTo(-rw * .4, top); cx.closePath(); cx.fillStyle = g; cx.fill();
+    cx.strokeStyle = w.acc; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(0, -4); cx.lineTo(0, top); cx.stroke();
+    // handguard + barrel(s)
+    const bars = w.dbl ? [-bw * .62, bw * .62] : [0];
+    bars.forEach(bx => {
+      g = cx.createLinearGradient(bx - bw / 2, 0, bx + bw / 2, 0); g.addColorStop(0, '#0d1117'); g.addColorStop(.5, '#4b5563'); g.addColorStop(1, '#0d1117');
+      cx.beginPath(); cx.moveTo(bx - bw / 2, top); cx.lineTo(bx + bw / 2, top); cx.lineTo(bx + bw * .36, tip); cx.lineTo(bx - bw * .36, tip); cx.closePath(); cx.fillStyle = g; cx.fill();
+    });
+    cx.fillStyle = shade(w.col, -.35); cx.fillRect(-bw * (w.dbl ? 1.4 : 1.05), top - w.len * .42, bw * (w.dbl ? 2.8 : 2.1), w.len * .42);
+    cx.fillStyle = w.acc; cx.fillRect(-2, tip - 9, 4, 12);                        // front sight
+    cx.fillRect(-rw * .32, top + 4, 7, 14); cx.fillRect(rw * .32 - 7, top + 4, 7, 14); // rear sight
+    if (w.scope) {
+      cx.fillStyle = '#0b0f14'; cx.beginPath(); cx.arc(0, top + w.rh * .22, 26, 0, TAU); cx.fill();
+      g = cx.createRadialGradient(-6, top + w.rh * .22 - 6, 2, 0, top + w.rh * .22, 22); g.addColorStop(0, '#9be7ff'); g.addColorStop(1, '#0b3a52'); cx.fillStyle = g; cx.beginPath(); cx.arc(0, top + w.rh * .22, 20, 0, TAU); cx.fill();
+      cx.strokeStyle = 'rgba(0,0,0,.6)'; cx.lineWidth = 1.5; cx.beginPath(); cx.moveTo(-20, top + w.rh * .22); cx.lineTo(20, top + w.rh * .22); cx.moveTo(0, top + w.rh * .22 - 20); cx.lineTo(0, top + w.rh * .22 + 20); cx.stroke();
+    }
+    // right forearm + hand (grip)
+    const hx = rw * .22, hy = -w.rh * .2;
+    limb(cx, hx + 6, hy + 10, hx + 120, hy + 300, 46, 70, o.sleeve === 'long' ? sleeve : skin);
+    if (o.sleeve !== 'long') limb(cx, hx + 6, hy + 10, hx + 120, hy + 300, 46, 70, sleeve, .4, 1);
+    cx.fillStyle = skin; cx.beginPath(); cx.ellipse(hx, hy, 27, 32, .1, 0, TAU); cx.fill();
+    cx.strokeStyle = 'rgba(0,0,0,.25)'; cx.lineWidth = 1.5; for (let i = 0; i < 3; i++) { cx.beginPath(); cx.moveTo(hx - 24, hy - 12 + i * 11); cx.lineTo(hx + 8, hy - 8 + i * 11); cx.stroke(); }
+    cx.fillStyle = skin; cx.beginPath(); cx.ellipse(lx - 2, ly, 24, 22, 0, 0, TAU); cx.fill();
+    // muzzle flash
+    if (G.muzzle > 0) {
+      const a = G.muzzle / .08; cx.save(); cx.translate(0, tip - 4); cx.globalAlpha = clamp(a, 0, 1);
+      g = cx.createRadialGradient(0, 0, 2, 0, 0, 46); g.addColorStop(0, '#fff'); g.addColorStop(.35, '#ffd166'); g.addColorStop(1, 'rgba(255,120,0,0)');
+      cx.fillStyle = g; cx.beginPath(); for (let i = 0; i < 16; i++) { const r = i % 2 ? 14 : 46, an = i / 16 * TAU; cx.lineTo(Math.cos(an) * r, Math.sin(an) * r); } cx.closePath(); cx.fill(); cx.restore();
+    }
+    cx.restore();
+  }
+
+  /* =================== MAIN RENDER =================== */
+  function render() {
+    sinY = Math.sin(P.yaw); cosY = Math.cos(P.yaw);
+    cx.save();
+    if (G.shake > 0) cx.translate(rnd(-1, 1) * G.shake * 12, rnd(-1, 1) * G.shake * 12);
+    drawSky(); drawGround(); drawWalls();
+    const items = [], labels = [];
+    SCN.forEach(b => { const c = toCam(b.x, 0, b.z); if (c.d < -14 || c.d > 125) return; items.push({ d: c.d, fn: () => b.k === 'tree' ? (c.d > NEAR && drawTree(b, c)) : drawBox(b, c) }); });
+    G.en.forEach(e => {
+      const c = toCam(e.x, 0, e.z); if (c.d < .45) return;
+      items.push({ d: c.d, fn: () => { const s = F / c.d, sx = W / 2 + c.l / c.d * F, sy = HOR + CAMH / c.d * F; drawEnemy(e, sx, sy, s, c.d); labels.push({ e, sx, sy, s }); } });
+    });
+    items.sort((a, b) => b.d - a.d); items.forEach(i => i.fn());
+    labels.forEach(drawLabel);
+    // tracers
+    G.shots.forEach(s => { cx.strokeStyle = 'rgba(255,220,120,' + clamp(s.ttl / .12, 0, 1) + ')'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(s.x1, s.y1); cx.lineTo(s.x2, s.y2); cx.stroke(); });
+    // particles + coin pops
+    G.parts.forEach(p => { cx.globalAlpha = clamp(p.life / p.max, 0, 1); cx.fillStyle = p.col; cx.beginPath(); cx.arc(p.x, p.y, p.size, 0, TAU); cx.fill(); });
+    cx.globalAlpha = 1;
+    G.pops.forEach(p => { cx.globalAlpha = clamp(p.life / .9, 0, 1); cx.font = '800 ' + (p.big ? 26 : 20) + 'px ' + FONT; cx.textAlign = 'center'; cx.fillStyle = '#ffd166'; cx.strokeStyle = 'rgba(0,0,0,.7)'; cx.lineWidth = 3; cx.strokeText(p.t, p.x, p.y); cx.fillText(p.t, p.x, p.y); });
+    cx.globalAlpha = 1; cx.restore();
+
+    // off-screen target arrows
+    G.en.forEach(e => {
+      if (e.vis) return; const left = e.b < 0, x = left ? 26 : W - 26, y = H * .38, danger = e.d < 14;
+      cx.fillStyle = danger ? 'rgba(255,60,60,.95)' : 'rgba(255,120,80,.8)'; cx.beginPath();
+      if (left) { cx.moveTo(x - 12, y); cx.lineTo(x + 8, y - 16); cx.lineTo(x + 8, y + 16); } else { cx.moveTo(x + 12, y); cx.lineTo(x - 8, y - 16); cx.lineTo(x - 8, y + 16); }
+      cx.closePath(); cx.fill(); cx.font = '700 11px ' + FONT; cx.textAlign = 'center'; cx.fillStyle = '#fff'; cx.fillText(Math.round(e.d) + 'm', x + (left ? 2 : -2), y + 30);
+    });
+    // damage / grenade flash
+    if (G.flash > 0) { const g = cx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .85); g.addColorStop(0, 'rgba(255,0,0,0)'); g.addColorStop(1, 'rgba(255,0,0,' + (G.flash * .7) + ')'); cx.fillStyle = g; cx.fillRect(0, 0, W, H); }
+    if (G.nade > 0) { cx.fillStyle = 'rgba(255,255,255,' + clamp(G.nade * .9, 0, .9) + ')'; cx.fillRect(0, 0, W, H); const r = (1 - G.nade) * W * .7; cx.strokeStyle = 'rgba(255,200,100,' + G.nade + ')'; cx.lineWidth = 10 * G.nade; cx.beginPath(); cx.arc(W / 2, HOR, r, 0, TAU); cx.stroke(); }
+    if (G.state === 'run' || G.state === 'paused') drawVM();
+    else if (G.state === 'idle') drawVM();
+    // crosshair
+    cx.strokeStyle = G.lock ? '#ffd166' : 'rgba(255,255,255,.85)'; cx.lineWidth = 2; cx.beginPath();
+    cx.moveTo(W / 2 - 14, HOR); cx.lineTo(W / 2 - 5, HOR); cx.moveTo(W / 2 + 5, HOR); cx.lineTo(W / 2 + 14, HOR); cx.moveTo(W / 2, HOR - 14); cx.lineTo(W / 2, HOR - 5); cx.moveTo(W / 2, HOR + 5); cx.lineTo(W / 2, HOR + 14); cx.stroke();
+    cx.fillStyle = 'rgba(255,255,255,.9)'; cx.fillRect(W / 2 - 1, HOR - 1, 2, 2);
+    // banner
+    if (G.banner) { cx.globalAlpha = clamp(G.banner.ttl / .5, 0, 1); cx.font = '800 22px ' + FONT; cx.textAlign = 'center'; cx.fillStyle = '#fff'; cx.strokeStyle = 'rgba(0,0,0,.75)'; cx.lineWidth = 4; cx.strokeText(G.banner.t, W / 2, 62); cx.fillText(G.banner.t, W / 2, 62); cx.globalAlpha = 1; }
+  }
+
+  /* mini-map: targets = RED points */
+  function drawMap() {
+    const sc = MW / (WORLD * 2), X = x => (x + WORLD) * sc, Y = z => (WORLD - z) * sc;
+    mx.clearRect(0, 0, MW, MW); mx.fillStyle = 'rgba(8,12,24,.92)'; mx.fillRect(0, 0, MW, MW);
+    mx.strokeStyle = 'rgba(255,255,255,.08)'; mx.lineWidth = 1; mx.beginPath(); for (let k = -WORLD + 8; k < WORLD; k += 16) { mx.moveTo(X(k), 0); mx.lineTo(X(k), MW); mx.moveTo(0, Y(k)); mx.lineTo(MW, Y(k)); } mx.stroke();
+    SCN.forEach(b => { mx.fillStyle = b.k === 'bld' ? 'rgba(160,170,190,.35)' : b.k === 'tree' ? 'rgba(60,180,90,.4)' : 'rgba(190,130,60,.5)'; const w = b.k === 'tree' ? 2 : b.w * sc; mx.fillRect(X(b.x) - w / 2, Y(b.z) - w / 2, w, w); });
+    // view cone
+    const px = X(P.x), py = Y(P.z), a = P.yaw, r = 34;
+    mx.fillStyle = 'rgba(80,200,255,.22)'; mx.beginPath(); mx.moveTo(px, py);
+    for (let i = 0; i <= 12; i++) { const an = a - FOV / 2 + FOV * i / 12; mx.lineTo(px + Math.sin(an) * r, py - Math.cos(an) * r); }
+    mx.closePath(); mx.fill();
+    // enemies (RED points)
+    G.en.forEach(e => {
+      const ex = X(e.x), ey = Y(e.z), pulse = 1 + .35 * Math.sin(G.t * 6 + e.ph);
+      mx.fillStyle = 'rgba(255,40,40,.25)'; mx.beginPath(); mx.arc(ex, ey, 6.5 * pulse, 0, TAU); mx.fill();
+      mx.fillStyle = G.lock === e ? '#ffd166' : '#ff2d2d'; mx.beginPath(); mx.arc(ex, ey, 3.4, 0, TAU); mx.fill();
+    });
+    // player arrow
+    mx.save(); mx.translate(px, py); mx.rotate(a); mx.fillStyle = '#38bdf8'; mx.strokeStyle = '#fff'; mx.lineWidth = 1.2; mx.beginPath(); mx.moveTo(0, -7); mx.lineTo(5, 6); mx.lineTo(0, 3); mx.lineTo(-5, 6); mx.closePath(); mx.fill(); mx.stroke(); mx.restore();
+    mx.strokeStyle = 'rgba(255,183,3,.7)'; mx.lineWidth = 2; mx.strokeRect(1, 1, MW - 2, MW - 2);
+  }
+
+  /* =================== GAME LOGIC =================== */
+  const hudCache = {};
+  function setT(id, v) { if (hudCache[id] !== v) { hudCache[id] = v; $(id).textContent = v; } }
+  function hud() {
+    setT('ffWords', Math.min(G.words, WIN)); $('ffBar').style.width = Math.min(100, G.words) + '%';
+    setT('ffRunCoins', G.coins); setT('ffCoins', S.coins); setT('ffWpn', WP(curW).name); setT('ffNades', S.nades); setT('ffNadeN', S.nades);
+    setT('ffLives', '❤'.repeat(Math.max(0, MAXFAIL - G.fails)) + '🖤'.repeat(Math.min(MAXFAIL, G.fails)));
+    setT('ffWrong', G.wrong);
+    const lvl = G.words >= 50 ? 'HARD' : G.words >= 20 ? 'MEDIUM' : 'EASY'; setT('ffLvl', lvl);
+    $('ffNade').classList.toggle('empty', S.nades <= 0);
+    const l = G.lock; const hint = $('ffHint');
+    const key = l ? l.w + '|' + l.pos : 'none|' + G.state; if (hudCache.hint !== key) {
+      hudCache.hint = key; hint.textContent = '';
+      if (l) { const d = mk('span', 'd', l.w.slice(0, l.pos)); hint.append('🎯 ', d, l.w.slice(l.pos)); }
+      else hint.textContent = G.state === 'run' ? '🎯 Screen par dikhne wale kisi bhi target ka pehla akshar type karo' : 'Mission start karo 👆';
+    }
+  }
+  function banner(t, ttl) { G.banner = { t, ttl: ttl || 1.8 }; }
+  function toast(msg) { const t = $('ffToast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2000); }
+
+  function spawn(front) {
+    if (G.en.length >= 7) return false;
+    const lvl = G.words >= 50 ? 2 : G.words >= 20 ? 1 : 0, used = new Set(G.en.map(e => e.w[0].toLowerCase()));
+    let w = null;
+    for (let t = 0; t < 50; t++) { const c = makeWord(lvl); if (!used.has(c[0].toLowerCase()) && !G.en.some(e => e.w === c)) { w = c; break; } }
+    if (!w) return false;
+    let x = 0, z = 0;
+    for (let t = 0; t < 12; t++) {
+      const a = (front || Math.random() < .65) ? P.yaw + rnd(-.5, .5) * FOV * .9 : rnd(0, TAU), r = rnd(30, 44);
+      x = P.x + Math.sin(a) * r; z = P.z + Math.cos(a) * r; if (Math.abs(x) < WORLD - 2 && Math.abs(z) < WORLD - 2) break;
+    }
+    x = clamp(x, -WORLD + 2, WORLD - 2); z = clamp(z, -WORLD + 2, WORLD - 2);
+    G.en.push({ x, z, w, pos: 0, sp: rnd(.85, 1.15), ph: rnd(0, TAU), col: pickOf(ECOL), hat: pickOf(['helmet', 'mask', 'cap']), d: 99, b: 0, vis: false });
+    return true;
+  }
+
+  function startRun() {
+    G = newG(); G.state = 'run'; P.x = 0; P.z = 0; P.yaw = 0; curW = S.weapon;
+    hideOv(); inp.disabled = false; inp.value = ''; inp.focus({ preventScroll: true });
+    spawn(true); spawn(true); G.spawnT = 2.6; lastT = performance.now(); hud();
+  }
+  function showOv(title, html, b) { ovT.textContent = title; ovP.innerHTML = html; goBtn.textContent = b; ov.classList.remove('hide'); }
+  function hideOv() { ov.classList.add('hide'); }
+  function pause(reason) {
+    if (G.state !== 'run') return;
+    G.state = 'paused'; ctrl.up = ctrl.down = ctrl.left = ctrl.right = 0; kbd.up = kbd.down = kbd.left = kbd.right = 0; inp.disabled = true;
+    showOv('⏸ Game Paused', reason || 'Game roka gaya hai.', '▶ Resume');
+  }
+  function resume() { if (G.state !== 'paused') return; G.state = 'run'; hideOv(); inp.disabled = false; inp.focus({ preventScroll: true }); lastT = performance.now(); }
+  function endRun(won, reason) {
+    G.state = won ? 'won' : 'over'; inp.disabled = true; inp.blur(); G.lock = null;
+    S.best = Math.max(S.best, G.words); if (won) S.wins++; save();
+    const stats = '<b>' + Math.min(G.words, WIN) + ' / ' + WIN + '</b> words &middot; Coins kamaye: <b>+' + G.coins + ' 🪙</b><br>Accuracy: <b>' + (G.typed ? Math.round(G.correct / G.typed * 100) : 0) + '%</b> &middot; Time: <b>' + Math.round(G.time) + 's</b> &middot; Best: <b>' + S.best + '</b>';
+    if (won) { SFX.win(); showOv('🏆 MISSION COMPLETE!', 'Shabaash! Aapne 100 words blast kar diye 🎉<br>' + stats + '<br><small>Coins se Drop Store / Outfit Shop me kharidari karein.</small>', '🔁 Dobara Khelo'); }
+    else { SFX.over(); showOv('💀 GAME OVER', reason + '<br>' + stats + '<br><small>Coins save hain — Drop Store me naye weapons lo!</small>', '🔁 Play Again'); }
+  }
+
+  const same = (a, b) => a === b || (b != null && /[a-z]/i.test(a) && a.toLowerCase() === b.toLowerCase());
+  function wrongKey() {
+    G.wrong++; G.flash = Math.max(G.flash, .35); G.shake = Math.max(G.shake, .25); SFX.wrong();
+    if (G.wrong > MAXWRONG) endRun(false, '4th galat keystroke! (Ek word par sirf 3 galtiyan allowed hain)');
+  }
+  function typeChar(ch) {
+    if (G.state !== 'run' || ch === ' ' || ch === '\n') return;
+    G.typed++; const e = G.lock;
+    if (e) {
+      if (same(ch, e.w[e.pos])) { e.pos++; G.correct++; G.wrong = 0; SFX.key(); if (e.pos >= e.w.length) kill(e, false); }
+      else wrongKey();
+    } else {
+      const c = G.en.find(x => x.vis && same(ch, x.w[0]));
+      if (c) { G.lock = c; c.pos = 1; G.correct++; G.wrong = 0; SFX.key(); if (c.w.length <= 1) kill(c, false); }
+      else if (G.en.some(x => x.vis)) wrongKey();
+    }
+  }
+  function screenOf(e) { const c = toCam(e.x, 0, e.z); if (c.d < .4) return [W / 2, HOR]; const s = F / c.d; return [W / 2 + c.l / c.d * F, HOR + CAMH / c.d * F - 1.05 * s]; }
+  function burst(x, y, big) {
+    const n = big ? 26 : 18; for (let i = 0; i < n; i++) { const a = rnd(0, TAU), v = rnd(60, big ? 320 : 220); G.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60, life: rnd(.4, .9), max: .9, size: rnd(2, 5), col: pickOf(['#ffd166', '#ff9f1c', '#ef4444', '#fff3c4', '#fb7185']) }); }
+  }
+  function kill(e, byNade) {
+    const i = G.en.indexOf(e); if (i < 0) return;
+    const [sx, sy] = screenOf(e); G.en.splice(i, 1); if (G.lock === e) G.lock = null; G.wrong = 0;
+    G.words++; G.coins += 5; S.coins += 5; save();
+    burst(sx, sy, byNade); G.pops.push({ x: sx, y: sy - 18, t: '+5 🪙', life: .9, big: byNade });
+    if (!byNade) {
+      const w = WP(curW); G.shots.push({ x1: W * .6, y1: H * .8, x2: sx, y2: sy, ttl: .12 }); G.recoil = 1; G.muzzle = .08; SFX.shot(); SFX.coin();
+      if (w.dbl) G.shots.push({ x1: W * .58, y1: H * .8, x2: sx + 14, y2: sy + 8, ttl: .12 });
+    }
+    if (G.words % 5 === 0) switchWeapon();
+    if (G.words >= WIN && G.state === 'run') endRun(true);
+  }
+  function switchWeapon() {
+    const idxs = WEAPONS.map((w, i) => S.owned.includes(w.id) ? i : -1).filter(i => i >= 0); if (idxs.length < 2) return;
+    const cur = WEAPONS.findIndex(w => w.id === curW), nx = idxs.find(i => i > cur); curW = WEAPONS[nx != null ? nx : idxs[0]].id;
+    banner('🔄 Weapon badal gaya: ' + WP(curW).name, 2); tone(500, 900, .15, 'triangle', .07);
+  }
+  function throwNade() {
+    if (G.state !== 'run') return;
+    if (S.nades <= 0) { banner('💣 Grenade khatam! Drop Store se kharido', 1.6); return; }
+    if (!G.en.length) { banner('Abhi koi target nahi hai', 1.2); return; }
+    S.nades--; save(); G.nade = 1; G.shake = 1; SFX.boom();
+    [...G.en].forEach(e => kill(e, true));
+    if (G.state === 'run') banner('💥 BOOM! Saare targets blast!', 1.8);
+  }
+  function hitPlayer(e) {
+    const i = G.en.indexOf(e); if (i < 0) return; G.en.splice(i, 1); if (G.lock === e) { G.lock = null; } G.wrong = 0;
+    G.fails++; G.flash = 1; G.shake = .7; SFX.hit(); burst(W / 2, H * .6, true);
+    if (G.fails >= MAXFAIL) endRun(false, 'Target aap tak pahunch gaye! (3 Failed Chances poore)'); else banner('⚠️ Target pahunch gaya! Chance: ' + G.fails + '/' + MAXFAIL, 1.6);
+  }
+
+  function update(dt) {
+    G.t += dt; G.time += dt;
+    // player movement
+    const fwd = (ctrl.up || kbd.up ? 1 : 0) - (ctrl.down || kbd.down ? 1 : 0), trn = (ctrl.right || kbd.right ? 1 : 0) - (ctrl.left || kbd.left ? 1 : 0);
+    P.yaw += trn * 1.9 * dt + dragYaw; dragYaw = 0;
+    const mv = fwd * 11 * dt + dragMove; dragMove = 0;
+    P.x = clamp(P.x + Math.sin(P.yaw) * mv, -WORLD + 1.5, WORLD - 1.5); P.z = clamp(P.z + Math.cos(P.yaw) * mv, -WORLD + 1.5, WORLD - 1.5);
+    G.mov += ((fwd || trn ? 1 : 0) - G.mov) * Math.min(1, dt * 8); if (fwd || trn) G.bob += dt * 11;
+    // aim assist: locked target ko screen me rakhta hai
+    if (G.lock && !trn && Math.abs(G.lock.b) > .4) P.yaw += Math.sign(G.lock.b) * Math.min(Math.abs(G.lock.b) - .4, 1.8 * dt);
+    sinY = Math.sin(P.yaw); cosY = Math.cos(P.yaw);
+    // spawning (words badhne par tez + zyada)
+    G.spawnT -= dt; const maxA = Math.min(6, 3 + Math.floor(G.words / 20));
+    if (G.spawnT <= 0 && G.en.length < maxA) { spawn(false); G.spawnT = Math.max(2.1, 3.4 - G.words * .013); }
+    if (G.en.length === 0 && G.spawnT > .9) G.spawnT = .6;
+    // enemies
+    const sp = 1.7 + Math.min(1.8, G.words * .018), hits = [];
+    G.en.forEach(e => {
+      const dx = P.x - e.x, dz = P.z - e.z, d = Math.hypot(dx, dz) || .01; e.d = d;
+      if (d < 2.2) { hits.push(e); return; }
+      const wv = Math.sin(G.t * 1.3 + e.ph) * .35, ux = dx / d, uz = dz / d;
+      e.x += (ux - uz * wv) * sp * e.sp * dt; e.z += (uz + ux * wv) * sp * e.sp * dt;
+      e.b = normA(Math.atan2(e.x - P.x, e.z - P.z) - P.yaw); e.vis = Math.abs(e.b) < FOV / 2 - .03 && d > 1;
+    });
+    hits.forEach(hitPlayer);
+  }
+  function fx(dt) {
+    G.parts.forEach(p => { p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 520 * dt; }); G.parts = G.parts.filter(p => p.life > 0);
+    G.pops.forEach(p => { p.life -= dt; p.y -= 38 * dt; }); G.pops = G.pops.filter(p => p.life > 0);
+    G.shots.forEach(s => s.ttl -= dt); G.shots = G.shots.filter(s => s.ttl > 0);
+    G.flash = Math.max(0, G.flash - dt * 1.6); G.shake = Math.max(0, G.shake - dt * 2.2); G.recoil = Math.max(0, G.recoil - dt * 6); G.muzzle = Math.max(0, G.muzzle - dt); G.nade = Math.max(0, G.nade - dt * 1.7);
+    if (G.banner) { G.banner.ttl -= dt; if (G.banner.ttl <= 0) G.banner = null; }
+  }
+  function frame(t) {
+    if (!looping) return;
+    const dt = Math.min(.05, (t - lastT) / 1000 || 0); lastT = t;
+    if (G.state === 'run') update(dt); else if (G.state === 'idle') { P.yaw += dt * .12; G.t += dt; }
+    if (G.state !== 'paused') fx(dt);
+    render(); drawMap(); hud();
+    raf = requestAnimationFrame(frame);
+  }
+  const startLoop = () => { if (looping) return; looping = true; lastT = performance.now(); raf = requestAnimationFrame(frame); };
+  const stopLoop = () => { looping = false; cancelAnimationFrame(raf); };
+
+  /* =================== CHARACTER (real-style human silhouette) =================== */
+  function drawHuman(c, x, y, sc, gender, o) {
+    const f = gender === 'female', skin = '#e0aa82', skinD = '#c58b64', hair = f ? '#2b1a12' : '#1b1410';
+    const sh = f ? 30 : 38, wa = f ? 17 : 22, hp = f ? 29 : 25, sY = 92, wY = f ? 176 : 184, hem = f ? 232 : 226, hc = f ? 14 : 13, hw = f ? 15 : 14;
+    c.save(); c.translate(x, y); c.scale(sc, sc); c.lineJoin = 'round'; c.lineCap = 'round';
+    const ol = (p, w) => { c.lineWidth = w || 1.6; c.strokeStyle = 'rgba(0,0,0,.42)'; c.stroke(p); };
+    // ground shadow
+    let g = c.createRadialGradient(100, 402, 4, 100, 402, 72); g.addColorStop(0, 'rgba(0,0,0,.5)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.beginPath(); c.ellipse(100, 402, 74, 14, 0, 0, TAU); c.fill();
+    // back hair (female)
+    if (f) { c.fillStyle = hair; c.beginPath(); c.moveTo(78, 40); c.quadraticCurveTo(64, 74, 69, 122); c.quadraticCurveTo(80, 138, 100, 130); c.quadraticCurveTo(120, 138, 131, 122); c.quadraticCurveTo(136, 74, 122, 40); c.closePath(); c.fill(); }
+    // arms (shirt ke peeche)
+    const arm = side => {
+      const p = new Path2D(), ax = 100 + side * sh, e1 = ax + side * 9, w0 = 19, w1 = 14, w2 = 10;
+      p.moveTo(ax + side * (w0 / 2 - 2), sY + 2); p.quadraticCurveTo(e1 + side * (w1 / 2 + 3), 146, e1 + side * (w2 / 2 + 1), 208);
+      p.lineTo(e1 - side * (w2 / 2) + side * 0, 208); p.quadraticCurveTo(e1 - side * (w1 / 2) - side * 1, 150, ax - side * (w0 / 2 - 6), sY + 12); p.closePath();
+      return { p, ax, hx: e1 };
+    };
+    const arms = [arm(-1), arm(1)], armsAll = new Path2D();
+    arms.forEach((a, i) => {
+      const side = i ? 1 : -1;
+      c.fillStyle = skin; c.fill(a.p); ol(a.p, 1.4); armsAll.addPath(a.p);
+      c.save(); c.clip(a.p); c.fillStyle = o.top; c.fillRect(0, 0, 200, o.sleeve === 'long' ? 200 : 128); c.restore();
+      if (o.sleeve === 'long') { c.fillStyle = shade(o.top, -.25); c.fillRect(a.hx - 8, 196, 16, 5); }
+      c.fillStyle = skin; c.beginPath(); c.ellipse(a.hx + side * 1, 216, 6.5, 10, side * -.08, 0, TAU); c.fill(); c.strokeStyle = 'rgba(0,0,0,.3)'; c.lineWidth = 1; c.stroke();
+    });
+    // legs (pants)
+    const leg = side => {
+      const p = new Path2D(), ox = 100 + side * (hc + hw), ix = 100 - side * 1;
+      p.moveTo(ox, 196); p.quadraticCurveTo(100 + side * (hc + hw + 1), 262, 100 + side * 25, 298); p.quadraticCurveTo(100 + side * 23, 340, 100 + side * 21, 380);
+      p.lineTo(100 + side * 6, 380); p.quadraticCurveTo(100 + side * 3, 340, 100 + side * 3, 298); p.quadraticCurveTo(100 + side * 0, 262, ix, 238); p.closePath(); return p;
+    };
+    const pantsAll = new Path2D(); [-1, 1].forEach(s => pantsAll.addPath(leg(s)));
+    [-1, 1].forEach(s => {
+      const sx = 100 + s * 17; c.fillStyle = o.shoe; c.beginPath(); c.ellipse(sx, 388, 15, 8.5, 0, 0, TAU); c.fill(); c.strokeStyle = 'rgba(0,0,0,.45)'; c.lineWidth = 1.4; c.stroke();
+      c.fillStyle = 'rgba(255,255,255,.35)'; c.beginPath(); c.ellipse(sx, 392, 14, 3, 0, 0, Math.PI); c.fill();
+    });
+    c.fillStyle = o.pant; c.fill(pantsAll); c.fillStyle = o.pant; rrect(c, 100 - hp - 2, 192, hp * 2 + 4, 48, 10); c.fill();
+    [-1, 1].forEach(s => ol(leg(s), 1.5));
+    g = c.createLinearGradient(0, 0, 200, 0); g.addColorStop(0, 'rgba(0,0,0,.28)'); g.addColorStop(.27, 'rgba(0,0,0,0)'); g.addColorStop(.5, 'rgba(0,0,0,.22)'); g.addColorStop(.73, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.28)'); c.fillStyle = g; c.fill(pantsAll);
+    c.strokeStyle = 'rgba(0,0,0,.18)'; c.lineWidth = 1.3; [-1, 1].forEach(s => { c.beginPath(); c.moveTo(100 + s * 13, 290); c.quadraticCurveTo(100 + s * 18, 296, 100 + s * 22, 292); c.moveTo(100 + s * 12, 300); c.quadraticCurveTo(100 + s * 16, 306, 100 + s * 20, 303); c.stroke(); });
+    // shirt
+    const shirt = new Path2D();
+    shirt.moveTo(100 - sh, sY + 6); shirt.quadraticCurveTo(100 - sh * .55, sY - 5, 90, sY - 5); shirt.quadraticCurveTo(100, sY + 8, 110, sY - 5); shirt.quadraticCurveTo(100 + sh * .55, sY - 5, 100 + sh, sY + 6);
+    shirt.quadraticCurveTo(100 + sh - 2, sY + 46, 100 + wa, wY); shirt.quadraticCurveTo(100 + wa + 1, wY + 28, 100 + hp + 2, hem); shirt.quadraticCurveTo(100, hem + 6, 100 - hp - 2, hem);
+    shirt.quadraticCurveTo(100 - wa - 1, wY + 28, 100 - wa, wY); shirt.quadraticCurveTo(100 - sh + 2, sY + 46, 100 - sh, sY + 6); shirt.closePath();
+    // neck (shirt se pehle taaki collar upar aaye)
+    c.fillStyle = skin; c.beginPath(); c.moveTo(f ? 94 : 92, 68); c.lineTo(f ? 94 : 92, 94); c.quadraticCurveTo(100, 104, f ? 106 : 108, 94); c.lineTo(f ? 106 : 108, 68); c.closePath(); c.fill();
+    g = c.createLinearGradient(0, 68, 0, 96); g.addColorStop(0, 'rgba(0,0,0,.35)'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fill();
+    c.fillStyle = o.top; c.fill(shirt); ol(shirt, 1.6);
+    g = c.createLinearGradient(100 - sh, 0, 100 + sh, 0); g.addColorStop(0, 'rgba(0,0,0,.3)'); g.addColorStop(.3, 'rgba(0,0,0,0)'); g.addColorStop(.7, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.3)'); c.fillStyle = g; c.fill(shirt);
+    // V-neck
+    c.fillStyle = skin; c.beginPath(); c.moveTo(89, sY - 4); c.lineTo(111, sY - 4); c.lineTo(100, sY + 18); c.closePath(); c.fill(); c.strokeStyle = 'rgba(0,0,0,.35)'; c.lineWidth = 1.3; c.stroke();
+    c.strokeStyle = 'rgba(0,0,0,.14)'; c.lineWidth = 1.4; c.beginPath();
+    if (f) { c.moveTo(82, 128); c.quadraticCurveTo(92, 140, 99, 128); c.moveTo(101, 128); c.quadraticCurveTo(108, 140, 118, 128); }
+    c.moveTo(82, 175); c.quadraticCurveTo(100, 182, 118, 175); c.moveTo(80, 200); c.quadraticCurveTo(100, 208, 120, 200); c.stroke();
+    // extras
+    if (o.extra === 'shirt') {
+      c.fillStyle = '#ffffff'; c.strokeStyle = 'rgba(0,0,0,.4)'; c.lineWidth = 1.2;
+      c.beginPath(); c.moveTo(89, sY - 6); c.lineTo(100, sY + 18); c.lineTo(80, sY + 14); c.closePath(); c.fill(); c.stroke();
+      c.beginPath(); c.moveTo(111, sY - 6); c.lineTo(100, sY + 18); c.lineTo(120, sY + 14); c.closePath(); c.fill(); c.stroke();
+      c.strokeStyle = 'rgba(0,0,0,.28)'; c.beginPath(); c.moveTo(100, sY + 18); c.lineTo(100, hem + 2); c.stroke(); c.fillStyle = 'rgba(0,0,0,.35)';
+      for (let k = 0; k < 5; k++) { c.beginPath(); c.arc(103, sY + 30 + k * 26, 1.7, 0, TAU); c.fill(); }
+    }
+    if (o.extra === 'stripe') {
+      c.save(); c.clip(shirt); c.fillStyle = 'rgba(255,255,255,.85)'; c.fillRect(0, 128, 200, 8); c.fillStyle = shade(o.pant, -.1); c.fillRect(0, 138, 200, 4); c.restore();
+      c.strokeStyle = 'rgba(255,255,255,.85)'; c.lineWidth = 4; [-1, 1].forEach(s => { c.beginPath(); c.moveTo(100 + s * (hc + hw - 3), 206); c.quadraticCurveTo(100 + s * 27, 262, 100 + s * 23, 300); c.quadraticCurveTo(100 + s * 22, 340, 100 + s * 19, 376); c.stroke(); });
+      arms.forEach(a => { c.save(); c.clip(a.p); c.strokeStyle = 'rgba(255,255,255,.85)'; c.lineWidth = 4; c.beginPath(); c.moveTo(a.hx > 100 ? a.hx + 3 : a.hx - 3, 100); c.lineTo(a.hx > 100 ? a.hx + 3 : a.hx - 3, 205); c.stroke(); c.restore(); });
+    }
+    if (o.extra === 'camo') {
+      const all = new Path2D(); all.addPath(shirt); all.addPath(armsAll); all.addPath(pantsAll);
+      c.save(); c.clip(all);
+      for (let i = 0; i < 46; i++) { const r = n => { const v = Math.sin((i + 1) * 127.1 + n * 311.7) * 43758.5453; return v - Math.floor(v); }; c.fillStyle = ['rgba(34,48,22,.8)', 'rgba(104,128,70,.75)', 'rgba(70,86,44,.8)', 'rgba(20,28,14,.7)'][i % 4]; c.beginPath(); c.ellipse(34 + r(1) * 132, 92 + r(2) * 290, 8 + r(3) * 14, 5 + r(4) * 9, r(5) * 3, 0, TAU); c.fill(); }
+      c.restore();
+    }
+    if (o.extra === 'vest') {
+      const v = new Path2D(); v.moveTo(100 - sh + 6, 98); v.lineTo(91, 98); v.lineTo(100, 124); v.lineTo(109, 98); v.lineTo(100 + sh - 6, 98); v.lineTo(100 + wa + 3, 206); v.lineTo(100 - wa - 3, 206); v.closePath();
+      c.fillStyle = '#5a4c2e'; c.fill(v); ol(v, 1.5); c.fillStyle = '#463b24'; [[80, 150], [104, 150], [80, 176], [104, 176]].forEach(p => { rrect(c, p[0], p[1], 17, 20, 3); c.fill(); c.strokeStyle = 'rgba(0,0,0,.4)'; c.lineWidth = 1; c.stroke(); });
+      c.fillStyle = '#2d2616'; c.fillRect(100 - wa - 3, 200, wa * 2 + 6, 6);
+    }
+    // head
+    const hx = f ? 19 : 21;
+    const head = new Path2D(); head.moveTo(100 - hx, 44); head.bezierCurveTo(100 - hx, 20, 100 + hx, 20, 100 + hx, 44); head.bezierCurveTo(100 + hx, 62, 112, 76, 100, 76); head.bezierCurveTo(88, 76, 100 - hx, 62, 100 - hx, 44); head.closePath();
+    c.fillStyle = skin; c.beginPath(); c.ellipse(100 - hx, 50, 3.5, 7, 0, 0, TAU); c.ellipse(100 + hx, 50, 3.5, 7, 0, 0, TAU); c.fill();
+    c.fillStyle = skin; c.fill(head); ol(head, 1.5);
+    g = c.createLinearGradient(100 - hx, 0, 100 + hx, 0); g.addColorStop(0, 'rgba(0,0,0,.18)'); g.addColorStop(.3, 'rgba(0,0,0,0)'); g.addColorStop(.75, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.2)'); c.fillStyle = g; c.fill(head);
+    // face
+    c.fillStyle = '#fff'; [[91, 49], [109, 49]].forEach(p => { c.beginPath(); c.ellipse(p[0], p[1], 3.6, 2.4, 0, 0, TAU); c.fill(); });
+    c.fillStyle = '#2b1b12'; [[91.6, 49], [109.4, 49]].forEach(p => { c.beginPath(); c.arc(p[0], p[1], 1.8, 0, TAU); c.fill(); });
+    c.strokeStyle = hair; c.lineWidth = f ? 1.6 : 2.2; c.beginPath(); c.moveTo(86, 42); c.quadraticCurveTo(91, 39.5, 96, 42); c.moveTo(104, 42); c.quadraticCurveTo(109, 39.5, 114, 42); c.stroke();
+    c.strokeStyle = skinD; c.lineWidth = 1.4; c.beginPath(); c.moveTo(100, 50); c.quadraticCurveTo(97, 58, 100, 60); c.stroke();
+    if (f) { c.strokeStyle = '#2b1b12'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(87.5, 48); c.lineTo(86, 46.5); c.moveTo(112.5, 48); c.lineTo(114, 46.5); c.stroke(); c.fillStyle = '#b4535a'; c.beginPath(); c.ellipse(100, 66, 5, 2.4, 0, 0, TAU); c.fill(); }
+    else { c.strokeStyle = '#8a4b3c'; c.lineWidth = 1.7; c.beginPath(); c.moveTo(94, 66); c.quadraticCurveTo(100, 69, 106, 66); c.stroke(); }
+    // hair (front)
+    c.fillStyle = hair;
+    if (f) {
+      c.beginPath(); c.moveTo(79, 46); c.bezierCurveTo(76, 14, 124, 14, 121, 46); c.bezierCurveTo(118, 34, 108, 28, 97, 27); c.bezierCurveTo(88, 30, 82, 38, 79, 46); c.fill();
+      c.beginPath(); c.moveTo(79, 40); c.quadraticCurveTo(70, 74, 74, 114); c.lineTo(82, 112); c.quadraticCurveTo(80, 76, 85, 44); c.closePath(); c.fill();
+      c.beginPath(); c.moveTo(121, 40); c.quadraticCurveTo(130, 74, 126, 114); c.lineTo(118, 112); c.quadraticCurveTo(120, 76, 115, 44); c.closePath(); c.fill();
+    } else {
+      c.beginPath(); c.moveTo(78, 46); c.bezierCurveTo(74, 12, 126, 12, 122, 46); c.bezierCurveTo(120, 36, 114, 31, 108, 31); c.bezierCurveTo(100, 36, 88, 33, 82, 36); c.bezierCurveTo(80, 39, 79, 42, 78, 46); c.fill();
+    }
+    // headwear
+    if (o.hat === 'cap') {
+      c.fillStyle = o.cap || o.top; c.beginPath(); c.moveTo(77, 42); c.bezierCurveTo(77, 14, 123, 14, 123, 42); c.quadraticCurveTo(100, 33, 77, 42); c.fill(); c.strokeStyle = 'rgba(0,0,0,.4)'; c.lineWidth = 1.3; c.stroke();
+      c.fillStyle = shade(o.cap || o.top, -.3); c.beginPath(); c.ellipse(100, 42, 25, 5.5, 0, 0, TAU); c.fill(); c.stroke(); c.fillStyle = shade(o.cap || o.top, .25); c.beginPath(); c.arc(100, 19, 2.6, 0, TAU); c.fill();
+    } else if (o.hat === 'helmet') {
+      c.fillStyle = '#566a3d'; c.beginPath(); c.moveTo(74, 47); c.bezierCurveTo(70, 6, 130, 6, 126, 47); c.lineTo(74, 47); c.closePath(); c.fill(); c.strokeStyle = 'rgba(0,0,0,.45)'; c.lineWidth = 1.4; c.stroke();
+      c.fillStyle = '#3c4a2a'; c.fillRect(74, 41, 52, 6); c.strokeStyle = '#2b2b2b'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(79, 47); c.lineTo(81, 70); c.moveTo(121, 47); c.lineTo(119, 70); c.stroke();
+    } else if (o.hat === 'mask') {
+      c.fillStyle = o.band; c.fillRect(77, 33, 46, 7); c.strokeStyle = 'rgba(0,0,0,.4)'; c.lineWidth = 1.2; c.strokeRect(77, 33, 46, 7);
+      c.fillStyle = '#12121a'; c.beginPath(); c.moveTo(80, 54); c.quadraticCurveTo(100, 50, 120, 54); c.lineTo(119, 66); c.quadraticCurveTo(100, 82, 81, 66); c.closePath(); c.fill(); c.stroke();
+    } else if (o.hat === 'bandana') {
+      c.fillStyle = o.band; c.beginPath(); c.moveTo(77, 38); c.quadraticCurveTo(100, 22, 123, 38); c.lineTo(123, 47); c.quadraticCurveTo(100, 36, 77, 47); c.closePath(); c.fill(); c.strokeStyle = 'rgba(0,0,0,.4)'; c.lineWidth = 1.3; c.stroke();
+      c.beginPath(); c.moveTo(122, 42); c.lineTo(136, 36); c.lineTo(132, 50); c.closePath(); c.fill(); c.stroke();
+    }
+    c.restore();
+  }
+  function renderAvatar() { const a = $('ffAvatar'), c = a.getContext('2d'); c.clearRect(0, 0, a.width, a.height); drawHuman(c, a.width / 2 - 100 * .23, 0, .23, S.gender, OUT()); }
+
+  /* =================== STORE / SHOP UI =================== */
+  function gunIcon(c, w, W2, H2) {
+    c.clearRect(0, 0, W2, H2); c.save(); c.translate(W2 / 2, H2 / 2);
+    const L = { Pistol: 70, SMG: 100, Shotgun: 130, 'Assault Rifle': 140, Sniper: 168 }[w.type] || 100, sc = Math.min((W2 - 14) / L, 1.25); c.scale(sc, sc);
+    const x0 = -L / 2, col = w.col, dk = shade(w.col, -.45);
+    const body = (x, y, ww, hh, fill) => { c.fillStyle = fill; rrect(c, x, y, ww, hh, 3); c.fill(); c.strokeStyle = 'rgba(0,0,0,.5)'; c.lineWidth = 1; c.stroke(); };
+    if (w.type === 'Pistol') { body(x0, -14, L * .85, 15, col); body(x0 + L * .85 - 2, -9, L * .15 + 2, 5, '#222'); c.fillStyle = dk; c.beginPath(); c.moveTo(x0 + 6, 1); c.lineTo(x0 + 26, 1); c.lineTo(x0 + 18, 28); c.lineTo(x0 + 2, 28); c.closePath(); c.fill(); c.stroke(); }
+    else {
+      const sw = w.type === 'SMG' ? 0 : L * .22; body(x0 + sw, -11, L - sw, 14, col); body(x0 + L * .72, -7, L * .28 + 1, 5, '#2a2a2a');
+      if (sw) { c.fillStyle = dk; c.beginPath(); c.moveTo(x0 + sw, -9); c.lineTo(x0, -7); c.lineTo(x0, 12); c.lineTo(x0 + sw, 3); c.closePath(); c.fill(); c.stroke(); }
+      if (w.mag) { c.fillStyle = '#20242b'; c.beginPath(); c.moveTo(x0 + L * .4, 3); c.lineTo(x0 + L * .4 + 11, 3); c.lineTo(x0 + L * .4 + (w.mag === 2 ? 20 : 11), 28); c.lineTo(x0 + L * .4 + (w.mag === 2 ? 9 : 0), 28); c.closePath(); c.fill(); c.stroke(); }
+      c.fillStyle = dk; c.beginPath(); c.moveTo(x0 + L * .3, 3); c.lineTo(x0 + L * .3 + 9, 3); c.lineTo(x0 + L * .3 + 4, 20); c.lineTo(x0 + L * .3 - 6, 20); c.closePath(); c.fill(); c.stroke();
+      if (w.scope) { body(x0 + L * .3, -22, L * .3, 9, '#0b0f14'); c.fillStyle = '#9be7ff'; c.fillRect(x0 + L * .3 + L * .3 - 3, -20, 3, 5); }
+    }
+    c.fillStyle = w.acc; c.fillRect(x0 + L * .1, -11, L * .35, 2.2); c.restore();
+  }
+  function cardBtn(label, cls, fn, dis) { const b = mk('button', 'btn sm ' + (cls || ''), label); b.type = 'button'; if (dis) b.disabled = true; b.onclick = fn; return b; }
+  function renderStore() {
+    const g = $('ffWeapons'); g.textContent = '';
+    WEAPONS.forEach(w => {
+      const own = S.owned.includes(w.id), eq = S.weapon === w.id, card = mk('div', 'ff-card' + (eq ? ' eq' : ''));
+      const c = mk('canvas'); c.width = 160; c.height = 76; gunIcon(c.getContext('2d'), w, 160, 76); card.append(c, mk('b', '', w.name), mk('small', '', w.type));
+      const b = own ? cardBtn(eq ? '✔ Equipped' : 'Equip', '', () => { S.weapon = w.id; curW = w.id; save(); refresh(); renderStore(); toast(w.name + ' equip ho gaya'); }, eq)
+        : cardBtn('Buy 🪙 ' + w.price, S.coins < w.price ? 'lock' : '', () => {
+          if (S.coins < w.price) { toast('Coins kam hain! ' + (w.price - S.coins) + ' aur chahiye'); return; }
+          S.coins -= w.price; S.owned.push(w.id); S.weapon = w.id; curW = w.id; save(); SFX.coin(); refresh(); renderStore(); toast('🎁 ' + w.name + ' mil gaya aur equip ho gaya!');
+        });
+      card.append(b); g.append(card);
+    });
+    const n = $('ffNadeShop'); n.textContent = '';
+    NADES.forEach(d => {
+      const card = mk('div', 'ff-card'); card.append(mk('div', 'ff-big', '💣'.repeat(Math.min(d.qty, 3)) + (d.qty > 3 ? '+' : '')), mk('b', '', d.name + ' ×' + d.qty), mk('small', '', 'Saare words ek saath blast'));
+      card.append(cardBtn('Buy 🪙 ' + d.price, S.coins < d.price ? 'lock' : '', () => {
+        if (S.coins < d.price) { toast('Coins kam hain! ' + (d.price - S.coins) + ' aur chahiye'); return; }
+        S.coins -= d.price; S.nades += d.qty; save(); SFX.coin(); refresh(); renderStore(); toast('💣 +' + d.qty + ' grenade mil gaye (Total: ' + S.nades + ')');
+      })); n.append(card);
+    });
+    $('ffNadeHave').textContent = S.nades;
+  }
+  function outfitCanvas(o, w, h, sc) { const c = mk('canvas'); c.width = w; c.height = h; drawHuman(c.getContext('2d'), (w - 200 * sc) / 2, 0, sc, S.gender, o); return c; }
+  function renderShop() {
+    const g = $('ffOutfits'); g.textContent = '';
+    OUTFITS.forEach(o => {
+      const own = S.outfits.includes(o.id), eq = S.outfit === o.id, card = mk('div', 'ff-card tall' + (eq ? ' eq' : ''));
+      card.append(outfitCanvas(o, 100, 160, .38), mk('b', '', o.name));
+      card.append(own ? cardBtn(eq ? '✔ Pehna hua' : 'Pehno', '', () => { S.outfit = o.id; save(); refresh(); renderShop(); toast(o.name + ' pehen liya'); }, eq)
+        : cardBtn('Buy 🪙 ' + o.price, S.coins < o.price ? 'lock' : '', () => {
+          if (S.coins < o.price) { toast('Coins kam hain! ' + (o.price - S.coins) + ' aur chahiye'); return; }
+          S.coins -= o.price; S.outfits.push(o.id); S.outfit = o.id; save(); SFX.coin(); refresh(); renderShop(); toast('👕 ' + o.name + ' kharida aur turant pehen liya!');
+        }));
+      g.append(card);
+    });
+  }
+  function renderChar() {
+    const wrap = $('ffCharCv'); wrap.textContent = ''; wrap.append(outfitCanvas(OUT(), 260, 430, 1.02));
+    $('ffOutName').textContent = OUT().name;
+    document.querySelectorAll('#ffGender button').forEach(b => b.classList.toggle('on', b.dataset.gd === S.gender));
+  }
+  function refresh() { setT('ffCoins', S.coins); renderAvatar(); hud(); $('ffMute').textContent = S.mute ? '🔇' : '🔊'; }
+
+  /* =================== PANELS + TAB INTEGRATION =================== */
+  function showPanel(name) {
+    if (name !== 'play') pause('Aap ' + (name === 'store' ? 'Drop Store' : name === 'char' ? 'Character' : 'Outfit Shop') + ' me gaye the');
+    panel = name;
+    ['play', 'store', 'char', 'shop'].forEach(p => { $('ffP-' + p).hidden = p !== name; });
+    $('ffSub').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.p === name));
+    if (name === 'store') renderStore(); else if (name === 'char') renderChar(); else if (name === 'shop') renderShop();
+    if (name === 'play') startLoop(); else stopLoop();
+  }
+  function activate() {
+    internal = true; const t0 = tabs.querySelector('[data-g="0"]'); if (t0) t0.click(); internal = false;   // baaki games ko rokta hai
+    if (orig) orig.style.display = 'none'; if (box) box.hidden = true;
+    tabs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+    root.hidden = false; active = true; refresh(); showPanel('play');
+    if (G.state === 'idle') showOv('🔫 Free Fire Typing Shooter', IDLE_HTML, '▶ Mission Start');
+  }
+  function deactivate() { active = false; pause('Aap dusre game par chale gaye the'); root.hidden = true; stopLoop(); btn.classList.remove('on'); }
+  const IDLE_HTML = '<ul><li>Screen par aate <b>target words</b> type karke blast karo — <b>1 word = 5 🪙</b></li><li>Har <b>5 words</b> par <b>weapon automatic</b> badalta hai</li><li><b>💣 Grenade</b> (button ya <b>Enter</b>) = saare words ek saath blast</li><li>Ek word par <b>3 galat key</b> theek, <b>4th galat = Game Over</b></li><li><b>3 target</b> tak pahunch gaye = Game Over</li><li><b>100 words</b> blast karo = 🏆 Mission Complete</li></ul><small>Move: ▲ ▼ ◀ ▶ buttons / keyboard arrows / screen par drag. Red points = Mini-Map par targets.</small>';
+  tabs.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || internal) return;
+    if (b === btn) { e.stopPropagation(); activate(); } else if (active) deactivate();
+  }, true);
+  $('ffSub').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showPanel(b.dataset.p); });
+  $('ffGender').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.gender = b.dataset.gd; save(); refresh(); renderChar(); });
+  $('ffGoShop').onclick = () => showPanel('shop');
+  $('ffMute').onclick = () => { S.mute = !S.mute; save(); refresh(); };
+  $('ffPause').onclick = () => pause('Aapne game roka hai.');
+  goBtn.onclick = () => { if (G.state === 'paused') resume(); else startRun(); };
+
+  /* ---------- controls ---------- */
+  root.querySelectorAll('[data-k]').forEach(b => {
+    const k = b.dataset.k;
+    const on = e => { e.preventDefault(); ctrl[k] = 1; b.classList.add('act'); try { b.setPointerCapture(e.pointerId); } catch (_) { } };
+    const off = () => { ctrl[k] = 0; b.classList.remove('act'); };
+    b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('lostpointercapture', off); b.addEventListener('contextmenu', e => e.preventDefault());
+  });
+  $('ffNade').addEventListener('pointerdown', e => { e.preventDefault(); throwNade(); });
+  const stage = $('ffStage');
+  stage.addEventListener('pointerdown', e => { if (G.state === 'run') inp.focus({ preventScroll: true }); if (e.target === cv) { drag = { x: e.clientX, y: e.clientY }; try { cv.setPointerCapture(e.pointerId); } catch (_) { } } });
+  stage.addEventListener('pointermove', e => { if (!drag || G.state !== 'run') return; const r = cv.getBoundingClientRect(), k = W / r.width; dragYaw += (e.clientX - drag.x) * k * .0055; dragMove += -(e.clientY - drag.y) * k * .05; drag.x = e.clientX; drag.y = e.clientY; });
+  const endDrag = () => { drag = null; }; stage.addEventListener('pointerup', endDrag); stage.addEventListener('pointercancel', endDrag);
+  const KMAP = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+  document.addEventListener('keydown', e => {
+    if (!active || panel !== 'play' || G.state !== 'run') return;
+    if (KMAP[e.key]) { e.preventDefault(); kbd[KMAP[e.key]] = 1; }
+    else if (e.key === 'Enter' && e.target === inp) { e.preventDefault(); throwNade(); }
+    else if (e.key === 'Escape') pause('Aapne game roka hai.');
+  });
+  document.addEventListener('keyup', e => { if (KMAP[e.key]) kbd[KMAP[e.key]] = 0; });
+  let composing = false;
+  inp.addEventListener('compositionstart', () => composing = true); inp.addEventListener('compositionend', () => { composing = false; });
+  inp.addEventListener('input', () => { const v = inp.value; inp.value = ''; if (G.state !== 'run') return; for (const ch of v) typeChar(ch); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause('Tab badal liya tha'); });
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(x => { if (!x.isIntersecting) pause('Aap game se bahar scroll kar gaye the'); }), { threshold: .2 }).observe(root);
+
+  /* debug/test hook (browser console me window.__ff se dekh sakte hain) */
+  window.__ff = { get G() { return G; }, P, S, typeChar, throwNade, startRun, WIN };
+  refresh();
+})();
+
+/* ===== AI Resume & Portfolio Builder (html2pdf) ===== */
+(function () {
+  'use strict';
+  const root = document.getElementById('resume');
+  if (!root) return;
+  const $ = s => root.querySelector(s), $$ = s => [...root.querySelectorAll(s)];
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const nl = s => esc(s).replace(/\n/g, '<br>');
+  const lines = s => String(s || '').split('\n').map(x => x.trim()).filter(Boolean);
+  const list = s => String(s || '').split(/[,\n]/).map(x => x.trim()).filter(Boolean);
+  const KEYS = ['cat', 'name', 'phone', 'email', 'addr', 'obj', 'e10', 'e12', 'grad', 'ccc', 'skills', 'subj', 'exp', 'proj', 'idno', 'course', 'father', 'dob', 'valid', 'result', 'lang', 'role', 'to', 'subject', 'from', 'upto', 'reason'];
+  const LS = 'rbData_v1';
+  let tpl = 'minimal', photo = '', shape = 'round';
+  const ACC = { minimal: '#111827', sidebar: '#0f766e', corporate: '#1e3a8a', creative: '#7c3aed' };
+
+  const val = k => { const e = $('#rb_' + k); return e ? e.value.trim() : ''; };
+  const data = () => { const d = { photo, shape }; KEYS.forEach(k => d[k] = val(k)); return d; };
+  const fmtD = s => { if (!s) return ''; const p = s.split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : s; };
+  const today = () => { const n = new Date(); return String(n.getDate()).padStart(2, '0') + '/' + String(n.getMonth() + 1).padStart(2, '0') + '/' + n.getFullYear(); };
+
+  /* ---------- Photo cropper ---------- */
+  const cv = $('#rbCrop'), cx = cv.getContext('2d');
+  const C = { img: null, z: 1, x: 0, y: 0 };
+  function drawCrop() {
+    const S = cv.width; cx.clearRect(0, 0, S, S);
+    if (!C.img) { photo = ''; return; }
+    const base = Math.max(S / C.img.width, S / C.img.height) * C.z;
+    const w = C.img.width * base, h = C.img.height * base;
+    cx.fillStyle = '#fff'; cx.fillRect(0, 0, S, S);
+    cx.drawImage(C.img, (S - w) / 2 + C.x * S / 200, (S - h) / 2 + C.y * S / 200, w, h);
+    try { photo = cv.toDataURL('image/jpeg', .92); } catch (e) { photo = ''; }
+  }
+  function cropShape() { cv.style.borderRadius = shape === 'round' ? '50%' : '12px'; }
+  $('#rbPhoto').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const fr = new FileReader();
+    fr.onload = () => { const im = new Image(); im.onload = () => { C.img = im; C.z = 1; C.x = C.y = 0; $('#rbZoom').value = 1; $('#rbX').value = 0; $('#rbY').value = 0; drawCrop(); render(); }; im.src = fr.result; };
+    fr.readAsDataURL(f);
+  });
+  [['#rbZoom', 'z'], ['#rbX', 'x'], ['#rbY', 'y']].forEach(([s, k]) => $(s).addEventListener('input', e => { C[k] = +e.target.value; drawCrop(); render(); }));
+  $('#rbShape').addEventListener('change', e => { shape = e.target.value; cropShape(); render(); });
+  $('#rbPhotoDel').addEventListener('click', () => { C.img = null; photo = ''; $('#rbPhoto').value = ''; drawCrop(); render(); });
+  let drag = null;
+  cv.addEventListener('pointerdown', e => { if (!C.img) return; drag = { px: e.clientX, py: e.clientY, x: C.x, y: C.y }; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; });
+  cv.addEventListener('pointermove', e => {
+    if (!drag) return; const r = cv.getBoundingClientRect(), k = 200 / r.width;
+    C.x = Math.max(-100, Math.min(100, drag.x + (e.clientX - drag.px) * k)); C.y = Math.max(-100, Math.min(100, drag.y + (e.clientY - drag.py) * k));
+    $('#rbX').value = C.x; $('#rbY').value = C.y; drawCrop(); render();
+  });
+  const endDrag = () => { drag = null; cv.style.cursor = 'grab'; };
+  cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag);
+
+  /* ---------- Template pieces ---------- */
+  const ph = (d, w) => d.photo
+    ? `<img src="${d.photo}" alt="" style="width:${w}px;height:${w}px;object-fit:cover;border-radius:${d.shape === 'round' ? '50%' : '12px'};display:block">`
+    : `<div class="rbph" style="width:${w}px;height:${w}px;border-radius:${d.shape === 'round' ? '50%' : '12px'};font-size:${Math.round(w / 3)}px">${esc((d.name || 'A').trim().charAt(0).toUpperCase())}</div>`;
+  const S = (t, inner) => inner ? `<section class="rbs"><h3>${t}</h3>${inner}</section>` : '';
+  const ul = a => a.length ? '<ul>' + a.map(x => `<li>${esc(x)}</li>`).join('') + '</ul>' : '';
+  const chips = a => a.map(x => `<span class="chip">${esc(x)}</span>`).join('');
+  const contact = d => [d.phone && '📞 ' + esc(d.phone), d.email && '✉️ ' + esc(d.email), d.addr && '📍 ' + esc(d.addr)].filter(Boolean);
+  const WM = '<div class="rbwm">Created via Access Computer Education</div>';
+  function parts(d) {
+    const teacher = d.cat === 'teacher';
+    const obj = d.obj || (teacher ? 'Dedicated and student-friendly teacher seeking a teaching position where I can inspire learners and contribute to the growth of the institution.' : 'Motivated and hardworking candidate seeking a challenging position where I can apply my skills and grow with the organization.');
+    const edu = [['10th', d.e10], ['12th', d.e12], ['Graduation / Diploma', d.grad]].filter(x => x[1]).map(x => `<b>${x[0]}:</b> ${esc(x[1])}`);
+    const eduHtml = edu.length ? '<ul>' + edu.map(x => `<li>${x}</li>`).join('') + '</ul>' : '';
+    const cert = d.ccc ? ul([d.ccc]) : '';
+    return {
+      obj: S('Career Objective', `<div>${nl(obj)}</div>`),
+      edu: S('Education', eduHtml), ccc: S('CCC / O-Level', cert),
+      skills: S('Technical Skills', chips(list(d.skills))),
+      subj: teacher ? S('Subjects / Classes', ul(list(d.subj))) : '',
+      exp: S(teacher ? 'Teaching Experience' : 'Experience', ul(lines(d.exp))),
+      proj: S('Projects', ul(lines(d.proj)))
+    };
+  }
+  const title = d => d.cat === 'teacher' ? 'Teacher — Curriculum Vitae' : 'Curriculum Vitae';
+
+  function resume(d) {
+    const p = parts(d), con = contact(d), nm = esc(d.name || 'Your Name');
+    if (tpl === 'sidebar') return `<div class="rbp-sidebar"><div class="sb"><div class="ph">${ph(d, 130)}</div>${S('Contact', '<div class="rbcon">' + con.map(x => `<div>${x}</div>`).join('') + '</div>')}${p.skills}${p.ccc}${p.subj}</div><div class="mn"><h1>${nm}</h1><div class="role">${title(d)}</div><div style="height:16px"></div>${p.obj}${p.edu}${p.exp}${p.proj}</div>${WM}</div>`;
+    const ct = con.map(x => `<span style="margin-right:14px;display:inline-block">${x}</span>`).join('');
+    if (tpl === 'corporate') return `<div class="rbp-corporate"><div class="hd"><div><h1>${nm}</h1><div class="role">${title(d)}</div><div class="cn">${ct}</div></div>${ph(d, 108)}</div><div class="bd">${p.obj}${p.edu}${p.ccc}${p.skills}${p.subj}${p.exp}${p.proj}</div>${WM}</div>`;
+    if (tpl === 'creative') return `<div class="rbp-creative"><div class="hd"><div><h1>${nm}</h1><div class="role">&lt;${title(d)} /&gt;</div><div class="cn">${ct}</div></div>${ph(d, 108)}</div><div class="bd">${p.obj}${p.skills}${p.edu}${p.ccc}${p.subj}${p.exp}${p.proj}</div>${WM}</div>`;
+    return `<div class="rbp-minimal"><div class="hd"><div><h1>${nm}</h1><div class="role">${title(d)}</div><div class="rbcon" style="margin-top:8px">${ct}</div></div>${ph(d, 96)}</div>${p.obj}${p.edu}${p.ccc}${p.skills}${p.subj}${p.exp}${p.proj}${WM}</div>`;
+  }
+
+  function letterHead(d) {
+    const ac = ACC[tpl], nm = esc(d.name || 'Your Name');
+    const base = `<div class="rbcon">${contact(d).join(' &nbsp; ')}</div>`;
+    if (tpl === 'minimal') return `<div style="border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:24px"><h1 style="font-size:24px">${nm}</h1>${base}</div>`;
+    if (tpl === 'sidebar') return `<div style="border-left:6px solid #14b8a6;padding-left:12px;margin-bottom:24px"><h1 style="font-size:24px;color:#0f766e">${nm}</h1>${base}</div>`;
+    const bg = tpl === 'corporate' ? ac : 'linear-gradient(135deg,#7c3aed,#06b6d4)';
+    return `<div class="lhd" style="background:${bg}"><h1 style="font-size:24px">${nm}</h1><div class="rbcon">${contact(d).join(' &nbsp; ')}</div></div>`;
+  }
+  function leave(d) {
+    const hi = d.lang === 'hi', f = fmtD(d.from), u = fmtD(d.upto);
+    let days = '';
+    if (d.from && d.upto) { const n = Math.round((new Date(d.upto) - new Date(d.from)) / 864e5) + 1; if (n > 0) days = n; }
+    const reason = d.reason || (hi ? 'आवश्यक कारणवश' : 'urgent personal reasons');
+    const sub = d.subject || (hi ? 'अवकाश हेतु प्रार्थना पत्र' : 'Application for leave');
+    const nm = esc(d.name || (hi ? 'आपका नाम' : 'Your Name')), role = d.role ? esc(d.role) : '';
+    let body;
+    if (hi) body = `सविनय निवेदन है कि मैं <b>${esc(reason)}</b> के कारण ${f ? 'दिनांक <b>' + f + '</b>' : 'आज'}${u ? ' से <b>' + u + '</b>' : ''} तक${days ? ' (' + days + ' दिन)' : ''} उपस्थित होने में असमर्थ हूँ।<br><br>अतः आपसे विनम्र प्रार्थना है कि मुझे उक्त अवधि का अवकाश प्रदान करने की कृपा करें। मैं आपका सदैव आभारी रहूँगा/रहूँगी।`;
+    else body = `With due respect, I would like to state that I will not be able to attend ${f ? 'from <b>' + f + '</b>' : 'today'}${u ? ' to <b>' + u + '</b>' : ''}${days ? ' (' + days + ' day' + (days > 1 ? 's' : '') + ')' : ''} due to <b>${esc(reason)}</b>.<br><br>I kindly request you to grant me leave for the above-mentioned period. I shall be highly obliged to you.`;
+    return `<div class="letter">${letterHead(d)}
+      <div class="lrow"><div>${hi ? 'सेवा में,' : 'To,'}<br>${nl(d.to || (hi ? 'प्रधानाचार्य / प्रबंधक' : 'The Principal / Manager'))}</div><div>${hi ? 'दिनांक' : 'Date'}: ${today()}</div></div>
+      <p style="margin:22px 0 14px"><b>${hi ? 'विषय' : 'Subject'}: ${esc(sub)}</b></p>
+      <p>${hi ? 'महोदय / महोदया,' : 'Respected Sir / Madam,'}</p>
+      <p style="margin-top:8px">${body}</p>
+      <p style="margin-top:30px">${hi ? 'धन्यवाद।' : 'Thank you.'}</p>
+      <p style="margin-top:34px">${hi ? 'आपका आज्ञाकारी,' : 'Yours obediently,'}<br><b>${nm}</b>${role ? '<br>' + role : ''}${d.phone ? '<br>' + esc(d.phone) : ''}</p>${WM}</div>`;
+  }
+
+  function idcard(d) {
+    const ac = tpl === 'creative' ? 'linear-gradient(135deg,#7c3aed,#06b6d4)' : ACC[tpl], nm = esc(d.name || 'Student Name');
+    const fld = (a, b) => b ? `<div><b>${a}:</b> ${esc(b)}</div>` : '';
+    const ct = d.course ? esc(d.course) : 'the course';
+    return `<div class="idwrap">
+      <div class="rb-idcard"><div class="ih" style="background:${ac}">ACCESS COMPUTER EDUCATION CENTRE<div style="font-weight:400;font-size:9.5px">STUDENT IDENTITY CARD</div></div>
+        <div class="ib2">${ph(d, 90)}<div class="it"><div style="font-size:14px;font-weight:700">${nm}</div>${fld('ID No', d.idno)}${fld('Course', d.course)}${fld("Father", d.father)}${fld('DOB', fmtD(d.dob))}${fld('Phone', d.phone)}${fld('Address', d.addr)}</div></div>
+        <div class="iff" style="background:${ac}"><span>Valid upto: ${esc(fmtD(d.valid) || '—')}</span><span>Authorised Signatory</span></div></div>
+      <div class="cert" style="border-color:${tpl === 'creative' ? '#7c3aed' : ACC[tpl]}"><h2 style="color:${tpl === 'creative' ? '#7c3aed' : ACC[tpl]}">CERTIFICATE</h2>
+        <p>This is to certify that</p><p style="font-size:22px;font-weight:700;margin:6px 0">${nm}</p>
+        <p>${d.father ? 'S/o / D/o ' + esc(d.father) + ', ' : ''}has successfully completed / attended <b>${ct}</b> at <b>Access Computer Education Centre</b>${d.result ? ' with <b>' + esc(d.result) + '</b>' : ''}.</p>
+        <p style="margin-top:8px">Date: ${today()}${d.idno ? ' &nbsp;|&nbsp; Reg. No: ' + esc(d.idno) : ''}</p>
+        <div class="sig"><div>Student Signature</div><div>Director / Authorised Signatory</div></div></div>${WM}</div>`;
+  }
+
+  /* ---------- Render + scale ---------- */
+  const paper = $('#rbPaper'), stage = $('#rbStage');
+  function render() {
+    const d = data();
+    paper.innerHTML = d.cat === 'leave' ? leave(d) : d.cat === 'idcard' ? idcard(d) : resume(d);
+    paper.className = 'rb-paper' + (d.cat === 'job' || d.cat === 'teacher' ? '' : ' rbp-doc');
+    scale();
+  }
+  function scale() {
+    const k = Math.min(1, stage.clientWidth / 794) || 1;
+    paper.style.transform = 'scale(' + k + ')';
+    stage.style.height = Math.ceil(paper.offsetHeight * k) + 'px';
+  }
+  window.addEventListener('resize', scale);
+  if ('ResizeObserver' in window) new ResizeObserver(scale).observe(stage);
+
+  function showCat() {
+    const c = val('cat');
+    $$('[data-cat]').forEach(e => e.hidden = !e.dataset.cat.split(' ').includes(c));
+  }
+  function save() { try { const o = {}; KEYS.forEach(k => o[k] = val(k)); o.tpl = tpl; o.shape = shape; localStorage.setItem(LS, JSON.stringify(o)); } catch (e) { } }
+  function load() {
+    try {
+      const o = JSON.parse(localStorage.getItem(LS) || 'null'); if (!o) return;
+      KEYS.forEach(k => { const e = $('#rb_' + k); if (e && o[k] != null) e.value = o[k]; });
+      if (o.tpl) tpl = o.tpl; if (o.shape) { shape = o.shape; $('#rbShape').value = shape; }
+    } catch (e) { }
+    $$('#rbTabs button').forEach(b => b.classList.toggle('on', b.dataset.t === tpl));
+  }
+
+  $('#rbForm').addEventListener('input', () => { showCat(); render(); save(); });
+  $('#rbForm').addEventListener('change', () => { showCat(); render(); save(); });
+  $('#rbTabs').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    tpl = b.dataset.t; $$('#rbTabs button').forEach(x => x.classList.toggle('on', x === b)); render(); save();
+  });
+  $('#rbClear').addEventListener('click', () => { $('#rbForm').reset(); C.img = null; photo = ''; shape = 'round'; drawCrop(); cropShape(); showCat(); render(); save(); });
+  $('#rbSample').addEventListener('click', () => {
+    const s = { name: 'Abhay Kumar', phone: '9876543210', email: 'abhay.kumar@email.com', addr: 'Aliganj, Lucknow, Uttar Pradesh', e10: 'UP Board, 2018, 78%', e12: 'UP Board, 2020, 74%', grad: 'BCA, University of Lucknow, 2023, 7.8 CGPA', ccc: 'CCC - A Grade, O-Level - B Grade', skills: 'MS Office, Python, HTML, CSS, JavaScript, Tally, Typing', subj: 'Computer Science, Maths (Class 6-10)', exp: 'Computer Instructor - Access Computer Education (2023-Present)\nData Entry Operator - ABC Enterprises (2022-2023)', proj: 'Student Management System - Python + SQLite\nPersonal Portfolio Website - HTML, CSS, JS', idno: 'ACE-2026-014', course: 'CCC / O-Level', father: 'Mr. Shivram', dob: '2007-11-11', valid: '2027-03-31', result: 'A Grade', role: 'Class 10-A', to: 'The Principal\nABC Public School, Lucknow', subject: 'Application for leave', from: new Date().toISOString().slice(0, 10), upto: new Date(Date.now() + 864e5).toISOString().slice(0, 10), reason: 'high fever and doctor advised rest' };
+    Object.keys(s).forEach(k => { const e = $('#rb_' + k); if (e && !e.value) e.value = s[k]; }); render(); save();
+  });
+
+  /* ---------- PDF download ---------- */
+  $('#rbDl').addEventListener('click', () => {
+    const btn = $('#rbDl');
+    if (!window.html2pdf) { alert('PDF library load nahi hui. Internet check karke page refresh karein.'); return; }
+    const clone = paper.cloneNode(true);
+    clone.style.transform = 'none'; clone.style.margin = '0'; clone.style.width = '794px';
+    const d = data(), nm = (d.name || 'resume').replace(/[^\w\u0900-\u097F]+/g, '_');
+    const old = btn.textContent; btn.disabled = true; btn.textContent = '⏳ PDF ban rahi hai…';
+    window.html2pdf().set({
+      margin: 0, filename: nm + '_' + d.cat + '.pdf', image: { type: 'jpeg', quality: .98 },
+      html2canvas: { scale: 2, useCORS: true, scrollX: 0, scrollY: 0, backgroundColor: '#ffffff' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['css', 'legacy'], avoid: ['.rbs', '.rb-idcard', '.cert'] }
+    }).from(clone).save().then(() => { btn.disabled = false; btn.textContent = old; }).catch(() => { btn.disabled = false; btn.textContent = old; alert('PDF banane me error aaya. Dobara try karein.'); });
+  });
+
+  load(); cropShape(); showCat(); drawCrop(); render();
+  setTimeout(scale, 300);
+})();
+
+/* ============================================================
+   CLOUD SUITE + RESULTS HUB + RESUME/FEE RECEIPT (modular)
+   Naya tool: CS_TOOLS.push({id,icon,label,render(panel){...}})
+   ============================================================ */
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const mk = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const dl = (name, data, type) => { const a = mk('a'); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); };
+  const pdf = (el, name) => { if (window.html2pdf) html2pdf().set({ margin: 8, filename: name, image: { type: 'jpeg', quality: .98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' } }).from(el).save(); else window.print(); };
+  const btn = (txt, fn) => { const b = mk('button', '', txt); b.type = 'button'; b.onclick = fn; return b; };
+  const tabs = (tabBox, panel, list) => {
+    list.forEach((t, i) => { const b = btn(t.icon + ' ' + t.label, () => { [...tabBox.children].forEach(x => x.classList.remove('on')); b.classList.add('on'); panel.innerHTML = ''; t.render(panel); }); tabBox.appendChild(b); if (!i) b.click(); });
+  };
+
+  /* ---------- Tool 1: Writer ---------- */
+  const writer = p => {
+    const bar = mk('div', 'cs-bar'), doc = mk('div', 'cs-doc', '<h2>Document Title</h2><p>Yahan type karein...</p>');
+    doc.contentEditable = true;
+    const cmd = (l, c, v) => bar.appendChild(btn(l, () => { doc.focus(); document.execCommand(c, false, v || null); }));
+    cmd('B', 'bold'); cmd('I', 'italic'); cmd('U', 'underline'); cmd('• List', 'insertUnorderedList'); cmd('1. List', 'insertOrderedList');
+    cmd('Left', 'justifyLeft'); cmd('Center', 'justifyCenter'); cmd('Right', 'justifyRight'); cmd('Undo', 'undo'); cmd('Redo', 'redo');
+    const fs = mk('select', '', [1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${n == 3 ? 'selected' : ''}>Size ${n}</option>`).join('')); fs.onchange = () => { doc.focus(); document.execCommand('fontSize', false, fs.value); }; bar.appendChild(fs);
+    const col = mk('input'); col.type = 'color'; col.value = '#000000'; col.oninput = () => { doc.focus(); document.execCommand('foreColor', false, col.value); }; bar.appendChild(col);
+    bar.appendChild(btn('⬇ PDF', () => pdf(doc, 'document.pdf')));
+    bar.appendChild(btn('⬇ Word (.doc)', () => dl('document.doc', `<html xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"></head><body>${doc.innerHTML}</body></html>`, 'application/msword')));
+    bar.appendChild(btn('⬇ HTML', () => dl('document.html', doc.innerHTML, 'text/html')));
+    p.append(bar, doc);
+  };
+
+  /* ---------- Tool 2: Calc ---------- */
+  const calc = p => {
+    const R = 25, C = 10, L = i => String.fromCharCode(65 + i), data = {};
+    const val = (k, d = 0) => {
+      if (d > 20) return NaN; const v = (data[k] ?? '').toString().trim(); if (v[0] !== '=') return v === '' ? 0 : isNaN(v) ? v : +v;
+      let e = v.slice(1).toUpperCase();
+      const rng = a => { a = a.trim(); const m = a.match(/^([A-J])(\d+):([A-J])(\d+)$/); if (!m) return [num(a, d)]; const o = []; for (let c = m[1].charCodeAt(0); c <= m[3].charCodeAt(0); c++)for (let r = +m[2]; r <= +m[4]; r++) o.push(num(String.fromCharCode(c) + r, d)); return o; };
+      e = e.replace(/(SUM|AVERAGE|AVG|MIN|MAX|COUNT)\(([^)]*)\)/g, (_, f, a) => { const n = a.split(',').flatMap(rng).filter(x => typeof x === 'number' && !isNaN(x)); const s = n.reduce((x, y) => x + y, 0); return { SUM: s, AVERAGE: n.length ? s / n.length : 0, AVG: n.length ? s / n.length : 0, MIN: Math.min(...n), MAX: Math.max(...n), COUNT: n.length }[f]; });
+      e = e.replace(/\b([A-J]\d+)\b/g, (_, c) => num(c, d));
+      if (!/^[0-9+\-*/().\s eE]*$/.test(e)) return '#ERR'; try { const r = Function('return (' + e + ')')(); return isFinite(r) ? +r.toFixed(6) : '#DIV/0'; } catch { return '#ERR'; }
+    };
+    const num = (k, d) => { const r = val(k, d + 1); return typeof r === 'number' ? r : 0; };
+    const t = mk('table', 'cs-grid'), inputs = {};
+    const build = () => {
+      t.innerHTML = '<tr><th></th>' + [...Array(C)].map((_, i) => `<th>${L(i)}</th>`).join('') + '</tr>';
+      for (let r = 1; r <= R; r++) { const tr = mk('tr', '', `<td class="rh">${r}</td>`); for (let c = 0; c < C; c++) { const k = L(c) + r, td = mk('td'), i = mk('input'); i.value = data[k] ?? ''; inputs[k] = i; i.onfocus = () => i.value = data[k] ?? ''; i.onblur = () => { data[k] = i.value; refresh(); }; i.onkeydown = e => { if (e.key === 'Enter') i.blur(); }; td.appendChild(i); tr.appendChild(td); } t.appendChild(tr); }
+      refresh();
+    };
+    const refresh = () => Object.keys(inputs).forEach(k => { if (document.activeElement !== inputs[k]) { const v = data[k]; inputs[k].value = v && String(v)[0] === '=' ? val(k) : (v ?? ''); } });
+    const bar = mk('div', 'cs-bar');
+    bar.append(
+      btn('+ Row', () => { }), btn('Delete Last Row', () => { for (let c = 0; c < C; c++)delete data[L(c) + R]; refresh(); }),
+      btn('Clear All', () => { Object.keys(data).forEach(k => delete data[k]); refresh(); }),
+      btn('⬇ CSV', () => { const rows = []; for (let r = 1; r <= R; r++) { const row = []; for (let c = 0; c < C; c++)row.push('"' + String(val(L(c) + r)).replace(/"/g, '""') + '"'); rows.push(row.join(',')); } dl('sheet.csv', '\ufeff' + rows.join('\n'), 'text/csv'); }),
+      btn('⬇ Excel (.xls)', () => dl('sheet.xls', '<html><head><meta charset="utf-8"></head><body>' + t.outerHTML.replace(/<input[^>]*value="([^"]*)"[^>]*>/g, '$1') + '</body></html>', 'application/vnd.ms-excel')),
+      mk('span', '', '<small style="color:#9db2d6;padding:8px">Formula: =SUM(A1:A5) =AVERAGE(B1:B4) =MIN =MAX =COUNT =A1*B1</small>'));
+    bar.children[0].onclick = () => { for (let c = 0; c < C; c++) { } const tr = mk('tr', '', `<td class="rh">+</td>`); for (let c = 0; c < C; c++) { const td = mk('td'), i = mk('input'); td.appendChild(i); tr.appendChild(td); } t.appendChild(tr); };
+    bar.children[0].textContent = '+ Blank Row';
+    const w = mk('div', 'cs-grid-w'); w.appendChild(t); p.append(bar, w); build();
+  };
+
+  /* ---------- Tool 3: Impress ---------- */
+  const impress = p => {
+    let s = [{ t: 'Welcome', b: 'Apni presentation yahan likhein' }], cur = 0;
+    const bar = mk('div', 'cs-bar'), wrap = mk('div', 'cs-slides'), th = mk('div', 'cs-thumbs'), main = mk('div'), slide = mk('div', 'cs-slide', '<div class="t" contenteditable></div><div class="b" contenteditable></div>');
+    const T = slide.children[0], B = slide.children[1];
+    const save = () => { s[cur] = { t: T.innerText, b: B.innerText }; };
+    const show = i => { save(); cur = i; T.innerText = s[i].t; B.innerText = s[i].b; th.innerHTML = ''; s.forEach((x, j) => { const d = mk('div', j == cur ? 'on' : '', `<b>${j + 1}</b> ${esc(x.t)}`); d.onclick = () => show(j); th.appendChild(d); }); };
+    T.oninput = B.oninput = save;
+    bar.append(btn('+ Slide', () => { save(); s.push({ t: 'New Slide', b: '' }); show(s.length - 1); }), btn('Delete Slide', () => { if (s.length > 1) { s.splice(cur, 1); show(Math.max(0, cur - 1)); } }),
+      btn('▶ Present', () => { save(); const e = slide; e.requestFullscreen && e.requestFullscreen(); }),
+      btn('⬇ PDF (all slides)', () => { save(); const h = mk('div'); s.forEach(x => h.appendChild(mk('div', 'cs-slide', `<div class="t">${esc(x.t)}</div><div class="b">${esc(x.b).replace(/\n/g, '<br>')}</div>`)).style.cssText = 'page-break-after:always;height:180mm;width:260mm'); pdf(h, 'presentation.pdf'); }),
+      btn('⬇ PowerPoint-compatible (.doc)', () => { save(); dl('presentation.doc', '<html><head><meta charset="utf-8"></head><body>' + s.map((x, i) => `<h1>Slide ${i + 1}: ${esc(x.t)}</h1><p>${esc(x.b).replace(/\n/g, '<br>')}</p><br style="page-break-after:always">`).join('') + '</body></html>', 'application/msword'); }));
+    main.appendChild(slide); wrap.append(th, main); p.append(bar, wrap); show(0);
+  };
+
+  /* ---------- Tool 4: Tally ledger ---------- */
+  const tally = p => {
+    const KEY = 'acec_tally', v = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } })();
+    const f = mk('div', 'cs-f cs-two', `<div><label>Date</label><input type="date" id="tD"></div><div><label>Voucher</label><select id="tV"><option>Payment</option><option>Receipt</option><option>Sales</option><option>Purchase</option><option>Journal</option></select></div>
+    <div><label>Ledger / Particulars</label><input id="tL" placeholder="e.g. Cash, Sales A/c"></div><div><label>Debit (Dr) ₹</label><input id="tDr" type="number" min="0"></div><div><label>Credit (Cr) ₹</label><input id="tCr" type="number" min="0"></div><div><label>Narration</label><input id="tN"></div>`);
+    const out = mk('div'), bar = mk('div', 'cs-bar');
+    const draw = () => {
+      try { localStorage.setItem(KEY, JSON.stringify(v)); } catch { }
+      const led = {}; v.forEach(x => { led[x.l] = led[x.l] || { d: 0, c: 0 }; led[x.l].d += +x.d; led[x.l].c += +x.c; });
+      const td = v.reduce((a, x) => a + +x.d, 0), tc = v.reduce((a, x) => a + +x.c, 0);
+      out.innerHTML = `<h4>Day Book</h4><div class="cs-grid-w"><table class="cs-tbl"><tr><th>Date</th><th>Type</th><th>Particulars</th><th class="r">Dr</th><th class="r">Cr</th><th>Narration</th><th></th></tr>${v.map((x, i) => `<tr><td>${esc(x.dt)}</td><td>${esc(x.v)}</td><td>${esc(x.l)}</td><td class="r">${(+x.d).toFixed(2)}</td><td class="r">${(+x.c).toFixed(2)}</td><td>${esc(x.n)}</td><td><button data-x="${i}">✕</button></td></tr>`).join('')}</table></div>
+      <h4 style="margin-top:12px">Trial Balance</h4><table class="cs-tbl"><tr><th>Ledger</th><th class="r">Debit</th><th class="r">Credit</th><th class="r">Closing</th></tr>${Object.entries(led).map(([k, a]) => { const b = a.d - a.c; return `<tr><td>${esc(k)}</td><td class="r">${a.d.toFixed(2)}</td><td class="r">${a.c.toFixed(2)}</td><td class="r">${Math.abs(b).toFixed(2)} ${b >= 0 ? 'Dr' : 'Cr'}</td></tr>`; }).join('')}<tr><th>Total</th><th class="r">${td.toFixed(2)}</th><th class="r">${tc.toFixed(2)}</th><th class="r">${td === tc ? '✔ Tallied' : '⚠ Difference ' + Math.abs(td - tc).toFixed(2)}</th></tr></table>`;
+      out.querySelectorAll('[data-x]').forEach(b => b.onclick = () => { v.splice(+b.dataset.x, 1); draw(); });
+    };
+    bar.append(btn('+ Add Entry', () => { const g = id => $('#' + id, f).value; if (!g('tL').trim()) return alert('Ledger name likhein'); v.push({ dt: g('tD') || new Date().toISOString().slice(0, 10), v: g('tV'), l: g('tL').trim(), d: g('tDr') || 0, c: g('tCr') || 0, n: g('tN') }); draw(); }),
+      btn('⬇ CSV', () => dl('daybook.csv', '\ufeffDate,Type,Particulars,Dr,Cr,Narration\n' + v.map(x => [x.dt, x.v, x.l, x.d, x.c, x.n].map(z => '"' + String(z).replace(/"/g, '""') + '"').join(',')).join('\n'), 'text/csv')),
+      btn('⬇ PDF', () => pdf(out, 'tally-ledger.pdf')), btn('Clear', () => { if (confirm('Saari entries delete karein?')) { v.length = 0; draw(); } }));
+    p.append(f, bar, out); draw();
+  };
+
+  window.CS_TOOLS = [
+    { id: 'writer', icon: '📝', label: 'Writer / MS Word', render: writer },
+    { id: 'calc', icon: '📊', label: 'Calc / MS Excel', render: calc },
+    { id: 'impress', icon: '📽️', label: 'Impress / PowerPoint', render: impress },
+    { id: 'tally', icon: '📒', label: 'Tally Prime / Ledger', render: tally }
+  ];
+
+  /* ---------- Results hub ---------- */
+  const CERT_DB = [{ no: 'ACEC/1002', name: 'Deva Vishwakarma', course: 'Tally Prime with GST', grade: 'A', date: '08-SEP-2026' }]; // naye certificates yahin add karein
+  const results = [
+    { t: '🎓 CCC Result / Certificate', d: 'NIELIT ki official site par CCC result dekhein.', u: 'https://nielit.gov.in/' },
+    { t: '💻 O-Level Result / Certificate', d: 'NIELIT student portal par O-Level result aur certificate.', u: 'https://student.nielit.gov.in/' },
+    { t: '🏛️ NIELIT Verification', d: 'Certificate verification ke liye official portal.', u: 'https://nielit.gov.in/content/verification' }
+  ];
+  const rh = $('#csResults');
+  if (rh) {
+    results.forEach(r => { const c = mk('div', 'cs-link', `<h3>${r.t}</h3><p>${r.d}</p>`); c.append(Object.assign(mk('a', 'btn sm', 'Open Official Site ↗'), { href: r.u, target: '_blank', rel: 'noopener' }), mk('span', '', ' '), btn('Embed', () => { if (!c.$f) { c.$f = mk('iframe'); c.$f.src = r.u; c.appendChild(c.$f); c.appendChild(mk('p', '', 'Agar page khali dikhe to site embed block karti hai — "Open Official Site" use karein.')); } })); rh.appendChild(c); });
+    const v = mk('div', 'cs-link', `<h3>✅ Access Certificate Verify</h3><p>Certificate No. (jaise ACEC/1002) daalein.</p><div class="cs-bar"><input id="cvNo" placeholder="ACEC/1002"></div><div id="cvOut"></div>`);
+    $('.cs-bar', v).appendChild(btn('Verify', () => { const n = $('#cvNo').value.trim().toUpperCase(), r = CERT_DB.find(x => x.no === n); $('#cvOut').innerHTML = r ? `<p style="color:#22c55e">✔ Valid: ${esc(r.name)} — ${esc(r.course)}, Grade ${esc(r.grade)}, ${esc(r.date)}</p>` : '<p style="color:#ef4444">✖ Record nahi mila. Centre se sampark karein: 9935035866</p>'; }));
+    rh.appendChild(v);
+  }
+
+  /* ---------- Resume + Fee Receipt ---------- */
+  const resume = p => {
+    const F = [['name', 'Name', 'Rahul Kumar'], ['father', "Father's Name", 'Shri Ram Kumar'], ['dob', 'Date of Birth', '01-01-2003'], ['phone', 'Mobile', '9876543210'], ['email', 'Email', 'rahul@email.com'], ['address', 'Address', 'Raebareli, Uttar Pradesh'], ['qual', 'Qualification (ek line me ek)', '10th - UP Board\n12th - UP Board\nO-Level - NIELIT'], ['skills', 'Skills (ek line me ek)', 'MS Office\nTally Prime with GST\nTyping'], ['obj', 'Career Objective', 'Computer field me apni skills ke saath company ki growth me yogdaan dena.']];
+    const form = mk('div', 'cs-f'), tpl = mk('select', '', '<option value="t1">Template 1 — Blue Header</option><option value="t2">Template 2 — Classic</option>'), prev = mk('div', 'cs-paper cs-rs t1');
+    F.forEach(([k, l, d]) => { const w = mk('div', '', `<label>${l}</label>` + (d.length > 40 || d.includes('\n') ? `<textarea rows="3" data-k="${k}">${esc(d)}</textarea>` : `<input data-k="${k}" value="${esc(d)}">`)); form.appendChild(w); });
+    const li = s => s.split('\n').filter(Boolean).map(x => `<li>${esc(x)}</li>`).join('');
+    const draw = () => { const g = k => $(`[data-k=${k}]`, form).value; prev.className = 'cs-paper cs-rs ' + tpl.value; prev.innerHTML = `<h1 style="margin:0 0 8px">${esc(g('name'))}</h1><div>📞 ${esc(g('phone'))} | ✉ ${esc(g('email'))}<br>📍 ${esc(g('address'))}</div><h4>Career Objective</h4><p>${esc(g('obj'))}</p><h4>Educational Qualification</h4><ul>${li(g('qual'))}</ul><h4>Skills</h4><ul>${li(g('skills'))}</ul><h4>Personal Details</h4><p>Father's Name: ${esc(g('father'))}<br>Date of Birth: ${esc(g('dob'))}</p>`; };
+    form.oninput = tpl.onchange = draw; draw();
+    const bar = mk('div', 'cs-bar'); bar.append(tpl, btn('⬇ Download PDF', () => pdf(prev, 'resume.pdf')), btn('🖨 Print', () => { prev.classList.add('cs-printing'); window.print(); prev.classList.remove('cs-printing'); }));
+    p.append(mk('div', 'cs-two')); p.firstChild.append(mk('div', '', '').appendChild(form).parentNode, mk('div')); p.firstChild.lastChild.append(bar, prev);
+  };
+  const receipt = p => {
+    const n = (() => { try { return (+localStorage.getItem('acec_rc') || 273) + 1; } catch { return 274; } })();
+    const form = mk('div', 'cs-f', `<label>Receipt No.</label><input data-k="no" value="${n}"><label>Student Name</label><input data-k="name"><label>Father / Husband Name</label><input data-k="father"><label>Course</label><input data-k="course" placeholder="O-Level / CCC / Tally"><label>Amount (₹)</label><input data-k="amt" type="number"><label>Payment Mode</label><select data-k="mode"><option>Cash</option><option>Online</option><option>Cheque</option><option>D.Draft</option></select><label>Date</label><input data-k="date" type="date" value="${new Date().toISOString().slice(0, 10)}"><label>Next Due Date</label><input data-k="due" type="date"><label>Late Fee (₹)</label><input data-k="late" type="number"><label>Balance (₹)</label><input data-k="bal" type="number">`);
+    const prev = mk('div', 'cs-paper cs-rc'), words = x => { x = Math.floor(+x) || 0; const o = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'], t = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']; const b = n => n < 20 ? o[n] : t[Math.floor(n / 10)] + ' ' + o[n % 10]; const h = n => (n > 99 ? o[Math.floor(n / 100)] + ' Hundred ' : '') + b(n % 100); if (!x) return 'Zero'; return [[1e7, 'Crore'], [1e5, 'Lakh'], [1e3, 'Thousand']].reduce((s, [d, nm]) => { if (x >= d) { s += h(Math.floor(x / d)) + ' ' + nm + ' '; x %= d; } return s; }, '') + (x ? h(x) : ''); };
+    const draw = () => { const g = k => $(`[data-k=${k}]`, form).value; prev.innerHTML = `<div class="hd"><svg width="56" height="56" viewBox="0 0 100 100"><polygon points="50,8 95,90 5,90" fill="#1e3a8a"/><polygon points="50,30 78,80 22,80" fill="#fff"/><polygon points="50,45 66,76 34,76" fill="#f59e0b"/></svg><div><h2 style="text-align:left">ACCESS COMPUTER EDUCATION CENTRE</h2><small>Run under Social Welfare Society of Education (Regd. Act 21-1860, Govt. of India)<br>H.No.438-A, Sanjay Nagar Colony, Behind Govt. Girls Inter College, Bachhrawan, Raebareli-229301 | Mob: 9935035866, 6393512412</small></div></div><div style="display:flex;justify-content:space-between"><b>FEE RECEIPT</b><span>Receipt No.: <b>${esc(g('no'))}</b> &nbsp; Date: <b>${esc(g('date'))}</b></span></div><div class="ln">Received with thanks from Mr./Miss/Mrs. <b>${esc(g('name'))}</b></div><div class="ln">S/o, D/o, W/o <b>${esc(g('father'))}</b></div><div class="ln">the sum of Rupees (Non Refundable) <b>${words(g('amt'))} Only</b></div><div class="ln">By ${esc(g('mode'))} &nbsp; Against: <b>${esc(g('course'))}</b></div><div class="ln">Late Fee: ₹${esc(g('late') || 0)} &nbsp; Balance: ₹${esc(g('bal') || 0)} &nbsp; Next Due Date: ${esc(g('due'))}</div><div style="display:flex;justify-content:space-between;align-items:end;margin-top:14px"><span class="amt">₹ ${esc(g('amt') || 0)}/-</span><span>_____________<br>Auth. Signature</span></div><small>Note: Deposited amount will not be refunded.</small>`; };
+    form.oninput = draw; draw();
+    const bar = mk('div', 'cs-bar'); bar.append(btn('⬇ Download PDF', () => { try { localStorage.setItem('acec_rc', $('[data-k=no]', form).value); } catch { } pdf(prev, 'fee-receipt-' + $('[data-k=no]', form).value + '.pdf'); }), btn('🖨 Print', () => { prev.classList.add('cs-printing'); window.print(); prev.classList.remove('cs-printing'); }));
+    const g2 = mk('div', 'cs-two'), r = mk('div'); r.append(bar, prev); g2.append(form, r); p.appendChild(g2);
+  };
+  window.CS_TOOLS2 = [{ id: 'resume', icon: '📄', label: 'Resume Builder', render: resume }, { id: 'receipt', icon: '🧾', label: 'Fee Receipt', render: receipt }];
+
+  const start = () => { const a = $('#csTabs'), b = $('#csTabs2'); if (a) tabs(a, $('#csPanel'), window.CS_TOOLS); if (b) tabs(b, $('#csPanel2'), window.CS_TOOLS2); };
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', start) : start();
+})();
+
+/* ============================================================
+   ⌨️ SHORTCUT KEYS & QUIZ MASTER  +  ✨ HERO CHARACTER MORPH
+   1) Software selector -> instant shortcut table (search enabled)
+   2) 3D Neon Quiz (Next / Previous, wrong-answer floating neon card)
+   3) Downloadable / viewable PDF cheat sheets (generated in-browser)
+   4) Hero walk-in -> hands down -> morph into neon welcome box
+   ============================================================ */
+(function () {
+  'use strict';
+  const q = (s, r) => (r || document).querySelector(s);
+  const qa = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  /* ---------- DATA ( keys are written as "Ctrl + Shift + S" ) ---------- */
+  const SK = [
+    { id: 'writer', name: 'LibreOffice Writer', icon: '📝', list: [
+      ['Ctrl + N', 'Create a new document'], ['Ctrl + O', 'Open a document'], ['Ctrl + S', 'Save the document'], ['Ctrl + Shift + S', 'Save As'],
+      ['Ctrl + P', 'Print the document'], ['Ctrl + Z', 'Undo last action'], ['Ctrl + Y', 'Redo last action'], ['Ctrl + A', 'Select all content'],
+      ['Ctrl + C', 'Copy selection'], ['Ctrl + X', 'Cut selection'], ['Ctrl + V', 'Paste from clipboard'], ['Ctrl + Shift + V', 'Open Paste Special dialog'],
+      ['Ctrl + B', 'Bold text'], ['Ctrl + I', 'Italic text'], ['Ctrl + U', 'Underline text'], ['Ctrl + E', 'Center align paragraph'],
+      ['Ctrl + L', 'Left align paragraph'], ['Ctrl + R', 'Right align paragraph'], ['Ctrl + J', 'Justify paragraph'], ['Ctrl + H', 'Open Find & Replace'],
+      ['F7', 'Check spelling'], ['Ctrl + Enter', 'Insert a page break'], ['Ctrl + 1', 'Apply Heading 1 style'], ['Ctrl + Shift + P', 'Superscript'],
+      ['Ctrl + Shift + B', 'Subscript'], ['Ctrl + K', 'Insert hyperlink'], ['F11', 'Open Styles sidebar'], ['F5', 'Open Navigator'],
+      ['Ctrl + Home', 'Go to start of document'], ['Ctrl + End', 'Go to end of document'], ['Ctrl + Q', 'Quit LibreOffice']
+    ] },
+    { id: 'word', name: 'MS Word', icon: '📘', list: [
+      ['Ctrl + N', 'New blank document'], ['Ctrl + O', 'Open a document'], ['Ctrl + S', 'Save'], ['F12', 'Save As'], ['Ctrl + P', 'Print'],
+      ['Ctrl + Z', 'Undo'], ['Ctrl + Y', 'Redo'], ['Ctrl + A', 'Select all'], ['Ctrl + C', 'Copy'], ['Ctrl + X', 'Cut'], ['Ctrl + V', 'Paste'],
+      ['Ctrl + B', 'Bold'], ['Ctrl + I', 'Italic'], ['Ctrl + U', 'Underline'], ['Ctrl + E', 'Center align'], ['Ctrl + L', 'Left align'],
+      ['Ctrl + R', 'Right align'], ['Ctrl + J', 'Justify'], ['Ctrl + F', 'Find (Navigation pane)'], ['Ctrl + H', 'Find and Replace'],
+      ['Ctrl + G', 'Go To page / line'], ['F7', 'Spelling and Grammar check'], ['Ctrl + Enter', 'Insert a page break'], ['Ctrl + Alt + 1', 'Apply Heading 1'],
+      ['Ctrl + K', 'Insert hyperlink'], ['Ctrl + D', 'Open Font dialog'], ['Ctrl + Shift + C', 'Copy formatting'], ['Ctrl + Shift + V', 'Paste formatting'],
+      ['Shift + F3', 'Change text case'], ['Ctrl + =', 'Subscript'], ['Ctrl + Shift + =', 'Superscript'], ['Ctrl + 2', 'Double line spacing'],
+      ['Ctrl + W', 'Close the document'], ['Ctrl + Home', 'Go to start of document']
+    ] },
+    { id: 'calc', name: 'LibreOffice Calc', icon: '📗', list: [
+      ['Ctrl + S', 'Save the spreadsheet'], ['Ctrl + Z', 'Undo'], ['Ctrl + Home', 'Go to cell A1'], ['Ctrl + End', 'Go to last used cell'],
+      ['F2', 'Edit the active cell'], ['Ctrl + ;', 'Insert current date'], ['Ctrl + Shift + ;', 'Insert current time'], ['Ctrl + D', 'Fill down'],
+      ['Shift + F4', 'Cycle absolute / relative reference'], ['Alt + =', 'AutoSum'], ['Ctrl + Space', 'Select entire column'], ['Shift + Space', 'Select entire row'],
+      ['Ctrl + 1', 'Open Format Cells dialog'], ['Ctrl + Shift + 4', 'Currency format'], ['Ctrl + Shift + 5', 'Percent format'], ['Ctrl + Shift + L', 'Toggle AutoFilter'],
+      ['Ctrl + Page Down', 'Move to next sheet'], ['Ctrl + Page Up', 'Move to previous sheet'], ['Ctrl + F2', 'Open Function Wizard'], ['F9', 'Recalculate formulas'],
+      ['Ctrl + Shift + V', 'Open Paste Special'], ['Ctrl + Enter', 'Fill selection with the entry'], ['F5', 'Open Navigator']
+    ] },
+    { id: 'excel', name: 'MS Excel', icon: '📊', list: [
+      ['Ctrl + N', 'New workbook'], ['Ctrl + O', 'Open workbook'], ['Ctrl + S', 'Save'], ['F12', 'Save As'], ['Ctrl + P', 'Print'], ['Ctrl + Z', 'Undo'],
+      ['Ctrl + Y', 'Redo'], ['Ctrl + C', 'Copy'], ['Ctrl + V', 'Paste'], ['Ctrl + B', 'Bold'], ['F2', 'Edit the active cell'],
+      ['F4', 'Toggle absolute / relative reference'], ['Ctrl + ;', 'Insert current date'], ['Ctrl + Shift + ;', 'Insert current time'], ['Ctrl + D', 'Fill down'],
+      ['Ctrl + R', 'Fill right'], ['Alt + =', 'AutoSum'], ['Ctrl + Space', 'Select entire column'], ['Shift + Space', 'Select entire row'],
+      ['Ctrl + Home', 'Go to cell A1'], ['Ctrl + End', 'Go to last used cell'], ['Ctrl + 1', 'Open Format Cells'], ['Ctrl + Shift + L', 'Toggle filter'],
+      ['Ctrl + T', 'Create a table'], ['Ctrl + Page Down', 'Move to next worksheet'], ['Shift + F11', 'Insert a new worksheet'], ['Ctrl + 9', 'Hide selected rows'],
+      ['Ctrl + 0', 'Hide selected columns'], ['Alt + Enter', 'New line inside a cell'], ['F11', 'Create chart on a new sheet'], ['Ctrl + F', 'Find'],
+      ['Ctrl + H', 'Replace'], ['F9', 'Calculate the workbook']
+    ] },
+    { id: 'tally', name: 'Tally Prime', icon: '🧾', list: [
+      ['F4', 'Contra voucher'], ['F5', 'Payment voucher'], ['F6', 'Receipt voucher'], ['F7', 'Journal voucher'], ['F8', 'Sales voucher'],
+      ['F9', 'Purchase voucher'], ['Ctrl + F8', 'Credit Note voucher'], ['Ctrl + F9', 'Debit Note voucher'], ['Alt + F7', 'Stock Journal voucher'],
+      ['Ctrl + A', 'Accept / save the screen'], ['Ctrl + Q', 'Quit or abandon the screen'], ['Esc', 'Go back / cancel'], ['Alt + C', 'Create a master on the fly'],
+      ['Alt + D', 'Delete a voucher or master'], ['Alt + X', 'Cancel a voucher'], ['Alt + I', 'Insert a voucher'], ['Alt + 2', 'Duplicate a voucher'],
+      ['Ctrl + P', 'Print the report'], ['Ctrl + E', 'Export the report'], ['F12', 'Open Configure screen'], ['Alt + G', 'Go To any screen']
+    ] },
+    { id: 'photoshop', name: 'Adobe Photoshop', icon: '🎨', list: [
+      ['Ctrl + N', 'New document'], ['Ctrl + O', 'Open a file'], ['Ctrl + S', 'Save'], ['Ctrl + Shift + S', 'Save As'], ['Ctrl + Z', 'Undo / Redo (toggle)'],
+      ['Ctrl + Alt + Z', 'Step backward in history'], ['Ctrl + Shift + Z', 'Step forward in history'], ['Ctrl + J', 'Duplicate the layer'],
+      ['Ctrl + Shift + N', 'Create a new layer'], ['Ctrl + T', 'Free Transform'], ['Ctrl + D', 'Deselect'], ['Ctrl + Shift + I', 'Inverse the selection'],
+      ['Ctrl + A', 'Select all'], ['Ctrl + E', 'Merge layer down'], ['Ctrl + Shift + E', 'Merge visible layers'], ['Ctrl + G', 'Group the layers'],
+      ['V', 'Move tool'], ['M', 'Marquee tool'], ['L', 'Lasso tool'], ['W', 'Quick Selection / Magic Wand tool'], ['C', 'Crop tool'], ['B', 'Brush tool'],
+      ['E', 'Eraser tool'], ['T', 'Type tool'], ['G', 'Gradient / Paint Bucket tool'], ['X', 'Swap foreground and background colors'], ['D', 'Reset default colors'],
+      ['Ctrl + 0', 'Fit image on screen'], ['Ctrl + Alt + I', 'Open Image Size'], ['Ctrl + Alt + C', 'Open Canvas Size'], ['Ctrl + L', 'Open Levels'],
+      ['Ctrl + M', 'Open Curves'], ['Ctrl + U', 'Open Hue / Saturation']
+    ] },
+    { id: 'powerpoint', name: 'MS PowerPoint', icon: '📙', list: [
+      ['Ctrl + N', 'New presentation'], ['Ctrl + S', 'Save'], ['Ctrl + M', 'Insert a new slide'], ['Ctrl + D', 'Duplicate the selected object'],
+      ['F5', 'Start slide show from the beginning'], ['Shift + F5', 'Start slide show from the current slide'], ['Esc', 'End the slide show'],
+      ['B', 'Black screen during show'], ['W', 'White screen during show'], ['N', 'Next slide during show'], ['P', 'Previous slide during show'],
+      ['Ctrl + P', 'Pen pointer (during slide show)'], ['Ctrl + K', 'Insert hyperlink'], ['Ctrl + G', 'Group objects'], ['Ctrl + Shift + G', 'Ungroup objects'],
+      ['F7', 'Check spelling'], ['Ctrl + B', 'Bold'], ['Ctrl + E', 'Center align'], ['Ctrl + Shift + C', 'Copy formatting']
+    ] },
+    { id: 'windows', name: 'Windows Basics', icon: '🪟', list: [
+      ['Win + D', 'Show or hide the desktop'], ['Win + E', 'Open File Explorer'], ['Win + L', 'Lock the PC'], ['Win + R', 'Open the Run dialog'],
+      ['Win + I', 'Open Settings'], ['Alt + Tab', 'Switch between open apps'], ['Alt + F4', 'Close the active window'], ['Ctrl + Shift + Esc', 'Open Task Manager'],
+      ['Win + Shift + S', 'Take a screenshot (Snipping tool)'], ['Win + V', 'Open Clipboard history'], ['F2', 'Rename the selected file'],
+      ['Shift + Delete', 'Delete a file permanently'], ['Win + Tab', 'Open Task View'], ['Ctrl + Alt + Delete', 'Open the security options screen'],
+      ['Win + A', 'Open Quick Settings'], ['Win + P', 'Project to a second screen'], ['PrtScn', 'Copy screenshot of the full screen']
+    ] }
+  ];
+  const byId = id => SK.find(s => s.id === id);
+  const kbd = keys => keys.split(' + ').map(k => '<kbd>' + esc(k) + '</kbd>').join('<i class="sk-plus">+</i>');
+
+  /* ---------- tiny toast ---------- */
+  let toastEl, toastT;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'sk-toast'; document.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT);
+    toastT = setTimeout(() => toastEl.classList.remove('show'), 2600);
+  }
+
+  /* ---------- PDF cheat sheets (html2pdf, generated in browser) ---------- */
+  function sheetEl(sw) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;left:-10000px;top:0;width:760px;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;padding:26px';
+    let rows = '';
+    sw.list.forEach((r, i) => { rows += '<tr style="background:' + (i % 2 ? '#f3f7ff' : '#fff') + '"><td style="padding:7px 9px;border:1px solid #cfd8ee;width:36px;text-align:center;color:#666">' + (i + 1) +
+      '</td><td style="padding:7px 9px;border:1px solid #cfd8ee;width:210px;font-weight:700;font-family:Consolas,monospace;color:#3a1aa8">' + esc(r[0]) +
+      '</td><td style="padding:7px 9px;border:1px solid #cfd8ee">' + esc(r[1]) + '</td></tr>'; });
+    wrap.innerHTML = '<div style="border-bottom:4px solid #00b8d4;padding-bottom:10px;margin-bottom:14px"><div style="font-size:13px;color:#555;letter-spacing:1px">ACCESS COMPUTER CENTER &bull; BACHHRAWAN, RAEBARELI</div>' +
+      '<div style="font-size:26px;font-weight:800;color:#1a1a3a;margin-top:4px">' + esc(sw.name) + ' &mdash; Shortcut Keys Cheat Sheet</div></div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="background:#1a1a3a;color:#fff"><th style="padding:8px;border:1px solid #1a1a3a">#</th><th style="padding:8px;border:1px solid #1a1a3a;text-align:left">Shortcut Key</th><th style="padding:8px;border:1px solid #1a1a3a;text-align:left">Function</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div style="margin-top:16px;font-size:11px;color:#777;text-align:right">Created via Access Computer Center &bull; ' + sw.list.length + ' shortcuts</div>';
+    document.body.appendChild(wrap);
+    return wrap;
+  }
+  function makePdf(id, mode) {
+    const sw = byId(id); if (!sw) return;
+    if (typeof window.html2pdf !== 'function') {
+      toast('PDF engine load nahi hua. Internet check karke dobara try karein.');
+      return;
+    }
+    const win = mode === 'view' ? window.open('', '_blank') : null;
+    if (win) win.document.write('<title>' + esc(sw.name) + '</title><body style="background:#050508;color:#00f0ff;font-family:sans-serif;display:grid;place-items:center;height:100vh">Preparing your PDF...</body>');
+    toast('PDF ban raha hai…');
+    const el = sheetEl(sw);
+    const job = window.html2pdf().set({
+      margin: 8, filename: sw.name.replace(/\s+/g, '_') + '_Shortcut_Keys.pdf',
+      image: { type: 'jpeg', quality: .96 }, html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['css', 'legacy'] }
+    }).from(el);
+    const done = () => { el.remove(); };
+    if (mode === 'view') {
+      job.outputPdf('bloburl').then(u => { if (win && !win.closed) win.location.href = u; else window.open(u, '_blank'); done(); })
+        .catch(() => { done(); if (win) win.close(); toast('PDF nahi ban saka, dobara try karein.'); });
+    } else {
+      job.save().then(() => { done(); toast('✅ PDF download ho gaya'); }).catch(() => { done(); toast('PDF nahi ban saka, dobara try karein.'); });
+    }
+  }
+
+  /* ---------- Selector + table ---------- */
+  const cardsEl = q('#skCards'), tableEl = q('#skTable'), headEl = q('#skHead'), searchEl = q('#skSearch');
+  let cur = 'writer';
+  function renderCards() {
+    if (!cardsEl) return;
+    cardsEl.innerHTML = SK.map(s => '<div class="sk-card' + (s.id === cur ? ' on' : '') + '" data-id="' + s.id + '" role="button" tabindex="0" aria-label="' + esc(s.name) + '">' +
+      '<div class="sk-ic">' + s.icon + '</div><b>' + esc(s.name) + '</b><small>' + s.list.length + ' shortcuts</small>' +
+      '<div class="sk-pdfs"><button type="button" data-pdf="view" data-id="' + s.id + '" title="View PDF">👁 View</button><button type="button" data-pdf="dl" data-id="' + s.id + '" title="Download PDF">⬇ PDF</button></div></div>').join('');
+  }
+  function renderTable() {
+    if (!tableEl) return;
+    const sw = byId(cur), term = (searchEl && searchEl.value || '').trim().toLowerCase();
+    const rows = sw.list.filter(r => !term || r[0].toLowerCase().includes(term) || r[1].toLowerCase().includes(term));
+    headEl.innerHTML = '<div><h3>' + sw.icon + ' ' + esc(sw.name) + '</h3><small>' + sw.list.length + ' professional shortcut keys</small></div>' +
+      '<div class="sk-head-btns"><button type="button" class="btn sm ghost" data-pdf="view" data-id="' + sw.id + '">👁 View PDF</button><button type="button" class="btn sm" data-pdf="dl" data-id="' + sw.id + '">⬇ Download PDF</button></div>';
+    tableEl.innerHTML = rows.length ? '<table class="sk-table"><thead><tr><th>#</th><th>Shortcut Key</th><th>Function</th></tr></thead><tbody>' +
+      rows.map((r, i) => '<tr><td>' + (i + 1) + '</td><td class="sk-keys">' + kbd(r[0]) + '</td><td>' + esc(r[1]) + '</td></tr>').join('') + '</tbody></table>'
+      : '<p class="sk-empty">Koi shortcut nahi mila. Dusra word try karein.</p>';
+  }
+  function select(id) {
+    cur = id; if (searchEl) searchEl.value = '';
+    renderCards(); renderTable();
+    if (qz.sel) { qz.sel.value = id; startQuiz(id); }
+  }
+  if (cardsEl) {
+    cardsEl.addEventListener('click', e => {
+      const b = e.target.closest('[data-pdf]');
+      if (b) { e.stopPropagation(); makePdf(b.dataset.id, b.dataset.pdf); return; }
+      const c = e.target.closest('.sk-card'); if (c) select(c.dataset.id);
+    });
+    cardsEl.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('sk-card')) { e.preventDefault(); select(e.target.dataset.id); } });
+  }
+  if (headEl) headEl.addEventListener('click', e => { const b = e.target.closest('[data-pdf]'); if (b) makePdf(b.dataset.id, b.dataset.pdf); });
+  if (searchEl) searchEl.addEventListener('input', renderTable);
+
+  /* ---------- 3D Neon Quiz ---------- */
+  const qz = { box: q('#skQuiz'), sel: null, st: null };
+  const QN = 10;
+  function pool(soft) {
+    if (soft === 'all') { const p = []; SK.forEach(s => s.list.forEach(r => p.push({ sid: s.id, sn: s.name, k: r[0], a: r[1] }))); return p; }
+    const s = byId(soft); return s.list.map(r => ({ sid: s.id, sn: s.name, k: r[0], a: r[1] }));
+  }
+  function build(soft) {
+    const items = shuffle(pool(soft)).slice(0, QN);
+    return items.map(it => {
+      const same = pool(it.sid);
+      const keyType = Math.random() < .6;
+      const field = keyType ? 'k' : 'a';
+      const others = shuffle(same.filter(x => x[field] !== it[field])).map(x => x[field]);
+      const uniq = []; others.forEach(o => { if (uniq.indexOf(o) < 0 && uniq.length < 3) uniq.push(o); });
+      const opts = shuffle([it[field]].concat(uniq));
+      return { soft: it.sn, keyType, text: keyType ? it.a : it.k, answer: it[field], opts, pick: -1 };
+    });
+  }
+  function bestGet() { try { return JSON.parse(localStorage.getItem('acec_sk_best') || '{}'); } catch (e) { return {}; } }
+  function bestSet(k, v) { try { const b = bestGet(); if (!b[k] || v > b[k]) { b[k] = v; localStorage.setItem('acec_sk_best', JSON.stringify(b)); } } catch (e) { /* storage blocked */ } }
+  function startQuiz(soft) { qz.st = { soft, qs: build(soft), i: 0, done: false }; drawQuiz(); }
+  function score() { return qz.st.qs.filter(x => x.pick >= 0 && x.opts[x.pick] === x.answer).length; }
+  function drawQuiz() {
+    const st = qz.st, box = qz.box; if (!box) return;
+    const body = q('#skQBody', box), bar = q('#skBar', box), sc = q('#skScore', box);
+    sc.textContent = '⭐ ' + score() + ' / ' + st.qs.length;
+    if (st.done) {
+      const s = score(), pct = Math.round(s / st.qs.length * 100);
+      bestSet(st.soft, pct);
+      const best = bestGet()[st.soft] || pct;
+      bar.style.width = '100%';
+      body.innerHTML = '<div class="sk-result"><div class="sk-trophy">' + (pct >= 80 ? '🏆' : pct >= 50 ? '🎯' : '📚') + '</div><h4>' + s + ' / ' + st.qs.length + ' Correct</h4>' +
+        '<p>' + (pct >= 80 ? 'Zabardast! Aap shortcut master ho.' : pct >= 50 ? 'Accha hai! Thoda aur practice karein.' : 'Cheat sheet padhkar dobara try karein.') + '</p><small>Best score: ' + best + '%</small>' +
+        '<div class="sk-nav"><button type="button" class="btn ghost" id="skReview">Review Answers</button><button type="button" class="btn" id="skRestart">↻ Restart Quiz</button></div></div>';
+      return;
+    }
+    const cq = st.qs[st.i], answered = cq.pick >= 0;
+    bar.style.width = ((st.i + (answered ? 1 : 0)) / st.qs.length * 100) + '%';
+    const qtext = cq.keyType ? 'Which shortcut key is used to <b>' + esc(cq.text) + '</b>?' : 'What does <span class="sk-qk">' + kbd(cq.text) + '</span> do?';
+    body.innerHTML = '<div class="sk-qmeta"><span>Question ' + (st.i + 1) + ' / ' + st.qs.length + '</span><span class="sk-chip">' + esc(cq.soft) + '</span></div>' +
+      '<div class="sk-qtext">' + qtext + '</div><div class="sk-opts">' +
+      cq.opts.map((o, i) => {
+        let cls = 'sk-opt';
+        if (answered) { if (o === cq.answer) cls += ' right'; else if (i === cq.pick) cls += ' wrong'; cls += ' lock'; }
+        return '<button type="button" class="' + cls + '" data-i="' + i + '"><span class="sk-letter">' + 'ABCD'[i] + '</span><span class="sk-otxt">' + (cq.keyType ? kbd(o) : esc(o)) + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="sk-fb" id="skFb">' + (answered ? (cq.opts[cq.pick] === cq.answer ? '✅ Correct answer!' : '❌ Correct: ' + (cq.keyType ? esc(cq.answer) : esc(cq.answer))) : 'Ek option chunein') + '</div>' +
+      '<div class="sk-nav"><button type="button" class="btn ghost" id="skPrev"' + (st.i === 0 ? ' disabled' : '') + '>◀ Previous</button>' +
+      '<button type="button" class="btn" id="skNext">' + (st.i === st.qs.length - 1 ? 'Finish ✔' : 'Next ▶') + '</button></div>';
+  }
+  function showWrong(cq) {
+    const box = qz.box; let pop = q('.sk-pop', box); if (pop) pop.remove();
+    pop = document.createElement('div'); pop.className = 'sk-pop'; pop.setAttribute('role', 'alertdialog');
+    pop.innerHTML = '<div class="sk-pop-card"><div class="sk-x">✖</div><h4>Wrong Answer</h4><p>Sahi jawab:</p><div class="sk-correct">' + (cq.keyType ? kbd(cq.answer) : esc(cq.answer)) + '</div><button type="button" class="btn sm" data-close-pop>Got it</button></div>';
+    box.appendChild(pop);
+    const close = () => { pop.classList.add('out'); setTimeout(() => pop.remove(), 320); };
+    pop.addEventListener('click', e => { if (e.target === pop || e.target.hasAttribute('data-close-pop')) close(); });
+    setTimeout(close, 4200);
+  }
+  function initQuiz() {
+    const box = qz.box; if (!box) return;
+    box.innerHTML = '<div class="sk-qhead"><h3>🎮 Quiz Master</h3><span class="sk-score" id="skScore"></span></div>' +
+      '<div class="sk-qctl"><select id="skQSel" aria-label="Quiz software"><option value="all">🔀 Mix: All Software</option>' + SK.map(s => '<option value="' + s.id + '">' + s.icon + ' ' + esc(s.name) + '</option>').join('') + '</select>' +
+      '<button type="button" class="btn sm ghost" id="skNew">New Quiz</button></div>' +
+      '<div class="sk-prog"><i id="skBar"></i></div><div id="skQBody"></div>';
+    qz.sel = q('#skQSel', box); qz.sel.value = cur;
+    qz.sel.addEventListener('change', () => startQuiz(qz.sel.value));
+    q('#skNew', box).addEventListener('click', () => startQuiz(qz.sel.value));
+    box.addEventListener('click', e => {
+      const st = qz.st; if (!st) return;
+      const opt = e.target.closest('.sk-opt');
+      if (opt && !st.done) {
+        const cq = st.qs[st.i]; if (cq.pick >= 0) return;
+        cq.pick = +opt.dataset.i; drawQuiz();
+        if (cq.opts[cq.pick] !== cq.answer) showWrong(cq);
+        return;
+      }
+      if (e.target.id === 'skPrev' && st.i > 0) { st.i--; drawQuiz(); }
+      else if (e.target.id === 'skNext') {
+        const cq = st.qs[st.i];
+        if (cq.pick < 0) { const fb = q('#skFb', box); if (fb) { fb.classList.remove('shake'); void fb.offsetWidth; fb.classList.add('shake'); fb.textContent = '⚠ Pehle jawab chunein'; } return; }
+        if (st.i < st.qs.length - 1) { st.i++; drawQuiz(); } else { st.done = true; drawQuiz(); }
+      }
+      else if (e.target.id === 'skRestart') startQuiz(qz.sel.value);
+      else if (e.target.id === 'skReview') { st.done = false; st.i = 0; drawQuiz(); }
+    });
+    startQuiz(cur);
+  }
+
+  /* ---------- Hero morph replay ---------- */
+  function initMorph() {
+    const stage = q('#mcStage'); if (!stage) return;
+    const btn = q('#mcReplay');
+    if (btn) btn.addEventListener('click', () => { stage.classList.remove('mc-play'); void stage.offsetWidth; stage.classList.add('mc-play'); });
+  }
+
+  renderCards(); renderTable(); initQuiz(); initMorph();
+})();
+// --- Sigma Battle Arena Logic ---
+let arenaState = {
+    playerName: "",
+    roomPass: "",
+    mode: "bot",
+    difficulty: "normal",
+    module: "m1",
+    totalQ: 20,
+    currentQIndex: 0,
+    score: 0,
+    wrongCount: 0,
+    timerInterval: null,
+    timeLeft: 0,
+    questionsList: []
+};
+
+// Question Database Mock per Module (O-Level Syllabus focused + W3.CSS & Python/IoT)
+const oLevelQuestionBank = {
+    m1: [
+        { q: "What is the shortcut key to open Open / Save As in IT Tools?", opts: ["Ctrl+S", "Ctrl+O", "F12", "Ctrl+N"], ans: 0 },
+        { q: "Which of the following is an Operating System?", opts: ["MS Word", "Linux", "Tally", "Photoshop"], ans: 1 },
+        { q: "What is extension of LibreOffice Calc file?", opts: [".odt", ".ods", ".odp", ".txt"], ans: 1 },
+        { q: "Which shortcut selects all items in a folder?", opts: ["Ctrl+A", "Ctrl+C", "Ctrl+V", "Ctrl+X"], ans: 0 }
+    ],
+    m2: [
+        { q: "Which W3.CSS class is used to create a responsive container?", opts: [".container", ".w3-container", ".w3-box", ".box"], ans: 1 },
+        { q: "What does HTML stand for?", opts: ["Hyper Text Markup Language", "High Tech Multi Language", "Hyper Transfer Machine Language", "None"], ans: 0 },
+        { q: "Which W3.CSS class gives a card effect?", opts: ["w3-panel", "w3-card", "w3-box", "w3-shadow"], ans: 1 },
+        { q: "CSS stands for?", opts: ["Computer Style Sheet", "Cascading Style Sheets", "Creative Style System", "Colorful Sheet"], ans: 1 }
+    ],
+    m3: [
+        { q: "Which keyword is used to define a function in Python?", opts: ["func", "def", "define", "function"], ans: 1 },
+        { q: "What is the file extension of Python files?", opts: [".pt", ".py", ".pyt", ".python"], ans: 1 },
+        { q: "Which data type is immutable in Python?", opts: ["List", "Dictionary", "Tuple", "Set"], ans: 2 },
+        { q: "What is output of 2 ** 3 in Python?", opts: ["6", "8", "9", "5"], ans: 1 }
+    ],
+    m4: [
+        { q: "What does IoT stand for?", opts: ["Internet of Things", "Input output Technology", "Interconnected Operational Tools", "Internet of Telecom"], ans: 0 },
+        { q: "Which board is commonly used for Arduino projects?", opts: ["Arduino Uno", "Raspberry Pi Zero", "Intel Core", "Graphics Card"], ans: 0 },
+        { q: "Arduino programming language is based on which language?", opts: ["Python", "C/C++", "Java", "HTML"], ans: 1 },
+        { q: "Which pin on Arduino is built-in LED attached to?", opts: ["Pin 13", "Pin 8", "Pin 5", "Pin 0"], ans: 0 }
+    ]
+};
+
+function startBattleArena() {
+    const nameInput = document.getElementById('p-name').value.trim();
+    const passInput = document.getElementById('p-pass').value.trim();
+
+    if (!nameInput || !passInput) {
+        alert("⚠️ Please enter both Player Name and Room Password to start the test!");
+        return;
+    }
+
+    arenaState.playerName = nameInput;
+    arenaState.roomPass = passInput;
+    arenaState.mode = document.getElementById('battle-mode').value;
+    arenaState.difficulty = document.getElementById('bot-difficulty').value;
+    arenaState.module = document.getElementById('quiz-module').value;
+    arenaState.totalQ = parseInt(document.getElementById('q-count').value);
+
+    // Generate randomized questions based on count
+    let rawBank = oLevelQuestionBank[arenaState.module] || oLevelQuestionBank.m1;
+    arenaState.questionsList = [];
+    for (let i = 0; i < arenaState.totalQ; i++) {
+        let randomQ = rawBank[Math.floor(Math.random() * rawBank.length)];
+        arenaState.questionsList.push(randomQ);
+    }
+
+    // Reset score & index
+    arenaState.currentQIndex = 0;
+    arenaState.score = 0;
+    arenaState.wrongCount = 0;
+
+    // Timer calculation: (Total Questions - 10 minutes buffer, min 2 mins)
+    let totalMinutes = Math.max(2, Math.floor(arenaState.totalQ * 0.8) - 10);
+    if(arenaState.totalQ <= 25) totalMinutes = 10;
+    arenaState.timeLeft = totalMinutes * 60;
+
+    // Switch UI panels
+    document.getElementById('arena-setup').classList.remove('active');
+    document.getElementById('arena-setup').classList.add('hidden');
+    document.getElementById('arena-quiz').classList.remove('hidden');
+    document.getElementById('arena-quiz').classList.add('active');
+
+    document.getElementById('hud-name').innerText = arenaState.playerName;
+    document.getElementById('hud-qtotal').innerText = arenaState.totalQ;
+
+    startArenaTimer();
+    loadQuestion();
+}
+
+function startArenaTimer() {
+    clearInterval(arenaState.timerInterval);
+    arenaState.timerInterval = setInterval(() => {
+        if (arenaState.timeLeft <= 0) {
+            clearInterval(arenaState.timerInterval);
+            finishArenaGame();
+            return;
+        }
+        arenaState.timeLeft--;
+        let m = Math.floor(arenaState.timeLeft / 60).toString().padStart(2, '0');
+        let s = (arenaState.timeLeft % 60).toString().padStart(2, '0');
+        document.getElementById('hud-timer').innerText = `${m}:${s}`;
+    }, 1000);
+}
+
+function loadQuestion() {
+    if (arenaState.currentQIndex >= arenaState.questionsList.length) {
+        finishArenaGame();
+        return;
+    }
+
+    document.getElementById('hud-qnum').innerText = arenaState.currentQIndex + 1;
+    let currentObj = arenaState.questionsList[arenaState.currentQIndex];
+    document.getElementById('question-text').innerText = currentObj.q;
+
+    let optsHtml = "";
+    currentObj.opts.forEach((opt, idx) => {
+        optsHtml += `<button class="option-btn" onclick="checkAnswer(${idx})">${String.fromCharCode(65 + idx)}. ${opt}</button>`;
+    });
+    document.getElementById('options-container').innerHTML = optsHtml;
+}
+
+function checkAnswer(selectedIndex) {
+    let currentObj = arenaState.questionsList[arenaState.currentQIndex];
+    if (selectedIndex === currentObj.ans) {
+        arenaState.score++;
+    } else {
+        arenaState.wrongCount++;
+    }
+    arenaState.currentQIndex++;
+    loadQuestion();
+}
+
+function finishArenaGame() {
+    clearInterval(arenaState.timerInterval);
+
+    document.getElementById('arena-quiz').classList.remove('active');
+    document.getElementById('arena-quiz').classList.add('hidden');
+    document.getElementById('arena-result').classList.remove('hidden');
+    document.getElementById('arena-result').classList.add('active');
+
+    let resultHtml = "";
+    
+    // Check if playing vs Bot in Hard Mode
+    if (arenaState.mode === 'bot' && arenaState.difficulty === 'hard') {
+        // Sigma Boy Hard mode is engineered to be unbeatable
+        resultHtml = `
+            <h2>🤖 Unbeatable Sigma Boy!</h2>
+            <p>Score: <strong>${arenaState.score} / ${arenaState.totalQ}</strong> (Wrong: ${arenaState.wrongCount})</p>
+            <p style="margin-top:1rem; color:#ff007f; font-weight:bold; font-size:1.3rem;">
+              Nahi sir 🙋🏻, Sigma Boy ko nahi hara sakta koi... 🤩🤩
+            </p>
+        `;
+    } else {
+        // Normal / Friend win check
+        let isWinner = arenaState.score >= Math.ceil(arenaState.totalQ / 2);
+        if (isWinner) {
+            resultHtml = `
+                <h2>🎁 🎉🎉💫 Congratulations! 👏🏻🎉🎉👏🏻</h2>
+                <p>Awesome job, <strong>${arenaState.playerName}</strong>!</p>
+                <p>You won the battle with <strong>${arenaState.score}</strong> correct answers! 🏆</p>
+            `;
+        } else {
+            resultHtml = `
+                <h2>💪 Try Again!</h2>
+                <p>Aap fir se try karein, is bar winner 🏆 aap hi hoge, Sigma Boy ko bharosha hai! 🎉🎉💫👏🏻</p>
+                <p>Your Score: ${arenaState.score} / ${arenaState.totalQ}</p>
+            `;
+        }
+    }
+
+    document.getElementById('result-box-content').innerHTML = resultHtml;
+}
+
+function resetArena() {
+    document.getElementById('arena-result').classList.remove('active');
+    document.getElementById('arena-result').classList.add('hidden');
+    document.getElementById('arena-setup').classList.remove('hidden');
+    document.getElementById('arena-setup').classList.add('active');
+}
+// Press Enter key to start arena instantly
+// FIX: Terminal (ya koi aur input) me Enter dabane par Battle Arena popup trigger nahi hoga.
+function isSigmaTerminalActive(e) {
+    const overlay = document.getElementById('sigma-terminal-overlay');
+    const termOpen = overlay && !overlay.classList.contains('sigma-terminal-hidden');
+    const termInput = document.getElementById('sigma-term-input');
+    const t = e && e.target;
+    return !!(termOpen || document.activeElement === termInput || (t && overlay && overlay.contains(t)));
+}
+document.addEventListener('keypress', function(e) {
+    if (e.key !== 'Enter') return;
+    if (isSigmaTerminalActive(e)) return;                       // terminal par focus/open hai -> arena mat chalao
+    const setupPanel = document.getElementById('arena-setup');
+    if (!setupPanel || !setupPanel.classList.contains('active')) return;
+    const t = e.target;
+    if (!t || !setupPanel.contains(t)) return;                  // sirf arena form ke andar Enter dabane par
+    if (/^(BUTTON|TEXTAREA|SELECT)$/.test(t.tagName)) return;   // button par Enter = uska apna click, double start nahi
+    startBattleArena();
+});
+// --- Save Test Progress & Retry Feature ---
+function saveTestProgress() {
+    if (!arenaState || arenaState.currentQIndex === 0) return;
+    const progressData = {
+        playerName: arenaState.playerName,
+        roomPass: arenaState.roomPass,
+        mode: arenaState.mode,
+        module: arenaState.module,
+        totalQ: arenaState.totalQ,
+        currentQIndex: arenaState.currentQIndex,
+        score: arenaState.score,
+        wrongCount: arenaState.wrongCount,
+        timeLeft: arenaState.timeLeft,
+        questionsList: arenaState.questionsList
+    };
+    localStorage.setItem('sigma_battle_progress', JSON.stringify(progressData));
+}
+
+// Check if previous unfinished test exists on load
+window.addEventListener('load', () => {
+    const saved = localStorage.getItem('sigma_battle_progress');
+    if (saved) {
+        if (confirm("⚠️ You have an unfinished test session! Do you want to resume from where you left off?")) {
+            const data = JSON.parse(saved);
+            arenaState = data;
+            
+            document.getElementById('arena-setup').classList.remove('active');
+            document.getElementById('arena-setup').classList.add('hidden');
+            document.getElementById('arena-quiz').classList.remove('hidden');
+            document.getElementById('arena-quiz').classList.add('active');
+
+            document.getElementById('hud-name').innerText = arenaState.playerName;
+            document.getElementById('hud-qtotal').innerText = arenaState.totalQ;
+            
+            startArenaTimer();
+            loadQuestion();
+        } else {
+            localStorage.removeItem('sigma_battle_progress');
+        }
+    }
+});
+
+// Auto-save progress on every question change
+const originalCheckAnswer = window.checkAnswer;
+window.checkAnswer = function(selectedIndex) {
+    originalCheckAnswer(selectedIndex);
+    saveTestProgress();
+};
+
+// Clear progress when test finishes or resets
+const originalFinishGame = window.finishArenaGame;
+window.finishArenaGame = function() {
+    localStorage.removeItem('sigma_battle_progress');
+    originalFinishGame();
+};
+
+const originalResetArena = window.resetArena;
+window.resetArena = function() {
+    localStorage.removeItem('sigma_battle_progress');
+    originalResetArena();
+};
+// --- Secret Sigma Command Terminal Logic ---
+function toggleSigmaTerminal() {
+    const overlay = document.getElementById('sigma-terminal-overlay');
+    overlay.classList.toggle('sigma-terminal-hidden');
+    if (!overlay.classList.contains('sigma-terminal-hidden')) {
+        setTimeout(() => document.getElementById('sigma-term-input').focus(), 50);
+    } else {
+        stopMatrixRain();
+        document.getElementById('sigma-term-input').blur();
+    }
+}
+
+// Keyboard Shortcut: Ctrl + Alt + S
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        toggleSigmaTerminal();
+    }
+});
+
+// Command Line Handler
+// FIX: capture phase + stopImmediatePropagation -> terminal ki key kisi global listener (Battle Arena etc.) tak jati hi nahi
+const sigmaTermInput = document.getElementById('sigma-term-input');
+const sigmaTermHistory = [];
+let sigmaTermHistIdx = 0;
+
+sigmaTermInput.addEventListener('keydown', function(e) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const inputVal = this.value.trim();
+        if (!inputVal) return;
+
+        appendTerminalOutput(`sigma@access-pc:~$ ${inputVal}`, 'term-highlight');
+        sigmaTermHistory.push(inputVal);
+        sigmaTermHistIdx = sigmaTermHistory.length;
+        processCommand(inputVal.toLowerCase(), inputVal);
+        this.value = '';
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (sigmaTermHistIdx > 0) this.value = sigmaTermHistory[--sigmaTermHistIdx];
+    } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (sigmaTermHistIdx < sigmaTermHistory.length - 1) this.value = sigmaTermHistory[++sigmaTermHistIdx];
+        else { sigmaTermHistIdx = sigmaTermHistory.length; this.value = ''; }
+    } else if (e.key === 'Escape') {
+        e.preventDefault();
+        toggleSigmaTerminal();
+    }
+}, true);
+
+// keypress / keyup bhi terminal se bahar leak na hon (purane keypress-based listeners ke liye)
+['keypress', 'keyup'].forEach(function(evt) {
+    sigmaTermInput.addEventListener(evt, function(e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        if (e.key === 'Enter') e.preventDefault();
+    }, true);
+});
+
+function appendTerminalOutput(text, className = '') {
+    const body = document.getElementById('sigma-terminal-body');
+    const div = document.createElement('div');
+    div.className = className;
+    div.innerText = text;
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+}
+
+function processCommand(cmd, raw) {
+    cmd = (cmd || '').trim();
+    raw = (raw || cmd).trim();
+    const base = cmd.split(/\s+/)[0];
+    if (base !== 'matrix') stopMatrixRain();   // koi bhi naya command aate hi matrix band
+
+    switch(base) {
+        case 'help':
+            appendTerminalOutput("Available Commands:", "term-highlight");
+            appendTerminalOutput("  - courses  : View Access Computer Center courses");
+            appendTerminalOutput("  - matrix   : Trigger Matrix code rain effect");
+            appendTerminalOutput("  - sigma    : Display special hidden Sigma message");
+            appendTerminalOutput("  - clear    : Clear terminal screen");
+            appendTerminalOutput("  - date     : Show today's date & time");
+            appendTerminalOutput("  - whoami   : Show current user");
+            appendTerminalOutput("  - echo TXT : Print your text");
+            appendTerminalOutput("  - python   : Open Python Coding practice");
+            appendTerminalOutput("  - iot      : Open IoT / Arduino Simulator");
+            appendTerminalOutput("  - exit     : Close terminal");
+            break;
+
+        case 'date':
+        case 'time':
+            appendTerminalOutput(new Date().toLocaleString('en-IN', { dateStyle: 'full', timeStyle: 'medium' }), 'term-success');
+            break;
+
+        case 'whoami':
+            appendTerminalOutput('sigma-boy @ Access Computer Center', 'term-success');
+            break;
+
+        case 'echo':
+            appendTerminalOutput(raw.replace(/^echo\s*/i, '') || ' ');
+            break;
+
+        case 'python':
+        case 'iot':
+        case 'arduino': {
+            const tabBtn = document.querySelector('.px-tab[data-px="' + (base === 'python' ? 'py' : 'ard') + '"]');
+            const sec = document.getElementById('codepractice');
+            if (tabBtn && sec) {
+                appendTerminalOutput('Opening ' + (base === 'python' ? 'Python Coding' : 'IoT / Arduino Simulator') + '...', 'term-success');
+                setTimeout(() => { toggleSigmaTerminal(); tabBtn.click(); sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 350);
+            } else appendTerminalOutput('Coding Practice section nahi mila.', 'term-error');
+            break;
+        }
+
+        case 'courses':
+            appendTerminalOutput("--- ACCESS COMPUTER CENTER COURSES ---", "term-highlight");
+            appendTerminalOutput("1. CCC & O-Level (NIELIT Certified)");
+            appendTerminalOutput("2. ADCA, PGDCA & Tally Prime with GST");
+            appendTerminalOutput("3. Python, HTML5, CSS3, JavaScript & Web Development");
+            break;
+
+        case 'matrix':
+            appendTerminalOutput("Initiating Matrix Rain Effect... (Type any other command to stop)", "term-success");
+            startMatrixRain();
+            break;
+
+        case 'sigma':
+            appendTerminalOutput("🔥 [SIGMA PROTOCOL ACTIVE] 🔥", "term-highlight");
+            appendTerminalOutput("“Zindagi me success chahiye toh khud ki mehnat par bharosa rakho, Sigma Boy kabhi rukta nahi!”");
+            break;
+
+        case 'clear':
+            document.getElementById('sigma-terminal-body').innerHTML = '';
+            break;
+
+        case 'exit':
+            toggleSigmaTerminal();
+            break;
+
+        default:
+            appendTerminalOutput(`Command not recognized: '${base}'. Type 'help' for available commands.`, 'term-error');
+            break;
+    }
+}
+
+function stopMatrixRain() {
+    if (matrixInterval) { clearInterval(matrixInterval); matrixInterval = null; }
+    const canvas = document.getElementById('matrix-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.style.display = 'none';
+    }
+    const ov = document.getElementById('sigma-terminal-overlay');
+    if (ov) ov.classList.remove('matrix-on');
+}
+
+// Matrix Rain Effect Implementation
+let matrixInterval = null;
+function startMatrixRain() {
+    const canvas = document.getElementById('matrix-canvas');
+    canvas.style.display = 'block';
+    const ov = document.getElementById('sigma-terminal-overlay');
+    if (ov) ov.classList.add('matrix-on');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+';
+    const alphabet = katakana + latin;
+    
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const rainDrops = [];
+    
+    for (let x = 0; x < columns; x++) {
+        rainDrops[x] = 1;
+    }
+    
+    if (matrixInterval) clearInterval(matrixInterval);
+    
+    matrixInterval = setInterval(() => {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#0f0';
+        ctx.font = fontSize + 'px monospace';
+        
+        for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+            
+            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                rainDrops[i] = 0;
+            }
+            rainDrops[i]++;
+        }
+    }, 30);
+}
+
+// =====================================================================
+// Sigma Utility Hub — Screenshot (html2canvas / Screen Capture API) + Screen Recorder (MediaRecorder)
+// =====================================================================
+(function () {
+    'use strict';
+    const $id = id => document.getElementById(id);
+    const hub = $id('sx-hub');
+    if (!hub) return;
+
+    const el = {
+        toggle: $id('sxToggle'), close: $id('sxClose'), panel: $id('sxPanel'), mini: $id('sxMini'),
+        seg: $id('sxSeg'), shot: $id('sxShot'), shotHint: $id('sxShotHint'),
+        sys: $id('sxSys'), mic: $id('sxMic'), timer: $id('sxTimer'),
+        rec: $id('sxRec'), pause: $id('sxPause'), stop: $id('sxStop'), recHint: $id('sxRecHint'),
+        prev: $id('sxPrev'), media: $id('sxMedia'), save: $id('sxSave'), drop: $id('sxDrop')
+    };
+
+    const say = m => { if (typeof toast === 'function') toast(m); };
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const pad = n => String(n).padStart(2, '0');
+    const fmt = s => pad(Math.floor(s / 60)) + ':' + pad(s % 60);
+    const stamp = () => { const d = new Date(); return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()); };
+
+    const canScreen = !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+    const canRecord = canScreen && typeof window.MediaRecorder !== 'undefined';
+
+    /* ---------- Open / Close ---------- */
+    function openHub(o) {
+        hub.classList.toggle('open', o);
+        el.toggle.setAttribute('aria-expanded', String(o));
+    }
+    el.toggle.addEventListener('click', () => openHub(!hub.classList.contains('open')));
+    el.close.addEventListener('click', () => openHub(false));
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && hub.classList.contains('open')) {
+            const ov = $id('sigma-terminal-overlay');
+            if (ov && !ov.classList.contains('sigma-terminal-hidden')) return;   // terminal khula ho to uska Esc chale
+            openHub(false);
+        }
+    });
+
+    /* ---------- Mode selector ---------- */
+    let mode = 'view';
+    const hints = {
+        view: 'VIEW = jo abhi screen par dikh raha hai',
+        full: 'FULL PAGE = poora page upar se neeche (bahut lamba page ho to limit lagti hai)',
+        screen: 'SCREEN = browser ka exact capture (3D/canvas bhi dikhega) — permission poochega'
+    };
+    el.seg.addEventListener('click', e => {
+        const b = e.target.closest('button[data-mode]'); if (!b) return;
+        if (b.dataset.mode === 'screen' && !canScreen) { say('⚠️ Is browser/device me SCREEN capture support nahi hai'); return; }
+        mode = b.dataset.mode;
+        el.seg.querySelectorAll('button').forEach(x => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', String(on)); });
+        el.shotHint.textContent = hints[mode];
+    });
+
+    /* ---------- Preview / Save ---------- */
+    let curURL = null;
+    function clearPreview() {
+        if (curURL) { URL.revokeObjectURL(curURL); curURL = null; }
+        el.media.textContent = ''; el.prev.hidden = true;
+    }
+    function showPreview(kind, blob) {
+        clearPreview();
+        curURL = URL.createObjectURL(blob);
+        let node;
+        if (kind === 'image') { node = document.createElement('img'); node.alt = 'Screenshot preview'; node.src = curURL; }
+        else { node = document.createElement('video'); node.src = curURL; node.controls = true; node.playsInline = true; }
+        el.media.appendChild(node);
+        const ext = kind === 'image' ? 'png' : (/mp4/.test(blob.type) ? 'mp4' : 'webm');
+        el.save.href = curURL;
+        el.save.download = 'access-' + (kind === 'image' ? 'screenshot-' : 'recording-') + stamp() + '.' + ext;
+        el.prev.hidden = false;
+        openHub(true);
+    }
+    el.drop.addEventListener('click', clearPreview);
+
+    /* ---------- Screenshot ---------- */
+    function loadH2C() {
+        if (window.html2canvas) return Promise.resolve(window.html2canvas);
+        return new Promise((res, rej) => {
+            const s = document.createElement('script');
+            const srcs = ['https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js'];
+            let k = 0;
+            const next = () => {
+                if (k >= srcs.length) return rej(new Error('html2canvas load failed'));
+                const sc = document.createElement('script');
+                sc.src = srcs[k++];
+                sc.onload = () => window.html2canvas ? res(window.html2canvas) : next();
+                sc.onerror = next;
+                document.head.appendChild(sc);
+            };
+            next();
+        });
+    }
+    const toBlob = c => new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error('toBlob failed')), 'image/png'));
+
+    async function shotPage(full) {
+        const h2c = await loadH2C();
+        const bg = getComputedStyle(document.body).backgroundColor;
+        const opts = {
+            useCORS: true, logging: false,
+            backgroundColor: (bg && bg !== 'rgba(0, 0, 0, 0)') ? bg : '#050508',
+            ignoreElements: n => n.id === 'sx-hub' || n.id === 'toast'
+        };
+        let target = document.body;
+        if (full) {
+            const de = document.documentElement;
+            const W = Math.max(de.scrollWidth, innerWidth), H = Math.min(de.scrollHeight, 12000);
+            Object.assign(opts, { scale: 1, width: W, height: H, windowWidth: W, windowHeight: H, x: 0, y: 0, scrollX: 0, scrollY: 0 });
+            target = de;
+            if (de.scrollHeight > 12000) say('ℹ️ Page bahut lamba hai — upar ke 12000px capture hue');
+        } else {
+            Object.assign(opts, {
+                scale: Math.min(window.devicePixelRatio || 1, 2),
+                x: window.scrollX, y: window.scrollY, width: innerWidth, height: innerHeight,
+                windowWidth: document.documentElement.clientWidth, windowHeight: innerHeight
+            });
+        }
+        const canvas = await h2c(target, opts);
+        return toBlob(canvas);
+    }
+
+    async function shotScreen() {
+        let stream;
+        try { stream = await navigator.mediaDevices.getDisplayMedia({ video: { displaySurface: 'browser' }, audio: false, preferCurrentTab: true }); }
+        catch (e0) {
+            if (e0 && (e0.name === 'NotAllowedError' || e0.name === 'AbortError')) throw e0;
+            stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });   // purane browsers: simple options
+        }
+        hub.classList.add('sx-hide');
+        try {
+            const v = document.createElement('video');
+            v.srcObject = stream; v.muted = true; v.playsInline = true;
+            await v.play();
+            await sleep(450);
+            const c = document.createElement('canvas');
+            c.width = v.videoWidth; c.height = v.videoHeight;
+            c.getContext('2d').drawImage(v, 0, 0);
+            return await toBlob(c);
+        } finally {
+            stream.getTracks().forEach(t => t.stop());
+            hub.classList.remove('sx-hide');
+        }
+    }
+
+    el.shot.addEventListener('click', async () => {
+        if (el.shot.disabled) return;
+        el.shot.disabled = true;
+        const old = el.shot.innerHTML; el.shot.innerHTML = '<span>⏳</span> CAPTURING...';
+        try {
+            if (mode === 'screen') {
+                const b = await shotScreen(); showPreview('image', b);
+            } else {
+                openHub(false); await sleep(320);               // panel band hone do
+                let b;
+                try { b = await shotPage(mode === 'full'); }
+                catch (e1) {
+                    console.warn('html2canvas fail:', e1);
+                    if (!canScreen) throw e1;
+                    say('ℹ️ Page capture nahi hua — SCREEN mode se le raha hoon');
+                    b = await shotScreen();
+                }
+                showPreview('image', b);
+            }
+            say('📸 Screenshot ready — SAVE dabakar download karein');
+        } catch (err) {
+            console.error('Screenshot error:', err);
+            if (err && (err.name === 'NotAllowedError' || err.name === 'AbortError')) say('Screenshot cancel / permission nahi mili');
+            else say('⚠️ Screenshot nahi ban paya — "SCREEN" mode try karein');
+        } finally {
+            el.shot.innerHTML = old; el.shot.disabled = false; hub.classList.remove('sx-hide');
+        }
+    });
+
+    /* ---------- Screen Recorder ---------- */
+    let recorder = null, chunks = [], dispStream = null, micStream = null, audioCtx = null;
+    let tickId = null, t0 = 0, pausedAt = 0, pausedTotal = 0, recording = false;
+
+    if (!canRecord) {
+        el.rec.disabled = true;
+        el.sys.disabled = true; el.mic.disabled = true;
+        el.recHint.textContent = '⚠️ Is browser/device me screen recording support nahi hai (mobile browsers me aam taur par nahi chalti). Desktop Chrome/Edge/Firefox use karein.';
+        el.recHint.classList.add('warn');
+    }
+
+    function pickMime() {
+        const list = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4'];
+        return list.find(m => window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
+    }
+    function elapsed() { return Math.max(0, Math.floor(((pausedAt || Date.now()) - t0 - pausedTotal) / 1000)); }
+    function paint() { const t = fmt(elapsed()); el.timer.textContent = t; el.mini.textContent = '● ' + t; }
+    function ui(state) {                       // 'idle' | 'rec' | 'paused'
+        const on = state !== 'idle';
+        hub.classList.toggle('recording', on);
+        el.rec.hidden = on; el.stop.hidden = !on; el.pause.hidden = !on;
+        el.pause.textContent = state === 'paused' ? '▶ RESUME' : '⏸ PAUSE';
+        el.sys.disabled = el.mic.disabled = on || !canRecord;
+        el.recHint.classList.remove('warn');
+        el.recHint.textContent = on ? (state === 'paused' ? 'Paused — RESUME dabakar aage badhein' : '🔴 Recording chal rahi hai… STOP dabane par video milegi') : 'Browser pooche to tab/screen select karke Share dabayein';
+    }
+    function cleanup() {
+        clearInterval(tickId); tickId = null;
+        [dispStream, micStream].forEach(s => s && s.getTracks().forEach(t => t.stop()));
+        dispStream = micStream = null;
+        if (audioCtx) { try { audioCtx.close(); } catch (e) { } audioCtx = null; }
+    }
+
+    async function startRec() {
+        if (recording || !canRecord) return;
+        try {
+            dispStream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: { ideal: 30 } }, audio: el.sys.checked });
+        } catch (err) {
+            dispStream = null;
+            say(err && err.name === 'NotAllowedError' ? 'Recording cancel / permission nahi mili' : '⚠️ Recording start nahi ho payi');
+            return;
+        }
+        const tracks = [...dispStream.getVideoTracks()];
+        const sysTracks = dispStream.getAudioTracks();
+        if (el.mic.checked) {
+            try { micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }); }
+            catch (e) { micStream = null; say('🎤 Mic permission nahi mili — bina mic record hoga'); }
+        }
+        if (el.sys.checked && !sysTracks.length) say('🔊 System audio share nahi hua (share dialog me "Share audio" tick karein)');
+        if (sysTracks.length && micStream) {            // dono audio mix
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+            audioCtx.createMediaStreamSource(new MediaStream(sysTracks)).connect(dest);
+            audioCtx.createMediaStreamSource(micStream).connect(dest);
+            tracks.push(...dest.stream.getAudioTracks());
+        } else if (sysTracks.length) tracks.push(...sysTracks);
+        else if (micStream) tracks.push(...micStream.getAudioTracks());
+
+        const mime = pickMime();
+        try {
+            recorder = new MediaRecorder(new MediaStream(tracks), mime ? { mimeType: mime, videoBitsPerSecond: 4000000 } : undefined);
+        } catch (err) {
+            console.error(err); cleanup(); say('⚠️ Is browser me recorder bana nahi paya'); return;
+        }
+        chunks = [];
+        recorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+        recorder.onstop = () => {
+            const type = (recorder && recorder.mimeType) || mime || 'video/webm';
+            const blob = new Blob(chunks, { type });
+            recording = false; pausedAt = 0; cleanup(); ui('idle'); el.timer.textContent = '00:00';
+            if (blob.size) { showPreview('video', blob); say('🎥 Recording ready — SAVE dabakar download karein'); }
+            else say('⚠️ Recording khali rahi');
+            recorder = null; chunks = [];
+        };
+        dispStream.getVideoTracks()[0].addEventListener('ended', stopRec);   // browser ke "Stop sharing" par bhi band
+        t0 = Date.now(); pausedAt = 0; pausedTotal = 0; recording = true;
+        recorder.start(1000);
+        tickId = setInterval(paint, 500); paint(); ui('rec');
+        openHub(false);                                                       // panel hata do, REC badge dikhta rahe
+        say('🔴 Recording shuru');
+    }
+    function stopRec() { if (recorder && recorder.state !== 'inactive') recorder.stop(); }
+    function togglePause() {
+        if (!recorder) return;
+        if (recorder.state === 'recording') { recorder.pause(); pausedAt = Date.now(); ui('paused'); }
+        else if (recorder.state === 'paused') { pausedTotal += Date.now() - pausedAt; pausedAt = 0; recorder.resume(); ui('rec'); }
+    }
+    el.rec.addEventListener('click', startRec);
+    el.stop.addEventListener('click', stopRec);
+    el.pause.addEventListener('click', togglePause);
+
+    window.addEventListener('beforeunload', e => { if (recording) { e.preventDefault(); e.returnValue = ''; } });
+    ui('idle');
+})();
+
+// =====================================================================
+// CODING PRACTICE extras: Python Coding + IoT / Arduino Simulator
+// =====================================================================
+(function () {
+  'use strict';
+  const q = (s, r) => (r || document).querySelector(s);
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const root = q('#pxWrap'); if (!root) return;
+  const ARD = {};
+
+  /* ---------- Sub-tabs ---------- */
+  root.querySelectorAll('.px-tab').forEach(b => b.addEventListener('click', () => {
+    root.querySelectorAll('.px-tab').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', String(x === b)); });
+    q('#pxPy').classList.toggle('on', b.dataset.px === 'py');
+    q('#pxArd').classList.toggle('on', b.dataset.px === 'ard');
+  }));
+
+  /* ---------- Syntax highlighting (custom, VS Code Dark+ colours) ---------- */
+  const L = {
+    py: {
+      re: /(#[^\n]*)|([rRbBfFuU]{0,2}(?:'''[\s\S]*?(?:'''|$)|"""[\s\S]*?(?:"""|$)|'(?:\\.|[^'\\\n])*'?|"(?:\\.|[^"\\\n])*"?))|(\b0[xXbBoO][\da-fA-F_]+\b|\b\d[\d_]*\.?\d*(?:[eE][+-]?\d+)?[jJ]?\b|\.\d+\b)|(@[A-Za-z_][\w.]*)|([A-Za-z_]\w*)|([\s\S])/g,
+      kw: new Set('and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield'.split(' ')),
+      cs: new Set(['True', 'False', 'None']),
+      bi: new Set('print input len range int float str list dict set tuple bool type sum min max abs round sorted reversed enumerate zip map filter open isinstance sqrt pow chr ord any all format repr id dir help bin hex oct divmod iter next object super'.split(' ')),
+      ty: new Set()
+    },
+    cpp: {
+      re: /(\/\/[^\n]*|\/\*[\s\S]*?(?:\*\/|$))|("(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|(\b0[xX][\da-fA-F]+\b|\b\d+\.?\d*(?:[eE][+-]?\d+)?[uUlLfF]*\b|\.\d+\b)|(^[ \t]*#[ \t]*\w+)|([A-Za-z_]\w*)|([\s\S])/gm,
+      kw: new Set('if else for while do switch case default return break continue const static unsigned signed volatile struct enum typedef sizeof'.split(' ')),
+      ty: new Set('void int long float double byte boolean bool char String word short uint8_t uint16_t uint32_t int8_t int16_t int32_t size_t'.split(' ')),
+      cs: new Set('true false HIGH LOW INPUT OUTPUT INPUT_PULLUP LED_BUILTIN A0 A1 A2 A3 A4 A5 PI HEX DEC BIN OCT NULL'.split(' ')),
+      bi: new Set('pinMode digitalWrite digitalRead analogWrite analogRead delay delayMicroseconds millis micros tone noTone random randomSeed map constrain abs min max sqrt pow sin cos tan Serial'.split(' '))
+    }
+  };
+  function hl(src, lang) {
+    const D = L[lang]; let out = '', m, prev = ''; D.re.lastIndex = 0;
+    while ((m = D.re.exec(src))) {
+      const t = m[0]; let c = '';
+      if (m[1]) c = 'c';
+      else if (m[2]) {
+        if (lang === 'py' && /^(?:[fF]|[rRbBuU][fF]|[fF][rRbB])['"]/.test(t)) {
+          out += '<span class="h-s">' + esc(t).replace(/\{[^{}\n]*\}/g, x => '</span><span class="h-i">' + x + '</span><span class="h-s">') + '</span>'; prev = ''; continue;
+        }
+        c = 's';
+      } else if (m[3]) c = 'n';
+      else if (m[4]) c = 'd';
+      else if (m[5]) {
+        const w = t;
+        if (D.kw.has(w)) c = 'k';
+        else if (D.ty.has(w)) c = 't';
+        else if (D.cs.has(w)) c = 'q';
+        else if (prev === 'def' || prev === 'class') c = 'f';
+        else if (D.bi.has(w)) c = 'b';
+        else if (/^[ \t]*\(/.test(src.substr(D.re.lastIndex, 40))) c = 'f';
+        else c = 'v';
+        prev = w;
+      } else { if (!/\s/.test(t)) prev = ''; out += esc(t); continue; }
+      if (c !== 'v' || m[5]) { /* keep prev for identifiers handled above */ }
+      if (!m[5]) prev = '';
+      out += '<span class="h-' + c + '">' + esc(t) + '</span>';
+    }
+    return out + '\n';
+  }
+
+  /* ---------- Small code editor widget (textarea + highlighted overlay) ---------- */
+  function editor(host, lang, init, symbols) {
+    host.innerHTML = '<div class="px-gut"><pre></pre></div><div class="px-cw"><pre class="px-hl" aria-hidden="true"></pre><textarea class="px-ta" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Code editor"></textarea></div>';
+    const gut = q('.px-gut pre', host), pre = q('.px-hl', host), ta = q('.px-ta', host);
+    const api = { ta, onchange: null, onrun: null, bad: new Set() };
+    const indent = lang === 'py' ? '    ' : '  ';
+    function draw() {
+      pre.innerHTML = hl(ta.value, lang);
+      const n = ta.value.split('\n').length; let g = '';
+      for (let i = 1; i <= n; i++) g += (api.bad.has(i) ? '<b>' + i + '</b>' : i) + '\n';
+      gut.innerHTML = g; sync();
+    }
+    function sync() { pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; gut.style.transform = 'translateY(' + (-ta.scrollTop) + 'px)'; }
+    function ins(txt) {
+      ta.focus();
+      let ok = false; try { ok = document.execCommand('insertText', false, txt); } catch (e) { }
+      if (!ok) { ta.setRangeText(txt, ta.selectionStart, ta.selectionEnd, 'end'); ta.dispatchEvent(new Event('input', { bubbles: true })); }
+    }
+    ta.addEventListener('input', () => { draw(); if (api.onchange) api.onchange(); });
+    ta.addEventListener('scroll', sync);
+    ta.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); if (api.onrun) api.onrun(); return; }
+      if (e.key === 'Tab' && !e.shiftKey && !e.ctrlKey && !e.altKey) { e.preventDefault(); ins(indent); return; }
+      if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+        const v = ta.value, s = ta.selectionStart, ls = v.lastIndexOf('\n', s - 1) + 1, line = v.slice(ls, s), lead = (line.match(/^[ \t]*/) || [''])[0];
+        let extra = '';
+        if (lang === 'py' && /:\s*$/.test(line)) extra = indent;
+        if (lang === 'cpp' && /\{\s*$/.test(line)) {
+          e.preventDefault();
+          if (v[ta.selectionEnd] === '}') { ins('\n' + lead + indent + '\n' + lead); ta.selectionStart = ta.selectionEnd = ta.selectionStart - lead.length - 1; }
+          else ins('\n' + lead + indent);
+          return;
+        }
+        e.preventDefault(); ins('\n' + lead + extra);
+      }
+    });
+    api.get = () => ta.value;
+    api.set = v => { ta.value = v; ta.scrollTop = ta.scrollLeft = 0; draw(); };
+    api.insert = ins;
+    api.mark = set => { api.bad = set || new Set(); draw(); };
+    api.set(init);
+    if (symbols) {
+      const bar = symbols; bar.innerHTML = '';
+      (lang === 'py' ? ['Tab', ':', '(', ')', '[', ']', '{', '}', '"', "'", '#', '=', '+', '-', '*', '/', '%', '<', '>', ',', '.', '_'] : ['Tab', ';', '{', '}', '(', ')', '[', ']', '"', '=', '+', '-', '*', '/', '<', '>', '!', '&', '|', ',']).forEach(s => {
+        const b = document.createElement('button'); b.type = 'button'; b.textContent = s; b.setAttribute('aria-label', 'Insert ' + s);
+        b.addEventListener('pointerdown', e => e.preventDefault());           // keyboard band na ho
+        b.addEventListener('click', () => ins(s === 'Tab' ? indent : s));
+        bar.appendChild(b);
+      });
+    }
+    return api;
+  }
+
+  /* =====================================================================
+     PYTHON
+     ===================================================================== */
+  const PYEX = {
+    hello: '# Python me pehla program\nname = "Access Computer"\nage = 10\nprint("Welcome to", name)\nprint(f"Hamare centre ko {age} saal ho gaye")\n\nfor i in range(1, 6):\n    print("Number:", i)\n',
+    func: '# Function aur List\ndef table(n):\n    for i in range(1, 11):\n        print(f"{n} x {i} = {n * i}")\n\ntable(7)\n\nmarks = [78, 91, 65, 88]\nprint("Total:", sum(marks))\nprint("Average:", sum(marks) / len(marks))\nprint("Highest:", max(marks))\n',
+    inp: '# input() se number lo\na = int(input("Pehla number: "))\nb = int(input("Doosra number: "))\nprint("Sum =", a + b)\nprint("Product =", a * b)\nif a > b:\n    print("Pehla bada hai")\nelse:\n    print("Doosra bada ya barabar hai")\n',
+    fib: '# Fibonacci series\nn = 10\na, b = 0, 1\nseries = []\nfor _ in range(n):\n    series.append(a)\n    a, b = b, a + b\nprint(series)\n',
+    dict: '# Dictionary\nstudent = {"name": "Anshika", "course": "CCC", "marks": 92}\nfor key, value in student.items():\n    print(key, "->", value)\n\nstudent["grade"] = "A+"\nprint(student)\nprint("Keys:", list(student.keys()))\n'
+  };
+  const py = { ed: null, engine: null, booting: null, booted: false };
+  const pyCon = q('#pyCon'), pyStat = q('#pyStat'), pyCnt = q('#pyCnt');
+  const pyOut = (t, c) => { const d = document.createElement('div'); if (c) d.className = c; d.textContent = t; pyCon.appendChild(d); pyCon.scrollTop = pyCon.scrollHeight; };
+  const pyState = (t, c) => { pyStat.textContent = t; pyStat.className = 'px-pill' + (c ? ' ' + c : ''); };
+  py.ed = editor(q('#pyEd'), 'py', PYEX.hello, q('#pySym'));
+
+  function loadPy() {
+    if (py.engine) return py.engine;
+    py.engine = new Promise((res, rej) => {
+      const done = async () => { try { res(await window.loadPyodide()); } catch (e) { rej(e); } };
+      if (window.loadPyodide) return done();
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js'; s.onload = done;
+      s.onerror = () => rej(new Error('Python engine load nahi hua — internet check karein'));
+      document.head.appendChild(s);
+    });
+    py.engine.catch(() => { py.engine = null; });
+    return py.engine;
+  }
+  const BOOT = 'import builtins, js\ndef _inp(p=""):\n    v = js.prompt(str(p))\n    if v is None:\n        raise EOFError("input cancel ho gaya")\n    print(str(p) + str(v))\n    return str(v)\nbuiltins.input = _inp\n';
+  let pyBusy = false;
+  async function pyRun() {
+    if (pyBusy) return;
+    const code = py.ed.get(); pyCon.textContent = ''; pyCnt.textContent = ''; py.ed.mark(null);
+    if (!code.trim()) { pyOut('Pehle kuch code likhiye.', 'wn'); return; }
+    if (/^\s*while\s+(True|1)\s*:/m.test(code) && !/\bbreak\b|\binput\s*\(|sys\.exit/.test(code)) {
+      pyOut('⚠ Infinite loop (while True) bina break ke — page hang ho sakta hai, isliye run nahi kiya. break lagayein.', 'er'); pyState('● Blocked', 'err'); return;
+    }
+    pyBusy = true; q('#pyRun').disabled = true;
+    try {
+      let eng;
+      if (!py.engine) { pyOut('⏳ Python engine load ho raha hai (pehli baar ~10 MB)…', 'mu'); pyState('● Loading…', 'wait'); }
+      eng = await loadPy();
+      pyCon.textContent = ''; pyState('● Running…', 'run');
+      eng.setStdout({ batched: s => pyOut(s) }); eng.setStderr({ batched: s => pyOut(s, 'er') });
+      if (!py.booted) { await eng.runPythonAsync(BOOT); py.booted = true; }
+      const t0 = performance.now();
+      try { await eng.runPythonAsync(code); pyOut('✔ Program poora hua', 'ok'); pyState('● Done', 'run'); }
+      catch (e) {
+        let msg = String((e && e.message) || e).split('\n'), i = msg.findIndex(l => /File "<exec>"/.test(l));
+        if (i > 0) msg = msg.slice(i);
+        msg = msg.filter(l => !/pyodide|\/lib\/python/.test(l));
+        const ln = (msg.join('\n').match(/File "<exec>", line (\d+)/) || [])[1];
+        if (ln) py.ed.mark(new Set([+ln]));
+        pyOut(msg.join('\n').trim(), 'er'); pyState('● Error', 'err');
+      }
+      pyCnt.textContent = Math.round(performance.now() - t0) + ' ms';
+    } catch (e) { pyCon.textContent = ''; pyOut('✖ ' + (e.message || e), 'er'); pyState('● Offline', 'err'); }
+    pyBusy = false; q('#pyRun').disabled = false;
+  }
+  py.ed.onrun = pyRun;
+  q('#pyRun').onclick = pyRun;
+  q('#pyClr').onclick = () => { pyCon.textContent = ''; pyCnt.textContent = ''; };
+  q('#pyReset').onclick = () => { py.ed.set(PYEX.hello); py.ed.mark(null); pyCon.textContent = ''; pyState('● Ready'); };
+  q('#pyEx').onchange = e => { if (PYEX[e.target.value]) { py.ed.set(PYEX[e.target.value]); py.ed.mark(null); } e.target.value = ''; };
+  q('#pyCopy').onclick = () => { const t = py.ed.get(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => pyOut('⎘ Code copy ho gaya', 'mu')).catch(() => { py.ed.ta.select(); document.execCommand('copy'); }); };
+
+  /* =====================================================================
+     IoT / ARDUINO SIMULATOR
+     ===================================================================== */
+  const EX = {
+    blink: '// Blink: pin 13 ka LED 1 second ON / OFF\nvoid setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}\n',
+    traffic: '// Traffic Light: Red = 13, Yellow = 11, Green = 12\nconst int red = 13;\nconst int yellow = 11;\nconst int green = 12;\n\nvoid setup() {\n  pinMode(red, OUTPUT);\n  pinMode(yellow, OUTPUT);\n  pinMode(green, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(red, HIGH);\n  delay(2000);\n  digitalWrite(red, LOW);\n  digitalWrite(yellow, HIGH);\n  delay(800);\n  digitalWrite(yellow, LOW);\n  digitalWrite(green, HIGH);\n  delay(2000);\n  digitalWrite(green, LOW);\n}\n',
+    button: '// Button dabao -> LED jale (button pin 2)\nconst int btn = 2;\nconst int led = 13;\n\nvoid setup() {\n  pinMode(btn, INPUT_PULLUP);\n  pinMode(led, OUTPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int state = digitalRead(btn);\n  if (state == LOW) {\n    digitalWrite(led, HIGH);\n    Serial.println("Button dabaya!");\n  } else {\n    digitalWrite(led, LOW);\n  }\n  delay(100);\n}\n',
+    fade: '// PWM Fade: pin 11 (~) par LED dheere dheere tez/dim\nint led = 11;\nint level = 0;\nint step = 5;\n\nvoid setup() {\n  pinMode(led, OUTPUT);\n}\n\nvoid loop() {\n  analogWrite(led, level);\n  level = level + step;\n  if (level <= 0 || level >= 255) {\n    step = -step;\n  }\n  delay(20);\n}\n',
+    melody: '// Buzzer (pin 8) par scale bajao\nconst int buzzer = 8;\nint notes[] = {262, 294, 330, 349, 392, 440, 494, 523};\n\nvoid setup() {\n}\n\nvoid loop() {\n  for (int i = 0; i < 8; i++) {\n    tone(buzzer, notes[i]);\n    delay(250);\n  }\n  noTone(buzzer);\n  delay(1000);\n}\n',
+    pot: '// Potentiometer (A0) se LED (pin 11) ki brightness\nconst int pot = A0;\nconst int led = 11;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(led, OUTPUT);\n}\n\nvoid loop() {\n  int v = analogRead(pot);\n  int b = map(v, 0, 1023, 0, 255);\n  analogWrite(led, b);\n  Serial.print("Pot: ");\n  Serial.println(v);\n  delay(100);\n}\n',
+    ldr: '// Night Lamp: andhera ho to LED (pin 12) jale\nconst int ldr = A1;\nconst int led = 12;\n\nvoid setup() {\n  pinMode(led, OUTPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int light = analogRead(ldr);\n  if (light < 300) {\n    digitalWrite(led, HIGH);\n  } else {\n    digitalWrite(led, LOW);\n  }\n  Serial.println(light);\n  delay(200);\n}\n',
+    temp: '// Temperature Alarm: 35 C se upar buzzer (pin 8)\nconst int sensor = A2;\nconst int buzz = 8;\n\nvoid setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int raw = analogRead(sensor);\n  float volt = raw * 5.0 / 1023.0;\n  float temp = (volt - 0.5) * 100.0;\n  Serial.print("Temp C: ");\n  Serial.println(temp);\n  if (temp > 35) {\n    tone(buzz, 1000);\n  } else {\n    noTone(buzz);\n  }\n  delay(500);\n}\n'
+  };
+
+  /* ---------- Lint: instant syntax / logic errors ---------- */
+  const TYPES = 'void|int|long|float|double|byte|boolean|bool|char|String|word|short|uint8_t|uint16_t|uint32_t|int8_t|int16_t|int32_t|size_t';
+  const API_FN = { pinMode: 2, digitalWrite: 2, digitalRead: 1, analogWrite: 2, analogRead: 1, delay: 1, delayMicroseconds: 1, millis: 0, micros: 0, tone: [2, 3], noTone: 1, random: [1, 2], randomSeed: 1, map: 5, constrain: 3, abs: 1, min: 2, max: 2, sqrt: 1, pow: 2, sin: 1, cos: 1, tan: 1, sq: 1, round: 1, floor: 1, ceil: 1, log: 1, exp: 1, radians: 1, degrees: 1, sizeof: 1, pulseIn: [2, 3], String: [0, 1, 2] };
+  const CONSTS = 'HIGH LOW INPUT OUTPUT INPUT_PULLUP LED_BUILTIN A0 A1 A2 A3 A4 A5 PI HEX DEC BIN OCT NULL true false Serial'.split(' ');
+  const KWS = ('if else for while do switch case default return break continue const static unsigned signed volatile struct enum typedef ' + TYPES.replace(/\|/g, ' ')).split(' ');
+  const SERIAL_M = new Set(['begin', 'print', 'println', 'write', 'available', 'read', 'flush', 'end', 'parseInt', 'setTimeout']);
+  function strip(src, errs) {
+    return src.replace(/\/\/[^\n]*|\/\*[\s\S]*?(?:\*\/|$)|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?/g, (m, ...a) => {
+      const off = a[a.length - 2];
+      if ((m[0] === '"' || m[0] === "'") && (m.length < 2 || m[m.length - 1] !== m[0] || /\\$/.test(m.slice(0, -1)) && m.length < 3)) errs.push({ ln: src.slice(0, off).split('\n').length, msg: "missing terminating " + m[0] + " character", sev: 'e' });
+      if (m.startsWith('/*') && !/\*\/$/.test(m)) errs.push({ ln: src.slice(0, off).split('\n').length, msg: "unterminated /* comment", sev: 'e' });
+      if (m[0] === '"' || m[0] === "'") return '0' + ' '.repeat(Math.max(0, m.length - 1));
+      return m.replace(/[^\n]/g, ' ');
+    });
+  }
+  function lev(a, b) {
+    const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[a.length][b.length];
+  }
+  function splitTop(s, sep) {
+    const out = []; let d = 0, cur = '';
+    for (const ch of s) { if ('([{'.includes(ch)) d++; else if (')]}'.includes(ch)) d--; if (ch === sep && d === 0) { out.push(cur); cur = ''; } else cur += ch; }
+    out.push(cur); return out;
+  }
+  function lint(src) {
+    const E = []; const c = strip(src, E); const lines = c.split('\n');
+    const add = (ln, msg, sev) => E.push({ ln, msg, sev: sev || 'e' });
+    // brackets
+    const st = []; let ln = 1; const PM = { ')': '(', ']': '[', '}': '{' };
+    for (const ch of c) {
+      if (ch === '\n') ln++;
+      else if ('([{'.includes(ch)) st.push([ch, ln]);
+      else if (')]}'.includes(ch)) { const t = st.pop(); if (!t) add(ln, "unexpected '" + ch + "' (isse pehle koi '" + PM[ch] + "' nahi mila)"); else if (t[0] !== PM[ch]) { add(ln, "'" + ch + "' ka jod '" + t[0] + "' (line " + t[1] + ") se nahi banta"); } }
+    }
+    st.forEach(t => add(t[1], "expected '" + { '(': ')', '[': ']', '{': '}' }[t[0]] + "' — '" + t[0] + "' band nahi kiya"));
+    // semicolons
+    let depth = 0;
+    lines.forEach((raw, i) => {
+      const t = raw.trim(); const sd = depth;
+      for (const ch of t) { if ('(['.includes(ch)) depth++; else if (')]'.includes(ch)) depth--; }
+      if (!t || t[0] === '#' || sd > 0 || depth > 0) return;
+      if (/[;{},:(]$/.test(t) || /^(else|do)$/.test(t)) return;
+      if (/^(if|else\s+if|for|while|switch)\b.*\)$/.test(t)) return;
+      if (/^(?:(?:static|inline|unsigned)\s+)*(?:void|int|long|float|double|byte|boolean|bool|char|String|word|short|uint\d+_t)\s+\w+\s*\([^;=]*\)$/.test(t)) return;
+      if (/[+\-*\/%&|?=<>!^]$/.test(t)) return;
+      const nx = lines.slice(i + 1).find(l => l.trim()); if (nx && /^\s*[+\-*\/%&|?:.=<>]/.test(nx) && !/^\s*(\+\+|--)/.test(nx)) return;
+      add(i + 1, "expected ';' — is line ke end me semicolon (;) lagayein");
+    });
+    // names
+    const fnDecl = new Set(), vars = new Set();
+    let m; const rf = new RegExp('\\b(?:' + TYPES + ')\\s+\\*?(\\w+)\\s*\\(', 'g');
+    while ((m = rf.exec(c))) fnDecl.add(m[1]);
+    const rv = new RegExp('\\b(?:' + TYPES + ')\\s+([^;{}]*)', 'g');
+    while ((m = rv.exec(c))) splitTop(m[1], ',').forEach(ch => { const n = (ch.match(/^\s*\*?\s*(\w+)/) || [])[1]; if (n) vars.add(n); });
+    c.replace(/^[ \t]*#[ \t]*define[ \t]+(\w+)/gm, (_, n) => { vars.add(n); return _; });
+    if (!fnDecl.has('setup')) add(1, "undefined reference to 'setup' — void setup() { } zaroori hai");
+    if (!fnDecl.has('loop')) add(1, "undefined reference to 'loop' — void loop() { } zaroori hai");
+    const known = new Set([...Object.keys(API_FN), ...CONSTS, ...KWS, ...fnDecl, ...vars]);
+    const body = c.replace(/^[ \t]*#.*$/gm, '').replace(/\b\d[\w.]*/g, '0');
+    const seen = new Set(); const ri = /(\.\s*)?\b([A-Za-z_]\w*)\b(\s*\()?/g; let k;
+    while ((k = ri.exec(body))) {
+      if (k[1]) continue; const n = k[2]; if (known.has(n)) continue;
+      const line = body.slice(0, k.index).split('\n').length; if (seen.has(n + line)) continue; seen.add(n + line);
+      let best = '', bd = 3; known.forEach(x => { if (/^[A-Z_]+$/.test(x) && x.length < 3) return; const d = lev(n.toLowerCase(), x.toLowerCase()); if (d < bd) { bd = d; best = x; } });
+      add(line, "'" + n + "' was not declared in this scope" + (best ? " — kya aapka matlab '" + best + "' tha?" : ''));
+    }
+    // Serial members + argument counts
+    const rs = /\bSerial\s*\.\s*(\w+)/g; let usesSer = false, begin = false;
+    while ((k = rs.exec(c))) { usesSer = true; if (k[1] === 'begin') begin = true; if (!SERIAL_M.has(k[1])) add(c.slice(0, k.index).split('\n').length, "'Serial' has no member named '" + k[1] + "'"); }
+    if (usesSer && !begin) add(1, 'Serial use kiya par Serial.begin(9600); setup() me nahi hai', 'w');
+    const rc = /(?<![.\w])(\w+)\s*\(/g;
+    while ((k = rc.exec(body))) {
+      const n = k[1]; if (!(n in API_FN) || fnDecl.has(n)) continue;
+      let d = 0, j = rc.lastIndex - 1, e = -1;
+      for (; j < body.length; j++) { if (body[j] === '(') d++; else if (body[j] === ')') { d--; if (!d) { e = j; break; } } }
+      if (e < 0) continue;
+      const inner = body.slice(rc.lastIndex, e).trim(), cnt = inner ? splitTop(inner, ',').length : 0, want = [].concat(API_FN[n]);
+      const okc = n === 'String' || want.includes(cnt);
+      if (!okc) add(body.slice(0, k.index).split('\n').length, (cnt < Math.min(...want) ? 'too few' : 'too many') + " arguments to function '" + n + "' (chahiye: " + want.join(' ya ') + ')');
+    }
+    E.sort((a, b) => a.ln - b.ln);
+    return E;
+  }
+
+  /* ---------- Arduino C++ -> JavaScript ---------- */
+  function matchParen(s, i) { let d = 0; for (let k = i; k < s.length; k++) { if (s[k] === '(') d++; else if (s[k] === ')') { d--; if (!d) return k; } } return -1; }
+  function guards(c) {
+    let out = '', last = 0, m; const re = /\b(while|for)\s*\(/g;
+    while ((m = re.exec(c))) {
+      const op = m.index + m[0].length - 1, cl = matchParen(c, op); if (cl < 0) break;
+      const inner = c.slice(op + 1, cl); let rep;
+      if (m[1] === 'while') rep = '(await __y(),(' + inner + '))';
+      else { const p = splitTop(inner, ';'); rep = p.length === 3 ? '(' + p[0] + ';(await __y(),(' + (p[1].trim() || 'true') + '));' + p[2] + ')' : '(' + inner + ')'; }
+      out += c.slice(last, m.index) + m[1] + rep; last = cl + 1; re.lastIndex = cl + 1;
+    }
+    return out + c.slice(last);
+  }
+  function toJS(src) {
+    const lit = []; let c = src.replace(/\/\/[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'/g, m => {
+      if (m[0] === '/') return m.replace(/[^\n]/g, ''); lit.push(m); return '\u0001' + (lit.length - 1) + '\u0002';
+    });
+    c = c.replace(/^[ \t]*#[ \t]*include.*$/gm, '').replace(/^[ \t]*#[ \t]*define[ \t]+(\w+)[ \t]+(.*)$/gm, 'const $1 = $2;');
+    const fns = [];
+    const strip = p => p.replace(/\b(?:const|unsigned|signed|volatile)\b|\b(?:int|long|float|double|byte|boolean|bool|char|String|word|short|uint\d+_t|int\d+_t|size_t)\b|[&*]|\[\s*\]/g, '');
+    c = c.replace(new RegExp('^[ \\t]*(?:(?:static|inline)\\s+)*(?:unsigned\\s+)?(?:' + TYPES + ')\\s+(\\w+)\\s*\\(([^)]*)\\)(\\s*)\\{', 'gm'), (_, n, p, w) => { fns.push(n); return 'async function ' + n + '(' + strip(p) + ')' + w + '{'; });
+    c = c.replace(new RegExp('\\b(?:(?:const|static|volatile|unsigned|signed|register)\\s+)*(?:' + TYPES.replace('void|', '') + ')\\s+(?:long\\s+)?\\*?\\s*(?=[A-Za-z_])', 'g'), 'let ');
+    c = c.replace(/\blet\s+(\w+)\s*\[\s*\w*\s*\]\s*=\s*\{([^}]*)\}/g, 'let $1 = [$2]').replace(/\blet\s+(\w+)\s*\[\s*(\w+)\s*\]\s*;/g, 'let $1 = new Array($2).fill(0);');
+    c = c.replace(/\(\s*(?:int|long|byte|word|char)\s*\)\s*(\w+(?:\([^()]*\))?|\([^()]*\))/g, 'Math.trunc($1)').replace(/\(\s*(?:float|double)\s*\)\s*/g, '');
+    c = c.replace(/\.length\(\)/g, '.length');
+    c = guards(c);
+    fns.forEach(n => { c = c.replace(new RegExp('(?<!function\\s)(?<![.\\w])' + n + '\\s*\\(', 'g'), 'await ' + n + '('); });
+    c = c.replace(/(?<![.\w])(delay|delayMicroseconds)\s*\(/g, 'await $1(');
+    return c.replace(/\u0001(\d+)\u0002/g, (_, i) => lit[+i]);
+  }
+  const STOP = { stop: 1 };
+
+  /* ---------- Virtual hardware ---------- */
+  const COMP = [
+    { id: 'red', t: 'led', n: 'LED Red', c: '#ff2b3d', pin: 13 }, { id: 'green', t: 'led', n: 'LED Green', c: '#22ff6a', pin: 12 },
+    { id: 'yellow', t: 'led', n: 'LED Yellow', c: '#ffe600', pin: 11 }, { id: 'buzz', t: 'buz', n: 'Buzzer', c: '#ff9a3c', pin: 8 },
+    { id: 'btn', t: 'btn', n: 'Push Button', c: '#4aa3ff', pin: 2 }, { id: 'pot', t: 'pot', n: 'Potentiometer', c: '#b57bff', pin: 14 },
+    { id: 'ldr', t: 'ldr', n: 'LDR Light', c: '#ffd166', pin: 15 }, { id: 'tmp', t: 'tmp', n: 'TMP36 Temp', c: '#34e0d0', pin: 16 }
+  ];
+  const PWM = new Set([3, 5, 6, 9, 10, 11]);
+  const X = i => 62 + i * 68, TY = 300, RAIL = 520;
+  const pinName = p => p >= 14 ? 'A' + (p - 14) : 'D' + p;
+  const pinXY = p => p < 14 ? [285 + (13 - p) * 21, 28] : [370 + (p - 14) * 21, 196];
+  const S = { mode: {}, val: {}, pwm: {}, tone: null, btn: false, pot: 512, ldr: 70, tmp: 25 };
+  const svg = q('#ardSvg'), serEl = q('#ardSer'), msgEl = q('#ardMsg'), statEl = q('#ardStat');
+  const R = {};
+  function buildSVG() {
+    let s = '<defs><filter id="ardBlur" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9"/></filter><pattern id="ardDots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1.7" fill="#b9ae8c"/></pattern></defs>';
+    s += '<rect x="20" y="10" width="580" height="200" rx="12" fill="#00838a" stroke="#00565b" stroke-width="3"/><rect x="20" y="62" width="58" height="62" rx="4" fill="#c9ced6" stroke="#8a919c"/><rect x="20" y="146" width="44" height="46" rx="4" fill="#1c1c20"/>';
+    s += '<circle cx="108" cy="46" r="11" fill="#d22" stroke="#800"/><text x="108" y="72" fill="#fff" font-size="10" text-anchor="middle">RESET</text><rect x="318" y="96" width="150" height="38" rx="3" fill="#222" stroke="#000"/><text x="393" y="119" fill="#bbb" font-size="11" text-anchor="middle">ATmega328P</text>';
+    s += '<text x="150" y="130" fill="#fff" font-size="26" font-weight="800" font-family="system-ui">ARDUINO</text><text x="150" y="156" fill="#bff" font-size="15" font-family="system-ui">UNO · IoT Lab</text>';
+    s += '<rect x="278" y="14" width="306" height="17" rx="2" fill="#15151a"/>';
+    for (let p = 0; p <= 13; p++) { const [x, y] = pinXY(p); s += '<rect x="' + (x - 5) + '" y="17" width="10" height="11" fill="#d8b34a"/><text x="' + x + '" y="46" fill="#fff" font-size="9" text-anchor="middle">' + (PWM.has(p) ? '~' : '') + p + '</text>'; }
+    s += '<circle id="ardL" cx="262" cy="64" r="5" fill="#ffb300" opacity=".25"/><text x="262" y="82" fill="#fff" font-size="9" text-anchor="middle">L</text>';
+    s += '<rect x="300" y="188" width="136" height="15" rx="2" fill="#15151a"/><rect x="362" y="188" width="126" height="15" rx="2" fill="#15151a"/>';
+    [['5V', 300], ['GND', 321]].forEach(a => { s += '<rect x="' + (a[1] - 5) + '" y="189" width="10" height="11" fill="#d8b34a"/><text x="' + a[1] + '" y="182" fill="#fff" font-size="9" text-anchor="middle">' + a[0] + '</text>'; });
+    for (let p = 14; p <= 19; p++) { const [x] = pinXY(p); s += '<rect x="' + (x - 5) + '" y="189" width="10" height="11" fill="#d8b34a"/><text x="' + x + '" y="182" fill="#fff" font-size="9" text-anchor="middle">A' + (p - 14) + '</text>'; }
+    s += '<rect x="20" y="248" width="580" height="292" rx="10" fill="#f1ead6" stroke="#cfc6a8" stroke-width="2"/><rect x="26" y="254" width="568" height="280" rx="8" fill="url(#ardDots)" opacity=".7"/>';
+    s += '<line x1="34" y1="262" x2="586" y2="262" stroke="#e23b3b" stroke-width="5"/><text x="40" y="256" font-size="10" fill="#a11" font-weight="700">+5V</text>';
+    s += '<line x1="34" y1="' + RAIL + '" x2="586" y2="' + RAIL + '" stroke="#2a6bff" stroke-width="5"/><text x="40" y="' + (RAIL + 17) + '" font-size="10" fill="#1844a8" font-weight="700">GND −</text>';
+    s += '<g id="ardWires"></g>';
+    COMP.forEach((c, i) => {
+      const x = X(i), leg = (a, b) => '<line x1="' + x + '" y1="' + a + '" x2="' + x + '" y2="' + b + '" stroke="#9a9a9a" stroke-width="2.5"/>';
+      s += '<g id="c' + i + '">';
+      if (c.t === 'led') {
+        s += '<circle class="glow" cx="' + x + '" cy="338" r="34" fill="' + c.c + '" opacity="0" filter="url(#ardBlur)"/>' + leg(TY, 322) + '<rect x="' + (x - 13) + '" y="322" width="26" height="32" rx="12" fill="' + c.c + '" opacity=".28" stroke="#555"/><rect class="lit" x="' + (x - 13) + '" y="322" width="26" height="32" rx="12" fill="' + c.c + '" opacity="0"/><ellipse cx="' + (x - 5) + '" cy="332" rx="3" ry="6" fill="#fff" opacity=".5"/>' + leg(354, 372) + '<rect x="' + (x - 7) + '" y="372" width="14" height="42" rx="4" fill="#d9b88a" stroke="#8a6a3a"/><rect x="' + (x - 7) + '" y="380" width="14" height="4" fill="#c00"/><rect x="' + (x - 7) + '" y="388" width="14" height="4" fill="#111"/><rect x="' + (x - 7) + '" y="396" width="14" height="4" fill="#a60"/>' + '<line x1="' + x + '" y1="414" x2="' + x + '" y2="' + RAIL + '" stroke="#9a9a9a" stroke-width="2.5"/>';
+      } else if (c.t === 'buz') {
+        s += leg(TY, 330) + '<g class="bz"><path class="wave" d="M' + (x + 26) + ' 336 q10 16 0 32" fill="none" stroke="' + c.c + '" stroke-width="3"/><path class="wave" d="M' + (x + 34) + ' 330 q16 22 0 44" fill="none" stroke="' + c.c + '" stroke-width="3"/><path class="wave" d="M' + (x - 26) + ' 336 q-10 16 0 32" fill="none" stroke="' + c.c + '" stroke-width="3"/><path class="wave" d="M' + (x - 34) + ' 330 q-16 22 0 44" fill="none" stroke="' + c.c + '" stroke-width="3"/></g><circle cx="' + x + '" cy="352" r="24" fill="#1b1b20" stroke="#555" stroke-width="2"/><circle cx="' + x + '" cy="352" r="6" fill="#000"/><text x="' + (x - 14) + '" y="336" fill="#ddd" font-size="11">+</text>' + '<line x1="' + x + '" y1="376" x2="' + x + '" y2="' + RAIL + '" stroke="#9a9a9a" stroke-width="2.5"/>';
+      } else if (c.t === 'btn') {
+        s += leg(TY, 330) + '<g class="btnc" tabindex="-1"><rect x="' + (x - 21) + '" y="330" width="42" height="42" rx="6" fill="#2b2f3a" stroke="#111" stroke-width="2"/><circle class="cap" cx="' + x + '" cy="351" r="14" fill="' + c.c + '" stroke="#12304f" stroke-width="2"/></g><line x1="' + x + '" y1="372" x2="' + x + '" y2="' + RAIL + '" stroke="#9a9a9a" stroke-width="2.5"/>';
+      } else if (c.t === 'pot') {
+        s += leg(TY, 328) + '<circle cx="' + x + '" cy="352" r="25" fill="#2a2350" stroke="#111" stroke-width="2"/><g class="knob" transform="rotate(0 ' + x + ' 352)"><circle cx="' + x + '" cy="352" r="17" fill="' + c.c + '"/><rect x="' + (x - 2) + '" y="336" width="4" height="13" rx="2" fill="#1a0d33"/></g><line x1="' + x + '" y1="377" x2="' + x + '" y2="' + RAIL + '" stroke="#9a9a9a" stroke-width="2.5"/>';
+      } else if (c.t === 'ldr') {
+        s += leg(TY, 338) + '<circle class="sun" cx="' + (x + 22) + '" cy="326" r="7" fill="#ffd166" opacity=".2"/><rect x="' + (x - 17) + '" y="338" width="34" height="20" rx="10" fill="#c8913a" stroke="#5a3a10" stroke-width="2"/><path d="M' + (x - 11) + ' 348 l4 -5 l4 10 l4 -10 l4 10 l4 -10 l3 5" fill="none" stroke="#5a3a10" stroke-width="1.6"/><line x1="' + x + '" y1="358" x2="' + x + '" y2="' + RAIL + '" stroke="#9a9a9a" stroke-width="2.5"/>';
+      } else {
+        s += leg(TY, 340) + '<path d="M' + (x - 17) + ' 376 v-16 a17 17 0 0 1 34 0 v16 z" fill="#25252b" stroke="#000" stroke-width="2"/><text x="' + x + '" y="372" fill="#ddd" font-size="8" text-anchor="middle">TMP36</text><line x1="' + x + '" y1="376" x2="' + x + '" y2="' + RAIL + '" stroke="#9a9a9a" stroke-width="2.5"/>';
+      }
+      s += '<circle cx="' + x + '" cy="' + TY + '" r="4.5" fill="#d8b34a" stroke="#7a5f10"/>';
+      s += '<text class="nm" x="' + x + '" y="446" text-anchor="middle" font-size="10" font-weight="700" fill="#2a2437" style="paint-order:stroke;stroke:#f1ead6;stroke-width:4px">' + c.n.replace('Potentiometer', 'Pot') + '</text><text class="pn" x="' + x + '" y="460" text-anchor="middle" font-size="10" fill="#7a1fa2" font-weight="700" style="paint-order:stroke;stroke:#f1ead6;stroke-width:4px"></text><text class="vl" x="' + x + '" y="486" text-anchor="middle" font-size="11" font-weight="700" fill="#0b4d2e" style="paint-order:stroke;stroke:#f1ead6;stroke-width:4px"></text></g>';
+    });
+    svg.innerHTML = s;
+    COMP.forEach((c, i) => { const g = q('#c' + i, svg); R[c.id] = { g, glow: q('.glow', g), lit: q('.lit', g), cap: q('.cap', g), knob: q('.knob', g), sun: q('.sun', g), bz: q('.bz', g), pn: q('.pn', g), vl: q('.vl', g), btn: q('.btnc', g) }; });
+    R.L = q('#ardL', svg);
+    // button on the board is clickable
+    const bd = e => { e.preventDefault(); S.btn = true; paint(); }, bu = () => { if (S.btn) { S.btn = false; paint(); } };
+    R.btn.btn.addEventListener('pointerdown', bd); window.addEventListener('pointerup', bu); window.addEventListener('pointercancel', bu);
+  }
+  function drawWires() {
+    let w = '<path class="wire" id="wr5v" d="M300 203 C300 250 70 210 42 262" stroke="#e23b3b" color="#e23b3b"/><path class="wire" id="wrg" d="M321 203 C321 330 8 300 26 ' + RAIL + '" stroke="#2a6bff" color="#2a6bff"/>';
+    COMP.forEach((c, i) => {
+      const [px, py] = pinXY(c.pin), x = X(i), dy = c.pin < 14 ? 130 : 60;
+      w += '<path class="wire" data-w="' + c.id + '" d="M' + px + ' ' + (py + (c.pin < 14 ? 0 : 6)) + ' C' + px + ' ' + (py + dy) + ' ' + x + ' ' + (TY - dy) + ' ' + x + ' ' + TY + '" stroke="' + c.c + '" color="' + c.c + '"/>';
+      if (c.t === 'pot' || c.t === 'ldr' || c.t === 'tmp') w += '<line class="wire" x1="' + (x + 12) + '" y1="262" x2="' + (x + 12) + '" y2="' + (TY - 6) + '" stroke="#e23b3b" stroke-width="2" style="stroke-width:2"/>';
+      R[c.id].pn.textContent = pinName(c.pin);
+    });
+    q('#ardWires', svg).innerHTML = w;
+  }
+  const lvl = p => S.pwm[p] != null ? S.pwm[p] / 255 : (S.val[p] ? (S.mode[p] === 1 ? 1 : .25) : 0);
+  const adc = c => c.t === 'pot' ? Math.round(S.pot) : c.t === 'ldr' ? Math.round(S.ldr * 10.23) : Math.round((0.5 + S.tmp / 100) / 5 * 1023);
+  let raf = 0; function paint() { if (!raf) raf = requestAnimationFrame(doPaint); }
+  function doPaint() {
+    raf = 0;
+    COMP.forEach((c, i) => {
+      const r = R[c.id], wr = q('[data-w="' + c.id + '"]', svg); let on = false;
+      if (c.t === 'led') { const v = lvl(c.pin); r.glow.style.opacity = v * .95; r.lit.style.opacity = v; on = v > 0; }
+      else if (c.t === 'buz') { on = !!(S.tone && S.tone.p === c.pin); r.g.classList.toggle('snd', on); }
+      else if (c.t === 'btn') { on = S.btn; r.cap.setAttribute('cy', S.btn ? 355 : 351); r.cap.setAttribute('r', S.btn ? 12 : 14); r.vl.textContent = S.btn ? 'PRESSED' : ''; }
+      else { on = true; r.vl.textContent = c.t === 'tmp' ? S.tmp + '°C · ' + adc(c) : c.t === 'ldr' ? S.ldr + '% · ' + adc(c) : adc(c); if (c.t === 'pot') r.knob.setAttribute('transform', 'rotate(' + Math.round(-135 + S.pot / 1023 * 270) + ' ' + X(i) + ' 352)'); if (c.t === 'ldr') r.sun.style.opacity = .15 + S.ldr / 120; }
+      if (wr) wr.classList.toggle('on', on && (c.t === 'led' || c.t === 'buz' || c.t === 'btn'));
+    });
+    R.L.setAttribute('opacity', .25 + .75 * lvl(13)); R.L.setAttribute('fill', lvl(13) > 0 ? '#ffe600' : '#ffb300');
+    chips.forEach(ch => { const p = +ch.dataset.p, md = S.mode[p]; ch.className = S.pwm[p] != null ? 'pw' : S.val[p] && md === 1 ? 'hi' : md === 0 || md === 2 ? 'in' : ''; ch.title = pinName(p) + (md === 1 ? ' OUTPUT' : md === 2 ? ' INPUT_PULLUP' : md === 0 ? ' INPUT' : ' (not set)') + (S.pwm[p] != null ? ' PWM ' + S.pwm[p] : ''); });
+  }
+  // pin chips
+  const chips = []; (function () { const box = q('#ardPins'); for (let p = 2; p <= 19; p++) { const i = document.createElement('i'); i.dataset.p = p; i.textContent = pinName(p); box.appendChild(i); chips.push(i); } })();
+  // wiring + sensor controls
+  (function () {
+    const wb = q('#ardWire'), sb = q('#ardSens');
+    COMP.forEach(c => {
+      const l = document.createElement('label'), sel = document.createElement('select'); l.textContent = c.n + ' pin'; l.appendChild(sel);
+      const list = (c.t === 'pot' || c.t === 'ldr' || c.t === 'tmp') ? [14, 15, 16, 17, 18, 19] : [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+      list.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = pinName(p) + (PWM.has(p) ? ' (~PWM)' : ''); if (p === c.pin) o.selected = true; sel.appendChild(o); });
+      sel.onchange = () => { c.pin = +sel.value; drawWires(); paint(); relint(); }; wb.appendChild(l);
+    });
+    const mk = (txt, min, max, key, unit) => { const l = document.createElement('label'), i = document.createElement('input'), sp = document.createElement('span'); i.type = 'range'; i.min = min; i.max = max; i.value = S[key]; const f = () => { S[key] = +i.value; sp.textContent = txt + ': ' + i.value + unit; paint(); }; i.oninput = f; l.append(sp, i); sb.appendChild(l); f(); };
+    mk('Potentiometer', 0, 1023, 'pot', ''); mk('Light (LDR)', 0, 100, 'ldr', '%'); mk('Temperature', 0, 50, 'tmp', '°C');
+    const h = document.createElement('button'); h.type = 'button'; h.className = 'ard-hold'; h.textContent = '👆 Push Button — dabaye rakho'; sb.appendChild(h);
+    const dn = e => { e.preventDefault(); S.btn = true; h.classList.add('on'); paint(); }, up = () => { S.btn = false; h.classList.remove('on'); paint(); };
+    h.addEventListener('pointerdown', dn); h.addEventListener('pointerup', up); h.addEventListener('pointerleave', up); h.addEventListener('pointercancel', up);
+    h.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') dn(e); }); h.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') up(); });
+  })();
+  buildSVG(); drawWires(); paint();
+
+  /* ---------- Sound ---------- */
+  let AC = null, osc = null, gn = null;
+  function beep(f) { if (!q('#ardSnd').checked) return; try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); if (!osc) { osc = AC.createOscillator(); gn = AC.createGain(); osc.type = 'square'; osc.connect(gn); gn.connect(AC.destination); osc.start(); } osc.frequency.value = f; gn.gain.value = .035; } catch (e) { } }
+  function hush() { try { if (gn) gn.gain.value = 0; } catch (e) { } }
+
+  /* ---------- Messages / status ---------- */
+  const ed = editor(q('#ardEd'), 'cpp', EX.blink, q('#ardSym'));
+  const warned = new Set();
+  function showMsgs(list) {
+    msgEl.innerHTML = '';
+    const bad = new Set();
+    list.forEach(x => { const d = document.createElement('div'); d.className = x.sev === 'e' ? 'e' : 'w'; d.textContent = (x.sev === 'e' ? '✖ ' : '⚠ ') + (x.ln ? 'Line ' + x.ln + ': ' : '') + x.msg; msgEl.appendChild(d); if (x.sev === 'e' && x.ln) bad.add(x.ln); });
+    if (!list.some(x => x.sev === 'e')) { const d = document.createElement('div'); d.className = 'g'; d.textContent = '✔ Syntax OK — koi error nahi mili'; msgEl.prepend(d); }
+    ed.mark(bad);
+  }
+  function setStat(t, c) { statEl.textContent = t || (running ? '● Running' : '● Stopped'); statEl.className = 'px-pill' + (c ? ' ' + c : running ? ' run' : ''); }
+  function rtMsg(msg, sev) { const d = document.createElement('div'); d.className = sev === 'e' ? 'e' : 'w'; d.textContent = (sev === 'e' ? '✖ Runtime error: ' : '⚠ ') + msg; msgEl.appendChild(d); msgEl.scrollTop = msgEl.scrollHeight; }
+  function warn(k, m) { if (warned.has(k)) return; warned.add(k); rtMsg(m, 'w'); }
+
+  /* ---------- Simulation engine ---------- */
+  let runId = 0, running = false; const timers = new Set();
+  function mkApi(id) {
+    const gd = () => { if (id !== runId) throw STOP; };
+    const chk = p => { if (!Number.isInteger(p) || p < 0 || p > 19) throw new Error('Pin ' + p + ' valid nahi hai (UNO: D0–D13, A0–A5)'); };
+    const norm = p => (p >= 0 && p <= 5) ? p + 14 : p;
+    const t0 = performance.now(); let n = 0;
+    const fmt = (x, b) => { if (typeof x === 'number') { if (Number.isInteger(x)) return (b && b !== 10) ? (x >>> 0).toString(b).toUpperCase() : String(x); return x.toFixed(b === undefined || b > 8 ? 2 : b); } if (typeof x === 'boolean') return x ? '1' : '0'; return String(x); };
+    const pr = t => { serEl.textContent = (serEl.textContent + t).slice(-6000); serEl.scrollTop = serEl.scrollHeight; };
+    const a = {
+      HIGH: 1, LOW: 0, INPUT: 0, OUTPUT: 1, INPUT_PULLUP: 2, LED_BUILTIN: 13, A0: 14, A1: 15, A2: 16, A3: 17, A4: 18, A5: 19, PI: Math.PI, HEX: 16, DEC: 10, BIN: 2, OCT: 8, NULL: 0,
+      __y: async () => { gd(); if (++n % 200 === 0) { await new Promise(r => setTimeout(r, 0)); gd(); } },
+      delay: ms => { gd(); return new Promise((res, rej) => { const t = { rej }; t.id = setTimeout(() => { timers.delete(t); res(); }, Math.max(0, +ms || 0)); timers.add(t); }); },
+      pinMode: (p, m) => { gd(); chk(p); S.mode[p] = m; if (m === 2) S.val[p] = 1; paint(); },
+      digitalWrite: (p, v) => { gd(); chk(p); if (S.mode[p] === undefined) warn('pm' + p, 'digitalWrite(' + p + ') se pehle pinMode(' + p + ', OUTPUT); likhein — warna LED poori nahi jalegi'); else if (S.mode[p] !== 1 && v) warn('po' + p, 'Pin ' + p + ' OUTPUT mode me nahi hai'); S.val[p] = v ? 1 : 0; S.pwm[p] = null; paint(); },
+      digitalRead: p => { gd(); chk(p); const c = COMP.find(x => x.t === 'btn' && x.pin === p); if (S.mode[p] === 1) return S.val[p] ? 1 : 0; if (c) return S.btn ? (S.mode[p] === 2 ? 0 : 1) : (S.mode[p] === 2 ? 1 : 0); if (S.mode[p] === undefined) warn('rm' + p, 'digitalRead(' + p + ') se pehle pinMode(' + p + ', INPUT) likhein'); return S.mode[p] === 2 ? 1 : 0; },
+      analogWrite: (p, v) => { gd(); chk(p); if (!PWM.has(p)) warn('pw' + p, 'Pin ' + p + ' PWM support nahi karta — 3, 5, 6, 9, 10, 11 (~) use karein'); v = Math.max(0, Math.min(255, Math.trunc(v))); if (S.mode[p] === undefined) S.mode[p] = 1; S.pwm[p] = PWM.has(p) ? v : null; S.val[p] = v >= 128 ? 1 : 0; paint(); },
+      analogRead: p => { gd(); p = norm(p); chk(p); const c = COMP.find(x => (x.t === 'pot' || x.t === 'ldr' || x.t === 'tmp') && x.pin === p); return c ? adc(c) : 0; },
+      tone: (p, f, d) => { gd(); chk(p); S.tone = { p, f }; beep(f); paint(); if (d) { const tk = S.tone; setTimeout(() => { if (S.tone === tk && id === runId) { S.tone = null; hush(); paint(); } }, d); } },
+      noTone: p => { gd(); S.tone = null; hush(); paint(); },
+      millis: () => Math.floor(performance.now() - t0), micros: () => Math.floor((performance.now() - t0) * 1000),
+      random: (x, y) => y === undefined ? Math.floor(Math.random() * x) : x + Math.floor(Math.random() * (y - x)), randomSeed: () => { },
+      map: (x, a1, b1, c1, d1) => Math.trunc((x - a1) * (d1 - c1) / (b1 - a1) + c1), constrain: (x, lo, hi) => Math.min(hi, Math.max(lo, x)),
+      abs: Math.abs, min: Math.min, max: Math.max, sqrt: Math.sqrt, pow: Math.pow, sin: Math.sin, cos: Math.cos, tan: Math.tan, sq: x => x * x, round: Math.round, floor: Math.floor, ceil: Math.ceil, log: Math.log, exp: Math.exp, radians: x => x * Math.PI / 180, degrees: x => x * 180 / Math.PI,
+      sizeof: x => Array.isArray(x) ? x.length * 2 : 2, pulseIn: () => 0,
+      Serial: { begin: () => { }, end: () => { }, flush: () => { }, available: () => 0, read: () => -1, parseInt: () => 0, setTimeout: () => { }, write: x => pr(String.fromCharCode(x)), print: (x, b) => pr(fmt(x, b)), println: (x, b) => pr((x === undefined ? '' : fmt(x, b)) + '\n') }
+    };
+    a.delayMicroseconds = us => a.delay(us / 1000);
+    return a;
+  }
+  const cleanup = () => { timers.forEach(t => { clearTimeout(t.id); t.rej(STOP); }); timers.clear(); S.tone = null; hush(); };
+  function stopSim() { runId++; running = false; cleanup(); setStat(); paint(); }
+  function resetState() { S.mode = {}; S.val = {}; S.pwm = {}; S.tone = null; warned.clear(); paint(); }
+  async function runSim() {
+    stopSim(); const src = ed.get(), res = lint(src); showMsgs(res);
+    if (res.some(x => x.sev === 'e')) { setStat('● Error', 'err'); return; }
+    resetState(); serEl.textContent = '';
+    const id = ++runId; running = true; setStat();
+    let prog;
+    try {
+      const js = toJS(src);
+      const F = new Function('__a', 'with(__a){return (async function(){' + js + '\nreturn {setup:typeof setup==="function"?setup:null,loop:typeof loop==="function"?loop:null};})();}');
+      prog = await F(mkApi(id));
+    } catch (e) { if (e !== STOP) { rtMsg(String(e.message || e), 'e'); running = false; setStat('● Error', 'err'); } return; }
+    try {
+      if (prog.setup) await prog.setup();
+      if (prog.loop) while (id === runId) { await prog.loop(); if (id !== runId) break; await new Promise(r => setTimeout(r, 1)); }
+    } catch (e) { if (e !== STOP && id === runId) { rtMsg(String(e.message || e), 'e'); running = false; cleanup(); setStat('● Error', 'err'); } }
+  }
+  ARD.run = runSim;
+  let tl = 0, tr = 0;
+  function relint() { clearTimeout(tl); tl = setTimeout(() => { const r = lint(ed.get()); showMsgs(r); if (!r.some(x => x.sev === 'e')) { if (!running) setStat(); } else setStat('● Error', 'err'); }, 250); }
+  ed.onchange = () => {
+    relint(); clearTimeout(tr);
+    if (q('#ardLive').checked) tr = setTimeout(() => { if (!lint(ed.get()).some(x => x.sev === 'e')) runSim(); }, 900);
+  };
+  ed.onrun = runSim;
+  q('#ardRun').onclick = runSim; q('#ardStop').onclick = () => { clearTimeout(tr); stopSim(); resetState(); };
+  q('#ardReset').onclick = () => { clearTimeout(tr); stopSim(); resetState(); ed.set(EX.blink); showMsgs(lint(ed.get())); serEl.textContent = ''; };
+  q('#ardSerClr').onclick = () => { serEl.textContent = ''; };
+  q('#ardEx').onchange = e => { const v = EX[e.target.value]; e.target.value = ''; if (v) { clearTimeout(tr); ed.set(v); showMsgs(lint(v)); runSim(); } };
+  q('#ardSnd').onchange = e => { if (!e.target.checked) hush(); };
+  showMsgs(lint(ed.get())); setStat();
+  document.addEventListener('visibilitychange', () => { if (document.hidden) hush(); });
+  window.__pxArduino = { lint, toJS };   // debugging / testing hook
 })();
