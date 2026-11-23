@@ -9,31 +9,49 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&family=Yatra+One&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- 3D floating boxes background (JS boxes banata hai) -->
+<div class="bg3d" id="bg3d" aria-hidden="true"></div>
 
 <header class="nav">
   <a href="#home" class="brand"><span class="logo">💻</span><b>ACCESS COMPUTER EDUCATION CENTRE<small>| SIGMA BOY</small></b></a>
   <nav id="menu">
+    <label class="tabrow tab-all" title="Sabhi sections ek saath kholo / band karo"><input type="checkbox" id="tabAll"> <span>Show all sections</span></label>
     <a href="#home" data-i18n="home">Home</a>
-    <a href="#gallery" data-i18n="gallery">Gallery</a>
-    <a href="#courses" data-i18n="courses">Courses</a>
-    <a href="#faculty" data-i18n="faculty">Faculty</a>
-    <a href="#msoffice" data-i18n="msoffice">MS Office</a>
-    <a href="#ccc" data-i18n="ccc">CCC Test</a>
-    <a href="#olevel" data-i18n="ol">O-Level Test</a>
-    <a href="#olcode" data-i18n="olcode">O-Level Coding</a>
-    <a href="#codepractice" data-i18n="codepr">Coding Practice</a>
-   <a href="#battle-arena" data-i18n="battle" onclick="switchTab('battle-arena')"><i class="fa-solid fa-gamepad"></i> Sigma Battle Arena</a>
-    <a href="#resume" data-en="Resume Builder" data-hi="रेज़्यूमे बिल्डर">Resume Builder</a>
-    <a href="#typing" data-i18n="typing">Typing</a>
-    <a href="#saturday" data-i18n="lb">Leaderboard</a>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="gallery" aria-label="Open or hide: Gallery" title="Tick = open, untick = hide"> <a href="#gallery" data-i18n="gallery">Gallery</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="courses" aria-label="Open or hide: Courses" title="Tick = open, untick = hide"> <a href="#courses" data-i18n="courses">Courses</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="coursefinder" aria-label="Open or hide: 🎯 Course Finder" title="Tick = open, untick = hide"> <a href="#coursefinder">🎯 Course Finder</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="faculty" aria-label="Open or hide: Faculty" title="Tick = open, untick = hide"> <a href="#faculty" data-i18n="faculty">Faculty</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="msoffice" aria-label="Open or hide: MS Office" title="Tick = open, untick = hide"> <a href="#msoffice" data-i18n="msoffice">MS Office</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="ccc" aria-label="Open or hide: CCC Test" title="Tick = open, untick = hide"> <a href="#ccc" data-i18n="ccc">CCC Test</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="onlinetest" aria-label="Open or hide: Online Test" title="Tick = open, untick = hide"> <a href="#onlinetest">📝 Online Test</a></span>
+    <div class="tabrow olx-nav" id="olxNav">
+      <input type="checkbox" class="tab-chk" data-tab="oltest" aria-label="Open or hide: O Level Test (HTML, CSS, JavaScript)" title="Tick = open, untick = hide">
+      <a href="#oltest">🎯 O Level Test</a>
+      <div class="olx-sub" id="olxSubNav" hidden>
+        <label><input type="checkbox" class="olx-pick" data-ox="ox_html"> <span>HTML <small>(HTML &amp; HTML5)</small></span></label>
+        <label><input type="checkbox" class="olx-pick" data-ox="ox_css"> <span>CSS <small>(CSS &amp; W3.CSS)</small></span></label>
+        <label><input type="checkbox" class="olx-pick" data-ox="ox_js"> <span>JavaScript <small>(JS &amp; AngularJS)</small></span></label>
+        <button type="button" class="btn sm olx-go" disabled>▶ Start Test</button>
+      </div>
+    </div>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="olevel" aria-label="Open or hide: O-Level Test" title="Tick = open, untick = hide"> <a href="#olevel" data-i18n="ol">O-Level Test</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="olcode" aria-label="Open or hide: O-Level Coding" title="Tick = open, untick = hide"> <a href="#olcode" data-i18n="olcode">O-Level Coding</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="codepractice" aria-label="Open or hide: Coding Practice" title="Tick = open, untick = hide"> <a href="#codepractice" data-i18n="codepr">Coding Practice</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="dailytest" aria-label="Open or hide: 📝 Daily Coding Test" title="Tick = open, untick = hide"> <a href="#dailytest">📝 Daily Coding Test</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="protools" aria-label="Open or hide: ⚡ Pro Tools" title="Tick = open, untick = hide"> <a href="#protools">⚡ Pro Tools</a></span>
+   <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="battle-arena" aria-label="Open or hide: Sigma Battle Arena" title="Tick = open, untick = hide"> <a href="#battle-arena" data-i18n="battle" onclick="switchTab('battle-arena')"><i class="fa-solid fa-gamepad"></i> Sigma Battle Arena</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="resume" aria-label="Open or hide: Resume Builder" title="Tick = open, untick = hide"> <a href="#resume" data-en="Resume Builder" data-hi="रेज़्यूमे बिल्डर">Resume Builder</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="typing" aria-label="Open or hide: Typing" title="Tick = open, untick = hide"> <a href="#typing" data-i18n="typing">Typing</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="saturday" aria-label="Open or hide: Leaderboard" title="Tick = open, untick = hide"> <a href="#saturday" data-i18n="lb">Leaderboard</a></span>
     
-    <a href="#shortcuts">Shortcuts &amp; Quiz</a>
-    <a href="#cloudsuite">Cloud Suite</a>
-    <a href="#resultshub">Results Hub</a>
-    <a href="#toolsupgrade">Resume &amp; Fee Receipt</a>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="shortcuts" aria-label="Open or hide: Shortcuts &amp; Quiz" title="Tick = open, untick = hide"> <a href="#shortcuts">Shortcuts &amp; Quiz</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="cloudsuite" aria-label="Open or hide: Cloud Suite" title="Tick = open, untick = hide"> <a href="#cloudsuite">Cloud Suite</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="resultshub" aria-label="Open or hide: Results Hub" title="Tick = open, untick = hide"> <a href="#resultshub">Results Hub</a></span>
+    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="toolsupgrade" aria-label="Open or hide: Resume &amp; Fee Receipt" title="Tick = open, untick = hide"> <a href="#toolsupgrade">Resume &amp; Fee Receipt</a></span>
     <a href="#contact" data-i18n="contact">Contact</a>
     <button class="m-only" id="themeBtn2" type="button" aria-label="Theme">🌙</button>
   </nav>
@@ -82,7 +100,7 @@
     <span class="tag pulse">🎓 Admission Open</span>
     <h1>Code is my weapon,<br><span class="grad glitch" data-t="success is my game">success is my game</span></h1>
     <p class="typing">Hum sikhate hain: <b id="typed"></b><i class="cur">|</i></p>
-    <div class="cta"><a class="btn" href="#ccc" data-i18n="cta1">CCC Test Do</a><a class="btn ghost" href="#courses" data-i18n="cta2">Courses Dekhein</a></div>
+    <div class="cta"><a class="btn" href="#ccc" data-i18n="cta1">CCC Test Do</a><a class="btn ghost" href="#courses" data-i18n="cta2">Courses Dekhein</a><a class="btn ghost" href="#coursefinder">🎯 Course Finder Quiz</a></div>
   </div>
   <div class="hcap" id="hCap"></div>
   <button class="s-btn prev" id="sPrev" aria-label="Previous">&#10094;</button>
@@ -120,6 +138,14 @@
   <p class="note">🎉 OBC students ke liye admission open hai. Details ke liye centre par sampark karein.</p>
 </section>
 
+<section class="sec reveal cf-sec" id="coursefinder">
+  <h2>Course Finder <span class="grad">Quiz</span></h2>
+  <p class="sub">Confuse hain kaunsa course lein? 6 chhote sawal ka jawab dein aur best course paayein</p>
+  <div class="cf-card" id="cfCard" aria-live="polite">
+    <noscript><p style="text-align:center">Quiz chalane ke liye JavaScript on karein, ya seedha <a href="https://wa.me/916393512412" style="color:var(--neon)">WhatsApp</a> par sampark karein.</p></noscript>
+  </div>
+</section>
+
 <section class="sec reveal alt" id="faculty">
   <h2>Our <span class="grad">Faculty</span></h2>
   <p class="sub">Theory aur practical dono me expert, anubhavi mentors</p>
@@ -135,6 +161,67 @@
   <h2>CCC <span class="grad">Online Test Series</span></h2>
   <p class="sub">Apna chapter chunein aur test shuru karein</p>
   <div class="grid tests" id="cccGrid"></div>
+</section>
+
+<section class="sec reveal alt" id="onlinetest">
+  <h2>Online <span class="grad">Test</span></h2>
+  <p class="sub">Test chunein &middot; Username + Test Password se login karein &middot; Har test sirf ek baar</p>
+  <div class="ot-grid notranslate" translate="no">
+    <div class="ot-card">
+      <span class="chip">Test 1</span>
+      <h3>M1-R5</h3>
+      <div class="ot-sub">IT Tools &amp; Network Basics &mdash; IT Basics, Operating System, LibreOffice Writer, Calc &amp; Impress</div>
+      <ul class="ot-meta"><li><b>100</b>Questions</li><li><b>60 min</b>Total timer</li><li><b>20 sec</b>Per question</li><li><b>40 / 100</b>Pass marks</li></ul>
+      <button class="btn" type="button" data-ot-start="M1-R5">▶ Start M1-R5</button>
+    </div>
+    <div class="ot-card">
+      <span class="chip">Test 2</span>
+      <h3>M2-R5</h3>
+      <div class="ot-sub">HTML Basics &mdash; Tags, Lists, Tables, Forms &amp; HTML5 (MCQ + True/False)</div>
+      <ul class="ot-meta"><li><b>50</b>Questions</li><li><b>35 min</b>Total timer</li><li><b>20 sec</b>Per question</li><li><b>25 / 50</b>Pass marks</li></ul>
+      <button class="btn" type="button" data-ot-start="M2-R5">▶ Start M2-R5</button>
+    </div>
+  </div>
+  <div class="ot-hbtn-row"><button class="btn ghost sm" type="button" data-ot-history>📜 History</button></div>
+  <p class="ot-note">Ek username se ek test sirf ek baar diya ja sakta hai. Page refresh / band hone par login karke wahin se resume hoga. 20 second me jawab na dene par agla sawal aa jayega.</p>
+</section>
+
+
+<section class="sec reveal" id="oltest">
+  <h2>O Level <span class="grad">Test</span></h2>
+  <p class="sub">Subject par tick karein, phir <b>Start Test</b> dabayein &middot; Har subject me 100 questions</p>
+  <div class="olx-wrap">
+    <div class="olx-cards" id="oltGrid" role="group" aria-label="O Level subjects">
+      <div class="card test olx-card" data-ox="ox_html">
+        <span class="chip">Subject 1</span>
+        <h3>HTML &amp; HTML5</h3>
+        <div class="count" data-count="ox_html">100 questions</div>
+        <p class="olx-topics">Tags, links, lists, tables, forms, semantic elements, audio/video, canvas, HTML5 input types</p>
+        <div data-badge="ox_html"></div>
+        <label class="olx-tick"><input type="checkbox" class="olx-pick" data-ox="ox_html"> <span>Tick to select</span></label>
+      </div>
+      <div class="card test olx-card" data-ox="ox_css">
+        <span class="chip">Subject 2</span>
+        <h3>CSS &amp; W3.CSS</h3>
+        <div class="count" data-count="ox_css">100 questions</div>
+        <p class="olx-topics">Selectors, box model, positioning, flexbox, grid, animations, media queries, W3.CSS classes</p>
+        <div data-badge="ox_css"></div>
+        <label class="olx-tick"><input type="checkbox" class="olx-pick" data-ox="ox_css"> <span>Tick to select</span></label>
+      </div>
+      <div class="card test olx-card" data-ox="ox_js">
+        <span class="chip">Subject 3</span>
+        <h3>JavaScript &amp; AngularJS</h3>
+        <div class="count" data-count="ox_js">100 questions</div>
+        <p class="olx-topics">Variables, functions, arrays, DOM, events, async code, AngularJS directives, modules, filters, routing</p>
+        <div data-badge="ox_js"></div>
+        <label class="olx-tick"><input type="checkbox" class="olx-pick" data-ox="ox_js"> <span>Tick to select</span></label>
+      </div>
+    </div>
+    <div class="olx-actions">
+      <button class="btn" id="oltStart" type="button" disabled>▶ Start Test</button>
+      <span id="oltHint" aria-live="polite">Pehle ek subject tick karein</span>
+    </div>
+  </div>
 </section>
 
 <section class="sec reveal alt" id="olevel">
@@ -294,6 +381,34 @@
 <p class="sub">Template chunein, details bharein, PDF download karein</p>
 <div class="cs-wrap"><div class="cs-tabs" id="csTabs2"></div><div class="cs-panel" id="csPanel2"></div></div></section>
 
+<section class="sec reveal car3d-sec" id="car3d">
+  <h2>3D <span class="grad">Drive Zone</span></h2>
+  <p class="sub">Hamari car Access Computer Centre ke around bar bar round lagati rehti hai &#128663; &mdash; mouse hilao, scene tilt hoga</p>
+  <div class="c3-stage" id="c3Stage" aria-label="3D car circling a track">
+    <div class="c3-scene" id="c3Scene">
+      <div class="c3-ground"></div>
+      <div class="c3-road"></div>
+      <div class="c3-lane"></div>
+      <div class="c3-pedestal"><i></i><i></i><i></i><i></i><i></i><b>ACCESS</b></div>
+      <div class="c3-orbit">
+        <div class="c3-trail"></div>
+        <div class="c3-car">
+          <div class="c3-shadow"></div>
+          <div class="c3-beam"></div>
+          <div class="cb chassis" style="--w:46px;--l:104px;--h:14px;--z:0px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb cabin" style="--w:38px;--l:50px;--h:13px;--y:-8px;--z:13px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb spoiler" style="--w:42px;--l:8px;--h:3px;--y:-47px;--z:13px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb hl" style="--w:9px;--l:2px;--h:5px;--x:14px;--y:52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb hl" style="--w:9px;--l:2px;--h:5px;--x:-14px;--y:52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb tl" style="--w:10px;--l:2px;--h:4px;--x:14px;--y:-52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb tl" style="--w:10px;--l:2px;--h:4px;--x:-14px;--y:-52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <i class="wh" style="--x:25px;--y:32px"></i><i class="wh tire" style="--x:20px;--y:32px"></i><i class="wh" style="--x:25px;--y:-32px"></i><i class="wh tire" style="--x:20px;--y:-32px"></i><i class="wh" style="--x:-25px;--y:32px"></i><i class="wh tire" style="--x:-20px;--y:32px"></i><i class="wh" style="--x:-25px;--y:-32px"></i><i class="wh tire" style="--x:-20px;--y:-32px"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec reveal alt" id="contact">
   <h2>Contact <span class="grad">Karein</span></h2>
   <p class="sub">Admission aur course ki jankari ke liye</p>
@@ -304,6 +419,62 @@
     <div class="card"><h3>Address</h3><p>✧ Behind Government Girls Inter College,<br>
 ✧ Sanjay Nagar Colony,<br>
 ✧ Bachhrawan, Raebareli </p><p>🕘 Timing: 8:00 AM - 5:00 PM</p></div>
+  </div>
+
+  <!-- ===== Contact Flip Social Dock ===== -->
+  <div class="contact-dock-stage">
+    <p class="dock-hint">Hover karo &mdash; letter palatke social icon dikhega</p>
+    <div class="contact-dock" role="group" aria-label="Social media links">
+      <div class="dock-item" style="--c:#1877f2">
+        <a class="letter" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
+          <span class="front">C</span>
+          <span class="back"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">Facebook</span>
+      </div>
+      <div class="dock-item" style="--c:#e1306c">
+        <a class="letter" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+          <span class="front">O</span>
+          <span class="back"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">Instagram</span>
+      </div>
+      <div class="dock-item" style="--c:#0a66c2">
+        <a class="letter" href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <span class="front">N</span>
+          <span class="back"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">LinkedIn</span>
+      </div>
+      <div class="dock-item" style="--c:#ff1a1a">
+        <a class="letter" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+          <span class="front">T</span>
+          <span class="back"><i class="fa-brands fa-youtube" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">YouTube</span>
+      </div>
+      <div class="dock-item" style="--c:#25d366">
+        <a class="letter" href="https://wa.me/916393512412" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <span class="front">A</span>
+          <span class="back"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">WhatsApp</span>
+      </div>
+      <div class="dock-item" style="--c:#ea4335">
+        <a class="letter" href="mailto:info@example.com" target="_blank" rel="noopener" aria-label="Email">
+          <span class="front">C</span>
+          <span class="back"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">Email</span>
+      </div>
+      <div class="dock-item" style="--c:#2b3340">
+        <a class="letter" href="https://x.com/" target="_blank" rel="noopener" aria-label="X / Twitter">
+          <span class="front">T</span>
+          <span class="back"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">X / Twitter</span>
+      </div>
+    </div>
   </div>
 </section>
 <!-- MS Office Main Section -->
@@ -2366,6 +2537,76 @@
             <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>slide6.jpeg</code></div>
             <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 2: DOM Manipulation &amp; Event Listeners" data-hi="उदाहरण 2: DOM मैनिपुलेशन और इवेंट लिसनर">Example 2: DOM Manipulation &amp; Event Listeners</span></figcaption>
           </figure>
+          <figure class="olc-fig">
+            <img src="screenprint.jpg" alt="JavaScript Coding Example 3" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>screenprint.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 3: Arithmetic Operators: sum, multiply, subtract &amp; divide (document.write)" data-hi="उदाहरण 3: अरिथमेटिक ऑपरेटर: जोड़, गुणा, घटाव और भाग (document.write)">Example 3: Arithmetic Operators: sum, multiply, subtract &amp; divide (document.write)</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="alert.jpg" alt="JavaScript Coding Example 4" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>alert.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 4: prompt() &amp; alert(): Area of a circle (3.14 * r * r)" data-hi="उदाहरण 4: prompt() और alert(): वृत्त का क्षेत्रफल (3.14 * r * r)">Example 4: prompt() &amp; alert(): Area of a circle (3.14 * r * r)</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="condition.jpg" alt="JavaScript Coding Example 5" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>condition.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 5: if...else: Voting eligibility check (age &gt;= 18)" data-hi="उदाहरण 5: if...else: वोट देने की पात्रता (age &gt;= 18)">Example 5: if...else: Voting eligibility check (age &gt;= 18)</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="condition2.jpg" alt="JavaScript Coding Example 6" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>condition2.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 6: if statements: Positive, Negative or Zero number check" data-hi="उदाहरण 6: if स्टेटमेंट: संख्या पॉज़िटिव, नेगेटिव या ज़ीरो चेक">Example 6: if statements: Positive, Negative or Zero number check</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="and.jpg" alt="JavaScript Coding Example 7" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>and.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 7: &amp;&amp; (AND) operator: Largest of three numbers" data-hi="उदाहरण 7: &amp;&amp; (AND) ऑपरेटर: तीन संख्याओं में सबसे बड़ी संख्या">Example 7: &amp;&amp; (AND) operator: Largest of three numbers</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="or.jpg" alt="JavaScript Coding Example 8" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>or.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 8: || (OR) operator: Vowel or Consonant check" data-hi="उदाहरण 8: || (OR) ऑपरेटर: स्वर या कंसोनेंट चेक">Example 8: || (OR) operator: Vowel or Consonant check</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="day.jpg" alt="JavaScript Coding Example 9" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>day.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 9: switch case: Day name from number (1 to 7)" data-hi="उदाहरण 9: switch case: नंबर (1 से 7) से दिन का नाम">Example 9: switch case: Day name from number (1 to 7)</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="fun.jpg" alt="JavaScript Coding Example 10" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>fun.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 10: String functions: length, toUpperCase, charAt, concat, bold, sub, sup &amp; more" data-hi="उदाहरण 10: स्ट्रिंग फंक्शन: length, toUpperCase, charAt, concat, bold, sub, sup आदि">Example 10: String functions: length, toUpperCase, charAt, concat, bold, sub, sup &amp; more</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="function.jpg" alt="JavaScript Coding Example 11" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>function.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 11: Math functions: abs, exp, floor, cos, log, sin, tan, sqrt, pow, ceil, max, min" data-hi="उदाहरण 11: मैथ फंक्शन: abs, exp, floor, cos, log, sin, tan, sqrt, pow, ceil, max, min">Example 11: Math functions: abs, exp, floor, cos, log, sin, tan, sqrt, pow, ceil, max, min</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="onload.jpg" alt="JavaScript Coding Example 12" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>onload.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 12: onload event: alert when the page loads" data-hi="उदाहरण 12: onload इवेंट: पेज लोड होते ही alert">Example 12: onload event: alert when the page loads</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="onchange.jpg" alt="JavaScript Coding Example 13" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>onchange.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 13: onchange event: convert input text to UPPERCASE" data-hi="उदाहरण 13: onchange इवेंट: इनपुट टेक्स्ट को UPPERCASE में बदलना">Example 13: onchange event: convert input text to UPPERCASE</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="onkeydown.jpg" alt="JavaScript Coding Example 14" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>onkeydown.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 14: onkeydown event: alert when any key is pressed" data-hi="उदाहरण 14: onkeydown इवेंट: कोई भी key दबाने पर alert">Example 14: onkeydown event: alert when any key is pressed</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="onmouseover.jpg" alt="JavaScript Coding Example 15" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>onmouseover.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 15: onmouseover / onmouseout event: mouse over and mouse out" data-hi="उदाहरण 15: onmouseover / onmouseout इवेंट: माउस ऊपर लाएँ और हटाएँ">Example 15: onmouseover / onmouseout event: mouse over and mouse out</span></figcaption>
+          </figure>
+          <figure class="olc-fig">
+            <img src="fileattach.jpg" alt="JavaScript Coding Example 16" loading="lazy" onerror="this.parentNode.classList.add('noimg')">
+            <div class="olc-ph"><span>📷 Yahan apni image lagayein</span><code>fileattach.jpg</code></div>
+            <figcaption><b>JavaScript Coding</b> &mdash; <span data-en="Example 16: Form action: Submit button opens another file (anshika.html) + img tag" data-hi="उदाहरण 16: Form action: Submit बटन से दूसरी फ़ाइल (anshika.html) खुलती है + img टैग">Example 16: Form action: Submit button opens another file (anshika.html) + img tag</span></figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -2509,6 +2750,138 @@
       </div>
       <p class="px-note">Live ON ho to code sahi hote hi simulation khud restart hota hai. Galti par error niche editor ke neeche dikhega (line number ke saath).</p>
     </div>
+  </div>
+</section>
+
+<!-- ===== DAILY CODING PRACTICE & TEST ===== -->
+<section class="sec" id="dailytest">
+  <div class="reveal">
+    <h2><span data-en="Daily Coding" data-hi="डेली कोडिंग">Daily Coding</span> <span class="grad" data-en="Practice &amp; Test" data-hi="प्रैक्टिस और टेस्ट">Practice &amp; Test</span></h2>
+    <p class="sub" data-en="Every day 3 new practical questions (HTML + CSS + JavaScript) — 30 minute timer, live Run Code, solution &amp; step-by-step marking. Open for every student!" data-hi="रोज़ 3 नए प्रैक्टिकल सवाल (HTML + CSS + JavaScript) — 30 मिनट टाइमर, लाइव Run Code, सॉल्यूशन और स्टेप-बाय-स्टेप मार्किंग। हर स्टूडेंट के लिए खुला!">Every day 3 new practical questions (HTML + CSS + JavaScript) — 30 minute timer, live Run Code, solution &amp; step-by-step marking. Open for every student!</p>
+  </div>
+  <div class="dct notranslate" translate="no" id="dct"></div>
+</section>
+
+<!-- ===== PRO TOOLS: 25 SUPER FEATURES (new tab) ===== -->
+<section class="sec pt-sec" id="protools">
+  <div class="reveal">
+    <h2><span data-en="Pro" data-hi="प्रो">Pro</span> <span class="grad" data-en="Tools: 25 Super Features" data-hi="टूल्स: 25 सुपर फीचर्स">Tools: 25 Super Features</span></h2>
+    <p class="sub" data-en="Small utilities that run entirely in your browser. Nothing is uploaded." data-hi="छोटे यूटिलिटी टूल्स जो पूरी तरह आपके ब्राउज़र में चलते हैं। कुछ भी अपलोड नहीं होता।">Small utilities that run entirely in your browser. Nothing is uploaded.</p>
+  </div>
+  <div class="pt-grid notranslate" translate="no" id="ptGrid">
+
+    <article class="pt-card pt-wide" data-k="search find filter quick"><h3>🔎 Quick search</h3>
+      <div class="pt-row2"><input id="ptSearch" type="search" placeholder="Search tools: json, timer, color, password…" autocomplete="off" aria-label="Search tools"><span id="ptCount" class="pt-pill">24 of 24</span></div>
+      <p id="ptNone" class="pt-msg" hidden>No tool matches that. Try “json”, “timer” or “color”.</p></article>
+
+    <article class="pt-card" data-k="password generator secure random"><h3>🔐 Password generator</h3>
+      <div class="pt-out" id="ptPwOut">-</div>
+      <label class="pt-row">Length <b id="ptPwLenV">16</b></label><input type="range" id="ptPwLen" min="6" max="48" value="16" aria-label="Password length">
+      <div class="pt-chk"><label><input type="checkbox" id="ptPwU" checked>A-Z</label><label><input type="checkbox" id="ptPwL" checked>a-z</label><label><input type="checkbox" id="ptPwN" checked>0-9</label><label><input type="checkbox" id="ptPwS" checked>#$%</label></div>
+      <div class="pt-btns"><button type="button" id="ptPwGen">Generate</button><button type="button" id="ptPwCopy" class="g">Copy</button></div><small id="ptPwStr" class="pt-msg"></small></article>
+
+    <article class="pt-card" data-k="gradient css color picker background"><h3>🌈 CSS gradient picker</h3>
+      <div class="pt-prev" id="ptGrPrev"></div>
+      <div class="pt-row2"><input type="color" id="ptGr1" value="#00f0ff" aria-label="Color 1"><input type="color" id="ptGr2" value="#7c3aed" aria-label="Color 2"><input type="range" id="ptGrAng" min="0" max="360" value="135" aria-label="Angle"></div>
+      <code class="pt-code" id="ptGrCss"></code>
+      <div class="pt-btns"><button type="button" id="ptGrCopy">Copy CSS</button><button type="button" id="ptGrRnd" class="g">Random</button></div></article>
+
+    <article class="pt-card" data-k="word character counter text count reading"><h3>🔢 Word &amp; character counter</h3>
+      <textarea id="ptCnIn" rows="3" placeholder="Type or paste text…" aria-label="Text to count"></textarea>
+      <div class="pt-stats"><span><b id="ptCnW">0</b>words</span><span><b id="ptCnC">0</b>chars</span><span><b id="ptCnS">0</b>no spaces</span><span><b id="ptCnL">0</b>lines</span><span><b id="ptCnT">0</b>sentences</span><span><b id="ptCnR">0</b>min read</span></div></article>
+
+    <article class="pt-card" data-k="binary hex decimal converter text number"><h3>💾 Binary converter</h3>
+      <input id="ptBnIn" placeholder="Text, binary or a number" aria-label="Input">
+      <div class="pt-btns"><button type="button" data-bn="t2b">Text→Bin</button><button type="button" data-bn="b2t" class="g">Bin→Text</button><button type="button" data-bn="n2b" class="g">Num→Bin/Hex</button><button type="button" data-bn="b2n" class="g">Bin→Num</button></div>
+      <div class="pt-out" id="ptBnOut">-</div></article>
+
+    <article class="pt-card" data-k="notes scratchpad memo save"><h3>📝 Notes scratchpad</h3>
+      <textarea id="ptNotes" rows="5" placeholder="Jot anything down. It saves on this device." aria-label="Notes"></textarea>
+      <div class="pt-btns"><button type="button" id="ptNotesClr" class="g">Clear</button><small id="ptNotesSt" class="pt-msg"></small></div></article>
+
+    <article class="pt-card" data-k="sound effects beep click toggle"><h3>🔊 Sound effects</h3>
+      <p class="pt-msg">Plays a soft click when you press buttons in these tools.</p>
+      <div class="pt-btns"><button type="button" id="ptSfx" class="pt-sw" role="switch" aria-checked="false">Off</button><button type="button" id="ptSfxTest" class="g">Test sound</button></div></article>
+
+    <article class="pt-card" data-k="neon text generator glow css"><h3>💡 Neon text generator</h3>
+      <div class="pt-prev pt-neonbox"><span id="ptNeonP">ACCESS</span></div>
+      <input id="ptNeonT" value="ACCESS" maxlength="24" aria-label="Neon text">
+      <div class="pt-row2"><input type="color" id="ptNeonC" value="#00f0ff" aria-label="Glow color"><button type="button" id="ptNeonCopy">Copy CSS</button></div></article>
+
+    <article class="pt-card" data-k="screen ruler pixel measure viewport"><h3>📏 Screen ruler</h3>
+      <p class="pt-msg">Viewport: <b id="ptRulSize">-</b></p>
+      <div class="pt-btns"><button type="button" id="ptRulBtn" class="pt-sw" role="switch" aria-checked="false">Ruler off</button></div>
+      <small class="pt-msg">Shows pixel rulers and a live cursor position. Esc turns it off.</small></article>
+
+    <article class="pt-card" data-k="calculator math calc"><h3>🧮 Calculator</h3>
+      <input id="ptCalcIn" inputmode="decimal" placeholder="0" autocomplete="off" aria-label="Calculator expression">
+      <div class="pt-keys" id="ptCalcKeys"></div></article>
+
+    <article class="pt-card" data-k="random quote motivation"><h3>💬 Random quote</h3>
+      <blockquote class="pt-quote" id="ptQ">-</blockquote>
+      <div class="pt-btns"><button type="button" id="ptQNew">New quote</button><button type="button" id="ptQCopy" class="g">Copy</button></div></article>
+
+    <article class="pt-card" data-k="theme accent color switcher dark light"><h3>🎨 Theme switcher</h3>
+      <div class="pt-sw-row" id="ptAcc"><button type="button" data-acc="cyan" style="--s:#00f0ff" aria-label="Cyan accent"></button><button type="button" data-acc="violet" style="--s:#b36bff" aria-label="Violet accent"></button><button type="button" data-acc="green" style="--s:#39ff88" aria-label="Green accent"></button><button type="button" data-acc="blue" style="--s:#3b9eff" aria-label="Blue accent"></button><button type="button" data-acc="pink" style="--s:#ff4fd8" aria-label="Pink accent"></button></div>
+      <div class="pt-btns"><button type="button" id="ptDark" class="g">Dark / Light</button></div></article>
+
+    <article class="pt-card" data-k="stopwatch timer lap time"><h3>⏱️ Stopwatch</h3>
+      <div class="pt-big" id="ptSwT">00:00.00</div>
+      <div class="pt-btns"><button type="button" id="ptSwGo">Start</button><button type="button" id="ptSwLap" class="g">Lap</button><button type="button" id="ptSwRst" class="g">Reset</button></div>
+      <ol class="pt-laps" id="ptSwL"></ol></article>
+
+    <article class="pt-card" data-k="local storage status memory space"><h3>🗄️ Local storage status</h3>
+      <div class="pt-meter"><i id="ptLsBar"></i></div>
+      <p class="pt-msg" id="ptLsTxt">-</p>
+      <div class="pt-btns"><button type="button" id="ptLsRef">Refresh</button><button type="button" id="ptLsClr" class="g">Clear Pro Tools data</button></div></article>
+
+    <article class="pt-card" data-k="regex regular expression tester match"><h3>🧪 Regex tester</h3>
+      <div class="pt-row2"><input id="ptRxP" placeholder="pattern e.g. \d+" aria-label="Pattern"><input id="ptRxF" value="g" maxlength="6" class="pt-flag" aria-label="Flags"></div>
+      <textarea id="ptRxT" rows="2" placeholder="Test text">Call 98765 43210 or 12345</textarea>
+      <div class="pt-out" id="ptRxO">-</div><small class="pt-msg" id="ptRxM"></small></article>
+
+    <article class="pt-card" data-k="json formatter validate minify beautify"><h3>🧾 JSON formatter</h3>
+      <textarea id="ptJs" rows="4" placeholder='{"name":"Access","tools":25}' aria-label="JSON"></textarea>
+      <div class="pt-btns"><button type="button" id="ptJsFmt">Format</button><button type="button" id="ptJsMin" class="g">Minify</button><button type="button" id="ptJsCopy" class="g">Copy</button></div><small class="pt-msg" id="ptJsM"></small></article>
+
+    <article class="pt-card" data-k="base64 encode decode"><h3>🔁 Base64 encoder</h3>
+      <textarea id="ptB64" rows="3" placeholder="Text or Base64" aria-label="Base64 input"></textarea>
+      <div class="pt-btns"><button type="button" id="ptB64E">Encode</button><button type="button" id="ptB64D" class="g">Decode</button><button type="button" id="ptB64C" class="g">Copy</button></div><small class="pt-msg" id="ptB64M"></small></article>
+
+    <article class="pt-card" data-k="code snippet copy html css javascript python"><h3>📋 Code snippet copier</h3>
+      <select id="ptSnS" aria-label="Snippet"></select>
+      <pre class="pt-pre" id="ptSnP"></pre>
+      <div class="pt-btns"><button type="button" id="ptSnC">Copy snippet</button></div></article>
+
+    <article class="pt-card" data-k="shortcut keyboard keys guide help"><h3>⌨️ Shortcut guide</h3>
+      <ul class="pt-keys2"><li><kbd>Ctrl</kbd>+<kbd>K</kbd> or <kbd>/</kbd><span>Site search</span></li><li><kbd>Alt</kbd>+<kbd>P</kbd><span>Jump to Pro Tools</span></li><li><kbd>Alt</kbd>+<kbd>M</kbd><span>Matrix rain</span></li><li><kbd>Alt</kbd>+<kbd>S</kbd><span>Sound effects</span></li><li><kbd>Alt</kbd>+<kbd>N</kbd><span>Focus notes</span></li><li><kbd>Esc</kbd><span>Close ruler / feedback</span></li></ul></article>
+
+    <article class="pt-card" data-k="network ping internet online latency speed"><h3>📡 Network ping</h3>
+      <p class="pt-msg"><span class="pt-dot" id="ptNetDot"></span><b id="ptNetSt">-</b> <span id="ptNetTy"></span></p>
+      <div class="pt-big" id="ptPing">- ms</div>
+      <div class="pt-btns"><button type="button" id="ptPingBtn">Ping now</button></div></article>
+
+    <article class="pt-card" data-k="feedback review rating modal"><h3>⭐ Quick feedback</h3>
+      <p class="pt-msg">Rate this page and leave a note. <span id="ptFbN"></span></p>
+      <div class="pt-btns"><button type="button" id="ptFbOpen">Give feedback</button></div></article>
+
+    <article class="pt-card" data-k="battery charge power level"><h3>🔋 Battery status</h3>
+      <div class="pt-meter"><i id="ptBatBar"></i></div>
+      <p class="pt-msg" id="ptBatTxt">Checking…</p></article>
+
+    <article class="pt-card" data-k="ambient sound noise rain focus music"><h3>🎧 Ambient sound</h3>
+      <select id="ptAmbS" aria-label="Sound"><option value="rain">Rain</option><option value="pink">Pink noise</option><option value="white">White noise</option><option value="brown">Deep rumble</option></select>
+      <label class="pt-row">Volume</label><input type="range" id="ptAmbV" min="0" max="100" value="40" aria-label="Volume">
+      <div class="pt-btns"><button type="button" id="ptAmbBtn" class="pt-sw" role="switch" aria-checked="false">Play</button></div></article>
+
+    <article class="pt-card" data-k="matrix rain background effect"><h3>🟩 Matrix rain</h3>
+      <p class="pt-msg">Falling code behind the whole site.</p>
+      <div class="pt-btns"><button type="button" id="ptMxBtn" class="pt-sw" role="switch" aria-checked="false">Off</button></div></article>
+
+    <article class="pt-card" data-k="particle speed slider background animation"><h3>✨ Particle speed</h3>
+      <label class="pt-row">Background speed <b id="ptSpV">1.0x</b></label><input type="range" id="ptSp" min="0" max="30" value="10" aria-label="Particle speed">
+      <div class="pt-btns"><button type="button" id="ptSpRst" class="g">Reset</button></div></article>
+
   </div>
 </section>
 
@@ -2675,31 +3048,161 @@
   <p>CCC · O-Level · ADCA · PGDCA · Tally · Python · Web Development . Msoffice </p>
 </footer>
 
+<!-- Online Test modal (login / test / result / history) -->
+<div class="modal notranslate" id="otModal" translate="no"><div class="modal-box ot-box" id="otBox" role="dialog" aria-modal="true" aria-labelledby="otTitle"></div></div>
+
 <!-- Login -->
 <div class="modal lg-modal" id="loginModal">
   <div class="lg-bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="bg3d bg3d-modal" aria-hidden="true"></div>
   <div class="lg-wrap" id="lgWrap">
     <button class="close" data-close aria-label="Close">&times;</button>
     <div class="lg-gate" id="lgGate">
+      <!-- Pull-cord lamp: cord ko neeche kheenchne par light jalti hai aur login box khulta hai -->
+      <div class="lamp" id="lamp">
+        <div class="lamp-beam" aria-hidden="true"></div>
+        <svg class="lamp-svg" id="lampSvg" viewBox="0 0 200 270" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="lampShadeG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+            <radialGradient id="lampBulbG" cx="50%" cy="38%" r="65%"><stop offset="0" stop-color="#fffbe6"/><stop offset=".55" stop-color="#ffd76a"/><stop offset="1" stop-color="#ffa62b"/></radialGradient>
+          </defs>
+          <line class="lamp-wire" x1="100" y1="0" x2="100" y2="30"/>
+          <g class="lamp-head" id="lampHead">
+            <rect class="lamp-cap" x="92" y="24" width="16" height="13" rx="3"/>
+            <path class="lamp-shade" d="M50 94C50 58 74 34 100 34s50 24 50 60z" fill="url(#lampShadeG)"/>
+            <ellipse class="lamp-rim" cx="100" cy="94" rx="50" ry="6"/>
+            <circle class="lamp-bulb-off" cx="100" cy="101" r="15"/>
+            <circle class="lamp-bulb-on" cx="100" cy="101" r="15" fill="url(#lampBulbG)"/>
+          </g>
+          <path class="lamp-cord" id="lampCord" d="M138 96L138 164" fill="none"/>
+          <g id="lampPull" transform="translate(138 164)">
+            <rect class="lamp-tab" x="-3" y="-12" width="6" height="12" rx="2"/>
+            <circle class="lamp-knob" cx="0" cy="6" r="9"/>
+            <circle class="lamp-shine" cx="-3" cy="3" r="2.6"/>
+          </g>
+        </svg>
+        <div class="lamp-hit" id="lampHit" role="button" tabindex="0" aria-pressed="false" aria-label="Pull the lamp cord down to turn on the light and open student login"></div>
+        <span class="lamp-cue" aria-hidden="true">Pull to turn on <b>&darr;</b></span>
+      </div>
       <div class="lg-logo">💻</div>
       <h3>Student Login</h3>
-      <p>Aage badhne ke liye neeche tick karein ✔</p>
-      <label class="lg-tick"><input type="checkbox" id="lgTick"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span><b>Main Access Computer ka student hu</b></label>
+      <p id="lampMsg">Cord ko neeche kheench kar light on karein 💡</p>
     </div>
-    <div class="lg-card" id="lgCard">
-      <div class="lg-side">
-        <div class="lg-logo sm">🎓</div>
-        <h3>Login karo,<br>rewards pao!</h3>
-        <ul><li>🎁 Roz ka Daily Gift</li><li>⭐ XP + Level system</li><li>🔥 Daily Streak &amp; Badges</li><li>🏆 Saturday Test Leaderboard</li></ul>
-      </div>
-      <form id="loginForm" class="lg-form">
-        <h3>Welcome 👋</h3>
-        <label class="lg-f"><span>👤</span><input id="lName" required minlength="3" placeholder="Apna poora naam" autocomplete="name"></label>
-        <label class="lg-f"><span>📱</span><input id="lMob" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit mobile number" autocomplete="tel"></label>
-        <button class="btn full lg-go" type="submit">Login Karein 🚀</button>
-        <small class="lg-note">Sirf naam aur mobile — koi password nahi.</small>
+    <!-- Naya Neumorphic Login / Sign Up card (purane naam+mobile form ki jagah) -->
+<div class="lg-card nm-host" id="lgCard">
+<div class="nm-card" id="nmCard" data-mode="login">
+
+    <!-- ===== LOGIN PANE (left) ===== -->
+    <div class="nm-pane nm-login" id="nmLoginPane">
+      <form class="nm-form" id="nmLoginForm" novalidate>
+        <h3 class="nm-title">Welcome Back</h3>
+        <p class="nm-lead">Apne account me login karein</p>
+
+        <div class="nm-field">
+          <i class="fa-solid fa-envelope nm-ico" aria-hidden="true"></i>
+          <input id="nmLEmail" type="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+        </div>
+        <div class="nm-field">
+          <i class="fa-solid fa-lock nm-ico" aria-hidden="true"></i>
+          <input id="nmLPass" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
+          <button type="button" class="nm-eye" aria-label="Password dikhao" aria-pressed="false"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+        </div>
+
+        <div class="nm-row">
+          <div class="nm-check">
+            <input type="checkbox" id="nmRemember">
+            <label for="nmRemember"><span class="nm-box"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Remember me</label>
+          </div>
+          <button type="button" class="nm-link" id="nmForgotBtn">Forgot Password?</button>
+        </div>
+
+        <p class="nm-msg" id="nmLMsg" role="alert" aria-live="polite"></p>
+        <button class="nm-btn nm-primary" type="submit"><span class="nm-btn-t">Login</span><span class="nm-spin" aria-hidden="true"></span></button>
       </form>
     </div>
+
+    <!-- ===== SIGN UP PANE (right) ===== -->
+    <div class="nm-pane nm-signup" id="nmSignupPane">
+      <form class="nm-form" id="nmSignupForm" novalidate>
+        <h3 class="nm-title">Create Account</h3>
+        <p class="nm-lead">Kuch hi second me account taiyaar</p>
+
+        <div class="nm-field">
+          <i class="fa-solid fa-user nm-ico" aria-hidden="true"></i>
+          <input id="nmSName" type="text" placeholder="Full name" aria-label="Full name" autocomplete="name" minlength="3" required>
+        </div>
+        <div class="nm-field">
+          <i class="fa-solid fa-envelope nm-ico" aria-hidden="true"></i>
+          <input id="nmSEmail" type="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+        </div>
+        <div class="nm-field">
+          <i class="fa-solid fa-phone nm-ico" aria-hidden="true"></i>
+          <input id="nmSMob" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit mobile number" aria-label="Mobile number" autocomplete="tel" required>
+        </div>
+        <div class="nm-field">
+          <i class="fa-solid fa-lock nm-ico" aria-hidden="true"></i>
+          <input id="nmSPass" type="password" placeholder="Password (min 6 akshar)" aria-label="Password" autocomplete="new-password" minlength="6" required>
+          <button type="button" class="nm-eye" aria-label="Password dikhao" aria-pressed="false"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+        </div>
+
+        <div class="nm-meter-wrap" aria-hidden="true">
+          <div class="nm-meter"><i id="nmMeterBar"></i></div>
+          <small id="nmMeterTxt"></small>
+        </div>
+
+        <p class="nm-msg" id="nmSMsg" role="alert" aria-live="polite"></p>
+        <button class="nm-btn nm-primary" type="submit"><span class="nm-btn-t">Sign Up</span><span class="nm-spin" aria-hidden="true"></span></button>
+      </form>
+    </div>
+
+    <!-- ===== SLIDING OVERLAY (photo + toggle) ===== -->
+    <aside class="nm-overlay" id="nmOverlay">
+      <div class="nm-avatar" aria-hidden="false">
+        <span><img class="nm-photo" src="login-photo.jpg" alt="Access Computer Education Centre student" width="150" height="150" loading="lazy" decoding="async"></span>
+      </div>
+
+      <div class="nm-ovtxt">
+        <div class="nm-ov nm-ov-login" id="nmOvLogin">
+          <h3>Pehli baar aaye ho?</h3>
+          <p>Free account banao aur Daily Gift, XP aur Saturday Leaderboard ka maza lo.</p>
+          <button type="button" class="nm-btn nm-ghost" data-nm-switch="signup"><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>Create Account</span></button>
+        </div>
+        <div class="nm-ov nm-ov-signup" id="nmOvSignup">
+          <h3>Wapas aa gaye!</h3>
+          <p>Account pehle se hai? Login karo aur wahin se shuru karo jahan chhoda tha.</p>
+          <button type="button" class="nm-btn nm-ghost" data-nm-switch="login"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>Login</span></button>
+        </div>
+      </div>
+
+      <!-- Sirf mobile par dikhta hai -->
+      <div class="nm-seg" role="group" aria-label="Login ya Sign Up chunein">
+        <button type="button" data-nm-switch="login" aria-pressed="true">Login</button>
+        <button type="button" data-nm-switch="signup" aria-pressed="false">Sign Up</button>
+      </div>
+    </aside>
+
+    <!-- ===== FORGOT PASSWORD SHEET ===== -->
+    <div class="nm-sheet" id="nmForgot" role="dialog" aria-label="Password reset">
+      <form class="nm-form" id="nmForgotForm" novalidate>
+        <h3 class="nm-title">Password Reset</h3>
+        <p class="nm-lead">Email aur naya password daalein</p>
+        <div class="nm-field">
+          <i class="fa-solid fa-envelope nm-ico" aria-hidden="true"></i>
+          <input id="nmFEmail" type="email" placeholder="Registered email" aria-label="Registered email" autocomplete="email" required>
+        </div>
+        <div class="nm-field">
+          <i class="fa-solid fa-key nm-ico" aria-hidden="true"></i>
+          <input id="nmFPass" type="password" placeholder="Naya password" aria-label="Naya password" autocomplete="new-password" minlength="6" required>
+          <button type="button" class="nm-eye" aria-label="Password dikhao" aria-pressed="false"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+        </div>
+        <p class="nm-msg" id="nmFMsg" role="alert" aria-live="polite"></p>
+        <button class="nm-btn nm-primary" type="submit"><span class="nm-btn-t">Password Badlein</span><span class="nm-spin" aria-hidden="true"></span></button>
+        <button type="button" class="nm-link nm-back" id="nmForgotBack"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Login par wapas</button>
+      </form>
+    </div>
+
+  </div>
+</div>
   </div>
 </div>
 
@@ -2939,6 +3442,38 @@ function googleTranslateElementInit() {
     <div class="sx-foot">Esc = close · Recording Desktop Chrome / Edge / Firefox me chalti hai</div>
   </div>
 </div>
+
+<!-- Pro Tools: background layers, ruler, feedback modal, toast -->
+<canvas id="ptBg" aria-hidden="true"></canvas>
+<canvas id="ptMatrix" aria-hidden="true"></canvas>
+<div id="ptRuler" hidden aria-hidden="true"><canvas id="ptRulC"></canvas><i id="ptRX"></i><i id="ptRY"></i><b id="ptRT"></b></div>
+<div id="ptModal" class="pt-modal" hidden role="dialog" aria-modal="true" aria-labelledby="ptFbH">
+  <div class="pt-mbox"><h3 id="ptFbH">How is the site?</h3>
+    <div class="pt-stars" id="ptStars" role="radiogroup" aria-label="Rating"><button type="button" data-v="1" aria-label="1 star">★</button><button type="button" data-v="2" aria-label="2 stars">★</button><button type="button" data-v="3" aria-label="3 stars">★</button><button type="button" data-v="4" aria-label="4 stars">★</button><button type="button" data-v="5" aria-label="5 stars">★</button></div>
+    <textarea id="ptFbT" rows="4" placeholder="What worked, what didn't?" aria-label="Feedback"></textarea>
+    <div class="pt-btns"><button type="button" id="ptFbSend">Send feedback</button><button type="button" id="ptFbX" class="g">Cancel</button></div>
+    <small class="pt-msg" id="ptFbM"></small></div>
+</div>
+<div id="ptToast" role="status" aria-live="polite"></div>
+
+<!-- 🎉 Fun / Effects button (confetti, balloons, fireworks, emoji + sound & voice, mute option ke saath) -->
+<div class="fun-wrap" id="funWrap">
+  <button type="button" class="fun-fab" id="funFab" aria-label="Fun effects" aria-expanded="false" aria-controls="funPanel" title="Fun effects 🎉">🎉</button>
+  <div class="fun-panel notranslate" translate="no" id="funPanel" role="dialog" aria-label="Fun effects" hidden>
+    <div class="fun-title">🎊 Fun Effects</div>
+    <div class="fun-grid">
+      <button type="button" data-fx="confetti">🎊 Confetti</button>
+      <button type="button" data-fx="balloons">🎈 Balloons</button>
+      <button type="button" data-fx="fireworks">🎆 Fireworks</button>
+      <button type="button" data-fx="emoji">😀 Emoji Rain</button>
+      <button type="button" data-fx="party">🥳 Party Mix</button>
+    </div>
+    <button type="button" class="fun-mute" id="funMute" aria-pressed="false">🔊 Sound: ON (tap to mute)</button>
+    <label class="fun-row"><input type="checkbox" id="funVoice"> <span>🗣️ Voice cheers</span></label>
+    <label class="fun-row"><input type="checkbox" id="funAuto"> <span>🏆 Celebrate good test scores (80%+)</span></label>
+  </div>
+</div>
+<canvas id="funCv" aria-hidden="true"></canvas>
 
 <!-- Matrix Canvas for Matrix Effect -->
 <canvas id="matrix-canvas"></canvas>

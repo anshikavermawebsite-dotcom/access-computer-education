@@ -321,6 +321,10 @@ const OL = [
   ['o1', 'IT Tools & Network Basics', 520], ['o2', 'Web Designing & Publishing', 558],
   ['o3', 'Python Programming Advance', 100], ['o4', 'Internet of Things - IoT', 100], ['o5', 'Advanced IT Systems & Security', 100]
 ];
+/* O Level Test (naya tab): HTML / CSS / JavaScript. Ye CCC aur purane O-Level chapters se alag hain. */
+const OLX = [
+  ['ox_html', 'HTML & HTML5', 100], ['ox_css', 'CSS & W3.CSS', 100], ['ox_js', 'JavaScript & AngularJS', 100]
+];
 const DAILY = [
   ['LibreOffice Writer me Save As ki shortcut key kya hai?', 'Ctrl + Shift + S'],
   ['HTML me sabse badi heading tag kaunsi hoti hai?', '<h1>']
@@ -2410,6 +2414,321 @@ const QB = {
   ]
 };
 
+/* ===== O Level Test question bank: HTML & HTML5 / CSS & W3.CSS / JavaScript & AngularJS (100 + 100 + 100) =====
+   Format: [question, [4 options], sahi_option_index (0 se 3), explanation]
+   Naye question jodne ke liye bas isi format me ek line add karein. */
+const QB_OX = {
+  /* ---------- HTML & HTML5 (100 questions) ---------- */
+  ox_html: [
+    ['What does HTML stand for?', ['Hyper Tool Markup Language', 'High Text Machine Language', 'Hyper Text Markup Language', 'Home Text Markup Language'], 2, 'HTML = Hyper Text Markup Language, the standard language for web pages.'],
+    ['Who is credited with creating HTML?', ['Bill Gates', 'Dennis Ritchie', 'Brendan Eich', 'Tim Berners-Lee'], 3, 'Tim Berners-Lee invented HTML and the World Wide Web in 1989-91.'],
+    ['Which tag defines the largest heading in HTML?', ['<h1>', '<head>', '<h6>', '<heading>'], 0, '<h1> is the largest heading and <h6> is the smallest.'],
+    ['Which tag is used to insert a single line break?', ['<lb>', '<break>', '<br>', '<hr>'], 2, '<br> is an empty tag that breaks the line without starting a new paragraph.'],
+    ['Which tag is used to create a paragraph?', ['<para>', '<p>', '<pg>', '<text>'], 1, 'The <p> tag defines a paragraph of text.'],
+    ['Which attribute of the <a> tag holds the link destination?', ['href', 'src', 'link', 'url'], 0, 'The href attribute stores the URL the link points to.'],
+    ['Which tag is used to display an image on a web page?', ['<image>', '<img>', '<pic>', '<src>'], 1, '<img> is an empty tag; the file is given in the src attribute.'],
+    ['Which attribute provides alternate text for an image if it cannot load?', ['title', 'alt', 'name', 'text'], 1, 'The alt attribute describes the image for screen readers and when loading fails.'],
+    ['Which tag creates an unordered (bulleted) list?', ['<ol>', '<li>', '<dl>', '<ul>'], 3, '<ul> makes a bulleted list; each item uses <li>.'],
+    ['Which tag creates an ordered (numbered) list?', ['<ul>', '<ol>', '<nl>', '<list>'], 1, '<ol> displays list items with numbers or letters.'],
+    ['Which tag defines an item inside a list?', ['<item>', '<list>', '<li>', '<il>'], 2, '<li> defines each list item inside <ul> or <ol>.'],
+    ['Which tag defines a table row?', ['<td>', '<tr>', '<th>', '<row>'], 1, '<tr> means table row; cells inside it use <td> or <th>.'],
+    ['Which tag defines a standard table data cell?', ['<tc>', '<cell>', '<tr>', '<td>'], 3, '<td> holds normal cell data inside a row.'],
+    ['Which tag defines a table header cell (bold and centered by default)?', ['<thead>', '<th>', '<head>', '<tb>'], 1, '<th> creates a header cell; browsers show it bold and centered.'],
+    ['Which attribute merges two or more columns in a table cell?', ['rowspan', 'merge', 'span', 'colspan'], 3, 'colspan makes a cell stretch across multiple columns.'],
+    ['Which attribute merges two or more rows in a table cell?', ['colspan', 'merge', 'height', 'rowspan'], 3, 'rowspan makes a cell stretch across multiple rows.'],
+    ['Which tag is used to create an HTML form for user input?', ['<input>', '<fieldform>', '<form>', '<submit>'], 2, '<form> wraps input controls and sends data to the server.'],
+    ['Which input type hides the characters typed by the user?', ['hidden', 'password', 'secret', 'text'], 1, 'type="password" shows dots or stars instead of characters.'],
+    ['Which input type lets the user pick multiple options independently?', ['radio', 'checkbox', 'select', 'button'], 1, 'Checkboxes allow zero, one or many selections.'],
+    ['How are radio buttons grouped so that only one can be chosen?', ['Same id', 'Same value', 'Same class', 'Same name attribute'], 3, 'Radio buttons with the same name belong to one group.'],
+    ['Which tag creates a multi-line text input?', ['<input type="multiline">', '<textbox>', '<text>', '<textarea>'], 3, '<textarea> accepts several lines of text.'],
+    ['Which pair of tags creates a drop-down list?', ['<select> and <option>', '<list> and <item>', '<dropdown> and <li>', '<ul> and <li>'], 0, '<select> is the container and each choice is an <option>.'],
+    ['Which attribute opens a link in a new browser tab?', ['target="_self"', 'new="tab"', 'open="new"', 'target="_blank"'], 3, 'target="_blank" opens the linked page in a new tab or window.'],
+    ['Which tag draws a horizontal line across the page?', ['<line>', '<br>', '<hr>', '<border>'], 2, '<hr> creates a thematic break shown as a horizontal rule.'],
+    ['Which tag marks text with strong importance (usually bold)?', ['<bold>', '<big>', '<heavy>', '<strong>'], 3, '<strong> shows importance and is bold by default.'],
+    ['Which tag is used to emphasise text (usually shown in italics)?', ['<em>', '<it>', '<slant>', '<emp>'], 0, '<em> stresses text and browsers display it in italics.'],
+    ['Which tag writes text as a subscript, like H2O?', ['<sup>', '<small>', '<low>', '<sub>'], 3, '<sub> lowers text below the baseline.'],
+    ['Which tag keeps spaces and line breaks exactly as typed?', ['<pre>', '<code>', '<tt>', '<text>'], 0, '<pre> displays preformatted text in a fixed-width font.'],
+    ['Which tag is used for a long quotation from another source?', ['<quote>', '<q>', '<blockquote>', '<cite>'], 2, '<blockquote> defines a block quotation, usually indented.'],
+    ['Which tag defines an abbreviation and can show full form on hover using title?', ['<short>', '<acr>', '<abb>', '<abbr>'], 3, '<abbr title="HyperText Markup Language">HTML</abbr> shows a tooltip.'],
+    ['Which tag is normally used for the contact information of the author?', ['<address>', '<contact>', '<author>', '<info>'], 0, '<address> holds contact details and is usually shown in italics.'],
+    ['Which tag embeds another web page inside the current page?', ['<embed>', '<frame>', '<window>', '<iframe>'], 3, '<iframe> creates an inline frame showing another document.'],
+    ['Where is the <title> tag placed?', ['Inside <head>', 'Inside <body>', 'Inside <footer>', 'After </html>'], 0, '<title> belongs in <head> and appears on the browser tab.'],
+    ['What does <meta charset="UTF-8"> do?', ['Sets the page language', 'Links a stylesheet', 'Sets the character encoding of the page', 'Sets the font'], 2, 'It tells the browser to use UTF-8 so all characters display properly.'],
+    ['Which tag links an external CSS file to an HTML page?', ['<style src="">', '<css>', '<script>', '<link>'], 3, '<link rel="stylesheet" href="style.css"> attaches an external stylesheet.'],
+    ['Which tag is used to write internal CSS inside an HTML page?', ['<css>', '<design>', '<format>', '<style>'], 3, 'The <style> tag holds internal CSS rules.'],
+    ['Which tag is used to include JavaScript in an HTML page?', ['<js>', '<script>', '<javascript>', '<code>'], 1, 'JavaScript goes inside <script> or in an external file via src.'],
+    ['What is the purpose of <!DOCTYPE html>?', ['It creates a comment', 'It tells the browser which HTML version the document uses', 'It links a stylesheet', 'It starts the body'], 1, 'The doctype triggers standards mode in the browser.'],
+    ['Which is the correct syntax of an HTML comment?', ['// comment', '<!-- comment -->', '/* comment */', '# comment'], 1, 'HTML comments start with <!-- and end with -->.'],
+    ['Which element is the root element of an HTML document?', ['<body>', '<html>', '<head>', '<root>'], 1, '<html> wraps the whole page and contains <head> and <body>.'],
+    ['Which element holds the visible content of a web page?', ['<head>', '<body>', '<main>', '<html>'], 1, 'Everything shown in the browser window sits inside <body>.'],
+    ['Which of the following is a block-level element?', ['<div>', '<span>', '<a>', '<b>'], 0, '<div> starts on a new line and takes the full width.'],
+    ['Which character entity creates a non-breaking space?', ['&space;', '&sp;', '&nbsp;', '&nbs;'], 2, '&nbsp; inserts a space that does not collapse or break.'],
+    ['Which entity displays the less-than sign (<)?', ['&gt;', '&lessthan;', '&lt;', '&lth;'], 2, '&lt; means less-than and &gt; means greater-than.'],
+    ['Which entity displays the copyright symbol?', ['&cr;', '&copy;', '&cp;', '&right;'], 1, '&copy; shows the copyright sign.'],
+    ['Which attribute gives an element a unique identifier?', ['id', 'class', 'name', 'key'], 0, 'An id must be unique in a page; class can repeat.'],
+    ['Which attribute adds inline CSS to an element?', ['style', 'css', 'font', 'format'], 0, 'style="color:red" applies CSS directly to that element.'],
+    ['Which attribute shows a tooltip when the mouse hovers over an element?', ['hover', 'tip', 'alt', 'title'], 3, 'The title attribute provides extra information as a tooltip.'],
+    ['Which attribute defines the language of a page, such as lang="en"?', ['language', 'locale', 'speak', 'lang'], 3, 'lang is set on <html> to declare the page language.'],
+    ['Which attribute prevents the user from changing an input value but still submits it?', ['disabled', 'locked', 'readonly', 'fixed'], 2, 'readonly blocks editing but the value is still sent with the form.'],
+    ['Which attribute limits the number of characters allowed in a text field?', ['size', 'maxlength', 'limit', 'length'], 1, 'maxlength sets the maximum number of characters.'],
+    ['Which attribute of <form> specifies where the data is sent?', ['action', 'method', 'target', 'name'], 0, 'action holds the URL of the script that processes the form.'],
+    ['Which HTTP method sends form data inside the request body and not in the URL?', ['GET', 'PUT', 'POST', 'HEAD'], 2, 'POST hides the data from the URL, GET shows it in the address bar.'],
+    ['What is the purpose of the <label> tag with the for attribute?', ['To link a caption to a form control', 'To create a heading', 'To style a table', 'To add a comment'], 0, 'Clicking the label focuses the control whose id matches for.'],
+    ['Which pair of tags groups form fields and gives the group a caption?', ['<group> and <title>', '<fieldset> and <legend>', '<form> and <caption>', '<div> and <label>'], 1, '<fieldset> draws a box and <legend> gives its title.'],
+    ['Which tag gives a title to a table?', ['<title>', '<caption>', '<head>', '<legend>'], 1, '<caption> must be the first child of <table>.'],
+    ['Which tags divide a table into header, body and footer sections?', ['<top>, <middle>, <bottom>', '<thead>, <tbody>, <tfoot>', '<head>, <body>, <foot>', '<th>, <tr>, <td>'], 1, '<thead>, <tbody> and <tfoot> group rows semantically.'],
+    ['Which tags are used to build a description (definition) list?', ['<dl>, <dt>, <dd>', '<ul>, <li>, <dd>', '<ol>, <li>, <dt>', '<list>, <term>, <desc>'], 0, '<dl> is the list, <dt> the term and <dd> the description.'],
+    ['Which code creates a link that opens the default email program?', ['<a href="mailto:abc@x.com">', '<a href="email:abc@x.com">', '<a href="mail=abc@x.com">', '<a src="mailto:abc@x.com">'], 0, 'The mailto: scheme starts a new email message.'],
+    ['Which code creates a link that starts a phone call on mobile?', ['<a href="tel:9876543210">', '<a href="call:9876543210">', '<a href="phone=9876543210">', '<a href="dial:9876543210">'], 0, 'The tel: scheme dials the number on supported devices.'],
+    ['How do you link to a section of the same page whose id is "contact"?', ['<a href="contact#">', '<a href="@contact">', '<a href="/contact">', '<a href="#contact">'], 3, 'A hash followed by an id jumps to that element.'],
+    ['Which tag sets the base URL for all relative links in a page?', ['<root>', '<url>', '<link>', '<base>'], 3, '<base href=""> in <head> is used as the starting point for relative URLs.'],
+    ['Which of these tags is deprecated and removed from HTML5?', ['<font>', '<section>', '<nav>', '<footer>'], 0, '<font> was replaced by CSS; HTML5 uses CSS for styling.'],
+    ['Which tag was used to make text scroll horizontally (non-standard now)?', ['<scroll>', '<marquee>', '<move>', '<slide>'], 1, '<marquee> creates scrolling text but is obsolete.'],
+    ['Which attributes set the size of an image in pixels?', ['size and length', 'width and height', 'x and y', 'top and left'], 1, 'width and height define the displayed size of <img>.'],
+    ['Which pair of tags creates a clickable image map?', ['<img> and <hotspot>', '<link> and <area>', '<map> and <area>', '<map> and <zone>'], 2, '<map> holds clickable <area> regions used with usemap on <img>.'],
+    ['Which attribute changes the numbering style of an ordered list to capital letters?', ['style="A"', 'letter="A"', 'type="A"', 'order="A"'], 2, 'type="A" gives A, B, C; type="1" gives numbers.'],
+    ['Which attribute makes an ordered list start counting from 5?', ['begin="5"', 'from="5"', 'start="5"', 'count="5"'], 2, 'start="5" begins the numbering at 5.'],
+    ['Which statement about HTML tags is correct?', ['HTML tags are case-sensitive', 'Only lowercase tags work', 'Only uppercase tags work', 'HTML tags are not case-sensitive'], 3, 'HTML tag names are not case-sensitive, but lowercase is recommended.'],
+    ['What is the correct HTML for making a text input field?', ['<textinput>', '<input type="textfield">', '<text>', '<input type="text">'], 3, '<input type="text"> creates a single-line text box.'],
+    ['Which input type creates a button that sends the form?', ['type="send"', 'type="go"', 'type="post"', 'type="submit"'], 3, 'A submit button submits the form to the action URL.'],
+    ['Which input type clears all form fields to their original values?', ['clear', 'reset', 'delete', 'undo'], 1, 'type="reset" restores the default values.'],
+    ['Which input type allows the user to choose a file to upload?', ['type="upload"', 'type="attach"', 'type="file"', 'type="browse"'], 2, 'type="file" opens the file chooser (form needs enctype="multipart/form-data").'],
+    ['Which element is new in HTML5 and defines the introductory content of a page or section?', ['<top>', '<intro>', '<start>', '<header>'], 3, '<header> contains headings, logos and introductory content.'],
+    ['Which HTML5 element defines the footer of a page or section?', ['<footer>', '<bottom>', '<end>', '<foot>'], 0, '<footer> usually holds copyright and contact information.'],
+    ['Which HTML5 element defines a standalone, self-contained piece of content like a blog post?', ['<article>', '<section>', '<aside>', '<div>'], 0, '<article> can be distributed independently, e.g. a news story.'],
+    ['Which HTML5 element groups related content under a heading in a thematic section?', ['<group>', '<part>', '<section>', '<block>'], 2, '<section> divides a document into thematic sections.'],
+    ['Which HTML5 element holds content slightly related to the main content, such as a sidebar?', ['<aside>', '<side>', '<extra>', '<sidebar>'], 0, '<aside> is for tangential content like sidebars or ads.'],
+    ['Which HTML5 element represents the dominant content of the <body>?', ['<primary>', '<content>', '<main>', '<center>'], 2, '<main> should appear only once per page.'],
+    ['Which pair of HTML5 tags adds an image with a caption?', ['<img> and <caption>', '<image> and <title>', '<pic> and <text>', '<figure> and <figcaption>'], 3, '<figure> wraps the media and <figcaption> describes it.'],
+    ['Which HTML5 tag is used to play audio files?', ['<audio>', '<sound>', '<music>', '<mp3>'], 0, '<audio controls> embeds an audio player without plugins.'],
+    ['Which HTML5 tag embeds a video player?', ['<movie>', '<media>', '<video>', '<film>'], 2, '<video controls> plays MP4, WebM or Ogg files.'],
+    ['Which attribute shows play, pause and volume buttons on <audio> or <video>?', ['buttons', 'player', 'controls', 'show'], 2, 'The Boolean controls attribute displays the default player controls.'],
+    ['Which tag is used inside <video> to give different file formats for the same video?', ['<source>', '<format>', '<file>', '<track>'], 0, '<source src="movie.mp4" type="video/mp4"> lets the browser pick a supported format.'],
+    ['Which HTML5 element is used to draw graphics with JavaScript?', ['<graphic>', '<draw>', '<canvas>', '<svg-js>'], 2, '<canvas> is a drawing area controlled by scripts.'],
+    ['Which input type is new in HTML5 and validates an email address?', ['type="mail"', 'type="text-email"', 'type="email"', 'type="address"'], 2, 'type="email" checks for a valid email format.'],
+    ['Which HTML5 input type shows a slider control?', ['range', 'slider', 'scroll', 'bar'], 0, 'type="range" lets the user pick a value between min and max.'],
+    ['Which HTML5 input type displays a date picker?', ['calendar', 'date', 'day', 'datetime-text'], 1, 'type="date" shows a calendar picker in modern browsers.'],
+    ['Which HTML5 attribute forces a user to fill a field before submitting the form?', ['mandatory', 'needed', 'validate', 'required'], 3, 'required prevents submitting an empty field.'],
+    ['Which HTML5 attribute shows a hint text inside an input until the user types?', ['hint', 'placeholder', 'tip', 'default'], 1, 'placeholder displays light grey hint text inside the field.'],
+    ['Which HTML5 element provides a list of predefined options for an <input> through the list attribute?', ['<select>', '<options>', '<datalist>', '<autocomplete>'], 2, '<datalist> gives autocomplete suggestions for an input.'],
+    ['Which HTML5 element shows the progress of a task such as a download?', ['<progress>', '<status>', '<loader>', '<bar>'], 0, '<progress value="40" max="100"> displays a progress bar.'],
+    ['Which HTML5 element displays a scalar measurement within a known range, such as disk usage?', ['<meter>', '<gauge>', '<range>', '<scale>'], 0, '<meter> shows a value in a known range, unlike <progress>.'],
+    ['Which HTML5 elements create content that the user can expand or collapse?', ['<details> and <summary>', '<toggle> and <content>', '<open> and <close>', '<accordion> and <panel>'], 0, '<summary> is the visible heading and <details> reveals the rest.'],
+    ['Which HTML5 tag highlights text like a marker pen?', ['<highlight>', '<hl>', '<mark>', '<em>'], 2, '<mark> shows text with a yellow background by default.'],
+    ['What is the purpose of data-* attributes in HTML5?', ['To connect to a database', 'To define the data type of an input', 'To store custom data on elements', 'To encrypt the content'], 2, 'data-id="5" can be read in JavaScript through dataset.'],
+    ['Which HTML5 feature stores data in the browser with no expiry date?', ['sessionStorage', 'cookie only', 'cacheStorage', 'localStorage'], 3, 'localStorage keeps data until it is cleared; sessionStorage ends with the tab.'],
+    ['Which HTML5 API is used to find the geographical position of a user?', ['Position API', 'Map API', 'Geolocation API', 'Locate API'], 2, 'navigator.geolocation.getCurrentPosition() requests the location with permission.'],
+    ['Which attribute makes an element editable by the user?', ['editable="true"', 'contenteditable="true"', 'edit="true"', 'write="true"'], 1, 'contenteditable lets the user edit the content directly.'],
+    ['Which of the following elements is NOT supported in HTML5?', ['<abbr>', '<acronym>', '<mark>', '<time>'], 1, '<acronym> was removed; <abbr> replaces it.']
+  ],
+  /* ---------- CSS & W3.CSS (100 questions) ---------- */
+  ox_css: [
+    ['What does CSS stand for?', ['Cascading Style Sheets', 'Creative Style Sheets', 'Computer Style Sheets', 'Colorful Style Sheets'], 0, 'CSS = Cascading Style Sheets; it controls the look of HTML pages.'],
+    ['Which HTML tag is used to link an external CSS file?', ['<style>', '<link>', '<css>', '<script>'], 1, '<link rel="stylesheet" href="style.css"> is placed inside <head>.'],
+    ['Which CSS type has the highest priority when styles conflict?', ['Inline CSS', 'External CSS', 'Internal CSS', 'Browser default'], 0, 'Inline styles written in the style attribute override internal and external rules.'],
+    ['Which selector targets an element with id="menu"?', ['.menu', '*menu', '#menu', 'menu'], 2, 'The hash symbol (#) selects by id.'],
+    ['Which selector targets all elements with class="box"?', ['#box', '.box', 'box', '*box'], 1, 'The dot (.) selects by class name.'],
+    ['Which selector selects every element on the page?', ['#', '*', '&', 'all'], 1, 'The universal selector * matches all elements.'],
+    ['What is the correct way to apply the same style to h1 and p together?', ['h1 p { }', 'h1 > p { }', 'h1 + p { }', 'h1, p { }'], 3, 'A comma groups selectors so they share one rule.'],
+    ['In div p { color: red; }, which elements become red?', ['Only direct child p of div', 'Every p inside a div at any level', 'Only the first p in div', 'Every div'], 1, 'A space is the descendant combinator and matches all nested p tags.'],
+    ['In div > p { color: red; }, which elements are affected?', ['All p inside div at any depth', 'The p placed after div', 'Only p that are direct children of div', 'All div elements'], 2, 'The > combinator selects direct children only.'],
+    ['What does h1 + p { } select?', ['All p after h1', 'The p inside h1', 'Every p in the page', 'The first p placed immediately after an h1'], 3, 'The + combinator selects the adjacent sibling right after h1.'],
+    ['Which selector selects links that open in a new tab, a[target="_blank"]?', ['Class selector', 'Pseudo-class selector', 'Attribute selector', 'Universal selector'], 2, 'Square brackets create an attribute selector.'],
+    ['Which pseudo-class styles an element when the mouse is over it?', [':hover', ':active', ':focus', ':visited'], 0, ':hover applies while the pointer is over the element.'],
+    ['Which pseudo-class selects the first child of its parent?', [':first', ':start', ':top-child', ':first-child'], 3, ':first-child matches an element that is the first child.'],
+    ['Which pseudo-element inserts content before an element content?', [':before-text', '::before', '::first', '::insert'], 1, '::before with the content property adds generated content.'],
+    ['Which selector selects every even list item?', ['li:even', 'li:second', 'li:nth-child(even)', 'li:nth(2)'], 2, 'nth-child(even) selects 2nd, 4th, 6th ... children.'],
+    ['Which is the correct syntax for a CSS comment?', ['// comment', '/* comment */', '<!-- comment -->', '# comment'], 1, 'CSS comments are written between /* and */.'],
+    ['Which property changes the text colour?', ['text-color', 'font-color', 'fgcolor', 'color'], 3, 'The color property sets the foreground (text) colour.'],
+    ['Which property sets the background colour of an element?', ['bgcolor', 'color-background', 'back-color', 'background-color'], 3, 'background-color accepts names, hex, rgb or hsl values.'],
+    ['Which property sets an image as the background?', ['image', 'bg-src', 'background-image', 'background-src'], 2, 'background-image: url("pic.jpg") sets the image.'],
+    ['Which value stops a background image from repeating?', ['repeat-none', 'stop', 'no-repeat', 'repeat: off'], 2, 'background-repeat: no-repeat shows the image only once.'],
+    ['Which value makes a background image cover the full element?', ['background-size: cover', 'background-fit: full', 'background-size: stretch', 'background-cover: true'], 0, 'cover scales the image to fill the whole area.'],
+    ['Which property changes the font of text?', ['font-style', 'text-font', 'typeface', 'font-family'], 3, 'font-family selects the typeface, e.g. Arial, sans-serif.'],
+    ['Which property changes the size of text?', ['font-size', 'text-size', 'size', 'font-height'], 0, 'font-size sets the text size, e.g. 16px.'],
+    ['Which declaration makes text bold?', ['text-style: bold', 'font: bolder-only', 'font-weight: bold', 'weight: bold'], 2, 'font-weight accepts normal, bold or numbers like 700.'],
+    ['Which declaration makes text italic?', ['font-style: italic', 'text-style: italic', 'font-weight: italic', 'text-decoration: italic'], 0, 'font-style: italic slants the text.'],
+    ['Which declaration centres text horizontally inside its container?', ['align: center', 'text-align: center', 'text-center: true', 'font-align: middle'], 1, 'text-align controls horizontal alignment of inline content.'],
+    ['Which declaration removes the underline from links?', ['underline: none', 'link-style: none', 'text-decoration: none', 'text-style: plain'], 2, 'text-decoration: none removes underlines.'],
+    ['Which declaration makes all letters capital?', ['font-variant: caps-lock', 'text-transform: uppercase', 'text-case: upper', 'letter-case: capital'], 1, 'text-transform: uppercase converts text to capital letters.'],
+    ['Which property controls the space between lines of text?', ['line-spacing', 'line-height', 'text-space', 'row-gap'], 1, 'line-height sets the height of each line box.'],
+    ['In the CSS box model, what is the correct order from the inside to the outside?', ['Margin, border, padding, content', 'Content, padding, border, margin', 'Content, border, padding, margin', 'Padding, content, border, margin'], 1, 'Content is at the centre, then padding, border and margin.'],
+    ['Which part of the box model is the space between content and border?', ['Margin', 'Padding', 'Outline', 'Gap'], 1, 'Padding is inside the border; margin is outside it.'],
+    ['Which part of the box model creates space outside the border?', ['Padding', 'Margin', 'Content', 'Spacing'], 1, 'Margin separates an element from its neighbours.'],
+    ['What does margin: 10px 20px; mean?', ['10px left and right, 20px top and bottom', '10px top, 20px bottom', '10px all around', '10px top and bottom, 20px left and right'], 3, 'Two values mean vertical first, horizontal second.'],
+    ['In margin: 10px 20px 30px 40px; which value is for the left side?', ['10px', '20px', '40px', '30px'], 2, 'The order is top, right, bottom, left (clockwise).'],
+    ['Which declaration creates a 2px solid red border?', ['border: 2px solid red', 'border: red 2px dash', 'border-style: 2px red', 'outline-border: 2px red'], 0, 'The border shorthand takes width, style and colour.'],
+    ['Which property gives an element rounded corners?', ['border-radius', 'corner-radius', 'border-curve', 'round'], 0, 'border-radius: 50% can make a circle from a square.'],
+    ['What does box-sizing: border-box do?', ['Removes the border', 'Adds margin to the width', 'Hides the box', 'Includes padding and border inside the given width and height'], 3, 'With border-box the width includes padding and border.'],
+    ['Which property prevents content overflow by hiding the extra part?', ['overflow: clip-all', 'display: overflow', 'hide: overflow', 'overflow: hidden'], 3, 'overflow: hidden cuts off the content that does not fit.'],
+    ['What is the difference between display: none and visibility: hidden?', ['There is no difference', 'visibility:hidden removes the space; display:none keeps it', 'display:none removes the space; visibility:hidden keeps the space', 'Both delete the element from the DOM'], 2, 'visibility:hidden hides the element but it still occupies space.'],
+    ['Which display value lets an element sit in line but accept width and height?', ['inline', 'block', 'none', 'inline-block'], 3, 'inline-block combines inline flow with box dimensions.'],
+    ['What is the default value of the position property?', ['static', 'relative', 'absolute', 'fixed'], 0, 'Elements are positioned in normal flow (static) by default.'],
+    ['Which position value moves an element relative to its normal position?', ['relative', 'absolute', 'fixed', 'sticky'], 0, 'position: relative with top/left offsets shifts it from where it would normally be.'],
+    ['An absolutely positioned element is placed relative to which element?', ['The viewport always', 'Its previous sibling', 'The body only', 'The nearest positioned ancestor'], 3, 'If no ancestor is positioned, it uses the initial containing block.'],
+    ['Which position value keeps an element fixed in the viewport while scrolling?', ['sticky', 'relative', 'fixed', 'absolute'], 2, 'position: fixed stays in the same place on the screen.'],
+    ['Which position value toggles between relative and fixed depending on scroll position?', ['sticky', 'static', 'inherit', 'floating'], 0, 'position: sticky sticks when the scroll threshold is reached.'],
+    ['Which property controls the stacking order of overlapping positioned elements?', ['stack', 'layer', 'order-z', 'z-index'], 3, 'A higher z-index appears in front of a lower one.'],
+    ['Which property is used to clear floated elements?', ['clear', 'float-stop', 'reset', 'clean'], 0, 'clear: both makes an element move below floated items.'],
+    ['Which declaration turns an element into a flex container?', ['display: flex', 'flex: container', 'position: flex', 'layout: flex'], 0, 'display: flex activates the flexbox layout on children.'],
+    ['In a row flex container, which property centres items along the main axis?', ['align-items: center', 'text-align: center', 'justify-content: center', 'flex-align: center'], 2, 'justify-content aligns along the main axis, align-items along the cross axis.'],
+    ['Which property aligns flex items along the cross axis?', ['justify-content', 'flex-flow', 'align-items', 'place-main'], 2, 'align-items controls the cross-axis alignment.'],
+    ['Which declaration stacks flex items vertically?', ['flex-direction: vertical', 'flex-stack: y', 'direction: column', 'flex-direction: column'], 3, 'flex-direction: column changes the main axis to vertical.'],
+    ['Which property lets flex items wrap onto the next line?', ['wrap: yes', 'flex-line: multi', 'overflow: wrap', 'flex-wrap: wrap'], 3, 'flex-wrap: wrap allows multiple lines.'],
+    ['Which declaration creates a CSS grid layout?', ['grid: on', 'layout: grid', 'position: grid', 'display: grid'], 3, 'display: grid turns the element into a grid container.'],
+    ['What does grid-template-columns: repeat(3, 1fr); create?', ['Three equal-width columns', 'Three rows', 'One column three times wider', 'Three fixed pixel columns'], 0, '1fr means one fraction of the free space, so each column is equal.'],
+    ['Which property sets the space between grid or flex items?', ['spacing', 'gutter', 'gap', 'margin-gap-all'], 2, 'gap (or grid-gap) sets row and column spacing.'],
+    ['Which unit is relative to the font-size of the root (html) element?', ['em', 'rem', 'px', 'pt'], 1, 'rem = root em; 1rem equals the font-size of <html>.'],
+    ['Which unit is relative to the font-size of the parent element?', ['em', 'rem', 'vw', 'cm'], 0, 'em depends on the current element or parent font-size.'],
+    ['What does 50vw mean?', ['50% of the viewport width', '50% of the parent width', '50 pixels wide', '50% of the font size'], 0, 'vw = 1% of the viewport width.'],
+    ['Which of the following is a valid hexadecimal colour for red?', ['#00ff00', '#0000ff', '#ffff00', '#ff0000'], 3, '#ff0000 = full red, no green, no blue.'],
+    ['What does the "a" in rgba() stand for?', ['Angle', 'Alpha (opacity)', 'Area', 'Auto'], 1, 'The 4th value is alpha: 0 is transparent and 1 is opaque.'],
+    ['Which property sets the transparency of an entire element?', ['alpha', 'visibility', 'opacity', 'transparency'], 2, 'opacity: 0.5 makes the element half transparent.'],
+    ['Which property creates a smooth change between two states of a style?', ['transition', 'transform', 'animation-fill', 'smooth'], 0, 'transition: all 0.3s animates property changes.'],
+    ['Which declaration rotates an element by 45 degrees?', ['rotate: 45', 'transform: rotate(45deg)', 'turn: 45deg', 'transform: spin(45)'], 1, 'transform: rotate(45deg) turns the element clockwise.'],
+    ['Which rule is used to define the steps of a CSS animation?', ['@keyframes', '@animate', '@frames', '@steps'], 0, '@keyframes defines the animation stages and animation-name applies it.'],
+    ['Which rule is used to make a page responsive for different screen widths?', ['@screen-size', '@responsive', '@device', '@media'], 3, '@media (max-width: 600px) { ... } applies styles only on small screens.'],
+    ['Which property adds a shadow around an element box?', ['box-shadow', 'shadow', 'element-shadow', 'border-shadow'], 0, 'box-shadow: 2px 2px 5px grey creates a shadow.'],
+    ['Which property adds a shadow to text?', ['font-shadow', 'shadow-text', 'letter-shadow', 'text-shadow'], 3, 'text-shadow takes horizontal, vertical, blur and colour.'],
+    ['Which declaration shows a hand pointer when hovering over an element?', ['pointer: hand', 'cursor: pointer', 'mouse: hand', 'hover: pointer'], 1, 'cursor: pointer shows the link-style hand icon.'],
+    ['Which declaration removes bullets from a list?', ['bullet: none', 'list-style-type: none', 'list: no-bullet', 'text-decoration: none'], 1, 'list-style-type: none hides markers.'],
+    ['What does !important do in a CSS declaration?', ['Marks a comment', 'Gives the declaration the highest priority over normal rules', 'Deletes the rule', 'Makes the rule optional'], 1, '!important overrides normal specificity rules.'],
+    ['Which selector has the highest specificity?', ['Element selector', 'Id selector', 'Class selector', 'Universal selector'], 1, 'Specificity order: inline > id > class/attribute/pseudo-class > element.'],
+    ['If two rules have the same specificity, which one is applied?', ['The first one', 'The shorter one', 'The last one written', 'Neither'], 2, 'The later rule in the cascade wins when specificity is equal.'],
+    ['Which of these properties is inherited by child elements by default?', ['margin', 'border', 'padding', 'color'], 3, 'Text-related properties like color and font-family are inherited; box properties are not.'],
+    ['How do you declare a CSS variable named main-color?', ['$main-color: red;', '@main-color: red;', '--main-color: red;', 'var main-color = red;'], 2, 'Custom properties begin with two hyphens.'],
+    ['How do you use a CSS variable named --main-color?', ['get(--main-color)', '$(--main-color)', 'use(--main-color)', 'var(--main-color)'], 3, 'The var() function reads the value of a custom property.'],
+    ['Which CSS function performs calculations such as width: calc(100% - 50px)?', ['math()', 'compute()', 'sum()', 'calc()'], 3, 'calc() lets you mix units in arithmetic.'],
+    ['Which declaration centres a block element with a fixed width horizontally?', ['align: center', 'text-align: center', 'margin: 0 auto', 'padding: auto'], 2, 'Automatic left and right margins centre the block.'],
+    ['Which pseudo-class selects elements that do NOT match a given selector?', [':except()', ':not()', ':without()', ':exclude()'], 1, 'p:not(.intro) selects all p without the class intro.'],
+    ['What is W3.CSS?', ['A modern CSS framework with ready-made classes', 'A JavaScript library', 'A database system', 'A server-side language'], 0, 'W3.CSS is a lightweight, responsive CSS framework from W3Schools.'],
+    ['How do you include W3.CSS in an HTML page?', ['<script src="w3.css">', '<import w3css>', '<style src="w3.css"></style>', '<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">'], 3, 'Add the stylesheet link in the <head> section.'],
+    ['Which W3.CSS class adds standard padding to a content block?', ['w3-container', 'w3-box', 'w3-wrap', 'w3-block-pad'], 0, 'w3-container adds 16px left and right padding and a small vertical padding.'],
+    ['Which W3.CSS class styles a button?', ['w3-btn-only', 'w3-button', 'w3-click', 'w3-press'], 1, 'w3-button gives hover effects and padding to buttons and links.'],
+    ['Which W3.CSS class adds a box shadow to an element?', ['w3-shadow-box', 'w3-card', 'w3-glow', 'w3-lift'], 1, 'w3-card (and w3-card-4) creates a shadowed card.'],
+    ['Which W3.CSS class gives a green background colour?', ['w3-bg-green', 'w3-color-green', 'w3-green', 'w3-back-green'], 2, 'Colour classes use the pattern w3-colorname, like w3-green or w3-blue.'],
+    ['Which W3.CSS class makes the text red?', ['w3-text-red', 'w3-red-text', 'w3-font-red', 'w3-color-red'], 0, 'Text colours use w3-text-colorname.'],
+    ['Which W3.CSS class gives an element rounded corners?', ['w3-curve', 'w3-round', 'w3-corner', 'w3-smooth'], 1, 'w3-round, w3-round-large and w3-round-xlarge set border-radius.'],
+    ['Which W3.CSS class turns an image into a circle?', ['w3-circle', 'w3-round-image', 'w3-ring', 'w3-oval'], 0, 'w3-circle gives border-radius: 50%.'],
+    ['Which W3.CSS class makes an element container for a horizontal navigation bar?', ['w3-nav', 'w3-menu', 'w3-bar', 'w3-topbar'], 2, 'w3-bar with w3-bar-item children creates a menu bar.'],
+    ['Which W3.CSS class creates a fixed sidebar?', ['w3-side', 'w3-drawer', 'w3-left-panel', 'w3-sidebar'], 3, 'w3-sidebar is fixed to the left by default; w3-bar-block stacks its items.'],
+    ['Which W3.CSS class creates a dropdown that opens on hover?', ['w3-dropdown-click', 'w3-hover-menu', 'w3-dropdown-hover', 'w3-menu-drop'], 2, 'w3-dropdown-hover holds a w3-dropdown-content child.'],
+    ['Which W3.CSS classes create a pop-up window (modal)?', ['w3-popup and w3-popup-box', 'w3-dialog and w3-dialog-box', 'w3-modal and w3-modal-content', 'w3-window and w3-window-body'], 2, 'w3-modal is the overlay and w3-modal-content is the dialog box.'],
+    ['Which W3.CSS class makes a table scroll horizontally on small screens?', ['w3-scroll', 'w3-responsive', 'w3-table-scroll', 'w3-mobile'], 1, 'Wrap the table in a div with w3-responsive.'],
+    ['Which W3.CSS class gives a table zebra-striped rows?', ['w3-zebra', 'w3-lines', 'w3-striped', 'w3-rowcolor'], 2, 'w3-striped colours alternate rows; w3-bordered adds borders.'],
+    ['Which W3.CSS class hides an element on small screens (phones)?', ['w3-hide-small', 'w3-no-mobile', 'w3-hide-phone', 'w3-small-none'], 0, 'w3-hide-small hides content on screens smaller than 601px.'],
+    ['Which W3.CSS class adds default padding on all four sides of an element?', ['w3-space', 'w3-inner', 'w3-pad-all', 'w3-padding'], 3, 'w3-padding adds 8px 16px padding; w3-margin adds margin.'],
+    ['Which W3.CSS class makes an element appear in the exact middle of a w3-display-container?', ['w3-center-all', 'w3-display-middle', 'w3-middle', 'w3-display-center'], 1, 'w3-display-middle positions content at the centre of its container.'],
+    ['Which W3.CSS class makes an element fade in on page load?', ['w3-fade-in', 'w3-appear', 'w3-show-slow', 'w3-animate-opacity'], 3, 'w3-animate-opacity, w3-animate-left and w3-animate-zoom add simple animations.'],
+    ['Which W3.CSS class is used for form inputs to get a clean style?', ['w3-form', 'w3-field', 'w3-input', 'w3-textbox'], 2, 'w3-input styles text fields; w3-select styles drop-downs.'],
+    ['Which W3.CSS class sets a very large heading font size?', ['w3-jumbo', 'w3-huge-size', 'w3-big-font', 'w3-giant'], 0, 'Sizes include w3-small, w3-medium, w3-large, w3-xlarge, w3-xxlarge and w3-jumbo.'],
+    ['How many columns does the W3.CSS responsive grid system use?', ['6', '10', '12', '16'], 2, 'W3.CSS uses a 12-column grid, with classes like w3-col m6 l4.']
+  ],
+  /* ---------- JavaScript & AngularJS (100 questions) ---------- */
+  ox_js: [
+    ['JavaScript is mainly known as which type of language?', ['Markup language', 'Scripting language', 'Database language', 'Styling language'], 1, 'JavaScript is a lightweight scripting language that adds behaviour to web pages.'],
+    ['Who created JavaScript in 1995?', ['James Gosling', 'Brendan Eich', 'Guido van Rossum', 'Bjarne Stroustrup'], 1, 'Brendan Eich created JavaScript at Netscape in just ten days.'],
+    ['Which HTML tag is used to write JavaScript code?', ['<script>', '<js>', '<javascript>', '<code>'], 0, 'JavaScript is written inside <script> tags.'],
+    ['Which attribute of <script> links an external JavaScript file?', ['href', 'link', 'file', 'src'], 3, '<script src="app.js"></script> loads an external script.'],
+    ['Which method shows a message in a pop-up box?', ['msg()', 'popup()', 'notify()', 'alert()'], 3, 'alert("Hello") displays a dialog with an OK button.'],
+    ['Which statement prints a value in the browser console?', ['print()', 'console.log()', 'echo()', 'document.console()'], 1, 'console.log() writes output to the developer console.'],
+    ['Which keyword declares a block-scoped variable that can be reassigned?', ['var', 'let', 'const', 'static'], 1, 'let is block scoped and can change; const cannot be reassigned.'],
+    ['What happens when you try to reassign a variable declared with const?', ['It works normally', 'The old value stays silently', 'It gives an error', 'The variable becomes undefined'], 2, 'Assigning to a const variable throws a TypeError.'],
+    ['Which of these is NOT a JavaScript data type?', ['Float', 'String', 'Boolean', 'Undefined'], 0, 'JavaScript has Number, not a separate Float type.'],
+    ['What is the output of typeof "hello"?', ['text', 'char', 'string', 'word'], 2, 'typeof returns the data type name as a string.'],
+    ['What does typeof null return?', ['null', 'undefined', 'number', 'object'], 3, 'This is a well-known quirk of JavaScript: typeof null is "object".'],
+    ['What is the difference between == and ===?', ['No difference', '== also checks the data type', '=== also checks the data type', '=== is assignment'], 2, '=== is strict equality: both value and type must match.'],
+    ['What is the result of 5 + "5" in JavaScript?', ['10', '55', 'Error', 'NaN'], 1, 'The + operator joins when one operand is a string, so the result is "55".'],
+    ['What is the result of "10" - 3?', ['103', 'NaN', '"7"', '7'], 3, 'The - operator converts the string to a number, giving 7.'],
+    ['What is the value of 10 % 3?', ['3', '0', '3.33', '1'], 3, 'The % (modulus) operator returns the remainder, which is 1.'],
+    ['Which operator is used for logical AND?', ['||', '&', '!!', '&&'], 3, '&& returns true only if both conditions are true.'],
+    ['Which loop always runs its body at least once?', ['for', 'while', 'do...while', 'for...in'], 2, 'do...while checks the condition after executing the body.'],
+    ['Which statement stops a loop completely?', ['stop', 'continue', 'break', 'exit'], 2, 'break ends the loop; continue skips only the current iteration.'],
+    ['Which statement skips the current iteration and moves to the next one?', ['break', 'skip', 'continue', 'next'], 2, 'continue jumps to the next iteration of the loop.'],
+    ['What is the correct syntax to declare a function?', ['function myFunc() { }', 'def myFunc() { }', 'func myFunc() { }', 'function = myFunc() { }'], 0, 'Functions are declared with the function keyword.'],
+    ['Which is the correct syntax of an arrow function that adds two numbers?', ['function => (a, b) a + b', '(a, b) => a + b', '(a, b) -> a + b', 'a, b => { a + b }'], 1, 'Arrow functions use => between parameters and body.'],
+    ['Which keyword sends a value back from a function?', ['send', 'output', 'return', 'yield-back'], 2, 'return ends the function and gives back a value.'],
+    ['What is the index of the first element in a JavaScript array?', ['1', '0', '-1', 'It depends'], 1, 'Array indexes start at 0.'],
+    ['Which method adds an element at the end of an array?', ['pop()', 'shift()', 'push()', 'unshift()'], 2, 'push() appends one or more items at the end.'],
+    ['Which method removes the last element of an array?', ['push()', 'shift()', 'remove()', 'pop()'], 3, 'pop() removes and returns the last element.'],
+    ['Which method removes the first element of an array?', ['pop()', 'shift()', 'splice-first()', 'delete()'], 1, 'shift() removes and returns the first element.'],
+    ['Which method creates a new array by applying a function to every element?', ['forEach()', 'filter()', 'map()', 'reduce()'], 2, 'map() returns a new array with the results.'],
+    ['Which method creates a new array with only the elements that pass a test?', ['map()', 'filter()', 'find-all()', 'select()'], 1, 'filter() keeps elements for which the callback returns true.'],
+    ['Which method joins all array elements into a string?', ['concat()', 'merge()', 'join()', 'toText()'], 2, '["a","b"].join("-") gives "a-b".'],
+    ['What does the length property of "Hello" return?', ['4', '6', 'undefined', '5'], 3, 'The string has 5 characters.'],
+    ['Which method converts a string to upper case?', ['toUpperCase()', 'upper()', 'capitalize()', 'toCaps()'], 0, '"abc".toUpperCase() returns "ABC".'],
+    ['Which method splits a string into an array?', ['divide()', 'break()', 'split()', 'cut()'], 2, '"a,b,c".split(",") returns ["a","b","c"].'],
+    ['Which symbols are used to insert variables inside a template literal?', ['{{ }}', '#{ }', '% %', '${ }'], 3, 'Template literals use backticks and ${expression}.'],
+    ['Which of the following is the correct way to create an object?', ['let o = { name: "Ravi", age: 20 };', 'let o = ( name = "Ravi" );', 'let o = [ name: "Ravi" ];', 'let o = < name: "Ravi" >;'], 0, 'Objects use curly braces with key: value pairs.'],
+    ['Which method converts a JavaScript object into a JSON string?', ['JSON.parse()', 'JSON.toString()', 'JSON.encode()', 'JSON.stringify()'], 3, 'JSON.stringify() serializes; JSON.parse() does the reverse.'],
+    ['Which method finds an HTML element using its id?', ['document.getElementById()', 'document.getId()', 'document.findElement()', 'document.id()'], 0, 'getElementById returns the element with the matching id.'],
+    ['Which property changes the HTML content inside an element?', ['outerText-only', 'innerHTML', 'html', 'content'], 1, 'element.innerHTML reads or sets the HTML inside an element.'],
+    ['Which property changes only the text of an element and ignores HTML tags?', ['textContent', 'innerHTML', 'htmlText', 'value-text'], 0, 'textContent treats the string as plain text.'],
+    ['Which code changes the text colour of an element with id "box" to red?', ['document.getElementById("box").style.color = "red";', 'document.getElementById("box").color = "red";', 'document.getElementById("box").css = "red";', 'document.getElementById("box").text-color = "red";'], 0, 'CSS properties are set through the style object.'],
+    ['Which method attaches an event handler to an element?', ['attachClick()', 'onEvent()', 'listen()', 'addEventListener()'], 3, 'element.addEventListener("click", fn) registers a listener.'],
+    ['Which event occurs when the user clicks an HTML element?', ['onchange', 'onmouseclick', 'onclick', 'onpress'], 2, 'onclick fires on mouse click.'],
+    ['Which event occurs when the value of an input field changes?', ['onclick', 'onload', 'onhover', 'onchange'], 3, 'onchange fires after the value is changed and focus is lost.'],
+    ['Which event occurs when the page has finished loading?', ['onready', 'onopen', 'onstart', 'onload'], 3, 'window.onload runs after the page and its resources are loaded.'],
+    ['Which method runs a function once after a delay?', ['setInterval()', 'delay()', 'setTimeout()', 'wait()'], 2, 'setTimeout(fn, 1000) runs fn after 1 second.'],
+    ['Which method runs a function repeatedly at a fixed interval?', ['setTimeout()', 'repeat()', 'setInterval()', 'loop()'], 2, 'setInterval repeats until clearInterval is called.'],
+    ['Which method returns a random number between 0 (inclusive) and 1 (exclusive)?', ['Math.rand()', 'Math.random()', 'random()', 'Math.number()'], 1, 'Math.random() returns a decimal in the range [0, 1).'],
+    ['What is the result of Math.floor(4.9)?', ['5', '4', '4.9', '0'], 1, 'Math.floor rounds down to the nearest integer.'],
+    ['What is the result of Math.round(2.5)?', ['2', '2.5', '4', '3'], 3, 'Math.round rounds .5 upwards, so the answer is 3.'],
+    ['What does parseInt("42px") return?', ['NaN', '"42px"', '0', '42'], 3, 'parseInt reads digits until it meets a non-digit character.'],
+    ['What does NaN stand for?', ['Not a Number', 'No arithmetic Number', 'Null and Nothing', 'New Array Name'], 0, 'NaN means Not-a-Number, the result of an invalid numeric operation.'],
+    ['Which function checks whether a value is NaN?', ['checkNaN()', 'notNumber()', 'isNumber()', 'isNaN()'], 3, 'isNaN("abc") returns true.'],
+    ['Which object is used to work with dates and times?', ['Date', 'Time', 'Calendar', 'Clock'], 0, 'new Date() creates a date object with the current date and time.'],
+    ['Which method returns the four-digit year of a Date object?', ['getFullYear()', 'getYear()', 'getYearNumber()', 'year()'], 0, 'getFullYear() returns for example 2026.'],
+    ['Which block is used to handle errors in JavaScript?', ['do...error', 'if...error', 'try...catch', 'error...handle'], 2, 'Code in try is tested and catch handles any error.'],
+    ['What does the confirm() method return?', ['A string', 'A number', 'undefined', 'true or false'], 3, 'confirm shows OK and Cancel; OK returns true, Cancel returns false.'],
+    ['Which method asks the user to enter a value in a dialog box?', ['prompt()', 'input()', 'ask()', 'read()'], 0, 'prompt("Name?") returns the typed text or null.'],
+    ['Which is the correct way to write a single-line comment in JavaScript?', ['<!-- comment -->', '// comment', '# comment', '** comment'], 1, '// starts a single-line comment; /* */ is for multi-line.'],
+    ['What does this statement do: window.location.href = "https://example.com"?', ['Reloads the page', 'Opens a pop-up', 'Redirects to another page', 'Prints the URL'], 2, 'Setting location.href navigates the browser to a new URL.'],
+    ['What is the value of a variable that is declared but not assigned?', ['null', '0', 'NaN', 'undefined'], 3, 'An uninitialised variable holds undefined.'],
+    ['Which of the following is a falsy value in JavaScript?', ['0', '"0"', '[]', '{}'], 0, 'Falsy values: false, 0, "", null, undefined, NaN. The string "0" is truthy.'],
+    ['Which operator is the ternary (conditional) operator?', ['=>', '? :', '::', '&&'], 1, 'condition ? valueIfTrue : valueIfFalse.'],
+    ['What does the DOM stand for?', ['Data Object Method', 'Document Object Model', 'Digital Order Model', 'Document Oriented Markup'], 1, 'DOM is the tree representation of an HTML document.'],
+    ['Which keyword is used to create a new object instance from a constructor or class?', ['new', 'create', 'make', 'instance'], 0, 'new Person("Amit") creates an object from the Person constructor.'],
+    ['Which method prevents the default action of an event, such as form submission?', ['event.stop()', 'event.preventDefault()', 'event.cancel()', 'event.block()'], 1, 'preventDefault() stops the browser default behaviour.'],
+    ['Which storage keeps data in the browser even after the browser is closed?', ['sessionStorage', 'Variable', 'localStorage', 'Array'], 2, 'localStorage has no expiry; sessionStorage ends with the tab.'],
+    ['Which ES6 feature copies or expands array elements using three dots?', ['Spread operator', 'Rest pointer', 'Ellipsis function', 'Dot loop'], 0, 'The spread operator (...) expands iterables, e.g. [...a, ...b].'],
+    ['What does async/await help with in JavaScript?', ['Writing asynchronous code in a readable way', 'Styling pages', 'Creating arrays', 'Declaring variables'], 0, 'async functions return promises and await pauses until they resolve.'],
+    ['Which JavaScript function is used to fetch data from a server using promises?', ['fetch()', 'get()', 'request()', 'load()'], 0, 'fetch(url).then(res => res.json()) is the modern way to call an API.'],
+    ['AngularJS is a framework developed by which company?', ['Facebook', 'Google', 'Microsoft', 'Oracle'], 1, 'AngularJS (version 1.x) was developed and maintained by Google.'],
+    ['Which directive defines the root element of an AngularJS application?', ['ng-start', 'ng-root', 'ng-main', 'ng-app'], 3, 'ng-app initialises the AngularJS application on the element.'],
+    ['Which directive binds the value of an input field to application data?', ['ng-model', 'ng-bind', 'ng-value', 'ng-data'], 0, 'ng-model creates two-way data binding with the input.'],
+    ['Which directive attaches a controller to a part of the view?', ['ng-control', 'ng-ctrl', 'ng-manager', 'ng-controller'], 3, 'ng-controller="myCtrl" connects the HTML with the controller function.'],
+    ['How do you display an AngularJS expression in HTML?', ['{{ expression }}', '[[ expression ]]', '<% expression %>', '${ expression }'], 0, 'Double curly braces display the expression value.'],
+    ['What is the output of {{ 5 + 5 }} in AngularJS?', ['5 + 5', '10', '55', 'Error'], 1, 'AngularJS evaluates the expression and displays 10.'],
+    ['Which directive repeats an HTML element for each item in an array?', ['ng-loop', 'ng-for', 'ng-repeat', 'ng-each'], 2, 'ng-repeat="x in items" creates one element per item.'],
+    ['Which directive handles a mouse click event in AngularJS?', ['ng-onclick', 'ng-click', 'ng-press', 'ng-tap'], 1, 'ng-click="doSomething()" runs the function on click.'],
+    ['Which directive initialises application data inline in the view?', ['ng-init', 'ng-set', 'ng-data-start', 'ng-begin'], 0, 'ng-init="name=\'Amit\'" sets initial values.'],
+    ['What is the difference between ng-show and ng-if?', ['No difference', 'ng-show hides using CSS; ng-if removes the element from the DOM', 'ng-if hides using CSS; ng-show removes the element from the DOM', 'ng-show works only for images'], 1, 'ng-if adds or removes the element, while ng-show only toggles display.'],
+    ['Which directive adds CSS classes dynamically based on an expression?', ['ng-css', 'ng-style-class', 'ng-addclass', 'ng-class'], 3, 'ng-class applies class names conditionally.'],
+    ['Which directive disables a button when its expression is true?', ['ng-off', 'ng-lock', 'ng-disabled', 'ng-stop'], 2, 'ng-disabled="form.$invalid" disables the control while the condition is true.'],
+    ['Which directive builds a drop-down list from an array or object?', ['ng-list', 'ng-options', 'ng-select', 'ng-items'], 1, 'ng-options="x for x in names" fills a <select> element.'],
+    ['Which directive runs a function when a form is submitted?', ['ng-send', 'ng-post', 'ng-submit', 'ng-action'], 2, 'ng-submit="save()" handles the submit event.'],
+    ['Which directive includes HTML from an external file into the page?', ['ng-import', 'ng-load', 'ng-insert', 'ng-include'], 3, 'ng-include="\'menu.html\'" embeds the file content.'],
+    ['What is $scope in AngularJS?', ['An object that links the controller and the view', 'A CSS class', 'A database table', 'A browser plugin'], 0, '$scope holds the model data and functions available to the view.'],
+    ['How do you create an AngularJS module named myApp?', ['angular.module("myApp", [])', 'angular.create("myApp")', 'new Module("myApp")', 'angular.app("myApp")'], 0, 'The second argument is the array of dependencies.'],
+    ['Which code defines a controller named myCtrl in a module stored in the variable app?', ['app.add("myCtrl", $scope)', 'app.ctrl = function myCtrl() { }', 'app.controller("myCtrl", function($scope) { })', 'controller.app("myCtrl")'], 2, 'The controller function receives $scope through dependency injection.'],
+    ['Which AngularJS filter converts text to upper case?', ['upper', 'capital', 'uppercase', 'toUpper'], 2, '{{ name | uppercase }} displays the text in capital letters.'],
+    ['Which symbol is used to apply a filter to an expression?', ['& (ampersand)', '# (hash)', '~ (tilde)', '| (pipe)'], 3, 'Filters are added with the pipe character, e.g. {{ price | currency }}.'],
+    ['Which AngularJS filter formats a number as money?', ['currency', 'money', 'price', 'rupee'], 0, '{{ 250 | currency }} outputs $250.00 by default.'],
+    ['Which filter sorts an array in ng-repeat?', ['sort', 'arrange', 'orderBy', 'sortBy'], 2, 'ng-repeat="x in items | orderBy:\'name\'" sorts items by name.'],
+    ['Which AngularJS service is used to read data from a remote server?', ['$ajax', '$server', '$request', '$http'], 3, '$http.get(url).then(...) sends an HTTP request.'],
+    ['What is dependency injection in AngularJS?', ['Writing CSS inside JavaScript', 'Providing required objects such as $scope to a function automatically', 'Deleting unused files', 'Converting JSON into HTML'], 1, 'AngularJS passes needed services to controllers by name.'],
+    ['Which AngularJS feature automatically updates the view when the model changes and the model when the view changes?', ['One-way binding', 'Two-way data binding', 'Event bubbling', 'Template caching'], 1, 'Two-way data binding keeps model and view synchronised.'],
+    ['Which module and service are required for routing in AngularJS?', ['ngRoute and $routeProvider', 'ngLink and $linkProvider', 'ngPage and $pageProvider', 'ngMove and $moveProvider'], 0, 'ngRoute with $routeProvider maps URLs to templates and controllers.'],
+    ['Which directive shows the template of the current route?', ['ng-route', 'ng-view', 'ng-page', 'ng-show-route'], 1, 'ng-view is the placeholder where route templates are rendered.'],
+    ['Which directive prevents the user from seeing raw {{ }} expressions before AngularJS loads?', ['ng-hide-raw', 'ng-wait', 'ng-ready', 'ng-cloak'], 3, 'ng-cloak hides the element until AngularJS has compiled it.'],
+    ['AngularJS follows which software design pattern?', ['Singleton-only', 'Waterfall', 'MVC (Model-View-Controller)', 'Client-Cloud-Core'], 2, 'AngularJS uses an MVC-style architecture.'],
+    ['Which AngularJS form property is true when all form fields are valid?', ['$correct', '$ok', '$valid', '$clean'], 2, 'form.$valid becomes true when all validation rules pass.'],
+    ['Which directive creates a custom HTML element or attribute in AngularJS?', ['.element()', '.directive()', '.component-only()', '.tag()'], 1, 'app.directive("myTag", function() { ... }) defines a custom directive.'],
+    ['How do you add AngularJS to a web page?', ['Include the AngularJS library with a <script> tag', 'Add a <link> to a CSS file', 'Use <angular> tag', 'Use @import angular'], 0, 'AngularJS is added through a <script src="...angular.min.js"> tag.']
+  ]
+};
+
 /* ===== Adapter: aapke purane format ke questions bina badle chalte hain ===== */
 /* Naya bilingual format bhi chalta hai:
    Q('English question', 'हिंदी प्रश्न', ['A','B','C','D'], sahi_number, ['अ','ब','स','द'])   (Hindi options optional) */
@@ -2421,6 +2740,7 @@ const CH_HI = {
   c6: 'इंटरनेट और WWW का परिचय', c7: 'ई-गवर्नेंस और डिजिटल वित्तीय सेवाएँ', c8: 'फ्यूचर स्किल्स और साइबर सुरक्षा', c9: 'भारतीय भाषा डिजिटल सेवाएँ और उभरती तकनीकें',
   o1: 'आईटी टूल्स और नेटवर्क बेसिक्स', o2: 'वेब डिज़ाइनिंग और पब्लिशिंग', o3: 'पायथन प्रोग्रामिंग', o4: 'इंटरनेट ऑफ थिंग्स (IoT)', o5: 'एडवांस आईटी सिस्टम और सुरक्षा'
 };
+Object.assign(CH_HI, { ox_html: 'HTML और HTML5', ox_css: 'CSS और W3.CSS', ox_js: 'JavaScript और AngularJS' });
 const ttl = c => lang === 'hi' ? (CH_HI[c[0]] || c[1]) : c[1];
 
 /* English version of a question (optional). Language English hone par yahi dikhega.
@@ -2441,6 +2761,11 @@ Object.keys(QB).forEach(k => QB[k] = QB[k].map((r, i) => {
   if (e) { b.q.en = e[0]; b.o.en = e[1]; }
   return b;
 }));
+
+/* O Level (HTML/CSS/JS) questions ko engine ke format me badlo. Ye technical English me hi rehte hain,
+   kyunki code wale options auto-translate hone par bigad jate hain. */
+Object.keys(QB_OX).forEach(k => QB_OX[k] = QB_OX[k].map(r => Array.isArray(r)
+  ? { q: { en: r[0], hi: r[0] }, o: { en: r[1], hi: r[1] }, a: r[2], ol: 'en', e: r[3] || '' } : r));
 
 /* ===== Auto translation (Hindi <-> English) : question + options, cache ke saath ===== */
 const TRC = store.get('acec_tr2', {}); let _trT = 0;
@@ -2567,7 +2892,7 @@ function fixRuns(order, bank) {
 /* Saturday test: sab chapters ke questions me se random 25. Sirf apna alag set chahiye to SAT_CUSTOM me Q(...) daalo. */
 const SAT_CUSTOM = [];
 const ALLQ = Object.keys(QB).flatMap(k => QB[k]);
-const getBank = k => k === 'SAT' ? (SAT_CUSTOM.length ? SAT_CUSTOM : ALLQ) : (QB[k] || []);
+const getBank = k => k === 'SAT' ? (SAT_CUSTOM.length ? SAT_CUSTOM : ALLQ) : (QB[k] || QB_OX[k] || []);
 
 /* ===== Static cards ===== */
 $('#courseGrid').innerHTML = COURSES.map(c => `<div class="card"><div class="ic">${c[0]}</div><h3>${c[1]}</h3><p>${c[2]}</p><a class="btn sm" href="#contact">Enquire Now</a></div>`).join('');
@@ -2588,6 +2913,7 @@ function renderTests() {
     return `<div class="card test"><span class="chip">${t('chap')} ${i + 1}</span><h3>${ttl(c)}</h3><div class="count">${n ? t('nq', { n }) : t('soonS')}</div>${s ? `<div class="rbadge">${t('saved', { i: s.i, n: s.order.length })}</div>` : ''}${bb(c[0])}<button class="btn sm" data-test="${c[0]}">${t('start')}</button></div>`;
   }).join('');
   $('#cccGrid').innerHTML = mk(CCC); $('#olGrid').innerHTML = mk(OL);
+  if (typeof renderOLX === 'function') renderOLX();
 }
 
 /* ===== Login ===== */
@@ -2597,12 +2923,10 @@ $('#loginBtn').onclick = () => {
   if (user) { if (confirm('Logout karna chahte hain?')) { user = null; localStorage.removeItem('acec_user'); paintUser(); toast('Logout ho gaye'); } }
   else openModal('loginModal');
 };
-$('#loginForm').onsubmit = e => {
-  e.preventDefault();
-  const name = $('#lName').value.trim(), mob = $('#lMob').value.trim();
-  if (!/^[0-9]{10}$/.test(mob)) return toast('10 digit ka sahi mobile number likhein');
-  user = { name, mob }; store.set('acec_user', user); paintUser(); closeModal('loginModal');
-  if (window.acLoginFX) window.acLoginFX(user); else toast('Welcome, ' + name + '!');
+// Naya Login/Sign Up card (#nmCard) safal hone par yahi chalta hai: user save, header button, welcome + XP
+window.acNmFinish = u => {
+  user = u; store.set('acec_user', user); paintUser(); closeModal('loginModal');
+  if (window.acLoginFX) window.acLoginFX(user); else toast('Welcome, ' + u.name + '!');
 };
 
 /* ===== Popup dialog (Yes/Cancel, Resume/Starting) ===== */
@@ -2642,7 +2966,7 @@ function begin(key, sv, only) {
   paintTitle(); paintTimer();
   T.i >= order.length ? finish() : showQ();
 }
-function paintTitle() { $('#tTitle').textContent = T.key === 'SAT' ? t('sat') : ttl([...CCC, ...OL].find(c => c[0] === T.key)); }
+function paintTitle() { $('#tTitle').textContent = T.key === 'SAT' ? t('sat') : ttl([...CCC, ...OL, ...OLX].find(c => c[0] === T.key)); }
 function paintTimer() { const s = Math.max(T.sec, 0); $('#tTimer').textContent = '⏱ ' + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
 function showQ() {
   const b = getBank(T.key)[T.order[T.i]], body = $('#tBody'); body.innerHTML = '';
@@ -2663,6 +2987,7 @@ function showQ() {
     el.onclick = () => pick(idx, b); body.append(el);
   });
   if (T.sel !== null) {
+    if (b.e) { const ex = document.createElement('div'); ex.className = 'olx-expl'; ex.textContent = '💡 ' + b.e; body.append(ex); }
     const n = document.createElement('button'); n.className = 'btn sm'; n.style.marginTop = '8px';
     n.textContent = T.i + 1 < T.order.length ? t('next') : t('result');
     n.onclick = () => { T.i++; T.sel = null; T.i < T.order.length ? showQ() : finish(); };
@@ -2686,7 +3011,7 @@ function finish() {
   if ($('#rtBtn')) $('#rtBtn').onclick = () => { const key = T.key, only = T.wrong.map(w => w[0]); closeTest(); setTimeout(() => begin(key, null, only), 300); };
   $('#cdBtn').onclick = () => resultCard();
   $('#waBtn').onclick = () => {
-    const ch = T.key === 'SAT' ? t('sat') : ttl([...CCC, ...OL].find(c => c[0] === T.key));
+    const ch = T.key === 'SAT' ? t('sat') : ttl([...CCC, ...OL, ...OLX].find(c => c[0] === T.key));
     const txt = `🎓 ${(user && user.name) || 'Student'} - ${ch}: ${T.score}/${n} (${pct}%)\nACCESS COMPUTER EDUCATION CENTRE\n${location.href.split('#')[0]}`;
     window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
   };
@@ -2695,7 +3020,7 @@ function finish() {
     const B = store.get('acec_best', {}); if (!B[T.key] || pct > B[T.key].p) { B[T.key] = { s: T.score, n, p: pct }; store.set('acec_best', B); renderTests(); }
     if (T.key === 'SAT') saveScore(T.score);
   }
-  if (pct >= 80) confetti();
+  if (pct >= 80) { confetti(); if (window.acFunResult) window.acFunResult(pct); }
 }
 async function paintReview() {
   const box = $('#rvBox'), bank = getBank(T.key);
@@ -2709,7 +3034,9 @@ async function paintReview() {
     const q = document.createElement('div'); q.className = 'rq'; q.textContent = (k + 1) + '. ' + qOf(x.b);
     const y = document.createElement('div'); y.className = 'ry'; y.textContent = '✗ ' + t('x_yourA') + ': ' + o[x.sel];
     const r = document.createElement('div'); r.className = 'rr'; r.textContent = '✓ ' + t('x_rightA') + ': ' + o[x.b.a];
-    d.append(q, y, r); box.append(d);
+    d.append(q, y, r);
+    if (x.b.e) { const ex = document.createElement('div'); ex.className = 'olx-rexp'; ex.textContent = '💡 ' + x.b.e; d.append(ex); }
+    box.append(d);
   });
 }
 function confetti() {
@@ -2726,7 +3053,7 @@ async function resultCard() {
   x.textAlign = 'center';
   const F = (w, z) => { x.font = w + ' ' + z + 'px Poppins,"Noto Sans Devanagari",sans-serif'; };
   const fit = (txt, w, z, wt) => { do { F(wt, z); z -= 2; } while (x.measureText(txt).width > w && z > 18); };
-  const ch = T.key === 'SAT' ? t('sat') : ttl([...CCC, ...OL].find(q => q[0] === T.key));
+  const ch = T.key === 'SAT' ? t('sat') : ttl([...CCC, ...OL, ...OLX].find(q => q[0] === T.key));
   x.fillStyle = '#fff'; fit('ACCESS COMPUTER EDUCATION CENTRE', W - 160, 46, 700); x.fillText('ACCESS COMPUTER EDUCATION CENTRE', W / 2, 150);
   x.fillStyle = '#ffb347'; F(600, 34); x.fillText(lang === 'hi' ? 'रिज़ल्ट कार्ड' : 'RESULT CARD', W / 2, 212);
   x.fillStyle = '#fff'; fit((user && user.name) || 'Student', W - 200, 64, 700); x.fillText((user && user.name) || 'Student', W / 2, 360);
@@ -2773,8 +3100,8 @@ function paintLB() {
 function jump(id) { const e = $('#' + id); if (e) e.scrollIntoView({ behavior: 'smooth' }); }
 let _qi = [], _ql = null;
 function buildIdx() {
-  const items = [], chTitle = k => { const c = [...CCC, ...OL].find(x => x[0] === k); return c ? ttl(c) : ''; };
-  [...CCC, ...OL].forEach(c => items.push({ k: 'tTest', ic: '📝', t: ttl(c), h: (c[1] + ' ' + (CH_HI[c[0]] || '') + ' test ccc o level olevel').toLowerCase(), go: () => openTest(c[0]) }));
+  const items = [], chTitle = k => { const c = [...CCC, ...OL, ...OLX].find(x => x[0] === k); return c ? ttl(c) : ''; };
+  [...CCC, ...OL, ...OLX].forEach(c => items.push({ k: 'tTest', ic: '📝', t: ttl(c), h: (c[1] + ' ' + (CH_HI[c[0]] || '') + ' test ccc o level olevel').toLowerCase(), go: () => openTest(c[0]) }));
   items.push({ k: 'tTest', ic: '🏆', t: t('sat'), h: 'saturday test weekly mock शनिवार टेस्ट', go: () => openTest('SAT') });
   COURSES.forEach(c => items.push({ k: 'tCourse', ic: c[0], t: c[1], sub: c[2], h: (c[1] + ' ' + c[2] + ' course').toLowerCase(), go: () => jump('courses') }));
   [['faculty', '👨‍🏫', 'faculty teacher mentor sir madam फैकल्टी शिक्षक', 'faculty'], ['typing', '⌨️', 'typing game speed टाइपिंग गेम', 'typing'], ['saturday', '🥇', 'leaderboard rank topper लीडरबोर्ड', 'lb'], ['gallery', '🖼️', 'gallery photos library फोटो गैलरी', 'gallery'], ['contact', '📞', 'contact phone whatsapp address संपर्क फोन', 'contact'], ['olcode', '💻', 'o level m2-r5 coding html css javascript कोडिंग', 'olcode'], ['codepractice', '⌨️', 'coding practice vs code editor html css javascript playground कोडिंग प्रैक्टिस', 'codepr']]
@@ -3246,7 +3573,7 @@ const SLIDES = [
 (function () {
   const c = $('#fx'), x = c.getContext('2d'); let W, H, P = [];
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const mk = (fresh) => ({ x: Math.random() * W, y: fresh ? Math.random() * H : H + 10, r: .8 + Math.random() * 2.2, vy: .25 + Math.random() * .85, ph: Math.random() * 6.28, sp: .01 + Math.random() * .03, hue: Math.random() < .6 ? 182 + Math.random() * 12 : 262 + Math.random() * 16 });
+  const mk = (fresh) => ({ x: Math.random() * W, y: fresh ? Math.random() * H : H + 10, r: .8 + Math.random() * 2.2, vy: .25 + Math.random() * .85, ph: Math.random() * 6.28, sp: .01 + Math.random() * .03, hue: Math.random() < .6 ? 330 + Math.random() * 12 : 48 + Math.random() * 10 });
   function size() {
     W = c.width = c.offsetWidth; H = c.height = c.offsetHeight;
     P = Array.from({ length: W < 700 ? 34 : 70 }, () => mk(true));
@@ -3586,15 +3913,99 @@ Sudha ma'am और परिवार के आशीर्वाद से ह
     chip.title = 'XP ' + p.xp + ' | Level ' + lvl(p.xp) + ' | Streak ' + p.streak + ' din';
   };
 
-  /* ---------- Login page: tick karte hi form khulta hai ---------- */
+  /* ---------- Login page: lamp ki cord neeche kheenchte hi light jalti hai aur login form khulta hai ---------- */
   (function () {
-    const m = el('loginModal'), wrap = el('lgWrap'), tick = el('lgTick'); if (!m || !wrap || !tick) return;
-    const reset = () => { wrap.classList.remove('ok'); tick.checked = false; el('lgCard').setAttribute('inert', ''); };
-    tick.addEventListener('change', () => {
-      if (!tick.checked) return;
-      setTimeout(() => { wrap.classList.add('ok'); el('lgCard').removeAttribute('inert'); setTimeout(() => { const n = el('lName'); if (n) n.focus(); }, 650); }, 520);
+    const m = el('loginModal'), wrap = el('lgWrap'), lamp = el('lamp'), card = el('lgCard');
+    const hit = el('lampHit'), head = el('lampHead'), cord = el('lampCord'), pull = el('lampPull'), msg = el('lampMsg');
+    if (!m || !wrap || !lamp || !hit || !card) return;
+    const MSG_OFF = msg ? msg.textContent : '';
+    const AX = 138, AY = 96, REST = 164, MAX = 84, TRIGGER = 50;   // lamp SVG (200x270) ke coordinates
+    let y = 0, x = 0, v = 0, startX = 0, startY = 0, moved = 0;
+    let dragging = false, autoDown = false, lit = false, raf = 0, openTimer = 0, wasOpen = false;
+
+    const scale = () => (lamp.clientWidth / 200) || 1;
+    const paint = () => {
+      const p = Math.max(0, Math.min(y / TRIGGER, 1));
+      lamp.style.setProperty('--pull', p.toFixed(3));
+      const ang = Math.max(-4, Math.min(4, y * 0.028 + x * 0.1)), r = ang * Math.PI / 180;
+      const ax = 100 + (AX - 100) * Math.cos(r) - AY * Math.sin(r);
+      const ay = (AX - 100) * Math.sin(r) + AY * Math.cos(r);
+      const hx = ax + x * 0.25, hy = REST + y;
+      head.setAttribute('transform', 'rotate(' + ang.toFixed(2) + ' 100 0)');
+      cord.setAttribute('d', 'M' + ax.toFixed(1) + ' ' + ay.toFixed(1) + 'L' + hx.toFixed(1) + ' ' + hy.toFixed(1));
+      cord.setAttribute('stroke-width', (2.6 - p * 0.9).toFixed(2));          // kheenchne par cord patli hoti hai
+      pull.setAttribute('transform', 'translate(' + hx.toFixed(1) + ' ' + hy.toFixed(1) + ')');
+      const s = scale();
+      hit.style.transform = 'translate(' + ((hx - AX) * s).toFixed(1) + 'px,' + ((hy - REST) * s).toFixed(1) + 'px)';
+    };
+
+    const turnOn = () => {
+      if (lit) return; lit = true;
+      lamp.classList.add('on'); wrap.classList.add('lit'); m.classList.add('lit');
+      hit.setAttribute('aria-pressed', 'true'); hit.setAttribute('aria-label', 'Light is on');
+      if (msg) msg.textContent = 'Light on ✨ Login khul raha hai…';
+      try { if (navigator.vibrate) navigator.vibrate(18); } catch (e) {}
+      clearTimeout(openTimer);
+      openTimer = setTimeout(() => {
+        wrap.classList.add('ok'); card.removeAttribute('inert');
+        setTimeout(() => { const n = el('nmLEmail'); if (n) n.focus(); }, 650);
+      }, 720);
+    };
+
+    const tick = () => {
+      if (autoDown) {                                           // tap / keyboard: cord apne aap neeche jaati hai
+        y += (MAX - y) * 0.3;
+        if (y >= TRIGGER + 2) { autoDown = false; v = 0; turnOn(); }
+      } else if (!dragging) {                                   // chhodte hi cord spring ki tarah wapas
+        v += -y * 0.18; v *= 0.72; y += v; x *= 0.8;
+        if (Math.abs(y) < 0.2 && Math.abs(v) < 0.2 && Math.abs(x) < 0.3) { y = v = x = 0; raf = 0; paint(); return; }
+      }
+      paint(); raf = requestAnimationFrame(tick);
+    };
+    const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+
+    const band = raw => raw < 0 ? raw * 0.15 : raw < 60 ? raw : Math.min(MAX, 60 + (raw - 60) * 0.4);
+    hit.addEventListener('pointerdown', e => {                  // mouse + touch + pen
+      if (lit || autoDown || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      dragging = true; moved = 0; startX = e.clientX; startY = e.clientY;
+      lamp.classList.add('drag');
+      try { hit.setPointerCapture(e.pointerId); } catch (err) {}
+      e.preventDefault(); kick();
     });
-    new MutationObserver(() => { if (m.classList.contains('open')) reset(); }).observe(m, { attributes: true, attributeFilter: ['class'] });
+    hit.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      const k = 1 / scale(), dy = (e.clientY - startY) * k, dx = (e.clientX - startX) * k;
+      moved = Math.max(moved, Math.abs(dy), Math.abs(dx));
+      y = band(dy); x = Math.max(-30, Math.min(30, dx));
+      if (y >= TRIGGER) turnOn();
+    });
+    const release = () => {
+      if (!dragging) return; dragging = false; lamp.classList.remove('drag');
+      if (!lit && moved < 6) { autoDown = true; }               // sirf tap kiya to bhi cord kheench do
+      kick();
+    };
+    hit.addEventListener('pointerup', release);
+    hit.addEventListener('pointercancel', release);
+    hit.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); if (!lit && !autoDown) { autoDown = true; kick(); } }
+    });
+
+    const reset = () => {
+      clearTimeout(openTimer); cancelAnimationFrame(raf); raf = 0;
+      lit = dragging = autoDown = false; y = x = v = 0;
+      wrap.classList.remove('ok', 'lit'); m.classList.remove('lit'); lamp.classList.remove('on', 'drag');
+      hit.setAttribute('aria-pressed', 'false');
+      hit.setAttribute('aria-label', 'Pull the lamp cord down to turn on the light and open student login');
+      if (msg) msg.textContent = MSG_OFF;
+      card.setAttribute('inert', ''); paint();
+    };
+    new MutationObserver(() => {                                // sirf open/close badalne par reset (lit class se loop na bane)
+      const open = m.classList.contains('open');
+      if (open === wasOpen) return;
+      wasOpen = open; reset();
+      if (open) setTimeout(() => { try { hit.focus({ preventScroll: true }); } catch (e) {} }, 60);
+    }).observe(m, { attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('resize', paint);
     reset();
   })();
 
@@ -5394,7 +5805,7 @@ document.addEventListener('keydown', e => {
       return;
     }
     const win = mode === 'view' ? window.open('', '_blank') : null;
-    if (win) win.document.write('<title>' + esc(sw.name) + '</title><body style="background:#050508;color:#00f0ff;font-family:sans-serif;display:grid;place-items:center;height:100vh">Preparing your PDF...</body>');
+    if (win) win.document.write('<title>' + esc(sw.name) + '</title><body style="background:#050508;color:#ff2e93;font-family:sans-serif;display:grid;place-items:center;height:100vh">Preparing your PDF...</body>');
     toast('PDF ban raha hai…');
     const el = sheetEl(sw);
     const job = window.html2pdf().set({
@@ -6781,4 +7192,2129 @@ function startMatrixRain() {
   showMsgs(lint(ed.get())); setStat();
   document.addEventListener('visibilitychange', () => { if (document.hidden) hush(); });
   window.__pxArduino = { lint, toJS };   // debugging / testing hook
+})();
+
+
+/* =====================================================================
+   🎯 INTERACTIVE CAREER & COURSE FINDER QUIZ
+   - 6 sawal -> score -> best course + match % + 2nd option
+   - Result ke baad naam likhkar seedha WhatsApp par connect
+   - Course list neeche COURSE_INFO me hai, naya course add karna ho to yahin add karein
+   ===================================================================== */
+(() => {
+  const root = document.getElementById('cfCard');
+  if (!root) return;
+
+  const WA_NUMBER = '916393512412';          // Manoj Kumar Singh ka WhatsApp
+  const CALL_NUMBER = '+916393512412';
+  const CENTRE = 'Access Computer Education Center, Bachhrawan';
+
+  const COURSE_INFO = {
+    ccc:    { icon: '🖥️', name: 'CCC',           pitch: 'Computer ki basic skills aur sarkari exams/forms ke liye sabse zaroori certificate course.',
+              learn: ['Computer Basics', 'Word / Excel / PPT', 'Internet & Email', 'Digital Services'] },
+    olevel: { icon: '🎓', name: "O-Level (NIELIT)", pitch: 'IT ka strong foundation: programming, web aur IoT ke saath government-recognised qualification.',
+              learn: ['IT Tools', 'Web Design', 'Python', 'IoT'] },
+    tally:  { icon: '🧾', name: 'Tally + GST',    pitch: 'Accounting, billing aur GST seekhkar shop, office ya CA firm me kaam paane ka practical raasta.',
+              learn: ['Accounting', 'GST', 'Billing', 'Excel Reports'] },
+    dtp:    { icon: '🎨', name: 'DTP / Graphic Design', pitch: 'Poster, banner, visiting card aur social media design banana seekhein aur print/design shop ya freelancing me kaam karein.',
+              learn: ['Photoshop', 'CorelDRAW', 'Poster & Banner', 'Print Design'] },
+    web:    { icon: '🌐', name: 'Web Designing',  pitch: 'HTML, CSS aur JavaScript se khud ki website banayein aur online kaam ya freelancing shuru karein.',
+              learn: ['HTML', 'CSS', 'JavaScript', 'Website Project'] }
+  };
+  const KEYS = Object.keys(COURSE_INFO);
+
+  // Har option ke saath har course ko points (0-3)
+  const QUIZ = [
+    { q: 'Computer seekhne ka aapka main goal kya hai?', opts: [
+      { e: '🏛️', t: 'Sarkari naukri ya form bharna',       s: { ccc: 3, olevel: 2 } },
+      { e: '💼', t: 'Office / shop me job paana',           s: { tally: 3, ccc: 2, dtp: 1 } },
+      { e: '🚀', t: 'Online kaam ya freelancing',           s: { web: 3, dtp: 3 } },
+      { e: '🧑‍💻', t: 'IT field me strong career banana',     s: { olevel: 3, web: 2 } } ] },
+    { q: 'Inme se aapko kaunsa kaam sabse mazedaar lagta hai?', opts: [
+      { e: '🔢', t: 'Hisab-kitab, bill aur numbers',        s: { tally: 3, ccc: 1 } },
+      { e: '🎨', t: 'Design, colors aur photo editing',     s: { dtp: 3, web: 1 } },
+      { e: '⚙️', t: 'Logic, coding aur puzzle solve karna', s: { web: 3, olevel: 2 } },
+      { e: '📄', t: 'Typing, documents aur computer basics', s: { ccc: 3, olevel: 1 } } ] },
+    { q: 'Aap abhi kis stage par hain?', opts: [
+      { e: '🌱', t: 'Bilkul beginner, computer pehli baar', s: { ccc: 3, dtp: 1 } },
+      { e: '📘', t: '10th / 12th pass, aage badhna hai',    s: { olevel: 2, ccc: 2, tally: 1 } },
+      { e: '🎓', t: 'Graduation chal rahi ya complete',     s: { olevel: 2, tally: 2, web: 2 } },
+      { e: '🛠️', t: 'Thoda kaam aata hai, skill upgrade',   s: { web: 3, dtp: 2, tally: 1 } } ] },
+    { q: 'Kaunsa tool/software use karna pasand karenge?', opts: [
+      { e: '📊', t: 'Excel, Tally, billing software',       s: { tally: 3 } },
+      { e: '🖌️', t: 'Photoshop, CorelDRAW, Canva',          s: { dtp: 3 } },
+      { e: '🌍', t: 'Website banana, HTML/CSS code',        s: { web: 3 } },
+      { e: '🗂️', t: 'Word, PPT, email, internet',           s: { ccc: 3, olevel: 1 } } ] },
+    { q: 'Course ke liye aapke paas kitna samay hai?', opts: [
+      { e: '⚡', t: 'Jaldi chahiye, chhota course',          s: { ccc: 3, dtp: 1, tally: 1 } },
+      { e: '⏳', t: 'Medium time, practical skill',          s: { tally: 2, dtp: 2, web: 2 } },
+      { e: '📅', t: 'Lamba time, deep learning',             s: { olevel: 3, web: 2 } },
+      { e: '🤔', t: 'Abhi pata nahi, guidance chahiye',      s: { ccc: 1, olevel: 1, tally: 1 } } ] },
+    { q: '1 saal baad khud ko kahan dekhna chahte hain?', opts: [
+      { e: '🏢', t: 'Sarkari / private naukri me',           s: { ccc: 3, olevel: 3, tally: 1 } },
+      { e: '🏪', t: 'Apni dukaan ya business chalate hue',   s: { tally: 3, dtp: 2 } },
+      { e: '💻', t: 'Freelancer / website developer',        s: { web: 3, dtp: 2 } },
+      { e: '📚', t: 'Aage padhai, IT degree ki taiyari',     s: { olevel: 3, ccc: 1, web: 1 } } ] }
+  ];
+
+  // Har course ka maximum possible score (percentage nikalne ke liye)
+  const MAX = {};
+  KEYS.forEach(k => { MAX[k] = QUIZ.reduce((sum, qu) => sum + Math.max(...qu.opts.map(o => o.s[k] || 0)), 0); });
+
+  let step = -1;                 // -1 = intro, 0..n-1 = sawal, n = result
+  let answers = [];              // har sawal me chuna hua option index
+
+  const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const mount = node => { root.innerHTML = ''; node.classList.add('cf-screen'); root.appendChild(node); };
+
+  function score() {
+    const total = {}; KEYS.forEach(k => total[k] = 0);
+    answers.forEach((ai, qi) => { const s = QUIZ[qi].opts[ai].s; for (const k in s) total[k] += s[k]; });
+    return KEYS.map(k => ({ key: k, raw: total[k], pct: Math.round((total[k] / MAX[k]) * 100) }))
+               .sort((a, b) => b.raw - a.raw || b.pct - a.pct);
+  }
+
+  function intro() {
+    const w = el('div', 'cf-intro', `
+      <div class="cf-orb" aria-hidden="true">🎯</div>
+      <h3>Aapke liye best course kaunsa hai?</h3>
+      <p>Sirf ${QUIZ.length} chhote sawal. Aapke interest aur goal ke hisab se hum sahi course suggest karenge aur seedha WhatsApp par baat karwayenge.</p>
+      <div class="cf-chips">${KEYS.map(k => `<span class="cf-chip">${COURSE_INFO[k].icon} ${esc(COURSE_INFO[k].name)}</span>`).join('')}</div>
+      <button type="button" class="btn" id="cfStart">Quiz Shuru Karein 🚀</button>`);
+    mount(w);
+    w.querySelector('#cfStart').onclick = () => { step = 0; answers = []; render(); };
+  }
+
+  function question() {
+    const qu = QUIZ[step], pct = Math.round((step / QUIZ.length) * 100);
+    const w = el('div', '', `
+      <div class="cf-top"><span>Sawal <b>${step + 1}</b> / ${QUIZ.length}</span><span>${pct}% complete</span></div>
+      <div class="cf-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>
+      <h3 class="cf-q" id="cfQ" tabindex="-1">${esc(qu.q)}</h3>
+      <div class="cf-opts" role="group" aria-labelledby="cfQ"></div>
+      <div class="cf-nav"><button type="button" class="cf-link" id="cfBack" ${step === 0 ? 'hidden' : ''}>← Peeche</button><button type="button" class="cf-link" id="cfRestart">Dobara shuru</button></div>`);
+    const box = w.querySelector('.cf-opts');
+    qu.opts.forEach((o, i) => {
+      const b = el('button', 'cf-opt' + (answers[step] === i ? ' sel' : ''), `<span class="e" aria-hidden="true">${o.e}</span><span>${esc(o.t)}</span>`);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', answers[step] === i ? 'true' : 'false');
+      b.onclick = () => {
+        answers[step] = i;
+        box.querySelectorAll('.cf-opt').forEach(x => x.classList.remove('sel'));
+        b.classList.add('sel');
+        const fill = w.querySelector('.cf-bar i'); if (fill) fill.style.width = Math.round(((step + 1) / QUIZ.length) * 100) + '%';
+        setTimeout(() => { step++; render(); }, 280);
+      };
+      box.appendChild(b);
+    });
+    w.querySelector('#cfBack').onclick = () => { step = Math.max(0, step - 1); render(); };
+    w.querySelector('#cfRestart').onclick = () => { step = -1; answers = []; render(); };
+    mount(w);
+    w.querySelector('#cfQ').focus({ preventScroll: true });
+  }
+
+  function waLink(name, best, second) {
+    const msg = `Namaste ${CENTRE}! 🙏\nMera naam ${name} hai.\nMaine website par Course Finder Quiz diya. Mujhe "${COURSE_INFO[best.key].name}" course suggest hua (${best.pct}% match)` +
+      (second ? ` aur doosra option "${COURSE_INFO[second.key].name}" aaya.` : '.') +
+      `\nKripya is course ki fees, batch timing aur admission ki jankari dijiye.`;
+    return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  }
+
+  function result() {
+    const ranked = score(), best = ranked[0], second = ranked[1];
+    const c = COURSE_INFO[best.key], c2 = COURSE_INFO[second.key];
+    try { localStorage.setItem('acec_cf_result', JSON.stringify({ best: best.key, pct: best.pct, t: Date.now() })); } catch (e) { /* private mode */ }
+
+    const w = el('div', '', `
+      <div class="cf-res-head"><span class="cf-kicker">✦ YOUR BEST MATCH ✦</span></div>
+      <div class="cf-win">
+        <div class="cf-ring" style="--p:${best.pct}"><b>${best.pct}%</b><small>match</small></div>
+        <div>
+          <h3>${c.icon} ${esc(c.name)}</h3>
+          <p>${esc(c.pitch)}</p>
+          <div class="cf-learn">${c.learn.map(x => `<span>${esc(x)}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div class="cf-alt"><span aria-hidden="true">${c2.icon}</span><span>Doosra best option: <b>${esc(c2.name)}</b> (${second.pct}% match)</span></div>
+      <div class="cf-bars">${ranked.map(r => `<div class="cf-brow"><span>${COURSE_INFO[r.key].icon} ${esc(COURSE_INFO[r.key].name.split(' ')[0])}</span><i><em data-w="${r.pct}"></em></i><span>${r.pct}%</span></div>`).join('')}</div>
+      <div class="cf-lead">
+        <label for="cfName">Aapka naam (WhatsApp message me jayega)
+          <input id="cfName" type="text" maxlength="40" autocomplete="name" placeholder="Jaise: Rahul Kumar"></label>
+        <div class="cf-actions">
+          <a class="btn wa" id="cfWa" target="_blank" rel="noopener" href="${waLink('Student', best, second)}">💬 WhatsApp par Connect Karein</a>
+          <a class="btn ghost" href="tel:${CALL_NUMBER}">📞 Call Karein</a>
+        </div>
+        <button type="button" class="cf-link" id="cfAgain">↻ Quiz dobara dein</button>
+        <p class="cf-note">Fees aur batch timing ki jankari centre se WhatsApp ya call par milegi.</p>
+      </div>`);
+    mount(w);
+    requestAnimationFrame(() => requestAnimationFrame(() => w.querySelectorAll('.cf-brow em').forEach(e => { e.style.width = e.dataset.w + '%'; })));
+    const nameIn = w.querySelector('#cfName'), wa = w.querySelector('#cfWa');
+    const sync = () => { wa.href = waLink(nameIn.value.trim() || 'Student', best, second); };
+    nameIn.addEventListener('input', sync);
+    w.querySelector('#cfAgain').onclick = () => { step = -1; answers = []; render(); };
+  }
+
+  function render() {
+    if (step < 0) intro();
+    else if (step < QUIZ.length) question();
+    else result();
+    if (step >= 0) { const top = root.getBoundingClientRect().top; if (top < 70 || top > innerHeight * 0.5) root.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  }
+
+  render();
+})();
+
+/* =====================================================================
+   DAILY CODING PRACTICE & TEST  (HTML + CSS + JavaScript, 30 min, 100 marks)
+   - Roz 1 HTML + 1 CSS + 1 JS question (date ke hisab se rotate hota hai)
+   - Timer: Close (pause) / Resume   - Run Code / View Code / Partial marking
+   Naye questions add karne ke liye BANK.html / BANK.css / BANK.js me object add karein.
+   ===================================================================== */
+(function () {
+  'use strict';
+  var root = document.getElementById('dct');
+  if (!root) return;
+
+  /* ---------- helpers ---------- */
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var $1 = function (d, s) { return d.querySelector(s); };
+  var $a = function (d, s) { return Array.prototype.slice.call(d.querySelectorAll(s)); };
+  var tx = function (e) { return e ? (e.textContent || '').trim() : ''; };
+  var cs = function (d, w, s) { var e = d.querySelector(s); return e ? w.getComputedStyle(e) : null; };
+  var rgb = function (c) { var m = String(c).match(/[\d.]+/g); return m ? m.slice(0, 3).map(Number) : [0, 0, 0]; };
+  var px = function (v) { return parseFloat(v) || 0; };
+
+  /* ---------- QUESTION BANK ----------
+     steps: [label, marks, test]
+     html / css test = function(document, window) -> true/false
+     js test        = string (expression evaluated inside the sandbox)          */
+  var BANK = {
+    html: [
+      { title: 'Heading, Paragraph & Link',
+        task: 'Ek page banao: <h1> me "Welcome" likho, ek <p> paragraph likho, aur ek link (<a>) banao jiska text "Google" ho aur jo https://www.google.com par jaye.',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<h1> heading me "Welcome" likha ho', 9, function (d) { return /welcome/i.test(tx($1(d, 'h1'))); }],
+          ['<p> paragraph me text ho', 8, function (d) { return tx($1(d, 'p')).length > 2; }],
+          ['<a> ka href google.com ho', 9, function (d) { var a = $1(d, 'a'); return !!a && /google\.com/i.test(a.getAttribute('href') || ''); }],
+          ['Link ka text "Google" ho', 9, function (d) { return /google/i.test(tx($1(d, 'a'))); }]],
+        sol: '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Welcome</h1>\n  <p>Ye mera pehla web page hai.</p>\n  <a href="https://www.google.com">Google</a>\n</body>\n</html>' },
+      { title: 'Fruits List',
+        task: 'Ek <h2> heading "Fruits" likho aur uske neeche unordered list (<ul>) banao jisme kam se kam 3 fruits (<li>) ho.',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<h2> me "Fruits" likha ho', 8, function (d) { return /fruit/i.test(tx($1(d, 'h2'))); }],
+          ['<ul> list banai ho', 9, function (d) { return !!$1(d, 'ul'); }],
+          ['<ul> me kam se kam 3 <li> ho', 10, function (d) { return $a(d, 'ul > li').length >= 3; }],
+          ['Har <li> me text likha ho', 8, function (d) { var l = $a(d, 'ul > li'); return l.length > 0 && l.every(function (x) { return tx(x).length > 0; }); }]],
+        sol: '<h2>Fruits</h2>\n<ul>\n  <li>Apple</li>\n  <li>Mango</li>\n  <li>Banana</li>\n</ul>' },
+      { title: 'Student Table',
+        task: 'Ek table banao: pehli row me 2 headings (<th>: Name, Marks) aur uske baad kam se kam 2 data rows (<td> me data).',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<table> banaya ho', 7, function (d) { return !!$1(d, 'table'); }],
+          ['Kam se kam 2 <th> heading ho', 9, function (d) { return $a(d, 'th').length >= 2; }],
+          ['Kam se kam 3 <tr> rows ho (1 heading + 2 data)', 9, function (d) { return $a(d, 'tr').length >= 3; }],
+          ['Kam se kam 4 <td> cells ho', 10, function (d) { return $a(d, 'td').length >= 4; }]],
+        sol: '<table border="1">\n  <tr>\n    <th>Name</th>\n    <th>Marks</th>\n  </tr>\n  <tr>\n    <td>Amit</td>\n    <td>85</td>\n  </tr>\n  <tr>\n    <td>Riya</td>\n    <td>92</td>\n  </tr>\n</table>' },
+      { title: 'Login Form',
+        task: 'Ek login form banao jisme ek text input (username), ek password input aur ek submit button ho.',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<form> tag use kiya ho', 8, function (d) { return !!$1(d, 'form'); }],
+          ['Text input ho (type="text")', 9, function (d) { return !!$1(d, 'input[type=text], input:not([type])'); }],
+          ['Password input ho (type="password")', 9, function (d) { return !!$1(d, 'input[type=password]'); }],
+          ['Submit button ho (<button> ya type="submit")', 9, function (d) { return !!$1(d, 'button, input[type=submit]'); }]],
+        sol: '<form>\n  <input type="text" placeholder="Username">\n  <input type="password" placeholder="Password">\n  <button type="submit">Login</button>\n</form>' },
+      { title: 'Image with Alt',
+        task: 'Ek image (<img>) lagao: src me koi bhi file naam do (jaise photo.jpg), alt text likho aur width 200 set karo.',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<img> tag ho', 9, function (d) { return !!$1(d, 'img'); }],
+          ['src attribute me value ho', 9, function (d) { var i = $1(d, 'img'); return !!i && (i.getAttribute('src') || '').trim().length > 0; }],
+          ['alt attribute me text ho', 9, function (d) { var i = $1(d, 'img'); return !!i && (i.getAttribute('alt') || '').trim().length > 0; }],
+          ['Width 200 ho (width="200" ya style)', 8, function (d) { var i = $1(d, 'img'); return !!i && (i.getAttribute('width') === '200' || /width\s*:\s*200px/i.test(i.getAttribute('style') || '')); }]],
+        sol: '<img src="photo.jpg" alt="My Photo" width="200">' },
+      { title: 'Ordered + Nested List',
+        task: 'Ek ordered list (<ol>) banao jisme 3 items ho. Kisi ek item ke andar ek nested unordered list (<ul>) banao jisme 2 sub-items ho.',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<ol> banayi ho', 9, function (d) { return !!$1(d, 'ol'); }],
+          ['<ol> me kam se kam 3 <li> ho', 9, function (d) { return $a(d, 'ol > li').length >= 3; }],
+          ['Kisi <li> ke andar <ul> nested ho', 9, function (d) { return !!$1(d, 'ol > li > ul'); }],
+          ['Nested <ul> me kam se kam 2 <li> ho', 8, function (d) { return $a(d, 'ol > li > ul > li').length >= 2; }]],
+        sol: '<ol>\n  <li>HTML</li>\n  <li>CSS\n    <ul>\n      <li>Flexbox</li>\n      <li>Grid</li>\n    </ul>\n  </li>\n  <li>JavaScript</li>\n</ol>' },
+      { title: 'Semantic Page Layout',
+        task: 'Semantic tags se page layout banao: <header> (andar <h1>), <main> aur <footer>.',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<header> tag ho', 9, function (d) { return !!$1(d, 'header'); }],
+          ['<main> tag ho', 9, function (d) { return !!$1(d, 'main'); }],
+          ['<footer> tag ho', 9, function (d) { return !!$1(d, 'footer'); }],
+          ['<header> ke andar <h1> ho', 8, function (d) { return !!$1(d, 'header h1'); }]],
+        sol: '<header>\n  <h1>My Website</h1>\n</header>\n<main>\n  <p>Main content yahan hai.</p>\n</main>\n<footer>\n  <p>&copy; 2026 Access Computer</p>\n</footer>' },
+      { title: 'Course Dropdown',
+        task: 'Ek <label> aur uske saath <select> dropdown banao jisme kam se kam 3 <option> ho aur har option me value attribute ho.',
+        st: '<!-- Yahan apna HTML code likho -->\n',
+        steps: [
+          ['<label> tag ho', 8, function (d) { return !!$1(d, 'label'); }],
+          ['<select> dropdown ho', 9, function (d) { return !!$1(d, 'select'); }],
+          ['<select> me kam se kam 3 <option> ho', 9, function (d) { return $a(d, 'select option').length >= 3; }],
+          ['Har <option> me value attribute ho', 9, function (d) { var o = $a(d, 'select option'); return o.length > 0 && o.every(function (x) { return x.hasAttribute('value'); }); }]],
+        sol: '<label for="course">Course:</label>\n<select id="course">\n  <option value="ccc">CCC</option>\n  <option value="olevel">O Level</option>\n  <option value="python">Python</option>\n</select>' }
+    ],
+    css: [
+      { title: 'Heading & Note Style',
+        task: '#title ka color red karo aur text center karo. .note ka font-size 20px karo aur font italic karo.',
+        html: '<h1 id="title">Access Computer</h1>\n<p class="note">Practice daily, improve daily.</p>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['#title ka color red', 9, function (d, w) { return cs(d, w, '#title').color === 'rgb(255, 0, 0)'; }],
+          ['#title text-align: center', 9, function (d, w) { return cs(d, w, '#title').textAlign === 'center'; }],
+          ['.note font-size: 20px', 9, function (d, w) { return cs(d, w, '.note').fontSize === '20px'; }],
+          ['.note font-style: italic', 8, function (d, w) { return cs(d, w, '.note').fontStyle === 'italic'; }]],
+        sol: '#title {\n  color: red;\n  text-align: center;\n}\n.note {\n  font-size: 20px;\n  font-style: italic;\n}' },
+      { title: 'Box Model',
+        task: '.box ko width 200px, height 100px, yellow background aur 2px solid border do.',
+        html: '<div class="box">Box</div>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['.box width: 200px', 9, function (d, w) { return cs(d, w, '.box').width === '200px'; }],
+          ['.box height: 100px', 9, function (d, w) { return cs(d, w, '.box').height === '100px'; }],
+          ['.box background yellow', 9, function (d, w) { return cs(d, w, '.box').backgroundColor === 'rgb(255, 255, 0)'; }],
+          ['.box border: 2px solid', 8, function (d, w) { var c = cs(d, w, '.box'); return c.borderTopWidth === '2px' && c.borderTopStyle === 'solid'; }]],
+        sol: '.box {\n  width: 200px;\n  height: 100px;\n  background: yellow;\n  border: 2px solid black;\n}' },
+      { title: 'Flexbox Center',
+        task: '.wrap ko flex container banao, items ko horizontally aur vertically center karo, aur items ke beech 10px gap rakho.',
+        html: '<div class="wrap"><div class="item">1</div><div class="item">2</div><div class="item">3</div></div>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['.wrap display: flex', 10, function (d, w) { return cs(d, w, '.wrap').display === 'flex'; }],
+          ['justify-content: center', 9, function (d, w) { return cs(d, w, '.wrap').justifyContent === 'center'; }],
+          ['align-items: center', 8, function (d, w) { return cs(d, w, '.wrap').alignItems === 'center'; }],
+          ['gap: 10px', 8, function (d, w) { return cs(d, w, '.wrap').columnGap === '10px'; }]],
+        sol: '.wrap {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n}' },
+      { title: 'Rounded Button',
+        task: '.btn ka background green, text color white, border-radius 8px ya zyada, aur padding 10px 20px karo.',
+        html: '<button class="btn">Click Me</button>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['Background green', 9, function (d, w) { var c = rgb(cs(d, w, '.btn').backgroundColor); return c[1] > 90 && c[1] > c[0] + 40 && c[1] > c[2] + 40; }],
+          ['Text color white', 9, function (d, w) { return cs(d, w, '.btn').color === 'rgb(255, 255, 255)'; }],
+          ['border-radius 8px ya zyada', 9, function (d, w) { return px(cs(d, w, '.btn').borderTopLeftRadius) >= 8; }],
+          ['padding: 10px 20px', 8, function (d, w) { var c = cs(d, w, '.btn'); return c.paddingTop === '10px' && c.paddingLeft === '20px'; }]],
+        sol: '.btn {\n  background: green;\n  color: white;\n  border-radius: 8px;\n  padding: 10px 20px;\n}' },
+      { title: 'Link Hover Effect',
+        task: '.link ka color green, text-decoration none, font-weight bold karo aur .link:hover par color change karo.',
+        html: '<a href="#" class="link">Visit Us</a>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['.link ka color green', 9, function (d, w) { var c = rgb(cs(d, w, '.link').color); return c[1] > 90 && c[1] > c[0] + 40 && c[1] > c[2] + 40; }],
+          ['text-decoration: none', 9, function (d, w) { return cs(d, w, '.link').textDecorationLine === 'none'; }],
+          ['font-weight: bold', 8, function (d, w) { return parseInt(cs(d, w, '.link').fontWeight, 10) >= 700; }],
+          ['.link:hover rule me color set ho', 9, function (d) { return Array.prototype.slice.call(d.styleSheets).some(function (ss) { return Array.prototype.slice.call(ss.cssRules).some(function (r) { return /\.link\s*:hover/.test(r.selectorText || '') && !!r.style.color; }); }); }]],
+        sol: '.link {\n  color: green;\n  text-decoration: none;\n  font-weight: bold;\n}\n.link:hover {\n  color: red;\n}' },
+      { title: 'Card Design',
+        task: '.card ko box-shadow, padding 20px, border-radius 12px (ya zyada) do, aur width 300px ke saath page me center karo (margin auto).',
+        html: '<div class="card"><h3>Python</h3><p>Learn coding step by step.</p></div>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['box-shadow lagayi ho', 9, function (d, w) { return cs(d, w, '.card').boxShadow !== 'none'; }],
+          ['padding: 20px', 9, function (d, w) { return cs(d, w, '.card').paddingTop === '20px'; }],
+          ['border-radius 12px ya zyada', 9, function (d, w) { return px(cs(d, w, '.card').borderTopLeftRadius) >= 12; }],
+          ['width 300px aur margin auto (center)', 8, function (d, w) { var c = cs(d, w, '.card'); return c.width === '300px' && c.marginLeft === c.marginRight && px(c.marginLeft) > 0; }]],
+        sol: '.card {\n  width: 300px;\n  margin: 0 auto;\n  padding: 20px;\n  border-radius: 12px;\n  box-shadow: 0 4px 12px rgba(0,0,0,0.3);\n}' },
+      { title: 'Grid Layout',
+        task: '.grid me 3 equal columns banao (CSS Grid), 10px gap do, aur .cell ko koi background color do.',
+        html: '<div class="grid"><div class="cell">1</div><div class="cell">2</div><div class="cell">3</div><div class="cell">4</div><div class="cell">5</div><div class="cell">6</div></div>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['.grid display: grid', 10, function (d, w) { return cs(d, w, '.grid').display === 'grid'; }],
+          ['3 columns (grid-template-columns)', 10, function (d, w) { return cs(d, w, '.grid').gridTemplateColumns.trim().split(/\s+/).length === 3; }],
+          ['gap 10px ya zyada', 7, function (d, w) { return px(cs(d, w, '.grid').rowGap) >= 10; }],
+          ['.cell ka background color ho', 8, function (d, w) { return cs(d, w, '.cell').backgroundColor !== 'rgba(0, 0, 0, 0)'; }]],
+        sol: '.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 10px;\n}\n.cell {\n  background: orange;\n  padding: 10px;\n}' },
+      { title: 'Badge Positioning',
+        task: '.parent ko position relative do. .child ko position absolute karke top: 10px aur right: 10px par rakho, aur usko background color do.',
+        html: '<div class="parent"><div class="child">Badge</div></div>',
+        st: '/* Yahan apna CSS code likho */\n',
+        steps: [
+          ['.parent position: relative', 9, function (d, w) { return cs(d, w, '.parent').position === 'relative'; }],
+          ['.child position: absolute', 9, function (d, w) { return cs(d, w, '.child').position === 'absolute'; }],
+          ['.child top: 10px aur right: 10px', 9, function (d, w) { var c = cs(d, w, '.child'); return c.top === '10px' && c.right === '10px'; }],
+          ['.child ka background color ho', 8, function (d, w) { return cs(d, w, '.child').backgroundColor !== 'rgba(0, 0, 0, 0)'; }]],
+        sol: '.parent {\n  position: relative;\n  height: 120px;\n  border: 1px solid gray;\n}\n.child {\n  position: absolute;\n  top: 10px;\n  right: 10px;\n  background: gold;\n  padding: 4px 8px;\n}' }
+    ],
+    js: [
+      { title: 'Add Two Numbers',
+        task: 'Ek function add(a, b) likho jo dono numbers ka sum return kare.',
+        st: 'function add(a, b) {\n  // yahan code likho\n}\n',
+        steps: [['add(2, 3) = 5', 10, 'add(2,3)===5'], ['add(-4, 4) = 0', 10, 'add(-4,4)===0'], ['add(0.5, 0.25) = 0.75', 10, 'add(0.5,0.25)===0.75']],
+        sol: 'function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(2, 3)); // 5' },
+      { title: 'Even or Odd',
+        task: 'Ek function isEven(n) likho jo number even ho to true, warna false return kare.',
+        st: 'function isEven(n) {\n  // yahan code likho\n}\n',
+        steps: [['isEven(4) = true', 10, 'isEven(4)===true'], ['isEven(7) = false', 10, 'isEven(7)===false'], ['isEven(0) = true', 10, 'isEven(0)===true']],
+        sol: 'function isEven(n) {\n  return n % 2 === 0;\n}\n\nconsole.log(isEven(4)); // true' },
+      { title: 'Reverse a String',
+        task: 'Ek function reverseStr(s) likho jo string ko ulta (reverse) karke return kare.',
+        st: 'function reverseStr(s) {\n  // yahan code likho\n}\n',
+        steps: [['reverseStr("abc") = "cba"', 10, 'reverseStr("abc")==="cba"'], ['reverseStr("Access") = "sseccA"', 10, 'reverseStr("Access")==="sseccA"'], ['reverseStr("") = ""', 10, 'reverseStr("")===""']],
+        sol: 'function reverseStr(s) {\n  return s.split("").reverse().join("");\n}\n\nconsole.log(reverseStr("abc")); // cba' },
+      { title: 'Largest Number',
+        task: 'Ek function maxOf(arr) likho jo array ka sabse bada number return kare.',
+        st: 'function maxOf(arr) {\n  // yahan code likho\n}\n',
+        steps: [['maxOf([1, 5, 3]) = 5', 10, 'maxOf([1,5,3])===5'], ['maxOf([-1, -5]) = -1', 10, 'maxOf([-1,-5])===-1'], ['maxOf([7]) = 7', 10, 'maxOf([7])===7']],
+        sol: 'function maxOf(arr) {\n  var max = arr[0];\n  for (var i = 1; i < arr.length; i++) {\n    if (arr[i] > max) max = arr[i];\n  }\n  return max;\n}\n\nconsole.log(maxOf([1, 5, 3])); // 5' },
+      { title: 'Factorial',
+        task: 'Ek function factorial(n) likho jo n ka factorial return kare (5! = 120, 0! = 1).',
+        st: 'function factorial(n) {\n  // yahan code likho\n}\n',
+        steps: [['factorial(5) = 120', 10, 'factorial(5)===120'], ['factorial(0) = 1', 10, 'factorial(0)===1'], ['factorial(3) = 6', 10, 'factorial(3)===6']],
+        sol: 'function factorial(n) {\n  var r = 1;\n  for (var i = 2; i <= n; i++) {\n    r = r * i;\n  }\n  return r;\n}\n\nconsole.log(factorial(5)); // 120' },
+      { title: 'Button Click Message',
+        task: 'Button (#btn) par click karne par paragraph (#msg) me "Hello" likha aana chahiye.',
+        html: '<button id="btn">Click Me</button>\n<p id="msg"></p>',
+        st: '// Yahan JavaScript likho\n',
+        steps: [
+          ['Click par #msg me "Hello" aaye', 20, '(function(){document.getElementById("btn").click();return document.getElementById("msg").textContent.trim()==="Hello"})()'],
+          ['Har click par "Hello" dikhe', 10, '(function(){document.getElementById("msg").textContent="";document.getElementById("btn").click();return document.getElementById("msg").textContent.trim()==="Hello"})()']],
+        sol: 'document.getElementById("btn").addEventListener("click", function () {\n  document.getElementById("msg").textContent = "Hello";\n});' },
+      { title: 'Count Vowels',
+        task: 'Ek function countVowels(s) likho jo string me vowels (a, e, i, o, u) ginti return kare (capital letters bhi count hon).',
+        st: 'function countVowels(s) {\n  // yahan code likho\n}\n',
+        steps: [['countVowels("hello") = 2', 10, 'countVowels("hello")===2'], ['countVowels("AEIOU") = 5', 10, 'countVowels("AEIOU")===5'], ['countVowels("xyz") = 0', 10, 'countVowels("xyz")===0']],
+        sol: 'function countVowels(s) {\n  var count = 0;\n  var v = "aeiouAEIOU";\n  for (var i = 0; i < s.length; i++) {\n    if (v.indexOf(s[i]) !== -1) count++;\n  }\n  return count;\n}\n\nconsole.log(countVowels("hello")); // 2' },
+      { title: 'Fizz Buzz',
+        task: 'Ek function fizz(n) likho: 3 se divisible ho to "Fizz", 5 se ho to "Buzz", dono se ho to "FizzBuzz", warna number khud return kare.',
+        st: 'function fizz(n) {\n  // yahan code likho\n}\n',
+        steps: [['fizz(3) = "Fizz"', 8, 'fizz(3)==="Fizz"'], ['fizz(5) = "Buzz"', 8, 'fizz(5)==="Buzz"'], ['fizz(15) = "FizzBuzz"', 8, 'fizz(15)==="FizzBuzz"'], ['fizz(7) = 7', 6, 'fizz(7)===7']],
+        sol: 'function fizz(n) {\n  if (n % 15 === 0) return "FizzBuzz";\n  if (n % 3 === 0) return "Fizz";\n  if (n % 5 === 0) return "Buzz";\n  return n;\n}\n\nconsole.log(fizz(15)); // FizzBuzz' }
+    ]
+  };
+
+  /* ---------- daily rotation (date based, har category me 8 din tak repeat nahi) ---------- */
+  var TOTAL_SEC = 1800, KEY = 'dct_state_v1', HK = 'dct_hist_v1';
+  var DAY_KEY = function () { var t = new Date(); return t.getFullYear() + '-' + ('0' + (t.getMonth() + 1)).slice(-2) + '-' + ('0' + t.getDate()).slice(-2); };
+  var DAYNUM = function () { var t = new Date(); return Math.floor(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate()) / 864e5); };
+  function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function pick(arr, dn, salt) {
+    var n = arr.length, cyc = Math.floor(dn / n), pos = ((dn % n) + n) % n, o = arr.map(function (_, i) { return i; }), r = rng(cyc * 977 + salt);
+    for (var i = n - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), x = o[i]; o[i] = o[j]; o[j] = x; }
+    return arr[o[pos]];
+  }
+  function decorate(k, q) {
+    var steps = q.steps.map(function (s) { return { label: s[0], pts: s[1], t: s[2] }; });
+    return { k: k, title: q.title, task: q.task, html: q.html || '', st: q.st, sol: q.sol, steps: steps, max: steps.reduce(function (a, s) { return a + s.pts; }, 0) };
+  }
+  function todays(dn) {
+    return [decorate('html', pick(BANK.html, dn, 11)), decorate('css', pick(BANK.css, dn, 23)), decorate('js', pick(BANK.js, dn, 37))];
+  }
+
+  /* ---------- state (localStorage) ---------- */
+  function fresh() { return { day: DAY_KEY(), dn: DAYNUM(), status: 'idle', left: TOTAL_SEC, codes: {}, best: {}, final: 0 }; }
+  function load() {
+    var s = null; try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) { }
+    if (!s || s.day !== DAY_KEY()) s = fresh();
+    if (s.status === 'running') s.status = 'paused';
+    return s;
+  }
+  var S = load(), tmr = null, endAt = 0, saveT = null;
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+  function hist() { try { return JSON.parse(localStorage.getItem(HK)) || {}; } catch (e) { return {}; } }
+  function saveHist() {
+    var h = hist(); h[S.day] = S.final; var o = {};
+    Object.keys(h).sort().slice(-7).forEach(function (k) { o[k] = h[k]; });
+    try { localStorage.setItem(HK, JSON.stringify(o)); } catch (e) { }
+  }
+  var fmt = function (s) { return ('0' + Math.floor(s / 60)).slice(-2) + ':' + ('0' + (s % 60)).slice(-2); };
+  var totalPts = function () { return Object.keys(S.best).reduce(function (a, k) { return a + (S.best[k].pts || 0); }, 0); };
+
+  /* ---------- evaluation ---------- */
+  function mkFrame(holder, sandbox) {
+    var fr = document.createElement('iframe');
+    fr.className = 'dct-eval'; fr.setAttribute('sandbox', sandbox); fr.setAttribute('title', 'Output');
+    holder.appendChild(fr); return fr;
+  }
+  function evalMarkup(q, code, holder) {
+    return new Promise(function (resolve) {
+      var fr = mkFrame(holder, 'allow-same-origin'), done = false;
+      function fin(o) { if (!done) { done = true; o.frame = fr; resolve(o); } }
+      fr.onload = function () {
+        try {
+          var d = fr.contentDocument, w = fr.contentWindow;
+          fin({ steps: q.steps.map(function (s) { var ok = false; try { ok = !!s.t(d, w); } catch (e) { } return { label: s.label, pts: s.pts, ok: ok }; }) });
+        } catch (e) { fin({ steps: q.steps.map(function (s) { return { label: s.label, pts: s.pts, ok: false }; }), err: String(e.message || e) }); }
+      };
+      fr.srcdoc = q.k === 'css'
+        ? '<!doctype html><html><head><meta charset="utf-8"><style>' + code + '</style></head><body>' + q.html + '</body></html>'
+        : code;
+      setTimeout(function () { fin({ steps: q.steps.map(function (s) { return { label: s.label, pts: s.pts, ok: false }; }), err: 'Timeout' }); }, 4000);
+    });
+  }
+  function evalJs(q, code, holder) {
+    return new Promise(function (resolve) {
+      var none = q.steps.map(function (s) { return { label: s.label, pts: s.pts, ok: false }; });
+      if (/while\s*\(\s*(true|1)\s*\)|for\s*\(\s*;\s*;\s*\)/.test(code)) return resolve({ steps: none, logs: [], err: 'Infinite loop mila (while(true) / for(;;)). Isko hatao.' });
+      var id = 'r' + Math.random().toString(36).slice(2), fr = mkFrame(holder, 'allow-scripts'), done = false;
+      function fin(o) { if (done) return; done = true; window.removeEventListener('message', onMsg); o.frame = fr; resolve(o); }
+      function onMsg(ev) {
+        var m = ev.data;
+        if (!m || m.dct !== id || ev.source !== fr.contentWindow) return;
+        fin({ steps: q.steps.map(function (s, i) { return { label: s.label, pts: s.pts, ok: !!m.R[i] }; }), logs: m.L || [], err: m.E || '' });
+      }
+      window.addEventListener('message', onMsg);
+      var head = '<script>window.__L=[];window.__E="";console.log=function(){window.__L.push([].slice.call(arguments).map(function(a){try{return typeof a==="object"?JSON.stringify(a):String(a)}catch(e){return String(a)}}).join(" "))};window.addEventListener("error",function(e){if(!window.__E)window.__E=(e.message||"Error")+(e.lineno?" (line "+e.lineno+")":"")});<\/script>';
+      var tests = '<script>window.addEventListener("load",function(){var T=' + JSON.stringify(q.steps.map(function (s) { return s.t; })) + ';var R=T.map(function(t){try{return !!(0,eval)(t)}catch(e){return false}});parent.postMessage({dct:"' + id + '",R:R,L:window.__L,E:window.__E},"*")});<\/script>';
+      fr.srcdoc = '<!doctype html><html><head><meta charset="utf-8"></head><body style="font-family:sans-serif">' + q.html + head + '<script>' + code.replace(/<\/script/gi, '<\\/script') + '\n<\/script>' + tests + '</body></html>';
+      setTimeout(function () { fin({ steps: none, logs: [], err: 'Code ne response nahi diya (infinite loop ho sakta hai).' }); }, 4000);
+    });
+  }
+  function evaluate(q, code, holder) { return q.k === 'js' ? evalJs(q, code, holder) : evalMarkup(q, code, holder); }
+  var sum = function (steps) { return steps.reduce(function (a, s) { return a + (s.ok ? s.pts : 0); }, 0); };
+  function keepBest(q, steps) {
+    var p = sum(steps), b = S.best[q.k];
+    if (!b || p >= b.pts) S.best[q.k] = { pts: p, ok: steps.map(function (s) { return s.ok; }) };
+  }
+
+  /* ---------- views ---------- */
+  function stepsHtml(q, ok) {
+    return q.steps.map(function (s, i) {
+      var c = ok ? (ok[i] ? 'ok' : 'bad') : '', ic = ok ? (ok[i] ? '✓' : '✗') : '○';
+      return '<li class="' + c + '"><i>' + ic + '</i><span>' + esc(s.label) + '</span><em>' + s.pts + '</em></li>';
+    }).join('');
+  }
+  var msgFor = function (n) { return n >= 90 ? '🏆 Zabardast! Sigma level coding!' : n >= 70 ? '🔥 Bahut badhiya performance!' : n >= 40 ? '👍 Achha try — roz practice se aur improve hoga.' : n > 0 ? '💪 Shuruaat achhi hai — solution dekho aur dobara try karo.' : '😅 Koi baat nahi — View Code dekho, seekho aur kal phir try karo!'; };
+
+  function showIntro() {
+    if (S.day !== DAY_KEY() && S.status !== 'running') S = fresh();
+    var Q = todays(S.dn), max = Q.reduce(function (a, q) { return a + q.max; }, 0);
+    var d = new Date(), ds = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    var h = hist(), hk = Object.keys(h).sort().reverse().slice(0, 7);
+    var act;
+    if (S.status === 'done') act = '<div class="dct-final"><b>' + S.final + '</b><span>/ ' + max + '</span></div><p class="dct-fm">' + msgFor(S.final) + '</p><div class="dct-cta"><button class="btn" data-act="result">📊 Result & Solutions dekho</button><button class="btn ghost" data-act="restart">🔁 Dobara Test do</button></div>';
+    else if (S.status === 'paused' && S.left < TOTAL_SEC) act = '<p class="dct-fm">⏸ Aapka test saved hai — <b>' + fmt(S.left) + '</b> bacha hai.</p><div class="dct-cta"><button class="btn" data-act="resume">⏯ Resume Test</button><button class="btn ghost" data-act="restart">🔁 Naya Start</button></div>';
+    else act = '<div class="dct-cta"><button class="btn" data-act="start">▶ Start Test (30:00)</button></div>';
+    root.innerHTML = '<div class="dct-card"><div class="dct-date">📅 ' + esc(ds) + '</div><h3 class="dct-h">Aaj ke 3 Practical Questions</h3>' +
+      '<div class="dct-chips">' + Q.map(function (q) { return '<div class="dct-chip ' + q.k + '"><b>' + q.k.toUpperCase() + '</b><span>' + esc(q.title) + '</span><em>' + q.max + ' marks</em></div>'; }).join('') + '</div>' +
+      '<ul class="dct-rules"><li>⏱ <b>30 minute</b> ka timer — total <b>' + max + ' marks</b></li><li>⏸ <b>Close</b> karke baad me <b>Resume</b> kar sakte ho (timer ruk jata hai)</li><li>▶ <b>Run Code</b>: galat code par error / 0 marks, sahi code par live output</li><li>🎯 <b>Step-by-step marking</b> — aadha sahi code to aadhe marks</li><li>👁 <b>View Code</b> se standard solution dekho</li><li>🔄 Har din naye questions (1 HTML + 1 CSS + 1 JavaScript)</li></ul>' + act +
+      (hk.length ? '<div class="dct-hist"><b>Pichle scores:</b> ' + hk.map(function (k) { return '<span>' + k.slice(5) + ': <b>' + h[k] + '</b></span>'; }).join('') + '</div>' : '') + '</div>';
+  }
+
+  function qCard(q, i) {
+    var b = S.best[q.k], code = S.codes[q.k] != null ? S.codes[q.k] : q.st;
+    return '<article class="dct-q" data-k="' + q.k + '"><header class="dct-qh"><span class="dct-badge ' + q.k + '">' + q.k.toUpperCase() + '</span><h3>Q' + (i + 1) + '. ' + esc(q.title) + '</h3><span class="dct-pts">' + (b ? b.pts : 0) + ' / ' + q.max + '</span></header>' +
+      '<p class="dct-task">' + esc(q.task) + '</p><ul class="dct-steps">' + stepsHtml(q, b ? b.ok : null) + '</ul>' +
+      '<textarea class="dct-ed" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" rows="10" aria-label="' + q.k + ' code editor">' + esc(code) + '</textarea>' +
+      '<div class="dct-btns"><button class="btn sm" data-act="run">▶ Run Code</button><button class="btn ghost sm" data-act="view">👁 View Code</button><button class="btn ghost sm" data-act="reset">↺ Reset</button></div>' +
+      '<div class="dct-msg" aria-live="polite"></div><div class="dct-out" hidden><div class="dct-outh">✅ Live Output</div><div class="dct-hold"></div><pre class="dct-log"></pre></div>' +
+      '<div class="dct-sol" hidden><div class="dct-solh"><b>✔ Standard Solution</b><button class="btn ghost sm" data-act="copy">📋 Copy</button></div><pre>' + esc(q.sol) + '</pre></div></article>';
+  }
+  function showTest() {
+    var Q = todays(S.dn);
+    root.innerHTML = '<div class="dct-bar"><div class="dct-clock"><span>⏱</span><b id="dctClock">' + fmt(S.left) + '</b></div><div class="dct-tot">Score: <b id="dctTot">' + totalPts() + '</b> / ' + Q.reduce(function (a, q) { return a + q.max; }, 0) + '</div><div class="dct-barbtns"><button class="btn ghost sm" data-act="close">⏸ Close</button><button class="btn sm" data-act="submit">✅ Submit</button></div></div>' + Q.map(qCard).join('');
+    updClock();
+  }
+  function updClock() {
+    var c = document.getElementById('dctClock'); if (!c) return;
+    c.textContent = fmt(S.left); c.parentNode.classList.toggle('low', S.left <= 300);
+  }
+  function refreshScores() {
+    var Q = todays(S.dn);
+    Q.forEach(function (q) {
+      var card = root.querySelector('[data-k="' + q.k + '"]'); if (!card) return;
+      var b = S.best[q.k]; card.querySelector('.dct-pts').textContent = (b ? b.pts : 0) + ' / ' + q.max;
+      card.querySelector('.dct-steps').innerHTML = stepsHtml(q, b ? b.ok : null);
+    });
+    var t = document.getElementById('dctTot'); if (t) t.textContent = totalPts();
+  }
+  function showResult(auto) {
+    var Q = todays(S.dn), max = Q.reduce(function (a, q) { return a + q.max; }, 0);
+    var wa = 'https://wa.me/?text=' + encodeURIComponent('Maine Access Computer Education Center ka Daily Coding Test diya aur ' + S.final + '/' + max + ' score kiya! 🎉 ' + location.origin + location.pathname + '#dailytest');
+    root.innerHTML = '<div class="dct-card"><div class="dct-date">' + (auto ? '⏰ Time Up! Test auto-submit ho gaya' : '✅ Test Submit ho gaya') + '</div><div class="dct-final big"><b>' + S.final + '</b><span>/ ' + max + '</span></div><p class="dct-fm">' + msgFor(S.final) + '</p>' +
+      Q.map(function (q, i) {
+        var b = S.best[q.k] || { pts: 0, ok: null };
+        return '<div class="dct-q" data-k="' + q.k + '"><header class="dct-qh"><span class="dct-badge ' + q.k + '">' + q.k.toUpperCase() + '</span><h3>Q' + (i + 1) + '. ' + esc(q.title) + '</h3><span class="dct-pts">' + b.pts + ' / ' + q.max + '</span></header><ul class="dct-steps">' + stepsHtml(q, b.ok || q.steps.map(function () { return false; })) + '</ul><div class="dct-btns"><button class="btn ghost sm" data-act="view">👁 View Code</button></div><div class="dct-sol" hidden><div class="dct-solh"><b>✔ Standard Solution</b><button class="btn ghost sm" data-act="copy">📋 Copy</button></div><pre>' + esc(q.sol) + '</pre></div></div>';
+      }).join('') +
+      '<div class="dct-cta"><a class="btn" target="_blank" rel="noopener" href="' + wa + '">📲 WhatsApp par Share</a><button class="btn ghost" data-act="restart">🔁 Dobara Test do</button><button class="btn ghost" data-act="home">🏠 Back</button></div></div>';
+    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ---------- timer ---------- */
+  function startTimer() {
+    endAt = Date.now() + S.left * 1000; clearInterval(tmr);
+    tmr = setInterval(tick, 250); tick();
+  }
+  function tick() {
+    var l = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    if (l !== S.left) { S.left = l; save(); updClock(); }
+    if (l <= 0) { clearInterval(tmr); submit(true); }
+  }
+  function begin(resume) {
+    S.status = 'running'; if (!resume) { S.left = TOTAL_SEC; S.codes = {}; S.best = {}; S.final = 0; }
+    save(); showTest(); startTimer();
+    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function closeTest() { clearInterval(tmr); S.status = 'paused'; save(); showIntro(); }
+
+  function submit(auto) {
+    clearInterval(tmr);
+    var Q = todays(S.dn), hold = document.createElement('div');
+    hold.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden';
+    document.body.appendChild(hold);
+    Promise.all(Q.map(function (q) {
+      var code = S.codes[q.k] != null ? S.codes[q.k] : q.st;
+      return evaluate(q, code, hold).then(function (r) { keepBest(q, r.steps); });
+    })).then(function () {
+      hold.remove(); S.final = totalPts(); S.status = 'done'; S.left = Math.max(S.left, 0); save(); saveHist(); showResult(auto);
+    });
+  }
+
+  /* ---------- Run Code ---------- */
+  function run(card) {
+    var Q = todays(S.dn), q = Q.filter(function (x) { return x.k === card.getAttribute('data-k'); })[0];
+    var ta = card.querySelector('.dct-ed'), msg = card.querySelector('.dct-msg'), out = card.querySelector('.dct-out'), hold = card.querySelector('.dct-hold'), log = card.querySelector('.dct-log'), btn = card.querySelector('[data-act=run]');
+    S.codes[q.k] = ta.value; save();
+    hold.innerHTML = ''; out.hidden = true; log.textContent = ''; btn.disabled = true;
+    msg.className = 'dct-msg'; msg.textContent = '⏳ Code check ho raha hai…';
+    evaluate(q, ta.value, hold).then(function (r) {
+      btn.disabled = false; keepBest(q, r.steps); save(); refreshScores();
+      var p = sum(r.steps), all = r.steps.every(function (s) { return s.ok; }) && !r.err, fr = r.frame;
+      if (all) {
+        msg.className = 'dct-msg good'; msg.innerHTML = '✅ <b>Bilkul sahi!</b> Full marks: ' + p + ' / ' + q.max;
+        out.hidden = false;
+        if (q.k === 'js') {
+          log.textContent = (r.logs.length ? r.logs.join('\n') + '\n\n' : '') + r.steps.map(function (s) { return '✓ ' + s.label; }).join('\n');
+          if (q.html && fr) fr.className = 'dct-frame'; else if (fr) fr.remove();
+        } else { if (fr) fr.className = 'dct-frame'; log.textContent = ''; }
+      } else {
+        if (fr) fr.remove();
+        var why = r.err ? '❌ <b>Error:</b> ' + esc(r.err) : (p > 0 ? '⚠️ <b>Aadha adhoora code</b> — kuch steps galat hain.' : '❌ <b>Output match nahi hua</b> — abhi 0 marks.');
+        msg.className = 'dct-msg bad'; msg.innerHTML = why + ' Marks mile: <b>' + p + ' / ' + q.max + '</b>. Upar ki list me ✗ wale steps theek karo.';
+      }
+    });
+  }
+
+  /* ---------- events ---------- */
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-act]') : null; if (!b || !root.contains(b)) return;
+    var act = b.getAttribute('data-act'), card = b.closest('.dct-q');
+    if (act === 'start') begin(false);
+    else if (act === 'resume') begin(true);
+    else if (act === 'restart') { if (confirm('Naya test shuru karein? Purana score/code hat jayega.')) { clearInterval(tmr); S = fresh(); save(); begin(false); } }
+    else if (act === 'close') closeTest();
+    else if (act === 'submit') { if (confirm('Test submit karna hai? Submit ke baad code edit nahi hoga.')) submit(false); }
+    else if (act === 'result') showResult(false);
+    else if (act === 'home') showIntro();
+    else if (act === 'run' && card) run(card);
+    else if (act === 'view' && card) { var s = card.querySelector('.dct-sol'); s.hidden = !s.hidden; b.textContent = s.hidden ? '👁 View Code' : '🙈 Hide Code'; }
+    else if (act === 'copy' && card) { var t = card.querySelector('.dct-sol pre').textContent; if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { b.textContent = '✔ Copied'; setTimeout(function () { b.textContent = '📋 Copy'; }, 1500); }); }
+    else if (act === 'reset' && card) {
+      var q = todays(S.dn).filter(function (x) { return x.k === card.getAttribute('data-k'); })[0];
+      if (confirm('Is question ka code starter par reset karein?')) { card.querySelector('.dct-ed').value = q.st; S.codes[q.k] = q.st; save(); }
+    }
+  });
+  root.addEventListener('input', function (e) {
+    var t = e.target; if (!t.classList || !t.classList.contains('dct-ed')) return;
+    S.codes[t.closest('.dct-q').getAttribute('data-k')] = t.value;
+    clearTimeout(saveT); saveT = setTimeout(save, 400);
+  });
+  root.addEventListener('keydown', function (e) {
+    var t = e.target;
+    if (t.classList && t.classList.contains('dct-ed') && e.key === 'Tab' && !e.shiftKey) {
+      e.preventDefault(); var s = t.selectionStart;
+      t.value = t.value.slice(0, s) + '  ' + t.value.slice(t.selectionEnd); t.selectionStart = t.selectionEnd = s + 2;
+      t.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+  window.addEventListener('beforeunload', function () { if (S.status === 'running') save(); });
+
+  showIntro();
+})();
+
+/* =====================================================================
+   Animated Login & Sign Up (Neumorphic) — #loginModal ke andar
+   Tick karne ke baad yahi card khulta hai (purane naam + mobile form ki jagah).
+   Login/Sign Up safal hone par site ka apna login system chalta hai:
+   window.acNmFinish(user) -> user save, header button update, welcome + XP.
+   NOTE: Accounts abhi browser ke localStorage me bante hain (demo level).
+   Real security ke liye password check server/backend par hona chahiye.
+   ===================================================================== */
+(function () {
+  'use strict';
+  const card = document.getElementById('nmCard');
+  if (!card) return;
+
+  const $ = (s, r) => (r || card).querySelector(s);
+  const $$ = (s, r) => Array.from((r || card).querySelectorAll(s));
+
+  /* ---------- Storage ---------- */
+  const K_USERS = 'acec_nm_users', K_REM = 'acec_nm_remember';
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, MOB_RE = /^[0-9]{10}$/;
+  const read = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+  const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  const drop = k => { try { localStorage.removeItem(k); } catch (e) {} };
+
+  /* ---------- Password hashing (plain password kabhi save nahi hota) ---------- */
+  const toHex = buf => Array.from(new Uint8Array(buf), b => ('0' + b.toString(16)).slice(-2)).join('');
+  function newSalt() {
+    const a = new Uint8Array(12);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+    else for (let i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 256);
+    return toHex(a);
+  }
+  function hash(pw, salt) {
+    const data = salt + ':' + pw;
+    if (window.crypto && crypto.subtle && window.TextEncoder) {
+      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(data)).then(toHex);
+    }
+    let h = 5381; // fallback (sirf purane browsers ke liye)
+    for (let i = 0; i < data.length; i++) h = ((h << 5) + h + data.charCodeAt(i)) | 0;
+    return Promise.resolve('f' + (h >>> 0).toString(16));
+  }
+
+  /* ---------- Elements ---------- */
+  const modal = document.getElementById('loginModal');
+  const loginPane = $('#nmLoginPane'), signupPane = $('#nmSignupPane'), overlay = $('#nmOverlay');
+  const ovLogin = $('#nmOvLogin'), ovSignup = $('#nmOvSignup'), forgotSheet = $('#nmForgot');
+  const loginForm = $('#nmLoginForm'), signupForm = $('#nmSignupForm'), forgotForm = $('#nmForgotForm');
+  const lEmail = $('#nmLEmail'), lPass = $('#nmLPass'), lMsg = $('#nmLMsg'), remember = $('#nmRemember');
+  const sName = $('#nmSName'), sEmail = $('#nmSEmail'), sMob = $('#nmSMob'), sPass = $('#nmSPass'), sMsg = $('#nmSMsg');
+  const fEmail = $('#nmFEmail'), fPass = $('#nmFPass'), fMsg = $('#nmFMsg');
+  const meterBar = $('#nmMeterBar'), meterTxt = $('#nmMeterTxt');
+
+  /* ---------- Helpers ---------- */
+  const delay = ms => new Promise(r => setTimeout(r, ms));
+
+  function setInert(el, on) {
+    if (on) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
+    else { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+  }
+  // Jo cheez dikh nahi rahi, keyboard/screen-reader usse door rakho
+  function syncInert() {
+    const mode = card.getAttribute('data-mode'), fg = forgotSheet.classList.contains('open');
+    setInert(loginPane, fg || mode !== 'login');
+    setInert(signupPane, fg || mode !== 'signup');
+    setInert(overlay, fg);
+    setInert(ovLogin, mode !== 'login');
+    setInert(ovSignup, mode !== 'signup');
+    setInert(forgotSheet, !fg);
+  }
+
+  function note(el, text, type) { el.textContent = text || ''; el.className = 'nm-msg' + (type ? ' ' + type : ''); }
+  function fail(el, text, input) {
+    note(el, text, 'err');
+    if (input) { input.classList.add('bad'); input.focus({ preventScroll: true }); }
+    card.classList.remove('nm-shake'); void card.offsetWidth; card.classList.add('nm-shake');
+  }
+  function busy(form, on) { const b = $('.nm-primary', form); if (b) b.classList.toggle('is-loading', on); }
+  $$('.nm-field input').forEach(i => i.addEventListener('input', () => i.classList.remove('bad')));
+  sMob.addEventListener('input', () => { sMob.value = sMob.value.replace(/\D/g, '').slice(0, 10); });
+
+  function setMode(mode, focusFirst) {
+    card.setAttribute('data-mode', mode);
+    $$('.nm-seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.nmSwitch === mode)));
+    [lMsg, sMsg].forEach(m => note(m, ''));
+    $$('.nm-field input.bad').forEach(i => i.classList.remove('bad'));
+    syncInert();
+    if (focusFirst) setTimeout(() => { const i = $(mode === 'login' ? '#nmLEmail' : '#nmSName'); if (i) i.focus({ preventScroll: true }); }, 420);
+  }
+
+  // Safal login/signup: site ka apna login system (user, XP, welcome) chalao
+  function finish(u) {
+    const user = { name: u.name, mob: u.mob, email: u.email };
+    if (typeof window.acNmFinish === 'function') window.acNmFinish(user);
+  }
+
+  /* ---------- Mode switch (overlay button + mobile segmented control) ---------- */
+  card.addEventListener('click', e => {
+    const sw = e.target.closest('[data-nm-switch]');
+    if (sw) setMode(sw.dataset.nmSwitch, true);
+  });
+
+  /* ---------- Show / hide password ---------- */
+  function eyeReset(eye) {
+    const inp = eye.parentNode.querySelector('input');
+    inp.type = 'password';
+    eye.setAttribute('aria-pressed', 'false'); eye.setAttribute('aria-label', 'Password dikhao');
+    eye.firstElementChild.className = 'fa-regular fa-eye';
+  }
+  card.addEventListener('click', e => {
+    const eye = e.target.closest('.nm-eye'); if (!eye) return;
+    const inp = eye.parentNode.querySelector('input'), show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    eye.setAttribute('aria-pressed', String(show));
+    eye.setAttribute('aria-label', show ? 'Password chhupao' : 'Password dikhao');
+    eye.firstElementChild.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+  });
+
+  /* ---------- Button ripple ---------- */
+  card.addEventListener('pointerdown', e => {
+    const b = e.target.closest('.nm-btn'); if (!b) return;
+    const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height);
+    const s = document.createElement('span');
+    s.className = 'nm-ripple';
+    s.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + (e.clientX - r.left - d / 2) + 'px;top:' + (e.clientY - r.top - d / 2) + 'px';
+    b.appendChild(s);
+    setTimeout(() => s.remove(), 650);
+  });
+
+  /* ---------- Password strength meter ---------- */
+  const LEVELS = [
+    ['Bahut kamzor', '#d6264f', 18], ['Kamzor', '#f97316', 38], ['Theek-thaak', '#eab308', 62],
+    ['Mazboot', '#84cc16', 82], ['Bahut mazboot', '#16a34a', 100]
+  ];
+  function strength(p) {
+    let s = 0;
+    if (p.length >= 6) s++;
+    if (p.length >= 10) s++;
+    if (/[a-z]/.test(p) && /[A-Z]/.test(p)) s++;
+    if (/\d/.test(p)) s++;
+    if (/[^A-Za-z0-9]/.test(p)) s++;
+    return Math.min(s, 4);
+  }
+  sPass.addEventListener('input', () => {
+    if (!sPass.value) { meterBar.style.width = '0'; meterTxt.textContent = ''; return; }
+    const l = LEVELS[strength(sPass.value)];
+    meterBar.style.width = l[2] + '%'; meterBar.style.background = l[1]; meterTxt.textContent = l[0];
+  });
+
+  /* ---------- LOGIN ---------- */
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = lEmail.value.trim().toLowerCase(), pw = lPass.value;
+    if (!EMAIL_RE.test(email)) return fail(lMsg, 'Sahi email address likhein', lEmail);
+    if (!pw) return fail(lMsg, 'Password likhein', lPass);
+    note(lMsg, '');
+    const user = read(K_USERS, []).find(x => x.email === email);
+    busy(loginForm, true);
+    Promise.all([user ? hash(pw, user.salt) : Promise.resolve(null), delay(450)]).then(res => {
+      busy(loginForm, false);
+      if (!user || res[0] !== user.hash) return fail(lMsg, 'Email ya password galat hai', lPass);
+      if (remember.checked) write(K_REM, email); else drop(K_REM);
+      finish(user);
+    });
+  });
+
+  /* ---------- SIGN UP ---------- */
+  signupForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = sName.value.trim().replace(/\s+/g, ' '), email = sEmail.value.trim().toLowerCase();
+    const mob = sMob.value.trim(), pw = sPass.value;
+    if (name.length < 3) return fail(sMsg, 'Poora naam likhein (kam se kam 3 akshar)', sName);
+    if (!EMAIL_RE.test(email)) return fail(sMsg, 'Sahi email address likhein', sEmail);
+    if (!MOB_RE.test(mob)) return fail(sMsg, '10 digit ka sahi mobile number likhein', sMob);
+    if (pw.length < 6) return fail(sMsg, 'Password kam se kam 6 akshar ka rakhein', sPass);
+    const users = read(K_USERS, []);
+    if (users.some(x => x.email === email)) return fail(sMsg, 'Is email se account pehle se hai — Login karein', sEmail);
+    if (users.some(x => x.mob === mob)) return fail(sMsg, 'Is mobile number se account pehle se hai — Login karein', sMob);
+    note(sMsg, '');
+    busy(signupForm, true);
+    const salt = newSalt();
+    Promise.all([hash(pw, salt), delay(450)]).then(res => {
+      busy(signupForm, false);
+      const user = { name, email, mob, salt, hash: res[0], created: Date.now() };
+      users.push(user);
+      if (!write(K_USERS, users)) return fail(sMsg, 'Browser storage band hai, account save nahi ho paya');
+      finish(user);
+    });
+  });
+
+  /* ---------- FORGOT PASSWORD ---------- */
+  let forgotOpener = null;
+  function openForgot() {
+    forgotOpener = document.activeElement;
+    fEmail.value = lEmail.value; fPass.value = ''; note(fMsg, '');
+    forgotSheet.classList.add('open'); syncInert();
+    setTimeout(() => (fEmail.value ? fPass : fEmail).focus({ preventScroll: true }), 450);
+  }
+  function closeForgot() {
+    forgotSheet.classList.remove('open'); syncInert();
+    if (forgotOpener && forgotOpener.focus) forgotOpener.focus({ preventScroll: true });
+  }
+  $('#nmForgotBtn').addEventListener('click', openForgot);
+  $('#nmForgotBack').addEventListener('click', closeForgot);
+  // Esc dabane par pehle sirf Forgot sheet band ho, poora login popup nahi
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && forgotSheet.classList.contains('open')) { e.stopPropagation(); closeForgot(); }
+  }, true);
+
+  forgotForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = fEmail.value.trim().toLowerCase(), pw = fPass.value;
+    if (!EMAIL_RE.test(email)) return fail(fMsg, 'Sahi email address likhein', fEmail);
+    if (pw.length < 6) return fail(fMsg, 'Naya password kam se kam 6 akshar ka rakhein', fPass);
+    const users = read(K_USERS, []), user = users.find(x => x.email === email);
+    if (!user) return fail(fMsg, 'Is email se koi account nahi mila', fEmail);
+    note(fMsg, '');
+    busy(forgotForm, true);
+    const salt = newSalt();
+    Promise.all([hash(pw, salt), delay(450)]).then(res => {
+      busy(forgotForm, false);
+      user.salt = salt; user.hash = res[0];
+      if (!write(K_USERS, users)) return fail(fMsg, 'Browser storage band hai, password save nahi ho paya');
+      note(fMsg, 'Password badal gaya ✔', 'ok');
+      setTimeout(() => {
+        closeForgot();
+        lEmail.value = email; lPass.value = '';
+        note(lMsg, 'Ab naye password se login karein', 'ok');
+        lPass.focus({ preventScroll: true });
+      }, 1000);
+    });
+  });
+
+  /* ---------- Popup har baar khulne par card ko fresh (Login mode) karo ---------- */
+  function resetCard() {
+    forgotSheet.classList.remove('open');
+    loginForm.reset(); signupForm.reset(); forgotForm.reset();
+    $$('.nm-eye').forEach(eyeReset);
+    meterBar.style.width = '0'; meterTxt.textContent = '';
+    [lMsg, sMsg, fMsg].forEach(m => note(m, ''));
+    const rem = read(K_REM, '');
+    if (rem) { lEmail.value = rem; remember.checked = true; }
+    setMode('login', false);
+  }
+  if (modal) new MutationObserver(() => { if (modal.classList.contains('open')) resetCard(); })
+    .observe(modal, { attributes: true, attributeFilter: ['class'] });
+  resetCard();
+})();
+
+
+/* =====================================================================
+   PRO TOOLS (25 features) + 3D ANIMATED BACKGROUND  -- appended code
+   Sab kuch ek alag IIFE me hai, isliye purane code se koi takrav nahi.
+   ===================================================================== */
+(function () {
+  'use strict';
+  const D = document, root = D.documentElement;
+  const P = id => D.getElementById('pt' + id);
+  const LS = {
+    g(k, d) { try { const v = localStorage.getItem('pt_' + k); return v === null ? d : v; } catch (e) { return d; } },
+    s(k, v) { try { localStorage.setItem('pt_' + k, v); } catch (e) {} }
+  };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const init = (n, f) => { try { f(); } catch (e) { console.error('[ProTools] ' + n, e); } };
+  const on = (el, ev, fn, o) => el && el.addEventListener(ev, fn, o);
+
+  let tt;
+  function toast(m) { const t = P('Toast'); if (!t) return; t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 1700); }
+  async function copy(txt, msg) {
+    try { await navigator.clipboard.writeText(txt); }
+    catch (e) { const a = D.createElement('textarea'); a.value = txt; a.style.cssText = 'position:fixed;opacity:0'; D.body.appendChild(a); a.select(); try { D.execCommand('copy'); } catch (_) {} a.remove(); }
+    toast(msg || 'Copied');
+  }
+  const setSw = (b, state, onTxt, offTxt) => { b.setAttribute('aria-checked', state ? 'true' : 'false'); b.textContent = state ? onTxt : offTxt; b.classList.toggle('on', !!state); };
+
+  /* ---- shared audio context (sound effects + ambient) ---- */
+  let AC = null;
+  const actx = () => { if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (C) AC = new C(); } if (AC && AC.state === 'suspended') AC.resume(); return AC; };
+  let sfxOn = LS.g('sfx', '0') === '1';
+  function beep(f, d, type, v) {
+    if (!sfxOn) return; const c = actx(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime;
+    o.type = type || 'triangle'; o.frequency.value = f || 560;
+    g.gain.setValueAtTime(v || .05, t); g.gain.exponentialRampToValueAtTime(.0001, t + (d || .07));
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + (d || .07) + .02);
+  }
+
+  /* shared state for background controls */
+  const BG = { speed: Math.max(0, Math.min(3, parseFloat(LS.g('speed', '1')) || 0)) };
+  if (LS.g('speed', '1') === '0') BG.speed = 0;
+
+  /* ===================== 3D ANIMATED BACKGROUND ===================== */
+  init('bg', () => {
+    const cv = P('Bg'); if (!cv) return; const c = cv.getContext('2d');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let W, H, dpr, col = { a: '#00f0ff', b: '#7c3aed' }, pts = [], cubes = [], yaw = 0, pitch = 0, tx = 0, ty = 0, off = 0, rot = 0, raf = 0, last = 0;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    function colors() { const s = getComputedStyle(root); col.a = s.getPropertyValue('--pt-a').trim() || '#00f0ff'; col.b = s.getPropertyValue('--pt-b').trim() || '#7c3aed'; }
+    function spawn(p, far) { p.x = rnd(-.7, .7) * W; p.y = rnd(-.6, .5) * H; p.z = far ? 1 : rnd(.15, 1); p.c = Math.random() < .7 ? 0 : 1; return p; }
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.max(24, Math.min(70, Math.round(W * H / 20000)));
+      pts = Array.from({ length: n }, () => spawn({}, false));
+      cubes = [0, 1, 2].map(i => ({ x: (i - 1) * W * .3, y: -H * (.12 + i * .05), z: .55 + i * .12, s: 38 + i * 12, rx: rnd(0, 6), ry: rnd(0, 6), vx: rnd(.004, .009), vy: rnd(.006, .012) }));
+      colors(); draw(0);
+    }
+    const V = [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]];
+    const E = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
+    function draw(dt) {
+      const sp = BG.speed * (reduce ? .2 : 1);
+      yaw += (tx - yaw) * .05; pitch += (ty - pitch) * .05;
+      off = (off + .006 * sp * dt) % 1; rot += dt;
+      c.clearRect(0, 0, W, H);
+      const hy = H * .58 + pitch * 14, vx = W / 2 + yaw * 50;
+      /* floor grid (perspective) */
+      c.lineWidth = 1; c.strokeStyle = col.a;
+      for (let i = -12; i <= 12; i++) { c.globalAlpha = .16 - Math.abs(i) * .008; c.beginPath(); c.moveTo(vx, hy); c.lineTo(vx + i * W * .2 - yaw * 30, H); c.stroke(); }
+      c.strokeStyle = col.b;
+      for (let k = 0; k < 14; k++) { const d = ((k + off) / 14), y = hy + (H - hy) * Math.pow(d, 2.3); c.globalAlpha = .06 + d * .22; c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+      c.globalAlpha = .18; c.fillStyle = col.a; c.fillRect(0, hy - 1, W, 2);
+      /* particles (3D projected, mouse parallax) */
+      const sx = [], sy = [], sa = [];
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i]; p.z -= .0007 * sp * dt;
+        let k = 1 / (p.z * 1.7), x = W / 2 + (p.x + yaw * 90 * (1 - p.z)) * k, y = hy * .75 + (p.y + pitch * 60 * (1 - p.z)) * k;
+        if (p.z < .13 || x < -30 || x > W + 30 || y < -30 || y > H + 30) { spawn(p, true); k = 1 / (p.z * 1.7); x = W / 2 + p.x * k; y = hy * .75 + p.y * k; }
+        const a = Math.min(1, (1 - p.z) * 1.5 + .12), r = Math.min(3.2, .7 + k * .7);
+        sx[i] = x; sy[i] = y; sa[i] = a;
+        c.globalAlpha = a * .85; c.fillStyle = p.c ? col.b : col.a; c.beginPath(); c.arc(x, y, r, 0, 6.2832); c.fill();
+      }
+      if (W > 700) {
+        c.strokeStyle = col.a; c.lineWidth = .7;
+        for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+          const dx = sx[i] - sx[j], dy = sy[i] - sy[j], d2 = dx * dx + dy * dy;
+          if (d2 < 9000) { c.globalAlpha = (1 - d2 / 9000) * .22 * Math.min(sa[i], sa[j]); c.beginPath(); c.moveTo(sx[i], sy[i]); c.lineTo(sx[j], sy[j]); c.stroke(); }
+        }
+      }
+      /* floating wireframe cubes */
+      c.lineWidth = 1.2;
+      cubes.forEach((q, qi) => {
+        q.rx += q.vx * sp * dt; q.ry += q.vy * sp * dt;
+        const cx = Math.cos(q.rx), sxr = Math.sin(q.rx), cy = Math.cos(q.ry), sy2 = Math.sin(q.ry);
+        const bob = Math.sin((rot * .02 * Math.max(sp, .1)) + qi * 2) * 14;
+        const pr = V.map(v => {
+          let x = v[0], y = v[1], z = v[2], t;
+          t = y * cx - z * sxr; z = y * sxr + z * cx; y = t;
+          t = x * cy + z * sy2; z = -x * sy2 + z * cy; x = t;
+          const f = 1 / (3.2 - z * .5);
+          return [W / 2 + q.x + yaw * 40 * q.z + x * q.s * f * 2.2, H * .42 + q.y + pitch * 24 * q.z + bob + y * q.s * f * 2.2];
+        });
+        c.strokeStyle = qi % 2 ? col.b : col.a; c.globalAlpha = .38;
+        c.beginPath(); E.forEach(e => { c.moveTo(pr[e[0]][0], pr[e[0]][1]); c.lineTo(pr[e[1]][0], pr[e[1]][1]); }); c.stroke();
+      });
+      c.globalAlpha = 1;
+    }
+    function frame(now) {
+      raf = requestAnimationFrame(frame);
+      const dt = Math.min(3, (now - last) / 16.67) || 1; last = now; draw(dt);
+    }
+    function start() { if (!raf && !D.hidden) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+    function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+    on(window, 'pointermove', e => { tx = (e.clientX / W - .5) * 2; ty = (e.clientY / H - .5) * 2; }, { passive: true });
+    let rt; on(window, 'resize', () => { clearTimeout(rt); rt = setTimeout(resize, 150); });
+    on(D, 'visibilitychange', () => D.hidden ? stop() : start());
+    new MutationObserver(colors).observe(root, { attributes: true, attributeFilter: ['data-accent', 'data-theme'] });
+    resize(); start();
+  });
+
+  /* ===================== MATRIX RAIN (feature 23) ===================== */
+  let matrixToggle = () => {};
+  init('matrix', () => {
+    const cv = P('Matrix'), btn = P('MxBtn'); if (!cv || !btn) return;
+    const c = cv.getContext('2d'), fs = 16, chars = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂ0123456789<>/{}=+';
+    let isOn = LS.g('matrix', '0') === '1', drops = [], raf = 0, last = 0;
+    function size() { cv.width = innerWidth; cv.height = innerHeight; drops = Array.from({ length: Math.ceil(cv.width / fs) }, () => Math.random() * -40); }
+    function draw(t) {
+      if (!isOn) return; raf = requestAnimationFrame(draw); if (t - last < 50) return; last = t;
+      c.globalCompositeOperation = 'destination-out'; c.fillStyle = 'rgba(0,0,0,.14)'; c.fillRect(0, 0, cv.width, cv.height);
+      c.globalCompositeOperation = 'source-over'; c.fillStyle = '#39ff88'; c.font = fs + 'px monospace';
+      for (let i = 0; i < drops.length; i++) {
+        c.fillText(chars[(Math.random() * chars.length) | 0], i * fs, drops[i] * fs);
+        if (drops[i] * fs > cv.height && Math.random() > .975) drops[i] = 0; else drops[i]++;
+      }
+    }
+    function set(v) {
+      isOn = v; LS.s('matrix', v ? '1' : '0'); setSw(btn, v, 'On', 'Off'); cv.classList.toggle('on', v);
+      cancelAnimationFrame(raf); raf = 0;
+      if (v) { size(); raf = requestAnimationFrame(draw); } else c.clearRect(0, 0, cv.width, cv.height);
+    }
+    matrixToggle = () => set(!isOn);
+    on(btn, 'click', () => set(!isOn));
+    let rt; on(window, 'resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (isOn) size(); }, 200); });
+    on(D, 'visibilitychange', () => { if (!isOn) return; if (D.hidden) { cancelAnimationFrame(raf); raf = 0; } else if (!raf) raf = requestAnimationFrame(draw); });
+    set(isOn);
+  });
+
+  /* ===================== 24. PARTICLE SPEED ===================== */
+  init('speed', () => {
+    const r = P('Sp'), v = P('SpV'); if (!r) return;
+    const show = () => { v.textContent = BG.speed.toFixed(1) + 'x'; };
+    r.value = Math.round(BG.speed * 10); show();
+    on(r, 'input', () => { BG.speed = r.value / 10; LS.s('speed', String(BG.speed)); show(); });
+    on(P('SpRst'), 'click', () => { r.value = 10; BG.speed = 1; LS.s('speed', '1'); show(); });
+  });
+
+  /* ===================== 1. PASSWORD GENERATOR ===================== */
+  init('pw', () => {
+    const sets = { U: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', L: 'abcdefghijklmnopqrstuvwxyz', N: '0123456789', S: '!@#$%^&*()-_=+[]{};:,.?' };
+    const len = P('PwLen'), out = P('PwOut');
+    const rnd = n => { const a = new Uint32Array(1), lim = Math.floor(4294967296 / n) * n; let x; do { crypto.getRandomValues(a); x = a[0]; } while (x >= lim); return x % n; };
+    function gen() {
+      let keys = Object.keys(sets).filter(k => P('Pw' + k).checked);
+      if (!keys.length) { P('PwL').checked = true; keys = ['L']; }
+      const L = +len.value, pool = keys.map(k => sets[k]).join('');
+      const p = keys.map(k => sets[k][rnd(sets[k].length)]);
+      while (p.length < L) p.push(pool[rnd(pool.length)]);
+      for (let i = p.length - 1; i > 0; i--) { const j = rnd(i + 1); [p[i], p[j]] = [p[j], p[i]]; }
+      out.textContent = p.join('');
+      const bits = Math.round(L * Math.log2(pool.length));
+      P('PwStr').textContent = 'Strength: ' + (bits < 45 ? 'Weak' : bits < 65 ? 'Fair' : bits < 90 ? 'Strong' : 'Very strong') + ' (~' + bits + ' bits)';
+    }
+    on(len, 'input', () => { P('PwLenV').textContent = len.value; gen(); });
+    ['U', 'L', 'N', 'S'].forEach(k => on(P('Pw' + k), 'change', gen));
+    on(P('PwGen'), 'click', gen);
+    on(P('PwCopy'), 'click', () => copy(out.textContent, 'Password copied'));
+    gen();
+  });
+
+  /* ===================== 2. GRADIENT PICKER ===================== */
+  init('gr', () => {
+    const a = P('Gr1'), b = P('Gr2'), g = P('GrAng'), pv = P('GrPrev'), code = P('GrCss');
+    const up = () => { const css = 'background: linear-gradient(' + g.value + 'deg, ' + a.value + ', ' + b.value + ');'; pv.style.cssText = css; code.textContent = css; };
+    [a, b, g].forEach(el => on(el, 'input', up));
+    const hex = () => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+    on(P('GrRnd'), 'click', () => { a.value = hex(); b.value = hex(); g.value = Math.floor(Math.random() * 361); up(); });
+    on(P('GrCopy'), 'click', () => copy(code.textContent, 'CSS copied'));
+    up();
+  });
+
+  /* ===================== 3. WORD / CHAR COUNTER ===================== */
+  init('cn', () => {
+    const t = P('CnIn');
+    const up = () => {
+      const v = t.value, w = v.trim() ? v.trim().split(/\s+/).length : 0;
+      P('CnW').textContent = w; P('CnC').textContent = v.length; P('CnS').textContent = v.replace(/\s/g, '').length;
+      P('CnL').textContent = v ? v.split('\n').length : 0; P('CnT').textContent = (v.match(/[^.!?।]+[.!?।]+/g) || []).length;
+      P('CnR').textContent = w ? Math.max(1, Math.ceil(w / 200)) : 0;
+    };
+    on(t, 'input', up); up();
+  });
+
+  /* ===================== 4. BINARY CONVERTER ===================== */
+  init('bn', () => {
+    const i = P('BnIn'), o = P('BnOut'), say = (m, bad) => { o.textContent = m; o.classList.toggle('bad', !!bad); };
+    const acts = {
+      t2b() { const v = i.value; if (!v) return say('Type some text first.', 1); say([...new TextEncoder().encode(v)].map(x => x.toString(2).padStart(8, '0')).join(' ')); },
+      b2t() { const b = i.value.replace(/[^01]/g, ''); if (!b || b.length % 8) return say('Binary needs groups of 8 bits (0 and 1 only).', 1);
+        try { say(new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(b.match(/.{8}/g).map(x => parseInt(x, 2))))); } catch (e) { say('Those bits are not valid text.', 1); } },
+      n2b() { const v = i.value.trim(); if (!/^\d+$/.test(v)) return say('Enter a whole number (0 or more).', 1); const n = BigInt(v); say('Bin: ' + n.toString(2) + '\nHex: ' + n.toString(16).toUpperCase() + '\nOct: ' + n.toString(8)); },
+      b2n() { const b = i.value.replace(/\s/g, ''); if (!/^[01]+$/.test(b)) return say('Enter only 0 and 1.', 1); const n = BigInt('0b' + b); say('Dec: ' + n.toString(10) + '\nHex: ' + n.toString(16).toUpperCase()); }
+    };
+    D.querySelectorAll('[data-bn]').forEach(b => on(b, 'click', () => acts[b.dataset.bn]()));
+  });
+
+  /* ===================== 5. NOTES ===================== */
+  init('notes', () => {
+    const t = P('Notes'), st = P('NotesSt'); let h;
+    t.value = LS.g('notes', '');
+    on(t, 'input', () => { clearTimeout(h); st.textContent = 'Saving…'; h = setTimeout(() => { LS.s('notes', t.value); st.textContent = 'Saved ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }, 350); });
+    on(P('NotesClr'), 'click', () => { t.value = ''; LS.s('notes', ''); st.textContent = 'Cleared'; });
+  });
+
+  /* ===================== 6. SOUND EFFECTS ===================== */
+  function sfxSet(v) { sfxOn = v; LS.s('sfx', v ? '1' : '0'); const b = P('Sfx'); if (b) setSw(b, v, 'On', 'Off'); if (v) beep(660, .09, 'sine', .06); }
+  init('sfx', () => {
+    const b = P('Sfx'); setSw(b, sfxOn, 'On', 'Off');
+    on(b, 'click', () => sfxSet(!sfxOn));
+    on(P('SfxTest'), 'click', () => { const was = sfxOn; sfxOn = true; beep(523, .12, 'sine', .07); setTimeout(() => beep(659, .12, 'sine', .07), 110); setTimeout(() => beep(784, .18, 'sine', .07), 220); setTimeout(() => { sfxOn = was; }, 450); });
+    on(P('Grid'), 'click', e => { if (e.target.closest('button') && e.target.id !== 'ptSfxTest') beep(520, .05, 'triangle', .04); });
+  });
+
+  /* ===================== 7. NEON TEXT ===================== */
+  init('neon', () => {
+    const t = P('NeonT'), c = P('NeonC'), p = P('NeonP');
+    const css = () => 'color:#fff;text-shadow:0 0 4px #fff,0 0 12px ' + c.value + ',0 0 26px ' + c.value + ',0 0 48px ' + c.value + ';';
+    const up = () => { p.textContent = t.value || ' '; p.style.cssText = css(); };
+    on(t, 'input', up); on(c, 'input', up); on(P('NeonCopy'), 'click', () => copy(css(), 'CSS copied')); up();
+  });
+
+  /* ===================== 8. SCREEN RULER ===================== */
+  init('ruler', () => {
+    const wrap = P('Ruler'), cv = P('RulC'), btn = P('RulBtn'), rx = P('RX'), ry = P('RY'), tip = P('RT'), size = P('RulSize'); let isOn = false;
+    const info = () => { size.textContent = innerWidth + ' × ' + innerHeight + ' px (DPR ' + (window.devicePixelRatio || 1).toFixed(1) + ')'; };
+    function paint() {
+      const dpr = window.devicePixelRatio || 1, w = innerWidth, h = innerHeight, c = cv.getContext('2d');
+      cv.width = w * dpr; cv.height = h * dpr; cv.style.width = w + 'px'; cv.style.height = h + 'px'; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.fillStyle = 'rgba(4,5,13,.82)'; c.fillRect(0, 0, w, 22); c.fillRect(0, 0, 22, h);
+      c.strokeStyle = '#00f0ff'; c.fillStyle = '#9fefff'; c.font = '9px monospace'; c.lineWidth = 1; c.beginPath();
+      for (let x = 0; x <= w; x += 10) { const L = x % 100 === 0 ? 14 : x % 50 === 0 ? 9 : 5; c.moveTo(x + .5, 22); c.lineTo(x + .5, 22 - L); }
+      for (let y = 0; y <= h; y += 10) { const L = y % 100 === 0 ? 14 : y % 50 === 0 ? 9 : 5; c.moveTo(22, y + .5); c.lineTo(22 - L, y + .5); }
+      c.stroke();
+      for (let x = 100; x <= w; x += 100) c.fillText(x, x + 3, 9);
+      for (let y = 100; y <= h; y += 100) { c.save(); c.translate(9, y - 3); c.rotate(-Math.PI / 2); c.fillText(y, 0, 0); c.restore(); }
+    }
+    function move(e) { rx.style.transform = 'translateX(' + e.clientX + 'px)'; ry.style.transform = 'translateY(' + e.clientY + 'px)'; tip.textContent = e.clientX + ', ' + e.clientY; tip.style.transform = 'translate(' + Math.min(e.clientX + 14, innerWidth - 90) + 'px,' + Math.min(e.clientY + 14, innerHeight - 30) + 'px)'; }
+    function set(v) { isOn = v; wrap.hidden = !v; setSw(btn, v, 'Ruler on', 'Ruler off'); if (v) { paint(); } }
+    on(btn, 'click', () => set(!isOn));
+    on(window, 'pointermove', e => { if (isOn) move(e); }, { passive: true });
+    on(window, 'resize', () => { info(); if (isOn) paint(); });
+    on(D, 'keydown', e => { if (e.key === 'Escape' && isOn) set(false); });
+    info();
+  });
+
+  /* ===================== 9. CALCULATOR ===================== */
+  init('calc', () => {
+    const inp = P('CalcIn'), keys = P('CalcKeys');
+    function evaluate(src) {
+      const s = src.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/\s+/g, ''); let i = 0;
+      const fail = m => { throw new Error(m); };
+      function expr() { let v = term(); while (s[i] === '+' || s[i] === '-') { const o = s[i++], r = term(); v = o === '+' ? v + r : v - r; } return v; }
+      function term() { let v = unary(); while (s[i] === '*' || s[i] === '/') { const o = s[i++], r = unary(); if (o === '/' && r === 0) fail('÷0'); v = o === '*' ? v * r : v / r; } return v; }
+      function unary() { if (s[i] === '-') { i++; return -unary(); } if (s[i] === '+') { i++; return unary(); } return prim(); }
+      function prim() {
+        let v;
+        if (s[i] === '(') { i++; v = expr(); if (s[i] !== ')') fail('( )'); i++; }
+        else { const m = /^(\d+\.?\d*|\.\d+)/.exec(s.slice(i)); if (!m) fail('Error'); v = parseFloat(m[0]); i += m[0].length; }
+        while (s[i] === '%') { v /= 100; i++; }
+        return v;
+      }
+      if (!s) return '';
+      const r = expr(); if (i < s.length) fail('Error'); if (!isFinite(r)) fail('Error');
+      return String(parseFloat(r.toPrecision(12)));
+    }
+    ['C', '⌫', '(', ')', '7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', '−', '0', '.', '%', '+', '='].forEach(k => {
+      const b = D.createElement('button'); b.type = 'button'; b.textContent = k; b.dataset.k = k;
+      if (k === '=') b.className = 'eq'; else if ('÷×−+'.includes(k)) b.className = 'op'; else if (k === 'C' || k === '⌫') b.className = 'g';
+      keys.appendChild(b);
+    });
+    function run() { try { const r = evaluate(inp.value); inp.value = r; inp.classList.remove('bad'); } catch (e) { inp.classList.add('bad'); inp.value = e.message === '÷0' ? 'Cannot divide by 0' : 'Error'; setTimeout(() => { if (inp.classList.contains('bad')) { inp.value = ''; inp.classList.remove('bad'); } }, 1100); } }
+    on(keys, 'click', e => {
+      const b = e.target.closest('button'); if (!b) return; const k = b.dataset.k;
+      if (inp.classList.contains('bad')) { inp.value = ''; inp.classList.remove('bad'); }
+      if (k === 'C') inp.value = ''; else if (k === '⌫') inp.value = inp.value.slice(0, -1); else if (k === '=') run(); else inp.value += k;
+    });
+    on(inp, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
+    on(inp, 'input', () => { inp.value = inp.value.replace(/\*/g, '×').replace(/\//g, '÷').replace(/[^0-9+\-−×÷().%\s]/g, ''); });
+  });
+
+  /* ===================== 10. RANDOM QUOTE ===================== */
+  init('quote', () => {
+    const Q = ['Small commits beat big plans.', 'Bug ka matlab hai ki code chal raha hai, bas aapki soch se alag.', 'Type slowly at first; speed is a side effect of accuracy.', 'Read the error message. It is usually telling the truth.', 'Ek din me ek concept, ek mahine me ek skill.', 'Make it work, make it clear, then make it fast.', 'Practice is the shortcut that has no shortcut.', 'Jo roz 30 minute code karta hai, wo kal se aage hai.', 'A clean desktop is a clear head.', 'Ask the question you are afraid is too basic. Someone else is waiting for it.', 'Backup today. Thank yourself tomorrow.', 'Computer sikhna ek bar ka kaam nahi, roz ki aadat hai.', 'Good typing is invisible, bad typing is all you notice.', 'Every expert once saved a file in the wrong folder.'];
+    const el = P('Q'); let last = -1;
+    const nx = () => { let i; do { i = Math.floor(Math.random() * Q.length); } while (i === last && Q.length > 1); last = i; el.textContent = Q[i]; };
+    on(P('QNew'), 'click', nx); on(P('QCopy'), 'click', () => copy(el.textContent, 'Quote copied')); nx();
+  });
+
+  /* ===================== 11. THEME SWITCHER ===================== */
+  init('theme', () => {
+    const box = P('Acc'), mark = a => box.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.acc === a));
+    const set = a => { if (a === 'cyan') root.removeAttribute('data-accent'); else root.setAttribute('data-accent', a); LS.s('accent', a); mark(a); };
+    on(box, 'click', e => { const b = e.target.closest('button'); if (b) set(b.dataset.acc); });
+    on(P('Dark'), 'click', () => { const t = D.getElementById('themeBtn'); if (t) t.click(); else toast('Theme button not found'); });
+    set(LS.g('accent', 'cyan'));
+  });
+
+  /* ===================== 12. STOPWATCH ===================== */
+  init('sw', () => {
+    const out = P('SwT'), go = P('SwGo'), laps = P('SwL'); let run = false, t0 = 0, acc = 0, raf = 0, n = 0;
+    const el = () => acc + (run ? performance.now() - t0 : 0);
+    const fmt = ms => { const c = Math.floor(ms / 10) % 100, s = Math.floor(ms / 1000) % 60, m = Math.floor(ms / 60000); return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0') + '.' + String(c).padStart(2, '0'); };
+    const tick = () => { out.textContent = fmt(el()); if (run) raf = requestAnimationFrame(tick); };
+    on(go, 'click', () => { if (run) { acc = el(); run = false; go.textContent = 'Resume'; cancelAnimationFrame(raf); tick(); } else { t0 = performance.now(); run = true; go.textContent = 'Pause'; tick(); } });
+    on(P('SwLap'), 'click', () => { if (!run && !acc) return; const li = D.createElement('li'); li.textContent = 'Lap ' + (++n) + '  ' + fmt(el()); laps.prepend(li); while (laps.children.length > 5) laps.lastChild.remove(); });
+    on(P('SwRst'), 'click', () => { run = false; acc = 0; n = 0; cancelAnimationFrame(raf); out.textContent = '00:00.00'; go.textContent = 'Start'; laps.innerHTML = ''; });
+  });
+
+  /* ===================== 13. LOCAL STORAGE STATUS ===================== */
+  init('ls', () => {
+    function refresh() {
+      let ok = true, bytes = 0, keys = 0;
+      try { const k = '__pt_t'; localStorage.setItem(k, '1'); localStorage.removeItem(k); for (let i = 0; i < localStorage.length; i++) { const k2 = localStorage.key(i); bytes += (k2.length + (localStorage.getItem(k2) || '').length) * 2; keys++; } } catch (e) { ok = false; }
+      const kb = bytes / 1024, pc = Math.min(100, kb / 5120 * 100);
+      P('LsBar').style.width = pc.toFixed(1) + '%';
+      P('LsTxt').textContent = ok ? keys + ' keys, about ' + (kb < 1024 ? kb.toFixed(1) + ' KB' : (kb / 1024).toFixed(2) + ' MB') + ' of roughly 5 MB used.' : 'Local storage is blocked in this browser (private mode or settings).';
+    }
+    on(P('LsRef'), 'click', () => { refresh(); toast('Refreshed'); });
+    on(P('LsClr'), 'click', () => {
+      if (!confirm('Clear only Pro Tools data (notes, settings, feedback)? Your other site data stays.')) return;
+      try { Object.keys(localStorage).filter(k => k.indexOf('pt_') === 0).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+      const nt = P('Notes'); if (nt) nt.value = ''; refresh(); toast('Pro Tools data cleared');
+    });
+    refresh();
+  });
+
+  /* ===================== 14. REGEX TESTER ===================== */
+  init('rx', () => {
+    const p = P('RxP'), f = P('RxF'), t = P('RxT'), o = P('RxO'), m = P('RxM');
+    function run() {
+      const pat = p.value; o.classList.remove('bad'); m.textContent = '';
+      if (!pat) { o.textContent = t.value || '-'; return; }
+      try {
+        const flags = f.value.indexOf('g') < 0 ? f.value + 'g' : f.value, re = new RegExp(pat, flags), s = t.value;
+        let html = '', last = 0, n = 0;
+        for (const x of s.matchAll(re)) { if (n++ >= 500) break; html += esc(s.slice(last, x.index)) + '<mark>' + esc(x[0]) + '</mark>'; last = x.index + x[0].length; }
+        html += esc(s.slice(last)); o.innerHTML = html || '-';
+        m.textContent = n >= 500 ? '500+ matches (showing first 500)' : n + (n === 1 ? ' match' : ' matches');
+      } catch (e) { o.classList.add('bad'); o.textContent = e.message; }
+    }
+    [p, f, t].forEach(el => on(el, 'input', run)); run();
+  });
+
+  /* ===================== 15. JSON FORMATTER ===================== */
+  init('js', () => {
+    const t = P('Js'), m = P('JsM'); const say = (s, bad) => { m.textContent = s; m.classList.toggle('badtxt', !!bad); };
+    const go = ind => { if (!t.value.trim()) return say('Paste some JSON first.', 1); try { t.value = JSON.stringify(JSON.parse(t.value), null, ind); say('Valid JSON'); } catch (e) { say(e.message, 1); } };
+    on(P('JsFmt'), 'click', () => go(2)); on(P('JsMin'), 'click', () => go(0));
+    on(P('JsCopy'), 'click', () => t.value ? copy(t.value, 'JSON copied') : say('Nothing to copy.', 1));
+  });
+
+  /* ===================== 16. BASE64 ===================== */
+  init('b64', () => {
+    const t = P('B64'), m = P('B64M'), say = (s, bad) => { m.textContent = s; m.classList.toggle('badtxt', !!bad); };
+    on(P('B64E'), 'click', () => { try { const b = new TextEncoder().encode(t.value); let s = ''; for (let i = 0; i < b.length; i += 8192) s += String.fromCharCode.apply(null, b.subarray(i, i + 8192)); t.value = btoa(s); say('Encoded'); } catch (e) { say('Could not encode this text.', 1); } });
+    on(P('B64D'), 'click', () => { try { const bin = atob(t.value.trim().replace(/-/g, '+').replace(/_/g, '/')); t.value = new TextDecoder('utf-8', { fatal: true }).decode(Uint8Array.from(bin, c => c.charCodeAt(0))); say('Decoded'); } catch (e) { say('That is not valid Base64 text.', 1); } });
+    on(P('B64C'), 'click', () => t.value ? copy(t.value, 'Copied') : say('Nothing to copy.', 1));
+  });
+
+  /* ===================== 17. SNIPPET COPIER ===================== */
+  init('sn', () => {
+    const S = {
+      'HTML5 starter': '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My Page</title>\n</head>\n<body>\n  \n</body>\n</html>',
+      'Center with flexbox': '.center {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n}',
+      'Fetch JSON': "fetch('https://api.example.com/data')\n  .then(r => r.json())\n  .then(data => console.log(data))\n  .catch(err => console.error(err));",
+      'Debounce (JS)': 'function debounce(fn, ms = 300) {\n  let t;\n  return (...a) => {\n    clearTimeout(t);\n    t = setTimeout(() => fn(...a), ms);\n  };\n}',
+      'Python input loop': 'while True:\n    n = input("Enter a number (q to quit): ")\n    if n == "q":\n        break\n    print("Square:", int(n) ** 2)'
+    };
+    const sel = P('SnS'), pre = P('SnP');
+    Object.keys(S).forEach(k => { const o = D.createElement('option'); o.textContent = k; sel.appendChild(o); });
+    const up = () => { pre.textContent = S[sel.value]; };
+    on(sel, 'change', up); on(P('SnC'), 'click', () => copy(S[sel.value], 'Snippet copied')); up();
+  });
+
+  /* ===================== 19. NETWORK PING ===================== */
+  init('net', () => {
+    const dot = P('NetDot'), st = P('NetSt'), ty = P('NetTy'), out = P('Ping'), btn = P('PingBtn');
+    function status() {
+      const ok = navigator.onLine; dot.className = 'pt-dot ' + (ok ? 'ok' : 'bad'); st.textContent = ok ? 'Online' : 'Offline';
+      const cn = navigator.connection || navigator.mozConnection; ty.textContent = ok && cn && cn.effectiveType ? '(' + cn.effectiveType.toUpperCase() + (cn.downlink ? ', ~' + cn.downlink + ' Mbps' : '') + ')' : '';
+    }
+    async function ping() {
+      if (!navigator.onLine) { out.textContent = 'Offline'; return; }
+      btn.disabled = true; out.textContent = 'Pinging…'; const r = [];
+      try {
+        for (let i = 0; i < 3; i++) { const t = performance.now(); await fetch(location.href.split('#')[0].split('?')[0] + '?pt=' + Date.now() + i, { method: 'HEAD', cache: 'no-store' }); r.push(performance.now() - t); }
+        const avg = Math.round(r.reduce((a, b) => a + b, 0) / r.length);
+        out.textContent = avg + ' ms ' + (avg < 80 ? '(excellent)' : avg < 200 ? '(good)' : avg < 500 ? '(slow)' : '(very slow)');
+      } catch (e) { out.textContent = 'Ping failed (open the site over http/https)'; }
+      btn.disabled = false;
+    }
+    on(window, 'online', status); on(window, 'offline', status);
+    const cn = navigator.connection; if (cn && cn.addEventListener) cn.addEventListener('change', status);
+    on(btn, 'click', ping); status();
+  });
+
+  /* ===================== 20. FEEDBACK MODAL ===================== */
+  let fbClose = () => {};
+  init('fb', () => {
+    const m = P('Modal'), t = P('FbT'), msg = P('FbM'), stars = P('Stars'); let rate = 0, lastFocus = null;
+    const load = () => { try { return JSON.parse(LS.g('feedback', '[]')) || []; } catch (e) { return []; } };
+    const count = () => { const n = load().length; P('FbN').textContent = n ? n + ' saved on this device.' : ''; };
+    const paint = () => stars.querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.v <= rate));
+    function open() { lastFocus = D.activeElement; m.hidden = false; rate = 0; paint(); t.value = ''; msg.textContent = ''; setTimeout(() => stars.querySelector('button').focus(), 30); }
+    function close() { if (m.hidden) return; m.hidden = true; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    fbClose = close;
+    on(P('FbOpen'), 'click', open); on(P('FbX'), 'click', close);
+    on(m, 'click', e => { if (e.target === m) close(); });
+    on(stars, 'click', e => { const b = e.target.closest('button'); if (b) { rate = +b.dataset.v; paint(); msg.textContent = ''; } });
+    on(P('FbSend'), 'click', () => {
+      if (!rate) { msg.textContent = 'Please pick a star rating first.'; return; }
+      const a = load(); a.push({ r: rate, t: t.value.trim().slice(0, 600), d: new Date().toISOString() }); LS.s('feedback', JSON.stringify(a.slice(-20)));
+      close(); count(); toast('Thanks for the feedback');
+    });
+    on(D, 'keydown', e => {
+      if (m.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'Tab') { const f = [...m.querySelectorAll('button,textarea')].filter(x => !x.disabled); if (!f.length) return; const a = f[0], z = f[f.length - 1]; if (e.shiftKey && D.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && D.activeElement === z) { e.preventDefault(); a.focus(); } }
+    });
+    count();
+  });
+
+  /* ===================== 21. BATTERY ===================== */
+  init('bat', () => {
+    const bar = P('BatBar'), tx = P('BatTxt');
+    if (!navigator.getBattery) { tx.textContent = 'Battery info is not available in this browser (Chrome and Edge support it).'; bar.parentNode.style.display = 'none'; return; }
+    navigator.getBattery().then(b => {
+      const up = () => { const l = Math.round(b.level * 100); bar.style.width = l + '%'; bar.className = l <= 20 && !b.charging ? 'low' : ''; tx.textContent = l + '% , ' + (b.charging ? 'charging' : 'on battery'); };
+      ['levelchange', 'chargingchange'].forEach(ev => b.addEventListener(ev, up)); up();
+    }).catch(() => { tx.textContent = 'Battery info is blocked in this browser.'; bar.parentNode.style.display = 'none'; });
+  });
+
+  /* ===================== 22. AMBIENT SOUND ===================== */
+  init('amb', () => {
+    const sel = P('AmbS'), vol = P('AmbV'), btn = P('AmbBtn'); let src = null, gain = null, playing = false;
+    function buffer(c, kind) {
+      const n = c.sampleRate * 3, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0); let l = 0, b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < n; i++) {
+        const w = Math.random() * 2 - 1;
+        if (kind === 'brown') { l = (l + .02 * w) / 1.02; d[i] = l * 3.5; }
+        else if (kind === 'pink') { b0 = .99886 * b0 + w * .0555179; b1 = .99332 * b1 + w * .0750759; b2 = .969 * b2 + w * .153852; b3 = .8665 * b3 + w * .3104856; b4 = .55 * b4 + w * .5329522; b5 = -.7616 * b5 - w * .016898; d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * .5362) * .11; b6 = w * .115926; }
+        else d[i] = w * .6;
+      }
+      for (let i = 0; i < 2000; i++) d[n - 1 - i] *= i / 2000, d[i] *= i / 2000; /* soft loop edges */
+      return b;
+    }
+    function stop() {
+      if (src) { const s = src, g = gain, c = AC; try { g.gain.setTargetAtTime(0, c.currentTime, .08); s.stop(c.currentTime + .4); } catch (e) {} src = null; }
+      playing = false; setSw(btn, false, 'Stop', 'Play');
+    }
+    function play() {
+      const c = actx(); if (!c) { toast('Audio is not supported here'); return; }
+      if (src) stop();
+      const kind = sel.value; src = c.createBufferSource(); src.buffer = buffer(c, kind); src.loop = true;
+      gain = c.createGain(); gain.gain.value = vol.value / 100 * .6;
+      let node = src;
+      if (kind === 'rain') { const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 700; const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 7000; node.connect(hp); hp.connect(lp); node = lp; }
+      node.connect(gain); gain.connect(c.destination); src.start(); playing = true; setSw(btn, true, 'Stop', 'Play');
+    }
+    on(btn, 'click', () => playing ? stop() : play());
+    on(sel, 'change', () => { if (playing) play(); });
+    on(vol, 'input', () => { if (gain) gain.gain.value = vol.value / 100 * .6; });
+    setSw(btn, false, 'Stop', 'Play');
+  });
+
+  /* ===================== 25. QUICK SEARCH ===================== */
+  init('search', () => {
+    const i = P('Search'), cards = [...D.querySelectorAll('#ptGrid .pt-card:not(.pt-wide)')], none = P('None'), cnt = P('Count');
+    function filter() {
+      const q = i.value.trim().toLowerCase(); let n = 0;
+      cards.forEach(c => { const hit = !q || (c.querySelector('h3').textContent + ' ' + c.dataset.k).toLowerCase().indexOf(q) > -1; c.hidden = !hit; if (hit) n++; });
+      cnt.textContent = n + ' of ' + cards.length; none.hidden = n > 0;
+    }
+    on(i, 'input', filter);
+    on(i, 'keydown', e => { if (e.key === 'Enter') { const f = cards.find(c => !c.hidden); if (f) { f.scrollIntoView({ behavior: 'smooth', block: 'center' }); f.classList.add('flash'); setTimeout(() => f.classList.remove('flash'), 1300); } } });
+    filter();
+  });
+
+  /* ===================== 18. SHORTCUT KEYS (Alt + key) ===================== */
+  init('keys', () => {
+    on(D, 'keydown', e => {
+      if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const m = { KeyP: () => { const s = D.getElementById('protools'); if (s) s.scrollIntoView({ behavior: 'smooth' }); },
+        KeyM: () => matrixToggle(), KeyS: () => sfxSet(!sfxOn), KeyN: () => { const n = P('Notes'); if (n) { n.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => n.focus({ preventScroll: true }), 350); } } }[e.code];
+      if (m) { e.preventDefault(); m(); }
+    });
+  });
+})();
+
+
+/* ===== UPDATE: 3D Car scene — mouse/touch se tilt (car apne aap round lagati rehti hai, CSS animation se) ===== */
+(function () {
+  const stage = document.getElementById('c3Stage');
+  if (!stage) return;
+  const reset = () => { stage.style.setProperty('--rx', '62deg'); stage.style.setProperty('--rz', '0deg'); };
+  const move = (e) => {
+    const r = stage.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    stage.style.setProperty('--rx', (62 + y * 16).toFixed(1) + 'deg');
+    stage.style.setProperty('--rz', (x * -40).toFixed(1) + 'deg');
+  };
+  stage.addEventListener('pointermove', move);
+  stage.addEventListener('pointerleave', reset);
+})();
+
+
+/* =====================================================================
+   3D floating coloured boxes background (CSS 3D transforms - light weight)
+   Body ke peeche + login popup ke andar; mouse hilane par halka parallax.
+   ===================================================================== */
+(function () {
+  const COLORS = ['#5eead4', '#38bdf8', '#a78bfa', '#fb7185', '#fbbf24', '#34d399'];
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const small = window.matchMedia && matchMedia('(max-width: 700px)').matches;
+  const worlds = [];
+  function build(host, count) {
+    if (!host || host.dataset.ready) return;
+    host.dataset.ready = '1';
+    const world = document.createElement('div'); world.className = 'bg3d-world';
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div'); b.className = 'b3';
+      const set = (k, v) => b.style.setProperty(k, v);
+      set('--s', rnd(small ? 16 : 18, small ? 38 : 58).toFixed(0) + 'px');
+      set('--x', rnd(2, 94).toFixed(1) + '%'); set('--y', rnd(4, 88).toFixed(1) + '%');
+      set('--c', COLORS[i % COLORS.length]);
+      set('--dx', rnd(-170, 170).toFixed(0) + 'px'); set('--dy', rnd(-130, 130).toFixed(0) + 'px'); set('--dz', rnd(-280, 280).toFixed(0) + 'px');
+      set('--dur', rnd(14, 28).toFixed(1) + 's'); set('--spin', rnd(16, 40).toFixed(1) + 's'); set('--dl', (-rnd(0, 24)).toFixed(1) + 's');
+      set('--rx', rnd(0, 360).toFixed(0) + 'deg'); set('--ry', rnd(0, 360).toFixed(0) + 'deg');
+      const inner = document.createElement('div'); inner.className = 'b3-in';
+      for (let f = 0; f < 6; f++) inner.appendChild(document.createElement('i'));
+      b.appendChild(inner); world.appendChild(b);
+    }
+    host.appendChild(world); worlds.push(world);
+  }
+  function init() {
+    document.querySelectorAll('.bg3d').forEach(h => build(h, h.classList.contains('bg3d-modal') ? (small ? 6 : 10) : (small ? 8 : 14)));
+    if (!window.matchMedia || !matchMedia('(hover: hover)').matches) return;
+    let tx = 0, ty = 0, queued = false;
+    window.addEventListener('pointermove', e => {
+      ty = (e.clientX / innerWidth - 0.5) * 10; tx = (0.5 - e.clientY / innerHeight) * 8;
+      if (queued) return; queued = true;
+      requestAnimationFrame(() => { queued = false; worlds.forEach(w => { w.style.setProperty('--tx', tx.toFixed(2) + 'deg'); w.style.setProperty('--ty', ty.toFixed(2) + 'deg'); }); });
+    }, { passive: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+/* ============================================================
+   ✅ TAB CHECKBOXES + 🎯 O LEVEL TEST (HTML/CSS/JS) + 🎉 FUN EFFECTS
+   Ye poora block naya hai. Purana koi code isme change nahi hua.
+   - Har nav tab ke saath checkbox: tick = section khulta hai, untick = chhup jata hai
+   - "O Level Test" tab: HTML / CSS / JavaScript subjects (100-100 questions) + Start Test
+   - Fun button (🎉): confetti, balloons, fireworks, emoji rain + sound/voice (mute option ke saath)
+   ============================================================ */
+
+/* Default: sab tabs band (untick) rahenge jab tak student tick na kare.
+   Agar chahte hain ki sab tabs by default khule rahein, to neeche false ko true kar dein. */
+const TAB_DEFAULT_OPEN = false;
+
+/* Ye function pehle se (renderTests ke andar) call hota hai, isliye global function hi rakha hai. */
+function renderOLX() {
+  const grid = document.getElementById('oltGrid');
+  if (!grid || typeof OLX === 'undefined') return;
+  const P = prog(), B = store.get('acec_best', {});
+  OLX.forEach(c => {
+    const key = c[0], n = getBank(key).length, s = P[key], b = B[key];
+    const box = grid.querySelector('[data-badge="' + key + '"]');
+    const cnt = grid.querySelector('[data-count="' + key + '"]');
+    if (cnt) cnt.textContent = n ? t('nq', { n }) : t('soonS');
+    if (!box) return;
+    box.innerHTML = (s ? '<div class="rbadge">' + t('saved', { i: s.i, n: s.order.length }) + '</div>' : '') +
+      (b ? '<div class="bbadge">🏅 ' + t('x_best') + ': ' + b.s + '/' + b.n + '</div>' : '');
+  });
+}
+
+(() => {
+  'use strict';
+  const $1 = s => document.querySelector(s);
+  const $all = s => Array.from(document.querySelectorAll(s));
+  const safeStore = {
+    get: (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+    set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+  };
+  const say = m => { if (typeof toast === 'function') toast(m); };
+
+  /* ---------------------------------------------------------
+     1) TAB CHECKBOXES
+     --------------------------------------------------------- */
+  const TAB_KEY = 'acec_tabs_open_v1';
+  const boxes = $all('.tab-chk');
+  const GATED = boxes.map(b => b.dataset.tab).filter(id => document.getElementById(id));
+  const opened = new Set(safeStore.get(TAB_KEY, TAB_DEFAULT_OPEN ? GATED : []));
+  const allBox = $1('#tabAll');
+
+  function persist() { safeStore.set(TAB_KEY, GATED.filter(id => opened.has(id))); }
+
+  function paintAll() {
+    if (!allBox) return;
+    const n = GATED.filter(id => opened.has(id)).length;
+    allBox.checked = n === GATED.length && n > 0;
+    allBox.indeterminate = n > 0 && n < GATED.length;
+  }
+
+  function setTab(id, on, quiet) {
+    const sec = document.getElementById(id);
+    if (!sec || !GATED.includes(id)) return;
+    const was = !sec.classList.contains('tab-collapsed');
+    sec.classList.toggle('tab-collapsed', !on);
+    if (on) opened.add(id); else opened.delete(id);
+    $all('.tab-chk[data-tab="' + id + '"]').forEach(b => { b.checked = on; });
+    if (on && !was) {
+      sec.classList.add('tab-in');
+      setTimeout(() => sec.classList.remove('tab-in'), 600);
+      // Chhupe hue section me jo games/canvas the unko size dobara nikalne do
+      requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    }
+    if (!quiet) persist();
+    paintAll();
+    document.dispatchEvent(new CustomEvent('acec:tab', { detail: { id, open: on } }));
+  }
+
+  function goTab(id) {
+    setTab(id, true);
+    requestAnimationFrame(() => {
+      const sec = document.getElementById(id);
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // Page load par saved state lagao
+  GATED.forEach(id => setTab(id, opened.has(id), true));
+  paintAll();
+
+  // Checkbox change
+  boxes.forEach(b => b.addEventListener('change', () => {
+    if (b.checked) goTab(b.dataset.tab); else setTab(b.dataset.tab, false);
+  }));
+  if (allBox) allBox.addEventListener('change', () => {
+    GATED.forEach(id => setTab(id, allBox.checked, true));
+    persist(); paintAll();
+    say(allBox.checked ? '✅ Saare tabs khul gaye' : '☑️ Saare tabs band');
+  });
+
+  // Koi bhi #link (nav, hero button, footer...) band section ki taraf ja raha ho to pehle use khol do
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = (a.getAttribute('href') || '').slice(1);
+    if (!id || !GATED.includes(id)) return;
+    const sec = document.getElementById(id);
+    if (sec && sec.classList.contains('tab-collapsed')) { e.preventDefault(); goTab(id); history.replaceState(null, '', '#' + id); }
+  }, true);
+
+  // Direct link (example.com/#ccc) aur browser back/forward
+  function fromHash() {
+    const id = (location.hash || '').slice(1);
+    if (id && GATED.includes(id)) goTab(id);
+  }
+  window.addEventListener('hashchange', fromHash);
+  if (location.hash) setTimeout(fromHash, 60);
+
+  // Search / voice assistant jab scrollIntoView se kisi band section tak pahunchein to wo khul jaye
+  const _siv = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function (...args) {
+    const sec = this.closest && this.closest('.tab-collapsed');
+    if (sec && sec.id) setTab(sec.id, true);
+    return _siv.apply(this, args);
+  };
+
+  // Nav me switchTab('battle-arena') pehle se likha hai par kahin defined nahi tha
+  if (typeof window.switchTab !== 'function') window.switchTab = id => { if (GATED.includes(id)) goTab(id); };
+
+  /* ---------------------------------------------------------
+     2) O LEVEL TEST  (HTML / CSS / JavaScript)
+     --------------------------------------------------------- */
+  let picked = null;
+  const startBtns = () => $all('#oltStart, .olx-go');
+  const hint = $1('#oltHint');
+
+  function paintPick() {
+    $all('.olx-pick').forEach(b => { b.checked = b.dataset.ox === picked; });
+    $all('.olx-card').forEach(c => c.classList.toggle('on', c.dataset.ox === picked));
+    const row = picked && (typeof OLX !== 'undefined') ? OLX.find(x => x[0] === picked) : null;
+    startBtns().forEach(b => { b.disabled = !picked; });
+    if (hint) hint.textContent = row ? 'Selected: ' + row[1] + ' · ' + getBank(picked).length + ' questions' : 'Pehle ek subject tick karein';
+  }
+
+  document.addEventListener('change', e => {
+    const b = e.target;
+    if (!b.classList || !b.classList.contains('olx-pick')) return;
+    picked = b.checked ? b.dataset.ox : (picked === b.dataset.ox ? null : picked);
+    paintPick();
+  });
+
+  // Card ke kisi bhi hisse par click karne se bhi checkbox tick ho jata hai
+  document.addEventListener('click', e => {
+    const card = e.target.closest && e.target.closest('.olx-card');
+    if (!card || e.target.closest('input, label, button')) return;
+    const b = card.querySelector('.olx-pick');
+    if (b) { b.checked = !b.checked; b.dispatchEvent(new Event('change', { bubbles: true })); }
+  });
+
+  function startPicked() {
+    if (!picked) { say('☝️ Pehle HTML, CSS ya JavaScript me se ek subject tick karein'); return; }
+    const m = $1('#menu'); if (m) m.classList.remove('open');
+    openTest(picked);
+  }
+  startBtns().forEach(b => b.addEventListener('click', startPicked));
+
+  // Nav ke andar sub-options tabhi dikhen jab "O Level Test" tab tick/open ho
+  function paintSub() {
+    const sub = $1('#olxSubNav'), sec = document.getElementById('oltest');
+    if (sub && sec) sub.hidden = sec.classList.contains('tab-collapsed');
+  }
+  document.addEventListener('acec:tab', e => { if (e.detail.id === 'oltest') paintSub(); });
+  paintSub(); paintPick(); renderOLX();
+
+  /* ---------------------------------------------------------
+     3) FUN EFFECTS  (confetti / balloons / fireworks / emoji + sound & voice)
+     --------------------------------------------------------- */
+  const fab = $1('#funFab'), panel = $1('#funPanel'), cv = $1('#funCv');
+  if (!fab || !panel || !cv) return;
+  const cx = cv.getContext('2d');
+  const prefs = Object.assign({ muted: false, voice: true, auto: false }, safeStore.get('acec_fun', {}));
+  const savePrefs = () => safeStore.set('acec_fun', prefs);
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COLORS = ['#ff2e93', '#ffd60a', '#38bdf8', '#22c55e', '#a78bfa', '#fb923c', '#f43f5e', '#2dd4bf'];
+  const EMOJI = ['🎉', '🥳', '🎈', '⭐', '✨', '💻', '🚀', '😀', '🎊', '🔥', '🪔', '🎆'];
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+  /* ----- Sound (Web Audio API) ----- */
+  let ac = null;
+  function audio() {
+    if (prefs.muted) return null;
+    if (!ac) { const C = window.AudioContext || window.webkitAudioContext; if (C) { try { ac = new C(); } catch { ac = null; } } }
+    if (ac && ac.state === 'suspended') ac.resume();
+    return ac;
+  }
+  function tone(freq, at, dur, type, vol, slideTo) {
+    const a = audio(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain(), t0 = a.currentTime + at;
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, t0);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol || 0.06, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(a.destination);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  function noise(at, dur, vol, cutoff) {
+    const a = audio(); if (!a) return;
+    const len = Math.max(1, Math.floor(a.sampleRate * dur)), buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+    s.buffer = buf; f.type = 'lowpass'; f.frequency.value = cutoff || 900; g.gain.value = vol || 0.05;
+    s.connect(f); f.connect(g); g.connect(a.destination);
+    s.start(a.currentTime + at);
+  }
+  const SOUND = {
+    confetti() { noise(0, 0.12, 0.06, 3000); [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.05 + i * 0.07, 0.18, 'triangle', 0.05)); },
+    balloons() { for (let i = 0; i < 4; i++) tone(300 + i * 90, i * 0.28, 0.22, 'sine', 0.05, 520 + i * 110); },
+    fireworks() { for (let i = 0; i < 5; i++) { tone(900, i * 0.45, 0.35, 'sine', 0.025, 200); noise(i * 0.45 + 0.3, 0.35, 0.07, 600); } },
+    emoji() { [784, 988, 1175, 1319, 1175, 988].forEach((f, i) => tone(f, i * 0.12, 0.16, 'sine', 0.045)); },
+    party() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, i * 0.09, 0.22, 'triangle', 0.05)); noise(0.1, 0.15, 0.06, 2500); },
+    result() { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.12, 0.3, 'triangle', 0.055)); tone(1319, 0.5, 0.6, 'sine', 0.05); }
+  };
+  let lastSound = 0;
+  function playSound(name) {
+    if (prefs.muted) return;
+    const now = Date.now(); if (now - lastSound < 900) return; lastSound = now;
+    try { (SOUND[name] || SOUND.confetti)(); } catch {}
+  }
+
+  /* ----- Voice (Web Speech API) ----- */
+  const PHRASES = {
+    confetti: ['Congratulations!', 'Hooray! Party time!'],
+    balloons: ['Wow! So much fun!', 'Up, up and away!'],
+    fireworks: ['Happy celebration!', 'Boom! Look at that!'],
+    emoji: ['Let us have some fun!', 'Smile! You are doing great!'],
+    party: ['Party time at Access Computer Education Centre!', 'Shabaash students!'],
+    result: ['Shabaash! Excellent score!', 'Well done! Keep it up!']
+  };
+  let lastVoice = 0;
+  function speak(name) {
+    if (prefs.muted || !prefs.voice || !('speechSynthesis' in window)) return;
+    const now = Date.now(); if (now - lastVoice < 8000) return; lastVoice = now;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(pick(PHRASES[name] || PHRASES.confetti));
+      u.rate = 1; u.pitch = 1.15; u.volume = 0.8; u.lang = 'en-IN';
+      speechSynthesis.speak(u);
+    } catch {}
+  }
+
+  /* ----- Visuals (canvas) ----- */
+  const parts = []; let raf = 0, last = 0, W = 0, H = 0, dpr = 1;
+  const MAXP = 700;
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', () => { if (parts.length) size(); });
+  const scale = n => Math.max(6, Math.round(n * (reduce ? 0.35 : (W < 600 ? 0.6 : 1))));
+  const add = p => { if (parts.length < MAXP) parts.push(p); };
+
+  function confettiBurst(x, y, dir) {
+    for (let i = 0; i < scale(70); i++) {
+      const ang = (dir === 0 ? -Math.PI / 2 : -Math.PI / 2 + dir * rnd(0.15, 0.9)), sp = rnd(9, 20);
+      add({ k: 'rect', x, y, vx: Math.cos(ang) * sp + rnd(-2, 2), vy: Math.sin(ang) * sp, g: 0.32, drag: 0.985, w: rnd(6, 11), h: rnd(4, 8), rot: rnd(0, 6.28), vr: rnd(-0.3, 0.3), c: pick(COLORS), life: rnd(130, 210), age: 0 });
+    }
+  }
+  function confettiRain(n) {
+    for (let i = 0; i < scale(n); i++) add({ k: 'rect', x: rnd(0, W), y: rnd(-H * 0.6, -10), vx: rnd(-1, 1), vy: rnd(1.5, 4), g: 0.02, drag: 1, w: rnd(6, 10), h: rnd(4, 7), rot: rnd(0, 6.28), vr: rnd(-0.2, 0.2), c: pick(COLORS), life: 400, age: 0, sway: rnd(0, 6.28) });
+  }
+  function balloons(n) {
+    for (let i = 0; i < scale(n); i++) add({ k: 'balloon', x: rnd(20, W - 20), y: H + rnd(40, 320), vx: 0, vy: -rnd(1.4, 3), r: rnd(20, 32), c: pick(COLORS), life: 700, age: 0, sway: rnd(0, 6.28), sw: rnd(0.02, 0.05) });
+  }
+  function fireworkAt(x, y) {
+    const col = pick(COLORS), n = scale(70);
+    for (let i = 0; i < n; i++) {
+      const ang = (i / n) * Math.PI * 2 + rnd(-0.05, 0.05), sp = rnd(2.5, 7.5);
+      add({ k: 'spark', x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, g: 0.06, drag: 0.975, c: Math.random() < 0.3 ? '#fff' : col, life: rnd(55, 95), age: 0 });
+    }
+  }
+  function fireworks(count) {
+    for (let i = 0; i < count; i++) setTimeout(() => { fireworkAt(rnd(W * 0.15, W * 0.85), rnd(H * 0.12, H * 0.5)); ensureLoop(); }, i * 450);
+  }
+  function emojiRain(n) {
+    for (let i = 0; i < scale(n); i++) add({ k: 'emoji', ch: pick(EMOJI), s: rnd(22, 42), x: rnd(0, W), y: rnd(-H * 0.7, -20), vx: rnd(-0.6, 0.6), vy: rnd(2, 4.5), g: 0.01, drag: 1, rot: rnd(-0.5, 0.5), vr: rnd(-0.03, 0.03), life: 420, age: 0 });
+  }
+
+  function step(dt) {
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i]; p.age += dt;
+      if (p.sway !== undefined) p.sway += p.sw || 0.06;
+      p.vx *= Math.pow(p.drag || 1, dt); p.vy += (p.g || 0) * dt;
+      p.x += (p.vx + (p.k === 'balloon' || p.sway !== undefined ? Math.sin(p.sway) * 0.9 : 0)) * dt; p.y += p.vy * dt;
+      if (p.rot !== undefined) p.rot += (p.vr || 0) * dt;
+      if (p.age > p.life || p.y > H + 80 && p.k !== 'balloon' || p.y < -120 && p.k === 'balloon') parts.splice(i, 1);
+    }
+  }
+  function draw() {
+    cx.clearRect(0, 0, W, H);
+    for (const p of parts) {
+      const fade = Math.max(0, Math.min(1, (p.life - p.age) / (p.k === 'spark' ? 35 : 60)));
+      cx.globalAlpha = fade;
+      if (p.k === 'rect') {
+        cx.save(); cx.translate(p.x, p.y); cx.rotate(p.rot); cx.fillStyle = p.c; cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.restore();
+      } else if (p.k === 'spark') {
+        cx.globalCompositeOperation = 'lighter'; cx.fillStyle = p.c; cx.beginPath(); cx.arc(p.x, p.y, 2.2, 0, 6.283); cx.fill(); cx.globalCompositeOperation = 'source-over';
+      } else if (p.k === 'balloon') {
+        cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 1; cx.beginPath(); cx.moveTo(p.x, p.y + p.r * 1.25); cx.quadraticCurveTo(p.x + 8, p.y + p.r * 2.2, p.x - 4, p.y + p.r * 3); cx.stroke();
+        cx.fillStyle = p.c; cx.beginPath(); cx.ellipse(p.x, p.y, p.r * 0.82, p.r, 0, 0, 6.283); cx.fill();
+        cx.fillStyle = 'rgba(255,255,255,.35)'; cx.beginPath(); cx.ellipse(p.x - p.r * 0.3, p.y - p.r * 0.35, p.r * 0.18, p.r * 0.3, -0.5, 0, 6.283); cx.fill();
+        cx.fillStyle = p.c; cx.beginPath(); cx.moveTo(p.x, p.y + p.r); cx.lineTo(p.x - 4, p.y + p.r + 7); cx.lineTo(p.x + 4, p.y + p.r + 7); cx.closePath(); cx.fill();
+      } else if (p.k === 'emoji') {
+        cx.save(); cx.translate(p.x, p.y); cx.rotate(p.rot); cx.font = p.s + 'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText(p.ch, 0, 0); cx.restore();
+      }
+    }
+    cx.globalAlpha = 1;
+  }
+  function loop(ts) {
+    const dt = Math.min(2.2, (ts - last) / 16.67 || 1); last = ts;
+    step(dt); draw();
+    if (parts.length || pending > 0) raf = requestAnimationFrame(loop);
+    else { raf = 0; cx.clearRect(0, 0, W, H); cv.classList.remove('on'); }
+  }
+  let pending = 0;
+  function ensureLoop() {
+    if (!W) size();
+    cv.classList.add('on');
+    if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); }
+  }
+
+  const FX = {
+    confetti() { confettiBurst(W * 0.08, H, 1); confettiBurst(W * 0.92, H, -1); setTimeout(() => { confettiRain(80); ensureLoop(); }, 350); },
+    balloons() { balloons(18); },
+    fireworks() { fireworks(6); },
+    emoji() { emojiRain(46); },
+    party() { FX.confetti(); balloons(10); fireworks(4); emojiRain(20); }
+  };
+  function run(name) {
+    if (!FX[name]) name = 'confetti';
+    size();
+    pending++; setTimeout(() => { pending = Math.max(0, pending - 1); }, name === 'fireworks' || name === 'party' ? 2600 : 600);
+    FX[name](); ensureLoop();
+    playSound(name); speak(name);
+  }
+
+  /* ----- Panel UI ----- */
+  const muteBtn = $1('#funMute'), voiceBox = $1('#funVoice'), autoBox = $1('#funAuto');
+  function paintPrefs() {
+    muteBtn.textContent = prefs.muted ? '🔇 Sound: OFF (tap to unmute)' : '🔊 Sound: ON (tap to mute)';
+    muteBtn.setAttribute('aria-pressed', String(prefs.muted));
+    fab.classList.toggle('muted', prefs.muted);
+    voiceBox.checked = !!prefs.voice; voiceBox.disabled = prefs.muted;
+    autoBox.checked = !!prefs.auto;
+  }
+  paintPrefs();
+  function openPanel(on) {
+    panel.hidden = !on; fab.setAttribute('aria-expanded', String(on));
+    if (!on && 'speechSynthesis' in window && prefs.muted) speechSynthesis.cancel();
+  }
+  fab.addEventListener('click', e => { e.stopPropagation(); openPanel(panel.hidden); });
+  panel.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', () => { if (!panel.hidden) openPanel(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) { openPanel(false); fab.focus(); } });
+  panel.addEventListener('click', e => { const b = e.target.closest('[data-fx]'); if (b) run(b.dataset.fx); });
+  muteBtn.addEventListener('click', () => {
+    prefs.muted = !prefs.muted; savePrefs(); paintPrefs();
+    if (prefs.muted && 'speechSynthesis' in window) speechSynthesis.cancel();
+    else { lastSound = 0; tone(660, 0, 0.12, 'sine', 0.05); tone(880, 0.12, 0.16, 'sine', 0.05); }
+  });
+  voiceBox.addEventListener('change', () => { prefs.voice = voiceBox.checked; savePrefs(); if (!prefs.voice && 'speechSynthesis' in window) speechSynthesis.cancel(); });
+  autoBox.addEventListener('change', () => { prefs.auto = autoBox.checked; savePrefs(); });
+
+  // Test me 80%+ score aaye to (agar Auto-celebrate on ho) fireworks + gentle fanfare + voice
+  window.acFunResult = () => {
+    if (!prefs.auto) return;
+    size(); pending++; setTimeout(() => { pending = Math.max(0, pending - 1); }, 2400);
+    fireworks(4); ensureLoop(); playSound('result'); speak('result');
+  };
+  window.acFun = { run, mute: v => { prefs.muted = !!v; savePrefs(); paintPrefs(); } };
+})();
+
+/* =====================================================================
+   ONLINE TEST  (M1-R5 / M2-R5)  -- appended; purana code untouched
+   ---------------------------------------------------------------------
+   PASSWORDS (change karne ke liye neeche TESTS / HIST_PASS dekhein):
+     M1-R5 test password : M1R5@2026
+     M2-R5 test password : M2R5@2026
+     History password    : HIST@2026
+   Passwords yahan hash karke rakhe hain (seedha text nahi).
+   Naya password set karna ho to browser console me:  otHashPass('NayaPass')
+   aur jo hash aaye wo neeche 'hash' me paste kar dein.
+
+   QUESTIONS UPDATE KARNE KE LIYE: neeche OT_BANK me har test ke liye
+   {q:"sawal", o:["A","B","C","D"], a:sahi_option_ka_index(0 se shuru)} format hai.
+   M1-R5 = M1-R5.pdf (100 MCQ) | M2-R5 = html.pdf (40 MCQ + 10 True/False = 50)
+   ===================================================================== */
+const OT_BANK = {"M1-R5":[{"q":"Computer ke kis bhaag ko \"Brain of Computer\" kaha jata hai?","o":["RAM","CPU","Hard Disk","Monitor"],"a":1},{"q":"Inmein se kaunsi ek Volatile (asthaayi) memory hai?","o":["ROM","SSD","RAM","Pen Drive"],"a":2},{"q":"1 Kilobyte (KB) mein kitne Bytes hote hain?","o":["1000 Bytes","1024 Bytes","512 Bytes","2048 Bytes"],"a":1},{"q":"Second Generation computers mein kis technology ka upyog kiya gaya tha?","o":["Vacuum Tubes","Integrated Circuits","Transistors","Microprocessors"],"a":2},{"q":"Inmein se kaunsa ek Output Device hai?","o":["Scanner","Joystick","Plotter","Trackball"],"a":2},{"q":"BIOS ka poora naam (Full Form) kya hai?","o":["Basic Input Output System","Binary Input Output Setup","Basic Internal Operating System","Boot Input Output Service"],"a":0},{"q":"MICR (Magnetic Ink Character Recognition) ka upyog mukhya roop se kahan hota hai?","o":["Shopping Malls","Banks (Cheque processing)","Hospitals","Airports"],"a":1},{"q":"Computer start hone par sabse pehle kaunsa software load hota hai?","o":["LibreOffice","Web Browser","Operating System","Antivirus"],"a":2},{"q":"Inmein se kaunsa ek Open-Source Operating System hai?","o":["Windows 11","macOS","Linux (Ubuntu)","iOS"],"a":2},{"q":"GUI ka poora naam kya hai?","o":["General User Interface","Graphical User Interface","Global Utility Integration","Graphic Unit Input"],"a":1},{"q":"Windows mein kisi file ya folder ko permanently delete karne (Recycle Bin mein bheje bina) ki shortcut key kya hai?","o":["Delete","Ctrl + Delete","Shift + Delete","Alt + Delete"],"a":2},{"q":"Windows mein kisi selected file ya folder ka naam badalne (Rename) ki shortcut key kya hai?","o":["F1","F2","F5","F12"],"a":1},{"q":"Linux Operating System ke mukhya core (heart) ko kya kaha jata hai?","o":["Shell","Kernel","Terminal","Root"],"a":1},{"q":"Windows OS mein Task Manager open karne ki shortcut key kya hai?","o":["Ctrl + Alt + T","Ctrl + Shift + Esc","Alt + Tab","Win + R"],"a":1},{"q":"Windows mein Run dialog box open karne ki shortcut key kya hai?","o":["Win + E","Win + D","Win + R","Win + L"],"a":2},{"q":"Computer ko sleep mode ya lock karne ke liye Windows mein kaunsi shortcut key use hoti hai?","o":["Win + L","Win + K","Ctrl + L","Alt + L"],"a":0},{"q":"Ek hi samay par ek se adhik applications chalane ki OS ki kshamta ko kya kehte hain?","o":["Multiprocessing","Multitasking","Multiuser","Multithreading"],"a":1},{"q":"Inmein se kaunsi mobile operating system nahi hai?","o":["Android","iOS","HarmonyOS","Fedora"],"a":3},{"q":"QR Code ka poora naam kya hai?","o":["Quick Response Code","Quality Result Code","Quick Register Code","Query Read Code"],"a":0},{"q":"Cloud Computing mein \"SaaS\" ka poora naam kya hai?","o":["Storage as a Service","Software as a Service","System as a Server","Security as a Service"],"a":1},{"q":"LibreOffice Writer document ka default file extension kya hota hai?","o":[".docx",".odt",".ods",".odp"],"a":1},{"q":"LibreOffice Writer mein \"Save As\" karne ki shortcut key kya hai?","o":["Ctrl + S","Ctrl + Shift + S","F12","Alt + S"],"a":1},{"q":"LibreOffice Writer mein \"Print Preview\" dekhne ki shortcut key kya hai?","o":["Ctrl + P","Ctrl + Shift + O","Ctrl + F2","Shift + P"],"a":1},{"q":"LibreOffice Writer mein \"Find and Replace\" dialog box open karne ki shortcut key kya hai?","o":["Ctrl + F","Ctrl + H","Ctrl + R","Alt + F"],"a":1},{"q":"LibreOffice Writer mein \"Superscript\" (jaise X²) lagane ki shortcut key kya hai?","o":["Ctrl + Shift + P","Ctrl + Shift + B","Ctrl + =","Ctrl + Shift + +"],"a":0},{"q":"LibreOffice Writer mein \"Subscript\" (jaise H₂O) lagane ki shortcut key kya hai?","o":["Ctrl + Shift + P","Ctrl + Shift + B","Ctrl + B","Alt + B"],"a":1},{"q":"LibreOffice Writer mein \"Clear Direct Formatting\" karne ki shortcut key kya hai?","o":["Ctrl + M","Ctrl + Q","Ctrl + Space","Shift + M"],"a":0},{"q":"LibreOffice Writer mein \"Page Break\" insert karne ki shortcut key kya hai?","o":["Shift + Enter","Ctrl + Enter","Alt + Enter","Tab + Enter"],"a":1},{"q":"LibreOffice Writer mein \"Double Underline\" lagane ki shortcut key kya hai?","o":["Ctrl + U","Ctrl + D","Ctrl + Shift + D","Alt + U"],"a":1},{"q":"LibreOffice Writer mein \"Ruler\" ko show ya hide karne ki shortcut key kya hai?","o":["Ctrl + R","Ctrl + Shift + R","Alt + R","F9"],"a":1},{"q":"LibreOffice Writer ke kis menu mein \"Mail Merge Wizard\" option hota hai?","o":["Insert","Format","Tools","File"],"a":2},{"q":"LibreOffice Writer ke kis menu mein \"Header and Footer\" insert karne ka vikalp hota hai?","o":["View","Insert","Format","Styles"],"a":1},{"q":"LibreOffice Writer ke kis menu mein \"Word Count\" option milta hai?","o":["Edit","View","Tools","Format"],"a":2},{"q":"LibreOffice Writer mein \"Export Directly as PDF\" ka option kis menu mein hota hai?","o":["File","Edit","Tools","Window"],"a":0},{"q":"LibreOffice Writer ke kis menu mein \"Track Changes\" (Record/Manage) option paya jata hai?","o":["File","Edit","Insert","Styles"],"a":1},{"q":"LibreOffice Writer mein Table insert karne ki shortcut key kya hai?","o":["Ctrl + T","Ctrl + F12","Shift + F12","Alt + T"],"a":1},{"q":"LibreOffice Writer mein \"Spelling Check\" karne ki shortcut key kya hai?","o":["F5","F7","Shift + F7","Ctrl + F7"],"a":1},{"q":"LibreOffice Writer mein \"Thesaurus\" (paryayvachi shabd) kholne ki shortcut key kya hai?","o":["F7","Ctrl + F7","Shift + F7","Alt + F7"],"a":1},{"q":"LibreOffice Writer mein \"Manage Templates\" open karne ki shortcut key kya hai?","o":["Ctrl + T","Ctrl + Shift + N","Alt + N","Ctrl + N"],"a":1},{"q":"LibreOffice Writer mein \"Heading 1\" style apply karne ki shortcut key kya hai?","o":["Ctrl + 1","Alt + 1","Shift + 1","F1"],"a":0},{"q":"LibreOffice Writer mein \"Navigator\" on/off karne ki shortcut key kya hai?","o":["F3","F5","F7","F11"],"a":1},{"q":"LibreOffice Writer mein default page orientation kaunsa hota hai?","o":["Landscape","Portrait","Legal","A3"],"a":1},{"q":"LibreOffice Writer mein minimum aur maximum zoom percentage kitna hota hai?","o":["10% se 400%","20% se 600%","20% se 500%","10% se 500%"],"a":1},{"q":"LibreOffice Writer mein kisi word ko select karne ke liye mouse se kitni baar click kiya jata hai?","o":["Single click","Double click","Triple click","Quadruple click"],"a":1},{"q":"LibreOffice Writer mein \"AutoText\" insert karne ki shortcut key kya hai?","o":["Ctrl + F3","Alt + F3","Shift + F3","F3"],"a":3},{"q":"LibreOffice Calc spreadsheet ka default file extension kya hota hai?","o":[".xlsx",".odt",".ods",".odp"],"a":2},{"q":"LibreOffice Calc mein koi bhi formula ya function kis symbol se shuru hota hai?","o":["@","#","=","$"],"a":2},{"q":"Formula =SUM(10, 20, 30) ka output kya hoga?","o":["30","60","20","Error"],"a":1},{"q":"Formula =AVERAGE(10, 20, 30, 40) ka parinaam kya aayega?","o":["20","25","30","100"],"a":1},{"q":"Formula =PRODUCT(5, 4, 2) ka output kya hoga?","o":["11","20","40","10"],"a":2},{"q":"Formula =QUOTIENT(17, 5) ka output kya hoga?","o":["2","3","3.4","5"],"a":1},{"q":"Formula =MOD(17, 5) ka parinaam (remainder) kya hoga?","o":["3","2","3.4","12"],"a":1},{"q":"Formula =ROUND(45.678, 1) ka output kya hoga?","o":["45.6","45.7","46","45.68"],"a":1},{"q":"Formula =FLOOR(127, 10) ka output kya hoga?","o":["130","120","127","100"],"a":1},{"q":"Formula =CEILING(121, 10) ka output kya hoga?","o":["120","130","125","121"],"a":1},{"q":"Formula =POWER(2, 5) ka parinaam kya hoga?","o":["10","25","32","7"],"a":2},{"q":"Range mein sirf numbers ginne ke liye kaunsa function use hota hai?","o":["=COUNTA()","=COUNT()","=COUNTIF()","=COUNTBLANK()"],"a":1},{"q":"Formula =MAX(12, 45, 8, 67, 23) aur =MIN(12, 45, 8, 67, 23) ka antar (MAX − MIN) kya hoga?","o":["59","55","44","67"],"a":0},{"q":"Formula =LEN(\"LibreOffice\") ka output kya hoga?","o":["10","11","12","9"],"a":1},{"q":"Formula =CONCATENATE(\"CCC\", \" \", \"Exam\") ka output kya hoga?","o":["CCCExam","CCC Exam","CCC-Exam","Error"],"a":1},{"q":"LibreOffice Calc mein current Date insert karne ki shortcut key kya hai?","o":["Ctrl + ;","Ctrl + Shift + ;","Alt + ;","Ctrl + D"],"a":0},{"q":"LibreOffice Calc mein current Time insert karne ki shortcut key kya hai?","o":["Ctrl + ;","Ctrl + Shift + ;","Ctrl + T","Shift + T"],"a":1},{"q":"LibreOffice Calc mein \"Format Cells\" dialog box kholne ki shortcut key kya hai?","o":["Ctrl + 1","Ctrl + F1","Alt + 1","Shift + 1"],"a":0},{"q":"LibreOffice Calc mein \"Function Wizard\" open karne ki shortcut key kya hai?","o":["F2","Ctrl + F2","Shift + F2","Alt + F2"],"a":1},{"q":"LibreOffice Calc mein kisi cell ko edit mode mein kholne ki shortcut key kya hai?","o":["F2","F4","F5","F7"],"a":0},{"q":"Cell reference ko Relative se Absolute (jaise $A$1) mein badalne ki shortcut key kya hai?","o":["F2","F4","F8","Ctrl + $"],"a":1},{"q":"LibreOffice Calc mein \"Insert Cells\" dialog box open karne ki shortcut key kya hai?","o":["Ctrl + +","Ctrl + -","Alt + +","Shift + +"],"a":0},{"q":"LibreOffice Calc mein ek worksheet mein maximum kitni Rows hoti hain?","o":["65,536","1,048,576","16,384","1,024"],"a":1},{"q":"LibreOffice Calc mein aakhiri column ka naam (address) kya hota hai (16,384 columns par)?","o":["AMJ","XFD","ZZZ","IV"],"a":1},{"q":"Jab cell ki width number dikhane ke liye kam pad jati hai, toh Calc kya error dikhata hai?","o":["#REF!","#NAME?","###","#VALUE!"],"a":2},{"q":"LibreOffice Impress presentation ka default file extension kya hota hai?","o":[".pptx",".odt",".ods",".odp"],"a":3},{"q":"LibreOffice Impress mein first slide se Slide Show start karne ki shortcut key kya hai?","o":["F5","Shift + F5","Ctrl + F5","Alt + F5"],"a":0},{"q":"Current slide (jahan aap kaam kar rahe hain) se Slide Show start karne ki shortcut key kya hai?","o":["F5","Shift + F5","Ctrl + F5","F7"],"a":1},{"q":"LibreOffice Impress mein \"New Slide\" insert karne ki shortcut key kya hai?","o":["Ctrl + N","Ctrl + M","Ctrl + Shift + N","Alt + M"],"a":1},{"q":"LibreOffice Impress mein \"Text Box\" insert karne ki shortcut key kya hai?","o":["F2","F4","F5","F8"],"a":0},{"q":"LibreOffice Impress mein \"Duplicate\" dialog box open karne ki shortcut key kya hai?","o":["Ctrl + D","Shift + F3","Ctrl + Shift + D","Alt + D"],"a":1},{"q":"Chalte hue Slide Show ko beech mein rokne (exit karne) ke liye kaunsi key dabai jati hai?","o":["Enter","Esc","Spacebar","Backspace"],"a":1},{"q":"Slide Show ke dauran agli slide par jane ke liye inmein se kaunsi key kaam nahi karti?","o":["Spacebar","Right Arrow","Esc","Enter"],"a":2},{"q":"LibreOffice Impress ke kis view mein sabhi slides chhote thumbnails ke roop mein ek saath dikhai deti hain?","o":["Normal View","Outline View","Slide Sorter View","Notes View"],"a":2},{"q":"Slides ko design aur edit karne ke liye default main view kaunsa hota hai?","o":["Normal View","Slide Sorter View","Master View","Handout View"],"a":0},{"q":"Kis view mein slide ka keval text content (headings aur bullets) dikhai deta hai, graphics nahi?","o":["Notes View","Outline View","Slide Sorter View","Normal View"],"a":1},{"q":"Presenter ke bolne ke liye speaker notes kis view mein likhe jate hain?","o":["Outline View","Notes View","Slide Sorter View","Master View"],"a":1},{"q":"Ek slide ke baad doosri slide aane par jo visual effect dikhta hai, use kya kehte hain?","o":["Custom Animation","Slide Transition","Slide Design","Master Slide"],"a":1},{"q":"Slide ke andar kisi text, image ya shape par lagaye jane wale movement effect ko kya kehte hain?","o":["Slide Transition","Animation","Slide Layout","Rehearse Timings"],"a":1},{"q":"LibreOffice Impress mein \"Slide Transition\" option kis menu mein hota hai?","o":["Insert","Slide","Format","Tools"],"a":1},{"q":"LibreOffice Impress mein \"Master Slide\" kis menu ke antargat aata hai?","o":["View","File","Edit","Tools"],"a":0},{"q":"Sabhi slides par ek jaisa background, logo ya font style ek hi baar mein set karne ke liye kis feature ka upyog hota hai?","o":["Slide Sorter","Master Slide","Slide Transition","Notes Page"],"a":1},{"q":"Slide par bane dotted boxes (jahan title, text ya image dali jati hai) ko kya kehte hain?","o":["Text Frames","Placeholders","Templates","Grids"],"a":1},{"q":"LibreOffice Impress mein default slide orientation kaunsa hota hai?","o":["Portrait","Landscape","Vertical","Square"],"a":1},{"q":"LibreOffice Impress mein minimum aur maximum zoom percentage kitna hota hai?","o":["5% se 3000%","10% se 400%","20% se 600%","5% se 500%"],"a":0},{"q":"LibreOffice Impress mein kisi object ka \"Position and Size\" dialog box open karne ki shortcut key kya hai?","o":["F2","F4","F5","F11"],"a":1},{"q":"Selected objects ko ek saath \"Group\" karne ki shortcut key kya hai?","o":["Ctrl + G","Ctrl + Shift + G","Alt + G","Shift + G"],"a":1},{"q":"Grouped objects ko wapas \"Ungroup\" karne ki shortcut key kya hai?","o":["Ctrl + U","Ctrl + Alt + Shift + G","Ctrl + Shift + U","Alt + U"],"a":1},{"q":"Audience ko baantne ke liye ek hi page par 2, 4, 6 ya 9 slides print karne ke liye kis option ka upyog hota hai?","o":["Outline","Handouts","Notes","Slides"],"a":1},{"q":"Slide show ke dauran screen ko poora Black (kaala) karne ke liye kaunsi key dabai jati hai?","o":["B","W","K","S"],"a":0},{"q":"Slide show ke dauran screen ko poora White (safed) karne ke liye kaunsi key dabai jati hai?","o":["B","W","F","Space"],"a":1},{"q":"Presentation mein har slide ke liye bolne ka samay (timing) record karne ke liye kis feature ka upyog hota hai?","o":["Slide Timer","Rehearse Timings","Auto Play","Custom Show"],"a":1},{"q":"LibreOffice Impress mein \"Duplicate Slide\" banane ka option kis menu mein hota hai?","o":["File","Edit","Slide","View"],"a":2},{"q":"LibreOffice Impress mein \"Photo Album\" create karne ka option kis menu mein milta hai?","o":["File","Insert","Slide","Tools"],"a":1},{"q":"LibreOffice Impress mein \"Styles\" sidebar open ya close karne ki shortcut key kya hai?","o":["F5","F7","F11","F12"],"a":2}],"M2-R5":[{"q":"HTML ka poora naam (Full Form) kya hai?","o":["High Text Machine Language","HyperText and Links Markup Language","HyperText Markup Language","None of these"],"a":2},{"q":"HTML document ka sabse pehla tag kaunsa hota hai?","o":["<head>","<html>","<title>","<body>"],"a":1},{"q":"Sabse badi heading dikhane ke liye kaunsa tag use hota hai?","o":["<h6>","<heading>","<h1>","<head>"],"a":2},{"q":"Line break dene ke liye kaunsa tag istemal hota hai?","o":["<lb>","<break>","<br>","<hr>"],"a":2},{"q":"HTML mein link (hyperlink) banane ke liye kaunsa tag use hota hai?","o":["<link>","<a>","<href>","<url>"],"a":1},{"q":"<a> tag mein link ka address dene ke liye kaunsa attribute use hota hai?","o":["src","link","href","alt"],"a":2},{"q":"Web page par image lagane ke liye kaunsa tag use hota hai?","o":["<pic>","<image>","<img>","<src>"],"a":2},{"q":"Image load na hone par text dikhane ke liye kaunsa attribute use hota hai?","o":["title","alt","src","text"],"a":1},{"q":"Numbered list (1, 2, 3...) banane ke liye kaunsa tag use hota hai?","o":["<ul>","<ol>","<li>","<dl>"],"a":1},{"q":"Bulleted list banane ke liye kaunsa tag use hota hai?","o":["<ol>","<ul>","<list>","<bl>"],"a":1},{"q":"Text ko bold karne ke liye HTML5 mein kaunsa semantic tag best mana jata hai?","o":["<bold>","<strong>","<big>","<em>"],"a":1},{"q":"Text ko italic karne ke liye kaunsa tag use hota hai?","o":["<italic>","<i>","<it>","<u>"],"a":1},{"q":"Horizontal line (seedhi rekha) khinchne ke liye kaunsa tag use hota hai?","o":["<line>","<hr>","<br>","<border>"],"a":1},{"q":"Web page ka background color badalne ke liye CSS se pehle kaunsa attribute use hota tha?","o":["color","bgcolor","background-color","bg"],"a":1},{"q":"Table mein ek row banane ke liye kaunsa tag use hota hai?","o":["<td>","<th>","<tr>","<table-row>"],"a":2},{"q":"Table ke andar heading cell banane ke liye kaunsa tag use hota hai?","o":["<td>","<th>","<thead>","<trh>"],"a":1},{"q":"Table mein do ya zyada columns ko jodne (merge karne) ke liye kaunsa attribute use hota hai?","o":["rowspan","colspan","merge","span"],"a":1},{"q":"Table mein do ya zyada rows ko jodne ke liye kaunsa attribute use hota hai?","o":["colspan","rowspan","rowmerge","verticalspan"],"a":1},{"q":"HTML mein comment likhne ka sahi tarika kaunsa hai?","o":["// comment","/* comment */","<!-- comment -->","<# comment #>"],"a":2},{"q":"Link ko naye tab (new tab) mein kholne ke liye target attribute ki value kya hoti hai?","o":["_new","_tab","_blank","_self"],"a":2},{"q":"Dropdown list banane ke liye kaunsa tag use hota hai?","o":["<input type=\"dropdown\">","<select>","<list>","<dropdown>"],"a":1},{"q":"Checkbox banane ke liye sahi HTML code kaunsa hai?","o":["<input type=\"check\">","<checkbox>","<input type=\"checkbox\">","<check>"],"a":2},{"q":"Text input field banane ke liye sahi tag kaunsa hai?","o":["<textfield>","<input type=\"text\">","<textinput>","<input type=\"textfield\">"],"a":1},{"q":"Form mein multi-line text input (bada box) dene ke liye kaunsa tag use hota hai?","o":["<input type=\"textarea\">","<textarea>","<textbox>","<multiline>"],"a":1},{"q":"HTML5 document type declare karne ka sahi tarika kya hai?","o":["<!DOCTYPE HTML5>","<!DOCTYPE html>","<DOCTYPE html>","<!HTML5>"],"a":1},{"q":"Web page par video chalane ke liye HTML5 ka kaunsa tag use hota hai?","o":["<media>","<movie>","<video>","<play>"],"a":2},{"q":"Audio file play karne ke liye HTML5 mein kaunsa tag hai?","o":["<sound>","<mp3>","<audio>","<music>"],"a":2},{"q":"Inmein se kaunsa ek Empty Tag (jiska closing tag nahi hota) hai?","o":["<p>","<div>","<br>","<h1>"],"a":2},{"q":"Web page ka title kahan likha jata hai?","o":["<body> section mein","<head> section mein","<footer> section mein","<html> ke bahar"],"a":1},{"q":"Ordered list ko Roman numbers (I, II, III) mein dikhane ke liye kaunsa attribute use hota hai?","o":["style=\"I\"","type=\"I\"","number=\"I\"","list=\"I\""],"a":1},{"q":"Chemical formula H2O likhne mein '2' ko niche lane ke liye kaunsa tag use hota hai?","o":["<sup>","<sub>","<down>","<below>"],"a":1},{"q":"Math power X² likhne mein '2' ko upar lane ke liye kaunsa tag use hota hai?","o":["<sub>","<sup>","<up>","<top>"],"a":1},{"q":"HTML files ka default extension kya hota hai?","o":[".ht",".html ya .htm",".web",".doc"],"a":1},{"q":"Radio button mein ek time par ek hi option select ho, iske liye sabhi inputs ka kaunsa attribute same hona chahiye?","o":["id","class","name","value"],"a":2},{"q":"Kisi input field ko bharna zaroori (mandatory) banane ke liye kaunsa attribute use hota hai?","o":["must","validate","required","important"],"a":2},{"q":"Input box ke andar halka hint text dikhane ke liye kaunsa attribute use hota hai?","o":["hint","placeholder","value","title"],"a":1},{"q":"HTML mein kitne levels ki headings hoti hain?","o":["3","5","6","8"],"a":2},{"q":"Ek web page ke andar doosra web page dikhane ke liye kaunsa tag use hota hai?","o":["<frame>","<iframe>","<embed>","<window>"],"a":1},{"q":"Text ko highlight (peele rang se mark) karne ke liye HTML5 mein kaunsa tag hai?","o":["<highlight>","<mark>","<span>","<yellow>"],"a":1},{"q":"Inmein se kaunsa Block-level element hai?","o":["<span>","<a>","<div>","<img>"],"a":2},{"q":"True ya False: HTML ek programming language hai.","o":["True","False"],"a":1},{"q":"True ya False: HTML tags case-sensitive hote hain (yani <P> aur <p> alag hain).","o":["True","False"],"a":1},{"q":"True ya False: <title> tag ka text browser ke tab par dikhai deta hai.","o":["True","False"],"a":0},{"q":"True ya False: <h1> sabse chhoti heading hoti hai.","o":["True","False"],"a":1},{"q":"True ya False: Ek hi page par ek se zyada <div> tag use kiye ja sakte hain.","o":["True","False"],"a":0},{"q":"True ya False: <br> tag ka closing tag </br> likhna zaroori hota hai.","o":["True","False"],"a":1},{"q":"True ya False: <span> ek inline element hai.","o":["True","False"],"a":0},{"q":"True ya False: Table mein <td> ka matlab \"Table Data\" hota hai.","o":["True","False"],"a":0},{"q":"True ya False: <ol> tag se bulleted list banti hai.","o":["True","False"],"a":1},{"q":"True ya False: HTML5 mein <marquee> tag ko officially hata (deprecate) diya gaya hai.","o":["True","False"],"a":0}]};
+const OT_PHOTO = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/6xaJSlACEQAAAAEAABZ/anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFllqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjFhZTdjNzY2LWRlN2EtNDk0Mi05N2M0LTlkODE3MjAwMjM0MAAAAAOUanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuWp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNoBUAxcSQRyCzPB+H+rjUUOAAAAG1jYm9yo2lkYzpmb3JtYXRqaW1hZ2UvanBlZ2ppbnN0YW5jZUlEeCx4bXA6aWlkOmMzMDg0NTVlLWYzMjQtNDg2NS1hOWNiLWU2NTZlMzBhZWFjY2xyZWxhdGlvbnNoaXBocGFyZW50T2YAAAHianVtYgAAAEFqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmFjdGlvbnMudjIAAAAAGGMyc2ipcC6rxllrxd2kTr+cY3R6AAABmWNib3KiZ2FjdGlvbnOComZhY3Rpb25rYzJwYS5vcGVuZWRqcGFyYW1ldGVyc6FraW5ncmVkaWVudHOBomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCDA6nmhNxgIIZrtWuqkjQIlXJcQeaTQz8E/7ZWaZaoBW6RmYWN0aW9ueB1jb20uYW50aHJvcGljLmNsYXVkZS5wcm92aWRlZGpwYXJhbWV0ZXJzoXgfY29tLmFudGhyb3BpYy5vcmlnaW4tY29uZmlkZW5jZWd1bmtub3dua2Rlc2NyaXB0aW9ueGZDbGF1ZGUgcHJvdmlkZWQgdGhpcyBmaWxlIGF0IHRoZSByZXF1ZXN0IG9mIGEgdXNlciBhbmQgbWF5IGhhdmUgY3JlYXRlZCBvciBtb2RpZmllZCB0aGUgZmlsZSBjb250ZW50cy5tc29mdHdhcmVBZ2VudKFkbmFtZWZDbGF1ZGVyYWxsQWN0aW9uc0luY2x1ZGVk9QAAAMhqdW1iAAAAQGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaGFzaC5kYXRhAAAAABhjMnNosysyZCSbjNeuKBdK+1vZ5QAAAIBjYm9ypWNhbGdmc2hhMjU2Y3BhZE4AAAAAAAAAAAAAAAAAAGRoYXNoWCBg1iAhmd7mAW0vCFLlOz/iBOhfI/eruGpQMfylvVjVrGRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBRmbGVuZ3RoGRaLAAACPmp1bWIAAAAnanVtZGMyY2wAEQAQgAAAqgA4m3EDYzJwYS5jbGFpbS52MgAAAAIPY2JvcqVjYWxnZnNoYTI1NmlzaWduYXR1cmV4TXNlbGYjanVtYmY9L2MycGEvdXJuOmMycGE6MWFlN2M3NjYtZGU3YS00OTQyLTk3YzQtOWQ4MTcyMDAyMzQwL2MycGEuc2lnbmF0dXJlamluc3RhbmNlSUR4LHhtcDppaWQ6Yzg1MWZjODAtODQ3My00NjE5LTkzYTAtODQ2MTcxNDA5ZGJicmNyZWF0ZWRfYXNzZXJ0aW9uc4OiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIMDqeaE3GAghmu1a6qSNAiVclxB5pNDPwT/tlZplqgFbomN1cmx4KnNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuYWN0aW9ucy52MmRoYXNoWCDSRzby3qomvwOLBiBh5OcQaPscoezT9OXIuLWrJWy8q6JjdXJseClzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmhhc2guZGF0YWRoYXNoWCAVMjIef629DP8Wg8jixTiBlmxoKU/lnyp3/cs0vMr46XRjbGFpbV9nZW5lcmF0b3JfaW5mb6NkbmFtZW9BbnRocm9waWMgRmlsZXNndmVyc2lvbmUxLjAuMGtzcGVjVmVyc2lvbmUyLjQuMAAAEDhqdW1iAAAAKGp1bWRjMmNzABEAEIAAAKoAOJtxA2MycGEuc2lnbmF0dXJlAAAAEAhjYm9y0oRZAhKiASYYIVkCCjCCAgYwggGNoAMCAQICFEDloAruwjnQvriD+gZCBT1nVRMAMAoGCCqGSM49BAMDMEkxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMS4wLAYDVQQDEyVBbnRocm9waWMgQ29udGVudCBDcmVkZW50aWFscyBSb290IENBMB4XDTI2MDgwNzE4NDM1NloXDTI4MDgwNjE5NDM1NlowRDEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxKTAnBgNVBAMTIEFudGhyb3BpYyBDbGF1ZGUgQ29udGVudCBTaWduaW5nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmHoKa8tQGAUU1TS9QqU5W0Tp2N3XsvlK7BfQt6YWKwEzd2R3/dzKPEUDdCjlLjp9fT+KFjRVnuZ9v0oXvTe3k6NYMFYwDgYDVR0PAQH/BAQDAgeAMBUGA1UdJQQOMAwGCisGAQQBg+heAgEwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBTOUeIEgU5kWyP448TPmj6cwddcwjAKBggqhkjOPQQDAwNnADBkAjAxcx0UngF60stVjs5G4T2eiptsBk5mf9oCtfJPAUBl8qs/PEXa8+gk1/X5QJ2DVcYCMHBfXN31YapiSqYvlIWrDVDJKOvXMl+kkz37Wt0PBI8sw486Mq6JeOhT+lRR4b1HCaFjcGFkWQ2eAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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';
+
+(() => {
+  'use strict';
+  const TESTS = {
+    'M1-R5': { sub: 'IT Tools & Network Basics', mins: 60, pass: 40, hash: 'jd7chc28h0' },
+    'M2-R5': { sub: 'HTML Basics, Tags, Tables & Forms', mins: 35, pass: 25, hash: '1tuoda244v4' }
+  };
+  const HIST_PASS_HASH = '23ger5byzw1';
+  const Q_SECS = 20;
+  const K_SES = 'acec_ot_sessions_v1', K_HIS = 'acec_ot_history_v1';
+
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const cy = (str, seed = 0) => {
+    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for (let i = 0, ch; i < str.length; i++) { ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+  };
+  const H = p => cy('acec|' + p);
+  window.otHashPass = H;
+  const jget = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+  const jset = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  const fmt = ms => { const s = Math.ceil(Math.max(0, ms) / 1000); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+  const say = m => { if (typeof toast === 'function') toast(m); };
+  const sessions = () => jget(K_SES, {});
+  const saveSes = s => { const all = sessions(); all[s.key] = s; return jset(K_SES, all); };
+  const history = () => jget(K_HIS, []);
+  const normUser = u => u.trim().replace(/\s+/g, ' ');
+
+  // ---- Login photo: purani image ki jagah apni photo ----
+  document.querySelectorAll('.nm-photo').forEach(i => { i.src = OT_PHOTO; i.classList.add('ot-mine'); i.loading = 'eager'; i.alt = 'Sigma Boy - Access Computer Education Centre'; });
+
+  const modal = $('#otModal'), box = $('#otBox');
+  if (!modal || !box) return;
+  let S = null, tick = null;
+
+  const openM = () => modal.classList.add('open');
+  const closeM = () => { modal.classList.remove('open'); stopTick(); S = null; };
+  modal.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Escape' && !S) closeM(); });
+  modal.addEventListener('keyup', e => e.stopPropagation());
+  modal.addEventListener('keypress', e => e.stopPropagation());
+
+  /* ---------------- finalize / submit ---------------- */
+  function finalize(ses, auto) {
+    const old = history().find(h => h.test === ses.test && h.userKey === ses.userKey);
+    if (old) { ses.done = true; saveSes(ses); return old; }
+    const T = TESTS[ses.test], qs = OT_BANK[ses.test];
+    let score = 0; ses.ans.forEach((a, i) => { if (a === qs[i].a) score++; });
+    const rec = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      user: ses.user, userKey: ses.userKey, test: ses.test, score, total: qs.length,
+      pass: score >= T.pass, passMark: T.pass, ts: Date.now(), auto: !!auto, ans: ses.ans.slice()
+    };
+    const h = history(); h.push(rec); jset(K_HIS, h);
+    ses.done = true; saveSes(ses);
+    return rec;
+  }
+  function submit(auto) {
+    if (!S) return;
+    const rec = finalize(S, auto);
+    stopTick(); S = null;
+    if (modal.classList.contains('open')) showResult(rec);
+    say(auto ? '⏰ Time khatam - test auto-submit ho gaya' : '✅ Test submit ho gaya');
+  }
+  function sweep() { // jo sessions ka time nikal chuka unhe submit kar do (tab band ho tab bhi)
+    const all = sessions(), now = Date.now();
+    Object.keys(all).forEach(k => { const s = all[k]; if (s && !s.done && now >= s.end && !(S && S.key === k)) finalize(s, true); });
+  }
+  sweep(); setInterval(sweep, 5000);
+
+  /* ---------------- timers ---------------- */
+  function stopTick() { if (tick) { clearInterval(tick); tick = null; } }
+  function startTick() { stopTick(); tick = setInterval(onTick, 250); onTick(); }
+  function onTick() {
+    if (!S) return;
+    const t = Date.now();
+    if (t >= S.end) { submit(true); return; }
+    if (t >= S.qStart + Q_SECS * 1000) { advance(); return; }
+    paintTimers();
+  }
+  function advance() {
+    const n = OT_BANK[S.test].length;
+    if (S.cur < n - 1) { S.cur++; S.qStart = Date.now(); saveSes(S); renderTest(); }
+    else submit(true);
+  }
+  function paintTimers() {
+    if (!S) return;
+    const clock = $('#otClock'), qs = $('#otQSec'), bar = $('#otQBar'), t = Date.now();
+    const left = S.end - t, ql = Math.max(0, S.qStart + Q_SECS * 1000 - t);
+    if (clock) { clock.textContent = fmt(left); clock.parentElement.classList.toggle('low', left < 300000); }
+    if (qs) qs.textContent = Math.ceil(ql / 1000);
+    if (bar) { bar.style.width = (ql / (Q_SECS * 1000) * 100) + '%'; bar.classList.toggle('low', ql <= 5000); }
+  }
+
+  /* ---------------- views ---------------- */
+  function viewLogin(id) {
+    const T = TESTS[id], n = OT_BANK[id].length;
+    box.innerHTML =
+      '<button type="button" class="ot-x" id="otX" aria-label="Close">&times;</button>' +
+      '<form class="ot-login" id="otLoginForm" novalidate autocomplete="off">' +
+      '<img class="ot-photo" src="' + OT_PHOTO + '" alt="Sigma Boy" width="112" height="112">' +
+      '<h3 id="otTitle">' + esc(id) + ' Test Login</h3>' +
+      '<p class="lead">' + esc(T.sub) + '</p>' +
+      '<div class="ot-info"><span>📝 ' + n + ' questions</span><span>⏱ ' + T.mins + ' min</span><span>✅ Pass: ' + T.pass + '+ marks</span><span>🔒 1 attempt</span></div>' +
+      '<div class="ot-field"><label for="otUser">Username *</label><input id="otUser" type="text" maxlength="30" placeholder="Apna naam / username" autocomplete="off" required></div>' +
+      '<div class="ot-field"><label for="otPass">Test Password *</label><input id="otPass" type="password" placeholder="' + esc(id) + ' ka password" autocomplete="new-password" required></div>' +
+      '<p class="ot-err" id="otErr" role="alert"></p>' +
+      '<div class="ot-row"><button class="btn" type="submit">▶ Start / Resume Test</button><button class="btn ghost" type="button" id="otCancel">Cancel</button></div>' +
+      '</form>';
+    openM();
+    $('#otX').onclick = $('#otCancel').onclick = closeM;
+    $('#otLoginForm').onsubmit = e => { e.preventDefault(); doLogin(id); };
+    setTimeout(() => { const u = $('#otUser'); if (u) u.focus(); }, 60);
+  }
+
+  function doLogin(id) {
+    const T = TESTS[id], err = m => { $('#otErr').textContent = m; };
+    const user = normUser($('#otUser').value), pw = $('#otPass').value;
+    if (!user) return err('Username daalna zaroori hai.');
+    if (user.length < 2) return err('Username kam se kam 2 akshar ka hona chahiye.');
+    if (!/^[\p{L}\p{N} ._-]+$/u.test(user)) return err('Username me sirf letters, numbers, space, . _ - allowed hain.');
+    if (!pw) return err('Test password daalna zaroori hai.');
+    if (H(pw) !== T.hash) return err('❌ Galat test password. Test nahi khul sakta.');
+    if (!jset('acec_ot_probe', 1)) return err('Browser storage band hai - test chalane ke liye isse on karein.');
+    const userKey = user.toLowerCase(), key = id + '|' + userKey, n = OT_BANK[id].length, now = Date.now();
+
+    const fin = history().find(h => h.test === id && h.userKey === userKey);
+    if (fin) { say('ℹ️ Is username se test pehle hi ho chuka hai - result dikha rahe hain'); showResult(fin); return; }
+
+    let ses = sessions()[key];
+    if (ses && ses.done) return err('Is username ka attempt pura ho chuka hai.');
+    if (ses) { // RESUME
+      if (now >= ses.end) { showResult(finalize(ses, true)); return; }
+      if (now - ses.qStart >= Q_SECS * 1000) {
+        if (ses.cur < n - 1) { ses.cur++; ses.qStart = now; }
+        else { showResult(finalize(ses, true)); return; }
+      }
+      say('▶ Test wahin se resume ho gaya jahan chhoda tha');
+    } else {    // NEW
+      ses = { key, user, userKey, test: id, start: now, end: now + T.mins * 60000, cur: 0, qStart: now, ans: Array(n).fill(-1), done: false };
+    }
+    if (!saveSes(ses)) return err('Progress save nahi ho paya - browser storage check karein.');
+    S = ses; renderTest(); startTick();
+  }
+
+  function renderTest() {
+    const T = TESTS[S.test], qs = OT_BANK[S.test], q = qs[S.cur], sel = S.ans[S.cur];
+    const answered = S.ans.filter(a => a >= 0).length;
+    box.innerHTML =
+      '<button type="button" class="ot-x" id="otExit" aria-label="Exit (progress saved)" title="Exit - progress save rahega, timer chalta rahega">&times;</button>' +
+      '<div class="ot-top"><div><h3 id="otTitle">' + esc(S.test) + '<small>' + esc(T.sub) + '</small></h3><div class="ot-user">👤 ' + esc(S.user) + '</div></div>' +
+      '<div class="ot-clockbox"><span>Time left</span><b id="otClock">--:--</b></div></div>' +
+      '<div class="ot-qmeta"><span>Question <b>' + (S.cur + 1) + '</b> / ' + qs.length + '</span><span>⏱ <b id="otQSec">' + Q_SECS + '</b>s</span></div>' +
+      '<div class="ot-qbar"><i id="otQBar"></i></div>' +
+      '<h4 class="ot-q">' + (S.cur + 1) + '. ' + esc(q.q) + '</h4>' +
+      '<div class="ot-opts" id="otOpts">' + q.o.map((t, i) =>
+        '<button type="button" class="ot-opt' + (sel === i ? ' sel' : '') + '" data-i="' + i + '"><b>' + 'ABCD'[i] + '</b><span>' + esc(t) + '</span></button>').join('') + '</div>' +
+      '<div class="ot-nav"><button class="btn ghost sm" type="button" id="otPrev"' + (S.cur === 0 ? ' disabled' : '') + '>← Previous</button>' +
+      '<span class="mid" id="otAns">Answered: ' + answered + ' / ' + qs.length + '</span>' +
+      '<button class="btn sm" type="button" id="otNext"' + (S.cur === qs.length - 1 ? ' disabled' : '') + '>Next →</button></div>' +
+      '<div class="ot-row" style="margin-top:14px"><button class="btn sm" type="button" id="otSubmit" style="background:linear-gradient(135deg,#22c55e,#16a34a)">✔ Submit Test</button></div>';
+    $('#otExit').onclick = () => { stopTick(); S = null; closeM(); say('Progress save hai - dobara login karke resume karein (timer chalta rahega)'); };
+    $('#otOpts').onclick = e => {
+      const b = e.target.closest('.ot-opt'); if (!b || !S) return;
+      S.ans[S.cur] = +b.dataset.i; saveSes(S);
+      box.querySelectorAll('.ot-opt').forEach(x => x.classList.toggle('sel', x === b));
+      $('#otAns').textContent = 'Answered: ' + S.ans.filter(a => a >= 0).length + ' / ' + qs.length;
+    };
+    $('#otPrev').onclick = () => { if (S.cur > 0) { S.cur--; S.qStart = Date.now(); saveSes(S); renderTest(); } };
+    $('#otNext').onclick = () => { if (S.cur < qs.length - 1) { S.cur++; S.qStart = Date.now(); saveSes(S); renderTest(); } };
+    $('#otSubmit').onclick = () => {
+      const un = S.ans.filter(a => a < 0).length;
+      if (confirm((un ? un + ' sawal abhi unanswered hain. ' : '') + 'Kya aap test submit karna chahte hain?')) submit(false);
+    };
+    paintTimers();
+  }
+
+  function thought(rec) {
+    const T = TESTS[rec.test], s = rec.score, pct = Math.round(s / rec.total * 100);
+    if (!rec.pass) {
+      if (s >= Math.ceil(T.pass * 0.75)) return ['😔', 'Bas thodi si kami reh gayi!', 'Pass hone me sirf ' + (T.pass - s) + ' marks door the. Galat sawalon ka review karo, concepts revise karo - agli baar pakka pass hoge. 💪'];
+      return ['🌱', 'Haar nahi maani jaati!', 'Ye score aakhri nahi hai. Har fail ek seekh hai - basics dobara padho, shortcut keys practice karo aur phir se koshish karo. Aap kar sakte ho!'];
+    }
+    if (pct >= 90) return ['🏆', 'Shandar! Aap topper ho!', 'Zabardast performance! Isi tarah mehnat karte raho - success aapke kadam choomegi.'];
+    if (pct >= 75) return ['🌟', 'Bahut badhiya!', 'Aapki tayari kaafi mazboot hai. Thoda aur revision aur aap top score kar sakte ho.'];
+    return ['✅', 'Pass ho gaye - badhai ho!', 'Aapne pass marks paar kar liye. Ab neeche galat jawab dekh kar unhe sudharo aur score aur badhao.'];
+  }
+
+  function showResult(rec) {
+    stopTick(); S = null;
+    const qs = OT_BANK[rec.test], th = thought(rec);
+    const skipped = rec.ans.filter(a => a < 0).length, wrong = rec.total - rec.score - skipped;
+    let rv = '';
+    qs.forEach((q, i) => {
+      const u = rec.ans[i], right = u === q.a;
+      rv += '<div class="ot-rv ' + (right ? 'r' : 'w') + '"><h5>' + (i + 1) + '. ' + esc(q.q) + '</h5><ul>' +
+        q.o.map((t, k) => {
+          let c = '', tag = '';
+          if (k === q.a) { c = 'ok'; tag = (u === k) ? '✔ Your answer (Correct)' : '✔ Correct answer'; }
+          else if (k === u) { c = 'bad'; tag = '✘ Your answer (Wrong)'; }
+          return '<li class="' + c + '"><span>' + 'ABCD'[k] + ') ' + esc(t) + '</span><em>' + tag + '</em></li>';
+        }).join('') + '</ul>' + (u < 0 ? '<div class="skip">⚠ Not answered / skipped</div>' : '') + '</div>';
+    });
+    box.innerHTML =
+      '<button type="button" class="ot-x" id="otX" aria-label="Close">&times;</button>' +
+      '<div class="ot-res"><h3 id="otTitle">' + esc(rec.test) + ' - Result</h3>' +
+      '<div class="ot-user">👤 ' + esc(rec.user) + ' · ' + new Date(rec.ts).toLocaleString('en-IN') + (rec.auto ? ' · ⏰ auto-submitted' : '') + '</div>' +
+      '<div class="ot-score">' + rec.score + ' <small>/ ' + rec.total + '</small></div>' +
+      '<span class="ot-badge ' + (rec.pass ? 'pass' : 'fail') + '">' + (rec.pass ? 'PASS' : 'FAIL') + '</span>' +
+      '<div class="ot-stats"><span>✔ Correct <b>' + rec.score + '</b></span><span>✘ Wrong <b>' + wrong + '</b></span><span>⚠ Skipped <b>' + skipped + '</b></span><span>Pass marks <b>' + rec.passMark + '</b></span></div>' +
+      '<div class="ot-thought"><b>' + th[0] + ' ' + th[1] + '</b><p>' + th[2] + '</p></div></div>' +
+      '<h4 class="ot-review-h">📋 Answer Review (green = sahi, red = aapka galat jawab)</h4>' + rv +
+      '<div class="ot-final">Final Total Score: ' + rec.score + ' / ' + rec.total + ' - ' + (rec.pass ? 'PASS ✅' : 'FAIL ❌') + '</div>' +
+      '<div class="ot-row"><button class="btn" type="button" id="otHist">📜 History</button><button class="btn ghost" type="button" id="otClose">Close</button></div>';
+    openM();
+    $('#otX').onclick = $('#otClose').onclick = closeM;
+    $('#otHist').onclick = () => viewHistPrompt();
+    box.scrollTop = 0;
+  }
+
+  /* ---------------- History (password protected, NO delete) ---------------- */
+  function viewHistPrompt() {
+    box.innerHTML =
+      '<button type="button" class="ot-x" id="otX" aria-label="Close">&times;</button>' +
+      '<form class="ot-login" id="otHForm" novalidate autocomplete="off"><h3 id="otTitle">🔐 Test History</h3>' +
+      '<p class="lead">History dekhne ke liye History Password daalein.</p>' +
+      '<div class="ot-field"><label for="otHPass">History Password</label><input id="otHPass" type="password" autocomplete="new-password"></div>' +
+      '<p class="ot-err" id="otErr" role="alert"></p>' +
+      '<div class="ot-row"><button class="btn" type="submit">Unlock History</button><button class="btn ghost" type="button" id="otCancel">Cancel</button></div></form>';
+    openM();
+    $('#otX').onclick = $('#otCancel').onclick = closeM;
+    $('#otHForm').onsubmit = e => {
+      e.preventDefault();
+      if (H($('#otHPass').value) !== HIST_PASS_HASH) { $('#otErr').textContent = '❌ Galat History Password.'; return; }
+      viewHistory();
+    };
+    setTimeout(() => { const i = $('#otHPass'); if (i) i.focus(); }, 60);
+  }
+  function viewHistory() {
+    const list = history().slice().sort((a, b) => b.ts - a.ts);
+    const rows = list.map((r, i) =>
+      '<tr><td>' + (i + 1) + '</td><td>' + esc(r.user) + '</td><td>' + esc(r.test) + '</td><td><b>' + r.score + '</b> / ' + r.total + '</td><td>' +
+      Math.round(r.score / r.total * 100) + '%</td><td class="' + (r.pass ? 'p' : 'f') + '">' + (r.pass ? 'PASS' : 'FAIL') + '</td><td>' +
+      new Date(r.ts).toLocaleString('en-IN') + '</td><td>' + (r.auto ? 'Auto (time up)' : 'Manual') + '</td></tr>').join('');
+    box.innerHTML =
+      '<button type="button" class="ot-x" id="otX" aria-label="Close">&times;</button>' +
+      '<h3 id="otTitle">📜 Submitted Test History <small style="font-weight:500;color:var(--muted);font-size:.7em">(' + list.length + ' records · read-only)</small></h3>' +
+      (list.length ? '<div class="ot-hwrap"><table class="ot-htbl"><thead><tr><th>#</th><th>Username</th><th>Test</th><th>Score</th><th>%</th><th>Result</th><th>Date &amp; Time</th><th>Submit</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+        : '<p class="ot-note">Abhi koi test submit nahi hua.</p>') +
+      '<div class="ot-row"><button class="btn" type="button" id="otCsv"' + (list.length ? '' : ' disabled') + '>⬇ Export CSV (backup)</button><button class="btn ghost" type="button" id="otClose">Close</button></div>';
+    $('#otX').onclick = $('#otClose').onclick = closeM;
+    $('#otCsv').onclick = () => {
+      const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+      const csv = ['Username,Test,Score,Total,Result,DateTime,Submit'].concat(list.map(r =>
+        [q(r.user), r.test, r.score, r.total, r.pass ? 'PASS' : 'FAIL', q(new Date(r.ts).toLocaleString('en-IN')), r.auto ? 'Auto' : 'Manual'].join(','))).join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+      a.download = 'online-test-history.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    };
+  }
+
+  /* ---------------- wiring (Online Test section buttons) ---------------- */
+  document.addEventListener('click', e => {
+    const s = e.target.closest && e.target.closest('[data-ot-start]');
+    if (s) { e.preventDefault(); viewLogin(s.getAttribute('data-ot-start')); return; }
+    const h = e.target.closest && e.target.closest('[data-ot-history]');
+    if (h) { e.preventDefault(); viewHistPrompt(); }
+  });
 })();
