@@ -17,44 +17,9 @@
 <div class="bg3d" id="bg3d" aria-hidden="true"></div>
 
 <header class="nav">
+  <button class="burger" id="burger" type="button" aria-label="Open menu" aria-controls="menu" aria-expanded="false" title="Menu">☰</button>
   <a href="#home" class="brand"><span class="logo">💻</span><b>ACCESS COMPUTER EDUCATION CENTRE<small>| SIGMA BOY</small></b></a>
-  <nav id="menu">
-    <label class="tabrow tab-all" title="Sabhi sections ek saath kholo / band karo"><input type="checkbox" id="tabAll"> <span>Show all sections</span></label>
-    <a href="#home" data-i18n="home">Home</a>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="gallery" aria-label="Open or hide: Gallery" title="Tick = open, untick = hide"> <a href="#gallery" data-i18n="gallery">Gallery</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="courses" aria-label="Open or hide: Courses" title="Tick = open, untick = hide"> <a href="#courses" data-i18n="courses">Courses</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="coursefinder" aria-label="Open or hide: 🎯 Course Finder" title="Tick = open, untick = hide"> <a href="#coursefinder">🎯 Course Finder</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="faculty" aria-label="Open or hide: Faculty" title="Tick = open, untick = hide"> <a href="#faculty" data-i18n="faculty">Faculty</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="msoffice" aria-label="Open or hide: MS Office" title="Tick = open, untick = hide"> <a href="#msoffice" data-i18n="msoffice">MS Office</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="ccc" aria-label="Open or hide: CCC Test" title="Tick = open, untick = hide"> <a href="#ccc" data-i18n="ccc">CCC Test</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="onlinetest" aria-label="Open or hide: Online Test" title="Tick = open, untick = hide"> <a href="#onlinetest">📝 Online Test</a></span>
-    <div class="tabrow olx-nav" id="olxNav">
-      <input type="checkbox" class="tab-chk" data-tab="oltest" aria-label="Open or hide: O Level Test (HTML, CSS, JavaScript)" title="Tick = open, untick = hide">
-      <a href="#oltest">🎯 O Level Test</a>
-      <div class="olx-sub" id="olxSubNav" hidden>
-        <label><input type="checkbox" class="olx-pick" data-ox="ox_html"> <span>HTML <small>(HTML &amp; HTML5)</small></span></label>
-        <label><input type="checkbox" class="olx-pick" data-ox="ox_css"> <span>CSS <small>(CSS &amp; W3.CSS)</small></span></label>
-        <label><input type="checkbox" class="olx-pick" data-ox="ox_js"> <span>JavaScript <small>(JS &amp; AngularJS)</small></span></label>
-        <button type="button" class="btn sm olx-go" disabled>▶ Start Test</button>
-      </div>
-    </div>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="olevel" aria-label="Open or hide: O-Level Test" title="Tick = open, untick = hide"> <a href="#olevel" data-i18n="ol">O-Level Test</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="olcode" aria-label="Open or hide: O-Level Coding" title="Tick = open, untick = hide"> <a href="#olcode" data-i18n="olcode">O-Level Coding</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="codepractice" aria-label="Open or hide: Coding Practice" title="Tick = open, untick = hide"> <a href="#codepractice" data-i18n="codepr">Coding Practice</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="dailytest" aria-label="Open or hide: 📝 Daily Coding Test" title="Tick = open, untick = hide"> <a href="#dailytest">📝 Daily Coding Test</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="protools" aria-label="Open or hide: ⚡ Pro Tools" title="Tick = open, untick = hide"> <a href="#protools">⚡ Pro Tools</a></span>
-   <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="battle-arena" aria-label="Open or hide: Sigma Battle Arena" title="Tick = open, untick = hide"> <a href="#battle-arena" data-i18n="battle" onclick="switchTab('battle-arena')"><i class="fa-solid fa-gamepad"></i> Sigma Battle Arena</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="resume" aria-label="Open or hide: Resume Builder" title="Tick = open, untick = hide"> <a href="#resume" data-en="Resume Builder" data-hi="रेज़्यूमे बिल्डर">Resume Builder</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="typing" aria-label="Open or hide: Typing" title="Tick = open, untick = hide"> <a href="#typing" data-i18n="typing">Typing</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="saturday" aria-label="Open or hide: Leaderboard" title="Tick = open, untick = hide"> <a href="#saturday" data-i18n="lb">Leaderboard</a></span>
-    
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="shortcuts" aria-label="Open or hide: Shortcuts &amp; Quiz" title="Tick = open, untick = hide"> <a href="#shortcuts">Shortcuts &amp; Quiz</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="cloudsuite" aria-label="Open or hide: Cloud Suite" title="Tick = open, untick = hide"> <a href="#cloudsuite">Cloud Suite</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="resultshub" aria-label="Open or hide: Results Hub" title="Tick = open, untick = hide"> <a href="#resultshub">Results Hub</a></span>
-    <span class="tabrow"><input type="checkbox" class="tab-chk" data-tab="toolsupgrade" aria-label="Open or hide: Resume &amp; Fee Receipt" title="Tick = open, untick = hide"> <a href="#toolsupgrade">Resume &amp; Fee Receipt</a></span>
-    <a href="#contact" data-i18n="contact">Contact</a>
-    <button class="m-only" id="themeBtn2" type="button" aria-label="Theme">🌙</button>
-  </nav>
+  
   <div class="acts">
     <span class="live-pill" id="livePill" title="Abhi site par active users"><i></i><b id="liveN">1</b> live</span>
     <button class="ib" id="searchBtn" type="button" aria-label="Search" title="Search (Ctrl+K)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
@@ -75,8 +40,75 @@
     <button class="btn sm rs" id="resumeBtn" type="button" hidden>▶ Resume</button>
     <button class="btn sm" id="loginBtn" type="button" data-i18n="login">Login</button>
   </div>
-  <button class="burger" id="burger" aria-label="Menu">☰</button>
 </header>
+<div class="menu-ov" id="menuOv"></div>
+<nav id="menu" class="drawer" aria-label="Main menu">
+  <div class="dr-head">
+    <b class="dr-title">☰ <span data-en="Menu" data-hi="मेन्यू">Menu</span></b>
+    <button type="button" class="dr-x" id="menuClose" aria-label="Close menu">✕</button>
+  </div>
+  <div class="dr-search"><input id="drSearch" type="search" autocomplete="off" aria-label="Search" placeholder="🔍 Search tab, test, topic…"></div>
+  <div class="dr-body">
+    <div class="dr-res" id="drRes" hidden></div>
+    <div class="dr-list" id="drList">
+    <div class="dr-cat" data-cat="home">
+    <a class="dr-cat-h" href="#cat-home" data-go="cat-home"><span class="dr-ic">🏠</span><span class="dr-ct" data-en="Home &amp; Institute" data-hi="होम और संस्थान">Home &amp; Institute</span><i class="dr-n">6</i></a>
+    <a class="dr-link" href="#home" data-go="home" data-kw="welcome start top होम"><span class="dr-ic">🏠</span><span class="dr-tx" data-i18n="home">Home</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#gallery" data-go="gallery" data-kw="gallery photos library फोटो गैलरी"><span class="dr-ic">🖼️</span><span class="dr-tx" data-i18n="gallery">Gallery</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#courses" data-go="courses" data-kw="courses fees syllabus admission कोर्स"><span class="dr-ic">📚</span><span class="dr-tx" data-i18n="courses">Courses</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#coursefinder" data-go="coursefinder" data-kw="course finder quiz career suggest कोर्स"><span class="dr-ic">🎯</span><span class="dr-tx" data-en="Course Finder" data-hi="कोर्स फाइंडर">Course Finder</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#faculty" data-go="faculty" data-kw="faculty teacher mentor sir madam फैकल्टी शिक्षक"><span class="dr-ic">👨‍🏫</span><span class="dr-tx" data-i18n="faculty">Faculty</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#reviews" data-go="reviews" data-kw="review reviews feedback comment rating student रिव्यू"><span class="dr-ic">💬</span><span class="dr-tx" data-en="Student Reviews" data-hi="छात्र रिव्यू">Student Reviews</span><span class="dr-tick" aria-hidden="true"></span></a>
+    </div>
+    <div class="dr-cat" data-cat="tests">
+    <a class="dr-cat-h" href="#cat-tests" data-go="cat-tests"><span class="dr-ic">📝</span><span class="dr-ct" data-en="Tests" data-hi="टेस्ट">Tests</span><i class="dr-n">6</i></a>
+    <a class="dr-link" href="#ccc" data-go="ccc" data-kw="ccc test exam mock practice टेस्ट"><span class="dr-ic">📝</span><span class="dr-tx" data-i18n="ccc">CCC Test</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#onlinetest" data-go="onlinetest" data-kw="online test m1-r5 exam ऑनलाइन"><span class="dr-ic">🖥️</span><span class="dr-tx" data-en="Online Test" data-hi="ऑनलाइन टेस्ट">Online Test</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <div class="olx-nav" id="olxNav"><a class="dr-link" href="#oltest" data-go="oltest" data-kw="o level test html css javascript angularjs w3.css subject"><span class="dr-ic">🎯</span><span class="dr-tx" data-en="O Level Test" data-hi="ओ लेवल टेस्ट">O Level Test</span><span class="dr-tick" aria-hidden="true"></span></a>
+      <div class="olx-sub" id="olxSubNav">
+        <label><input type="checkbox" class="olx-pick" data-ox="ox_html"> <span>HTML <small>(HTML &amp; HTML5)</small></span></label>
+        <label><input type="checkbox" class="olx-pick" data-ox="ox_css"> <span>CSS <small>(CSS &amp; W3.CSS)</small></span></label>
+        <label><input type="checkbox" class="olx-pick" data-ox="ox_js"> <span>JavaScript <small>(JS &amp; AngularJS)</small></span></label>
+        <button type="button" class="btn sm olx-go" disabled>▶ Start Test</button>
+      </div>
+    </div>
+    <a class="dr-link" href="#olevel" data-go="olevel" data-kw="o level olevel test chapter exam"><span class="dr-ic">📘</span><span class="dr-tx" data-i18n="ol">O-Level Test</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#dailytest" data-go="dailytest" data-kw="daily coding test practice दैनिक"><span class="dr-ic">🗓️</span><span class="dr-tx" data-en="Daily Coding Test" data-hi="डेली कोडिंग टेस्ट">Daily Coding Test</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#saturday" data-go="saturday" data-kw="leaderboard rank topper saturday test weekly लीडरबोर्ड शनिवार"><span class="dr-ic">🏆</span><span class="dr-tx" data-i18n="lb">Leaderboard</span><span class="dr-tick" aria-hidden="true"></span></a>
+    </div>
+    <div class="dr-cat" data-cat="practice">
+    <a class="dr-cat-h" href="#cat-practice" data-go="cat-practice"><span class="dr-ic">💻</span><span class="dr-ct" data-en="Practice &amp; Study" data-hi="प्रैक्टिस और पढ़ाई">Practice &amp; Study</span><i class="dr-n">8</i></a>
+    <a class="dr-link" href="#msoffice" data-go="msoffice" data-kw="ms office word excel powerpoint libreoffice q&amp;a notes"><span class="dr-ic">💻</span><span class="dr-tx" data-en="MS Office" data-hi="MS ऑफिस">MS Office</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#python-section" data-go="python-section" data-kw="python programming chapters q&amp;a पायथन"><span class="dr-ic">🐍</span><span class="dr-tx" data-en="Python Programming" data-hi="पायथन प्रोग्रामिंग">Python Programming</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#olcode" data-go="olcode" data-kw="o level m2-r5 coding html css javascript कोडिंग"><span class="dr-ic">🧑‍💻</span><span class="dr-tx" data-i18n="olcode">O-Level Coding</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#codepractice" data-go="codepractice" data-kw="coding practice vs code editor html css javascript playground कोडिंग प्रैक्टिस"><span class="dr-ic">⌨️</span><span class="dr-tx" data-i18n="codepr">Coding Practice</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#typing" data-go="typing" data-kw="typing game speed keyboard टाइपिंग गेम"><span class="dr-ic">🎮</span><span class="dr-tx" data-i18n="typing">Typing</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#shortcuts" data-go="shortcuts" data-kw="shortcut keys quiz master ctrl शॉर्टकट"><span class="dr-ic">🔑</span><span class="dr-tx" data-en="Shortcuts &amp; Quiz" data-hi="शॉर्टकट और क्विज़">Shortcuts &amp; Quiz</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#qotd" data-go="qotd" data-kw="question of the day qotd daily आज का प्रश्न"><span class="dr-ic">❓</span><span class="dr-tx" data-en="Question of the Day" data-hi="आज का प्रश्न">Question of the Day</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#daily" data-go="daily" data-kw="daily practice questions answers दैनिक अभ्यास"><span class="dr-ic">📅</span><span class="dr-tx" data-en="Daily Practice" data-hi="डेली प्रैक्टिस">Daily Practice</span><span class="dr-tick" aria-hidden="true"></span></a>
+    </div>
+    <div class="dr-cat" data-cat="tools">
+    <a class="dr-cat-h" href="#cat-tools" data-go="cat-tools"><span class="dr-ic">🛠️</span><span class="dr-ct" data-en="Tools &amp; Fun" data-hi="टूल्स और फन">Tools &amp; Fun</span><i class="dr-n">7</i></a>
+    <a class="dr-link" href="#protools" data-go="protools" data-kw="pro tools features utilities टूल्स"><span class="dr-ic">⚡</span><span class="dr-tx" data-en="Pro Tools" data-hi="प्रो टूल्स">Pro Tools</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#resume" data-go="resume" data-kw="resume builder cv portfolio ai रेज़्यूमे"><span class="dr-ic">📄</span><span class="dr-tx" data-en="Resume Builder" data-hi="रेज़्यूमे बिल्डर">Resume Builder</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#toolsupgrade" data-go="toolsupgrade" data-kw="resume fee receipt pdf रसीद"><span class="dr-ic">🧾</span><span class="dr-tx" data-en="Resume &amp; Fee Receipt" data-hi="रेज़्यूमे और फीस रसीद">Resume &amp; Fee Receipt</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#cloudsuite" data-go="cloudsuite" data-kw="cloud software suite online tools"><span class="dr-ic">☁️</span><span class="dr-tx" data-en="Cloud Suite" data-hi="क्लाउड सूट">Cloud Suite</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#resultshub" data-go="resultshub" data-kw="results certificates hub result certificate रिज़ल्ट"><span class="dr-ic">🏅</span><span class="dr-tx" data-en="Results Hub" data-hi="रिज़ल्ट हब">Results Hub</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#battle-arena" data-go="battle-arena" data-kw="sigma battle arena ai duel game friend challenge"><span class="dr-ic">⚔️</span><span class="dr-tx" data-en="Sigma Battle Arena" data-hi="सिग्मा बैटल एरीना">Sigma Battle Arena</span><span class="dr-tick" aria-hidden="true"></span></a>
+    <a class="dr-link" href="#car3d" data-go="car3d" data-kw="3d car drive game zone fun"><span class="dr-ic">🚗</span><span class="dr-tx" data-en="3D Drive Zone" data-hi="3D ड्राइव ज़ोन">3D Drive Zone</span><span class="dr-tick" aria-hidden="true"></span></a>
+    </div>
+    <div class="dr-cat" data-cat="contact">
+    <a class="dr-cat-h" href="#cat-contact" data-go="cat-contact"><span class="dr-ic">📞</span><span class="dr-ct" data-en="Contact" data-hi="संपर्क">Contact</span><i class="dr-n">1</i></a>
+    <a class="dr-link" href="#contact" data-go="contact" data-kw="contact phone whatsapp address admission संपर्क फोन"><span class="dr-ic">📞</span><span class="dr-tx" data-i18n="contact">Contact</span><span class="dr-tick" aria-hidden="true"></span></a>
+    </div>
+    </div>
+  </div>
+  <div class="dr-foot"><button class="m-only" id="themeBtn2" type="button" aria-label="Theme">🌙</button></div>
+</nav>
+<div class="qs-bar" id="qsBar">
+  <div class="qs-chips" id="qsChips"><a href="#cat-home" data-go="cat-home"><span data-en="🏠 Home" data-hi="🏠 होम">🏠 Home</span></a><a href="#cat-tests" data-go="cat-tests"><span data-en="📝 Tests" data-hi="📝 टेस्ट">📝 Tests</span></a><a href="#cat-practice" data-go="cat-practice"><span data-en="💻 Practice" data-hi="💻 प्रैक्टिस">💻 Practice</span></a><a href="#cat-tools" data-go="cat-tools"><span data-en="🛠️ Tools" data-hi="🛠️ टूल्स">🛠️ Tools</span></a><a href="#cat-contact" data-go="cat-contact"><span data-en="📞 Contact" data-hi="📞 संपर्क">📞 Contact</span></a></div>
+  <div class="qs-search"><input id="pgSearch" type="search" autocomplete="off" aria-label="Search the website" placeholder="🔍 Search anything: tab, test, topic, question…"><div class="qs-res" id="pgRes" hidden></div></div>
+</div>
 
 <main>
  
@@ -125,6 +157,7 @@
     </span>
   </marquee>
 </div>
+<div class="cat-banner" id="cat-home"><span class="cb-ic">🏠</span><div><b class="cb-t" data-en="Home &amp; Institute" data-hi="होम और संस्थान">Home &amp; Institute</b><small class="cb-s" data-en="Gallery, Courses, Faculty, Reviews" data-hi="गैलरी, कोर्स, फैकल्टी, रिव्यू">Gallery, Courses, Faculty, Reviews</small></div></div>
 <section class="sec reveal" id="gallery">
   <h2>center<span class="grad">Gallery</span></h2>
   <p class="sub">Photo par click karte hi zoom.(bdi image)</p>
@@ -157,6 +190,37 @@
   </div>
 </section>
 
+<section id="reviews" class="review-section">
+  <div class="container">
+    <h2>Student <span>Reviews</span></h2>
+    <p>Apna anubhav share karein aur batayein website kaisi lagi!</p>
+    
+    <!-- Review Form -->
+    <form id="reviewForm" class="review-form">
+      Apna Naam:<br>
+      <input type="text" id="revName" placeholder="Jaise: Anshika Verma" required>
+      
+      Course ka Naam:<br>
+      <input type="text" id="revCourse" placeholder="Jaise: CCC / O-Level / Web Dev" required>
+      
+      Aapka Review:<br>
+      <textarea id="revText" rows="3" placeholder="Website ya Teacher ke baare me likhein..." required></textarea>
+      
+      <div class="review-btn-group">
+        <button type="submit" class="btn-submit">Website par Post Karein</button>
+        <button type="button" id="whatsappBtn" class="btn-wa">WhatsApp par Bhejein 💬</button>
+      </div>
+      <p id="badWordError" class="error-msg" style="display:none; color: #ff4d4d; margin-top: 5px;"></p>
+    </form>
+
+    <!-- Reviews Display Container -->
+    <div id="reviewsContainer" class="reviews-grid">
+      <!-- Dynamic reviews yahan show honge -->
+    </div>
+  </div>
+</section>
+<div class="cat-banner" id="cat-tests"><span class="cb-ic">📝</span><div><b class="cb-t" data-en="Tests" data-hi="टेस्ट">Tests</b><small class="cb-s" data-en="CCC, Online, O-Level, Daily test &amp; Leaderboard" data-hi="CCC, ऑनलाइन, ओ-लेवल, डेली टेस्ट और लीडरबोर्ड">CCC, Online, O-Level, Daily test &amp; Leaderboard</small></div></div>
+
 <section class="sec reveal" id="ccc">
   <h2>CCC <span class="grad">Online Test Series</span></h2>
   <p class="sub">Apna chapter chunein aur test shuru karein</p>
@@ -180,6 +244,34 @@
       <div class="ot-sub">HTML Basics &mdash; Tags, Lists, Tables, Forms &amp; HTML5 (MCQ + True/False)</div>
       <ul class="ot-meta"><li><b>50</b>Questions</li><li><b>35 min</b>Total timer</li><li><b>20 sec</b>Per question</li><li><b>25 / 50</b>Pass marks</li></ul>
       <button class="btn" type="button" data-ot-start="M2-R5">▶ Start M2-R5</button>
+    </div>
+    <div class="ot-card">
+      <span class="chip">Test 3</span>
+      <h3>M1-R5 Marathon - Set 1</h3>
+      <div class="ot-sub">IT Tools &amp; Network Basics - Marathon Revision (Q1-Q100)</div>
+      <ul class="ot-meta"><li><b>100</b>Questions</li><li><b>60 min</b>Total timer</li><li><b>20 sec</b>Per question</li><li><b>40 / 100</b>Pass marks</li></ul>
+      <button class="btn" type="button" data-ot-start="M1-R5-MA1">&#9654; Start M1-R5 Marathon - Set 1</button>
+    </div>
+    <div class="ot-card">
+      <span class="chip">Test 4</span>
+      <h3>M1-R5 Marathon - Set 2</h3>
+      <div class="ot-sub">IT Tools &amp; Network Basics - Marathon Revision (Q101-Q150)</div>
+      <ul class="ot-meta"><li><b>50</b>Questions</li><li><b>35 min</b>Total timer</li><li><b>20 sec</b>Per question</li><li><b>25 / 50</b>Pass marks</li></ul>
+      <button class="btn" type="button" data-ot-start="M1-R5-MA2">&#9654; Start M1-R5 Marathon - Set 2</button>
+    </div>
+    <div class="ot-card">
+      <span class="chip">Test 5</span>
+      <h3>M2-R5 Marathon - Set 1</h3>
+      <div class="ot-sub">W3.CSS, JavaScript &amp; AngularJS - Marathon (M001-M100)</div>
+      <ul class="ot-meta"><li><b>100</b>Questions</li><li><b>60 min</b>Total timer</li><li><b>20 sec</b>Per question</li><li><b>40 / 100</b>Pass marks</li></ul>
+      <button class="btn" type="button" data-ot-start="M2-R5-MA1">&#9654; Start M2-R5 Marathon - Set 1</button>
+    </div>
+    <div class="ot-card">
+      <span class="chip">Test 6</span>
+      <h3>M2-R5 Marathon - Set 2</h3>
+      <div class="ot-sub">W3.CSS, JavaScript &amp; AngularJS - Marathon (M101-M200)</div>
+      <ul class="ot-meta"><li><b>100</b>Questions</li><li><b>60 min</b>Total timer</li><li><b>20 sec</b>Per question</li><li><b>40 / 100</b>Pass marks</li></ul>
+      <button class="btn" type="button" data-ot-start="M2-R5-MA2">&#9654; Start M2-R5 Marathon - Set 2</button>
     </div>
   </div>
   <div class="ot-hbtn-row"><button class="btn ghost sm" type="button" data-ot-history>📜 History</button></div>
@@ -230,116 +322,13 @@
   <div class="grid tests" id="olGrid"></div>
 </section>
 
-<section class="sec reveal alt" id="qotd">
-  <h2>Question of the <span class="grad">Day</span></h2>
-  <p class="sub">Roz ek naya sawal. Login karke sahi jawab do aur XP kamao ⭐ &middot; Naya sawal raat 12 baje</p>
-  <div class="qd-card" id="qdCard"><div class="qd-tag" id="qdTag"></div><h3 id="qdQ"></h3><div class="qd-opts" id="qdOpts"></div><div class="qd-res" id="qdRes"></div></div>
-</section>
-
-<section class="sec reveal" id="daily">
-  <h2>Daily <span class="grad">Practice</span></h2>
-  <p class="sub">Aaj ke important CCC aur O-Level questions</p>
-  <div class="faq" id="dailyList"></div>
-</section>
-
-<section class="sec reveal alt" id="typing">
-  <h2>Typing <span class="grad">Shooter Game(Anshika Verma)</span></h2>
-  <p class="sub">Girte hue words ko type karke destroy karo aur speed badhao</p>
-  <div class="tg-tabs notranslate" translate="no" id="tgTabs">
-    <button type="button" data-g="0" class="on">🧨 Word Fire</button>
-    <button type="button" data-g="1">🐍 Snake</button>
-    <button type="button" data-g="2">🚇 Subway Run</button>
-    <button type="button" data-g="3">🏔️ Hill Climb</button>
-    <button type="button" data-g="4">🇮🇳 हिंदी Race</button>
-    <button type="button" data-ff="1" id="ffTabBtn">🔫 Free Fire Typing</button>
+<!-- ===== DAILY CODING PRACTICE & TEST ===== -->
+<section class="sec" id="dailytest">
+  <div class="reveal">
+    <h2><span data-en="Daily Coding" data-hi="डेली कोडिंग">Daily Coding</span> <span class="grad" data-en="Practice &amp; Test" data-hi="प्रैक्टिस और टेस्ट">Practice &amp; Test</span></h2>
+    <p class="sub" data-en="Every day 3 new practical questions (HTML + CSS + JavaScript) — 30 minute timer, live Run Code, solution &amp; step-by-step marking. Open for every student!" data-hi="रोज़ 3 नए प्रैक्टिकल सवाल (HTML + CSS + JavaScript) — 30 मिनट टाइमर, लाइव Run Code, सॉल्यूशन और स्टेप-बाय-स्टेप मार्किंग। हर स्टूडेंट के लिए खुला!">Every day 3 new practical questions (HTML + CSS + JavaScript) — 30 minute timer, live Run Code, solution &amp; step-by-step marking. Open for every student!</p>
   </div>
-  <div class="game">
-    <div class="hud"><span>Score: <b id="gScore">0</b></span><span>Lives: <b id="gLives">❤❤❤</b></span></div>
-    <div class="arena" id="arena"><div class="overlay" id="gOverlay"><h3>Typing Mission Ready?</h3><p>Word type karo, bas.</p><button class="btn" id="gStart">Start Game</button></div></div>
-    <input id="gInput" type="text" placeholder="Yahan type karein..." autocomplete="off" autocapitalize="off" spellcheck="false" disabled>
-  </div>
-
-  <div class="game tgx notranslate" translate="no" id="tgx" hidden>
-    <div class="hud"><span>Score: <b id="tgScore">0</b></span><span>Best: <b id="tgBest">0</b></span><span id="tgInfo"></span></div>
-    <div class="tg-hint" id="tgHint"></div>
-    <div class="tg-stage"><canvas id="tgCv" width="640" height="320"></canvas>
-      <div class="overlay" id="tgOv"><h3></h3><p></p><button class="btn" id="tgGo" type="button">Start Game</button></div></div>
-    <input id="tgInp" type="text" placeholder="Yahan type karein... (ek galat key = Game Over)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled>
-  </div>
-
-  <!-- ================= 🔫 FREE FIRE STYLE 3D TYPING SHOOTER ================= -->
-  <div class="ffg notranslate" translate="no" id="ffg" hidden>
-    <div class="ff-top">
-      <div class="ff-sub" id="ffSub">
-        <button type="button" data-p="play" class="on">🎮 Play</button>
-        <button type="button" data-p="store">📦 Drop Store</button>
-        <button type="button" data-p="char">👤 Character</button>
-        <button type="button" data-p="shop">👕 Outfit Shop</button>
-      </div>
-      <div class="ff-wallet">🪙 <b id="ffCoins">0</b><button type="button" id="ffMute" class="ff-ib" title="Sound on/off">🔊</button></div>
-    </div>
-    <div class="ff-toast" id="ffToast"></div>
-
-    <!-- PLAY -->
-    <div class="ff-panel" id="ffP-play">
-      <div class="ff-hud">
-        <div class="ff-chip wide">🎯 <b id="ffWords">0</b>/100 <i class="ff-bar"><u id="ffBar"></u></i> <em id="ffLvl">EASY</em></div>
-        <div class="ff-chip">🪙 +<b id="ffRunCoins">0</b></div>
-        <div class="ff-chip">🔫 <b id="ffWpn">M1873</b></div>
-        <div class="ff-chip">💣 <b id="ffNades">0</b></div>
-        <div class="ff-chip">Chance <b id="ffLives">❤❤❤</b></div>
-        <div class="ff-chip">Galat <b id="ffWrong">0</b>/3</div>
-        <canvas id="ffAvatar" width="46" height="96" title="Aapka character"></canvas>
-      </div>
-      <div class="ff-stage" id="ffStage">
-        <canvas id="ffCv" width="800" height="450"></canvas>
-        <canvas id="ffMap" width="132" height="132" title="Mini-Map: laal points = targets"></canvas>
-        <span class="ff-maplbl">MINI-MAP</span>
-        <div class="ff-dpad">
-          <button type="button" data-k="up" class="u" aria-label="Aage">▲</button>
-          <button type="button" data-k="left" class="l" aria-label="Left">◀</button>
-          <button type="button" data-k="down" class="d" aria-label="Peeche">▼</button>
-          <button type="button" data-k="right" class="r" aria-label="Right">▶</button>
-        </div>
-        <button type="button" class="ff-nade" id="ffNade" aria-label="Grenade phenko">💣<small>Nade</small><b id="ffNadeN">0</b></button>
-        <button type="button" class="ff-pause" id="ffPause" aria-label="Pause">⏸</button>
-        <div class="ff-ov" id="ffOv"><h3></h3><div class="ff-ovp"></div><button class="btn" id="ffGo" type="button">▶ Mission Start</button></div>
-      </div>
-      <div class="ff-hint" id="ffHint"></div>
-      <input id="ffInp" type="text" placeholder="Yahan type karein... (Enter = Grenade 💣)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled>
-    </div>
-
-    <!-- DROP STORE -->
-    <div class="ff-panel" id="ffP-store" hidden>
-      <h4 class="ff-h">🪂 Drop Store &mdash; Weapons</h4>
-      <p class="ff-note">Har word = 5 coins. Har 5 words par aapke <b>owned weapons</b> me se agla weapon automatic lag jaata hai.</p>
-      <div class="ff-grid" id="ffWeapons"></div>
-      <h4 class="ff-h">💣 Grenades (Nades) &mdash; aapke paas: <b id="ffNadeHave">0</b></h4>
-      <div class="ff-grid" id="ffNadeShop"></div>
-    </div>
-
-    <!-- CHARACTER -->
-    <div class="ff-panel" id="ffP-char" hidden>
-      <h4 class="ff-h">👤 Character Select</h4>
-      <div class="ff-char">
-        <div class="ff-charcv" id="ffCharCv"></div>
-        <div class="ff-charinfo">
-          <div class="ff-gender" id="ffGender"><button type="button" data-gd="male" class="on">👨 Male</button><button type="button" data-gd="female">👩 Female</button></div>
-          <p class="ff-note">Abhi pehna hua outfit:<br><b id="ffOutName">Black Pant &amp; White Shirt</b></p>
-          <p class="ff-note">Default outfit: <b>Black Pant &amp; White Shirt</b>. Naye outfits Outfit Shop se coins dekar kharido &mdash; kharidte hi character par turant lag jaate hain.</p>
-          <button type="button" class="btn" id="ffGoShop">👕 Outfit Shop kholo</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- OUTFIT SHOP -->
-    <div class="ff-panel" id="ffP-shop" hidden>
-      <h4 class="ff-h">👕 Outfit Shop</h4>
-      <p class="ff-note">Coins se naya outfit kharido &mdash; character par <b>turant equip</b> ho jaayega (game me bhi aapke sleeves/haath me dikhega).</p>
-      <div class="ff-grid" id="ffOutfits"></div>
-    </div>
-  </div>
-
+  <div class="dct notranslate" translate="no" id="dct"></div>
 </section>
 
 <section class="sec reveal" id="saturday">
@@ -353,130 +342,7 @@
     </table>
   </div>
 </section>
-
-
-<section class="sec reveal" id="shortcuts"><h2>Shortcut Keys <span class="grad">&amp; Quiz Master</span></h2>
-<p class="sub">Software chunein, saare professional shortcut keys dekhein, PDF cheat sheet lein aur 3D neon quiz se practice karein</p>
-<div class="sk-wrap">
-  <div class="sk-cards" id="skCards"></div>
-  <div class="sk-grid">
-    <div class="sk-panel">
-      <div class="sk-head" id="skHead"></div>
-      <div class="sk-search"><input id="skSearch" type="search" placeholder="🔍 Shortcut ya function search karein…" autocomplete="off" aria-label="Search shortcuts"></div>
-      <div class="sk-tablewrap" id="skTable"></div>
-    </div>
-    <div class="sk-quiz" id="skQuiz"></div>
-  </div>
-</div></section>
-
-<section class="sec reveal" id="cloudsuite"><h2>Online Cloud <span class="grad">Software Suite</span></h2>
-<p class="sub">Mobile ya PC se seedha Word, Excel, PowerPoint aur Tally practice karein</p>
-<div class="cs-wrap"><div class="cs-tabs" id="csTabs"></div><div class="cs-panel" id="csPanel"></div></div></section>
-
-<section class="sec reveal alt" id="resultshub"><h2>Results &amp; <span class="grad">Certificates Hub</span></h2>
-<p class="sub">CCC, O-Level result aur certificate verification</p>
-<div class="cs-wrap"><div class="cs-links" id="csResults"></div></div></section>
-
-<section class="sec reveal" id="toolsupgrade"><h2>Resume Builder &amp; <span class="grad">Fee Receipt</span></h2>
-<p class="sub">Template chunein, details bharein, PDF download karein</p>
-<div class="cs-wrap"><div class="cs-tabs" id="csTabs2"></div><div class="cs-panel" id="csPanel2"></div></div></section>
-
-<section class="sec reveal car3d-sec" id="car3d">
-  <h2>3D <span class="grad">Drive Zone</span></h2>
-  <p class="sub">Hamari car Access Computer Centre ke around bar bar round lagati rehti hai &#128663; &mdash; mouse hilao, scene tilt hoga</p>
-  <div class="c3-stage" id="c3Stage" aria-label="3D car circling a track">
-    <div class="c3-scene" id="c3Scene">
-      <div class="c3-ground"></div>
-      <div class="c3-road"></div>
-      <div class="c3-lane"></div>
-      <div class="c3-pedestal"><i></i><i></i><i></i><i></i><i></i><b>ACCESS</b></div>
-      <div class="c3-orbit">
-        <div class="c3-trail"></div>
-        <div class="c3-car">
-          <div class="c3-shadow"></div>
-          <div class="c3-beam"></div>
-          <div class="cb chassis" style="--w:46px;--l:104px;--h:14px;--z:0px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
-          <div class="cb cabin" style="--w:38px;--l:50px;--h:13px;--y:-8px;--z:13px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
-          <div class="cb spoiler" style="--w:42px;--l:8px;--h:3px;--y:-47px;--z:13px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
-          <div class="cb hl" style="--w:9px;--l:2px;--h:5px;--x:14px;--y:52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
-          <div class="cb hl" style="--w:9px;--l:2px;--h:5px;--x:-14px;--y:52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
-          <div class="cb tl" style="--w:10px;--l:2px;--h:4px;--x:14px;--y:-52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
-          <div class="cb tl" style="--w:10px;--l:2px;--h:4px;--x:-14px;--y:-52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
-          <i class="wh" style="--x:25px;--y:32px"></i><i class="wh tire" style="--x:20px;--y:32px"></i><i class="wh" style="--x:25px;--y:-32px"></i><i class="wh tire" style="--x:20px;--y:-32px"></i><i class="wh" style="--x:-25px;--y:32px"></i><i class="wh tire" style="--x:-20px;--y:32px"></i><i class="wh" style="--x:-25px;--y:-32px"></i><i class="wh tire" style="--x:-20px;--y:-32px"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="sec reveal alt" id="contact">
-  <h2>Contact <span class="grad">Karein</span></h2>
-  <p class="sub">Admission aur course ki jankari ke liye</p>
-  <div class="grid contact">
-    <div class="card"><h3>Manoj Kumar Singh</h3><a class="btn sm" href="tel:+916393512412">📞 6393512412</a> <a class="btn sm wa" target="_blank" rel="noopener" href="https://wa.me/916393512412">WhatsApp</a></div>
-    <div class="card"><h3>Sudha Singh</h3><a class="btn sm" href="tel:+918467034252">📞 8467034252</a> <a class="btn sm wa" target="_blank" rel="noopener" href="https://wa.me/918467034252">WhatsApp</a></div>
-   
-    <div class="card"><h3>Address</h3><p>✧ Behind Government Girls Inter College,<br>
-✧ Sanjay Nagar Colony,<br>
-✧ Bachhrawan, Raebareli </p><p>🕘 Timing: 8:00 AM - 5:00 PM</p></div>
-  </div>
-
-  <!-- ===== Contact Flip Social Dock ===== -->
-  <div class="contact-dock-stage">
-    <p class="dock-hint">Hover karo &mdash; letter palatke social icon dikhega</p>
-    <div class="contact-dock" role="group" aria-label="Social media links">
-      <div class="dock-item" style="--c:#1877f2">
-        <a class="letter" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
-          <span class="front">C</span>
-          <span class="back"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span>
-        </a>
-        <span class="tooltip" role="tooltip">Facebook</span>
-      </div>
-      <div class="dock-item" style="--c:#e1306c">
-        <a class="letter" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
-          <span class="front">O</span>
-          <span class="back"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
-        </a>
-        <span class="tooltip" role="tooltip">Instagram</span>
-      </div>
-      <div class="dock-item" style="--c:#0a66c2">
-        <a class="letter" href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <span class="front">N</span>
-          <span class="back"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></span>
-        </a>
-        <span class="tooltip" role="tooltip">LinkedIn</span>
-      </div>
-      <div class="dock-item" style="--c:#ff1a1a">
-        <a class="letter" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
-          <span class="front">T</span>
-          <span class="back"><i class="fa-brands fa-youtube" aria-hidden="true"></i></span>
-        </a>
-        <span class="tooltip" role="tooltip">YouTube</span>
-      </div>
-      <div class="dock-item" style="--c:#25d366">
-        <a class="letter" href="https://wa.me/916393512412" target="_blank" rel="noopener" aria-label="WhatsApp">
-          <span class="front">A</span>
-          <span class="back"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span>
-        </a>
-        <span class="tooltip" role="tooltip">WhatsApp</span>
-      </div>
-      <div class="dock-item" style="--c:#ea4335">
-        <a class="letter" href="mailto:info@example.com" target="_blank" rel="noopener" aria-label="Email">
-          <span class="front">C</span>
-          <span class="back"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span>
-        </a>
-        <span class="tooltip" role="tooltip">Email</span>
-      </div>
-      <div class="dock-item" style="--c:#2b3340">
-        <a class="letter" href="https://x.com/" target="_blank" rel="noopener" aria-label="X / Twitter">
-          <span class="front">T</span>
-          <span class="back"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></span>
-        </a>
-        <span class="tooltip" role="tooltip">X / Twitter</span>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="cat-banner" id="cat-practice"><span class="cb-ic">💻</span><div><b class="cb-t" data-en="Practice &amp; Study" data-hi="प्रैक्टिस और पढ़ाई">Practice &amp; Study</b><small class="cb-s" data-en="MS Office, Python, Coding, Typing, Shortcuts, Daily Q" data-hi="MS Office, पायथन, कोडिंग, टाइपिंग, शॉर्टकट, डेली प्रश्न">MS Office, Python, Coding, Typing, Shortcuts, Daily Q</small></div></div>
 <!-- MS Office Main Section -->
 <section id="msoffice" class="msoffice-section">
     <div class="container">
@@ -2753,14 +2619,133 @@
   </div>
 </section>
 
-<!-- ===== DAILY CODING PRACTICE & TEST ===== -->
-<section class="sec" id="dailytest">
-  <div class="reveal">
-    <h2><span data-en="Daily Coding" data-hi="डेली कोडिंग">Daily Coding</span> <span class="grad" data-en="Practice &amp; Test" data-hi="प्रैक्टिस और टेस्ट">Practice &amp; Test</span></h2>
-    <p class="sub" data-en="Every day 3 new practical questions (HTML + CSS + JavaScript) — 30 minute timer, live Run Code, solution &amp; step-by-step marking. Open for every student!" data-hi="रोज़ 3 नए प्रैक्टिकल सवाल (HTML + CSS + JavaScript) — 30 मिनट टाइमर, लाइव Run Code, सॉल्यूशन और स्टेप-बाय-स्टेप मार्किंग। हर स्टूडेंट के लिए खुला!">Every day 3 new practical questions (HTML + CSS + JavaScript) — 30 minute timer, live Run Code, solution &amp; step-by-step marking. Open for every student!</p>
+<section class="sec reveal alt" id="typing">
+  <h2>Typing <span class="grad">Shooter Game(Anshika Verma)</span></h2>
+  <p class="sub">Girte hue words ko type karke destroy karo aur speed badhao</p>
+  <div class="tg-tabs notranslate" translate="no" id="tgTabs">
+    <button type="button" data-g="0" class="on">🧨 Word Fire</button>
+    <button type="button" data-g="1">🐍 Snake</button>
+    <button type="button" data-g="2">🚇 Subway Run</button>
+    <button type="button" data-g="3">🏔️ Hill Climb</button>
+    <button type="button" data-g="4">🇮🇳 हिंदी Race</button>
+    <button type="button" data-ff="1" id="ffTabBtn">🔫 Free Fire Typing</button>
   </div>
-  <div class="dct notranslate" translate="no" id="dct"></div>
+  <div class="game">
+    <div class="hud"><span>Score: <b id="gScore">0</b></span><span>Lives: <b id="gLives">❤❤❤</b></span></div>
+    <div class="arena" id="arena"><div class="overlay" id="gOverlay"><h3>Typing Mission Ready?</h3><p>Word type karo, bas.</p><button class="btn" id="gStart">Start Game</button></div></div>
+    <input id="gInput" type="text" placeholder="Yahan type karein..." autocomplete="off" autocapitalize="off" spellcheck="false" disabled>
+  </div>
+
+  <div class="game tgx notranslate" translate="no" id="tgx" hidden>
+    <div class="hud"><span>Score: <b id="tgScore">0</b></span><span>Best: <b id="tgBest">0</b></span><span id="tgInfo"></span></div>
+    <div class="tg-hint" id="tgHint"></div>
+    <div class="tg-stage"><canvas id="tgCv" width="640" height="320"></canvas>
+      <div class="overlay" id="tgOv"><h3></h3><p></p><button class="btn" id="tgGo" type="button">Start Game</button></div></div>
+    <input id="tgInp" type="text" placeholder="Yahan type karein... (ek galat key = Game Over)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled>
+  </div>
+
+  <!-- ================= 🔫 FREE FIRE STYLE 3D TYPING SHOOTER ================= -->
+  <div class="ffg notranslate" translate="no" id="ffg" hidden>
+    <div class="ff-top">
+      <div class="ff-sub" id="ffSub">
+        <button type="button" data-p="play" class="on">🎮 Play</button>
+        <button type="button" data-p="store">📦 Drop Store</button>
+        <button type="button" data-p="char">👤 Character</button>
+        <button type="button" data-p="shop">👕 Outfit Shop</button>
+      </div>
+      <div class="ff-wallet">🪙 <b id="ffCoins">0</b><button type="button" id="ffMute" class="ff-ib" title="Sound on/off">🔊</button></div>
+    </div>
+    <div class="ff-toast" id="ffToast"></div>
+
+    <!-- PLAY -->
+    <div class="ff-panel" id="ffP-play">
+      <div class="ff-hud">
+        <div class="ff-chip wide">🎯 <b id="ffWords">0</b>/100 <i class="ff-bar"><u id="ffBar"></u></i> <em id="ffLvl">EASY</em></div>
+        <div class="ff-chip">🪙 +<b id="ffRunCoins">0</b></div>
+        <div class="ff-chip">🔫 <b id="ffWpn">M1873</b></div>
+        <div class="ff-chip">💣 <b id="ffNades">0</b></div>
+        <div class="ff-chip">Chance <b id="ffLives">❤❤❤</b></div>
+        <div class="ff-chip">Galat <b id="ffWrong">0</b>/3</div>
+        <canvas id="ffAvatar" width="46" height="96" title="Aapka character"></canvas>
+      </div>
+      <div class="ff-stage" id="ffStage">
+        <canvas id="ffCv" width="800" height="450"></canvas>
+        <canvas id="ffMap" width="132" height="132" title="Mini-Map: laal points = targets"></canvas>
+        <span class="ff-maplbl">MINI-MAP</span>
+        <div class="ff-dpad">
+          <button type="button" data-k="up" class="u" aria-label="Aage">▲</button>
+          <button type="button" data-k="left" class="l" aria-label="Left">◀</button>
+          <button type="button" data-k="down" class="d" aria-label="Peeche">▼</button>
+          <button type="button" data-k="right" class="r" aria-label="Right">▶</button>
+        </div>
+        <button type="button" class="ff-nade" id="ffNade" aria-label="Grenade phenko">💣<small>Nade</small><b id="ffNadeN">0</b></button>
+        <button type="button" class="ff-pause" id="ffPause" aria-label="Pause">⏸</button>
+        <div class="ff-ov" id="ffOv"><h3></h3><div class="ff-ovp"></div><button class="btn" id="ffGo" type="button">▶ Mission Start</button></div>
+      </div>
+      <div class="ff-hint" id="ffHint"></div>
+      <input id="ffInp" type="text" placeholder="Yahan type karein... (Enter = Grenade 💣)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" disabled>
+    </div>
+
+    <!-- DROP STORE -->
+    <div class="ff-panel" id="ffP-store" hidden>
+      <h4 class="ff-h">🪂 Drop Store &mdash; Weapons</h4>
+      <p class="ff-note">Har word = 5 coins. Har 5 words par aapke <b>owned weapons</b> me se agla weapon automatic lag jaata hai.</p>
+      <div class="ff-grid" id="ffWeapons"></div>
+      <h4 class="ff-h">💣 Grenades (Nades) &mdash; aapke paas: <b id="ffNadeHave">0</b></h4>
+      <div class="ff-grid" id="ffNadeShop"></div>
+    </div>
+
+    <!-- CHARACTER -->
+    <div class="ff-panel" id="ffP-char" hidden>
+      <h4 class="ff-h">👤 Character Select</h4>
+      <div class="ff-char">
+        <div class="ff-charcv" id="ffCharCv"></div>
+        <div class="ff-charinfo">
+          <div class="ff-gender" id="ffGender"><button type="button" data-gd="male" class="on">👨 Male</button><button type="button" data-gd="female">👩 Female</button></div>
+          <p class="ff-note">Abhi pehna hua outfit:<br><b id="ffOutName">Black Pant &amp; White Shirt</b></p>
+          <p class="ff-note">Default outfit: <b>Black Pant &amp; White Shirt</b>. Naye outfits Outfit Shop se coins dekar kharido &mdash; kharidte hi character par turant lag jaate hain.</p>
+          <button type="button" class="btn" id="ffGoShop">👕 Outfit Shop kholo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTFIT SHOP -->
+    <div class="ff-panel" id="ffP-shop" hidden>
+      <h4 class="ff-h">👕 Outfit Shop</h4>
+      <p class="ff-note">Coins se naya outfit kharido &mdash; character par <b>turant equip</b> ho jaayega (game me bhi aapke sleeves/haath me dikhega).</p>
+      <div class="ff-grid" id="ffOutfits"></div>
+    </div>
+  </div>
+
 </section>
+
+
+<section class="sec reveal" id="shortcuts"><h2>Shortcut Keys <span class="grad">&amp; Quiz Master</span></h2>
+<p class="sub">Software chunein, saare professional shortcut keys dekhein, PDF cheat sheet lein aur 3D neon quiz se practice karein</p>
+<div class="sk-wrap">
+  <div class="sk-cards" id="skCards"></div>
+  <div class="sk-grid">
+    <div class="sk-panel">
+      <div class="sk-head" id="skHead"></div>
+      <div class="sk-search"><input id="skSearch" type="search" placeholder="🔍 Shortcut ya function search karein…" autocomplete="off" aria-label="Search shortcuts"></div>
+      <div class="sk-tablewrap" id="skTable"></div>
+    </div>
+    <div class="sk-quiz" id="skQuiz"></div>
+  </div>
+</div></section>
+
+<section class="sec reveal alt" id="qotd">
+  <h2>Question of the <span class="grad">Day</span></h2>
+  <p class="sub">Roz ek naya sawal. Login karke sahi jawab do aur XP kamao ⭐ &middot; Naya sawal raat 12 baje</p>
+  <div class="qd-card" id="qdCard"><div class="qd-tag" id="qdTag"></div><h3 id="qdQ"></h3><div class="qd-opts" id="qdOpts"></div><div class="qd-res" id="qdRes"></div></div>
+</section>
+
+<section class="sec reveal" id="daily">
+  <h2>Daily <span class="grad">Practice</span></h2>
+  <p class="sub">Aaj ke important CCC aur O-Level questions</p>
+  <div class="faq" id="dailyList"></div>
+</section>
+<div class="cat-banner" id="cat-tools"><span class="cb-ic">🛠️</span><div><b class="cb-t" data-en="Tools &amp; Fun" data-hi="टूल्स और फन">Tools &amp; Fun</b><small class="cb-s" data-en="Pro Tools, Resume, Cloud Suite, Results, Battle Arena" data-hi="प्रो टूल्स, रेज़्यूमे, क्लाउड सूट, रिज़ल्ट, बैटल एरीना">Pro Tools, Resume, Cloud Suite, Results, Battle Arena</small></div></div>
 
 <!-- ===== PRO TOOLS: 25 SUPER FEATURES (new tab) ===== -->
 <section class="sec pt-sec" id="protools">
@@ -2782,7 +2767,7 @@
 
     <article class="pt-card" data-k="gradient css color picker background"><h3>🌈 CSS gradient picker</h3>
       <div class="pt-prev" id="ptGrPrev"></div>
-      <div class="pt-row2"><input type="color" id="ptGr1" value="#00f0ff" aria-label="Color 1"><input type="color" id="ptGr2" value="#7c3aed" aria-label="Color 2"><input type="range" id="ptGrAng" min="0" max="360" value="135" aria-label="Angle"></div>
+      <div class="pt-row2"><input type="color" id="ptGr1" value="#00ff85" aria-label="Color 1"><input type="color" id="ptGr2" value="#ce3aed" aria-label="Color 2"><input type="range" id="ptGrAng" min="0" max="360" value="135" aria-label="Angle"></div>
       <code class="pt-code" id="ptGrCss"></code>
       <div class="pt-btns"><button type="button" id="ptGrCopy">Copy CSS</button><button type="button" id="ptGrRnd" class="g">Random</button></div></article>
 
@@ -2806,7 +2791,7 @@
     <article class="pt-card" data-k="neon text generator glow css"><h3>💡 Neon text generator</h3>
       <div class="pt-prev pt-neonbox"><span id="ptNeonP">ACCESS</span></div>
       <input id="ptNeonT" value="ACCESS" maxlength="24" aria-label="Neon text">
-      <div class="pt-row2"><input type="color" id="ptNeonC" value="#00f0ff" aria-label="Glow color"><button type="button" id="ptNeonCopy">Copy CSS</button></div></article>
+      <div class="pt-row2"><input type="color" id="ptNeonC" value="#00ff85" aria-label="Glow color"><button type="button" id="ptNeonCopy">Copy CSS</button></div></article>
 
     <article class="pt-card" data-k="screen ruler pixel measure viewport"><h3>📏 Screen ruler</h3>
       <p class="pt-msg">Viewport: <b id="ptRulSize">-</b></p>
@@ -2822,7 +2807,7 @@
       <div class="pt-btns"><button type="button" id="ptQNew">New quote</button><button type="button" id="ptQCopy" class="g">Copy</button></div></article>
 
     <article class="pt-card" data-k="theme accent color switcher dark light"><h3>🎨 Theme switcher</h3>
-      <div class="pt-sw-row" id="ptAcc"><button type="button" data-acc="cyan" style="--s:#00f0ff" aria-label="Cyan accent"></button><button type="button" data-acc="violet" style="--s:#b36bff" aria-label="Violet accent"></button><button type="button" data-acc="green" style="--s:#39ff88" aria-label="Green accent"></button><button type="button" data-acc="blue" style="--s:#3b9eff" aria-label="Blue accent"></button><button type="button" data-acc="pink" style="--s:#ff4fd8" aria-label="Pink accent"></button></div>
+      <div class="pt-sw-row" id="ptAcc"><button type="button" data-acc="cyan" style="--s:#00ff85" aria-label="Cyan accent"></button><button type="button" data-acc="violet" style="--s:#b36bff" aria-label="Violet accent"></button><button type="button" data-acc="green" style="--s:#39ff88" aria-label="Green accent"></button><button type="button" data-acc="blue" style="--s:#c8ff3d" aria-label="Lime accent"></button><button type="button" data-acc="pink" style="--s:#ff4fd8" aria-label="Pink accent"></button></div>
       <div class="pt-btns"><button type="button" id="ptDark" class="g">Dark / Light</button></div></article>
 
     <article class="pt-card" data-k="stopwatch timer lap time"><h3>⏱️ Stopwatch</h3>
@@ -2988,32 +2973,191 @@
   </div>
 </section>
 
-<section id="reviews" class="review-section">
-  <div class="container">
-    <h2>Student <span>Reviews</span></h2>
-    <p>Apna anubhav share karein aur batayein website kaisi lagi!</p>
-    
-    <!-- Review Form -->
-    <form id="reviewForm" class="review-form">
-      Apna Naam:<br>
-      <input type="text" id="revName" placeholder="Jaise: Anshika Verma" required>
-      
-      Course ka Naam:<br>
-      <input type="text" id="revCourse" placeholder="Jaise: CCC / O-Level / Web Dev" required>
-      
-      Aapka Review:<br>
-      <textarea id="revText" rows="3" placeholder="Website ya Teacher ke baare me likhein..." required></textarea>
-      
-      <div class="review-btn-group">
-        <button type="submit" class="btn-submit">Website par Post Karein</button>
-        <button type="button" id="whatsappBtn" class="btn-wa">WhatsApp par Bhejein 💬</button>
-      </div>
-      <p id="badWordError" class="error-msg" style="display:none; color: #ff4d4d; margin-top: 5px;"></p>
-    </form>
+<section class="sec reveal" id="toolsupgrade"><h2>Resume Builder &amp; <span class="grad">Fee Receipt</span></h2>
+<p class="sub">Template chunein, details bharein, PDF download karein</p>
+<div class="cs-wrap"><div class="cs-tabs" id="csTabs2"></div><div class="cs-panel" id="csPanel2"></div></div></section>
 
-    <!-- Reviews Display Container -->
-    <div id="reviewsContainer" class="reviews-grid">
-      <!-- Dynamic reviews yahan show honge -->
+<section class="sec reveal" id="cloudsuite"><h2>Online Cloud <span class="grad">Software Suite</span></h2>
+<p class="sub">Mobile ya PC se seedha Word, Excel, PowerPoint aur Tally practice karein</p>
+<div class="cs-wrap"><div class="cs-tabs" id="csTabs"></div><div class="cs-panel" id="csPanel"></div></div></section>
+
+<section class="sec reveal alt" id="resultshub"><h2>Results &amp; <span class="grad">Certificates Hub</span></h2>
+<p class="sub">CCC, O-Level result aur certificate verification</p>
+<div class="cs-wrap"><div class="cs-links" id="csResults"></div></div></section>
+ <!-- Sigma Battle Arena & AI Duel Hub Tab -->
+<section id="battle-arena" class="sec reveal tab-content">
+    <h2><i class="fa-solid fa-gamepad"></i> Sigma Battle Arena & AI Duel Hub</h2>
+    <p class="subtitle">Challenge Sigma Boy AI or compete live with your friend in computer syllabus modules!</p>
+
+    <div class="arena-card-container">
+        <!-- Step 1: Configuration Panel -->
+        <div id="arena-setup" class="arena-panel active">
+            <div class="form-grid">
+                <label>Player Name: <input type="text" id="p-name" placeholder="Enter Your Name"></label>
+                <label>Room Password / Code: <input type="password" id="p-pass" placeholder="Enter Room Password"></label>
+                
+                <label>Select Opponent Mode:
+                    <select id="battle-mode">
+                        <option value="bot">Play vs Sigma Boy (AI Robot)</option>
+                        <option value="friend">Play vs Friend (Live Room)</option>
+                    </select>
+                </label>
+
+                <label id="bot-diff-group">Sigma Boy Difficulty:
+                    <select id="bot-difficulty">
+                        <option value="normal">Normal (Easy Questions)</option>
+                        <option value="medium">Medium (Moderate)</option>
+                        <option value="hard">Hard (Unbeatable Sigma Boy)</option>
+                    </select>
+                </label>
+
+                <label>Select Module / Subject:
+                    <select id="quiz-module">
+                        <option value="m1">M1-R5 (IT Tools - 9 Chapters)</option>
+                        <option value="m2">M2-R5 (Web Design & Publishing - W3.CSS Focus)</option>
+                        <option value="m3">M3-R5 (Python Programming)</option>
+                        <option value="m4">M4-R5 (Internet of Things - IoT)</option>
+                    </select>
+                </label>
+
+                <label>Number of Questions:
+                    <select id="q-count">
+                        <option value="20">20 Questions</option>
+                        <option value="30">30 Questions</option>
+                        <option value="35">35 Questions</option>
+                        <option value="40">40 Questions</option>
+                        <option value="50">50 Questions</option>
+                        <option value="70">70 Questions</option>
+                        <option value="85">85 Questions</option>
+                        <option value="100">100 Questions</option>
+                        <option value="200">200 Questions</option>
+                        <option value="250">250 Questions</option>
+                    </select>
+                </label>
+            </div>
+            <button class="action-btn" onclick="startBattleArena()">Start Battle Arena 🚀</button>
+        </div>
+
+        <!-- Step 2: Live Quiz Arena -->
+        <div id="arena-quiz" class="arena-panel hidden">
+            <div class="quiz-top-bar">
+                <span id="player-hud">Player: <strong id="hud-name"></strong></span>
+                <span id="timer-hud">Time Left: <strong id="hud-timer">00:00</strong></span>
+                <span id="progress-hud">Q: <strong id="hud-qnum">1</strong>/<span id="hud-qtotal">20</span></span>
+            </div>
+            
+            <div class="question-box">
+                <h3 id="question-text">Question will appear here...</h3>
+                <div id="options-container" class="options-grid">
+                    <!-- Dynamic Options -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Game Over & Winner Modal / Box -->
+        <div id="arena-result" class="arena-panel hidden">
+            <div class="result-3d-box" id="result-box-content">
+                <!-- Dynamic 3D Celebration / Defeat Content -->
+            </div>
+            <button class="action-btn" onclick="resetArena()">Play Again 🔄</button>
+        </div>
+    </div>
+</section>
+
+<section class="sec reveal car3d-sec" id="car3d">
+  <h2>3D <span class="grad">Drive Zone</span></h2>
+  <p class="sub">Hamari car Access Computer Centre ke around bar bar round lagati rehti hai &#128663; &mdash; mouse hilao, scene tilt hoga</p>
+  <div class="c3-stage" id="c3Stage" aria-label="3D car circling a track">
+    <div class="c3-scene" id="c3Scene">
+      <div class="c3-ground"></div>
+      <div class="c3-road"></div>
+      <div class="c3-lane"></div>
+      <div class="c3-pedestal"><i></i><i></i><i></i><i></i><i></i><b>ACCESS</b></div>
+      <div class="c3-orbit">
+        <div class="c3-trail"></div>
+        <div class="c3-car">
+          <div class="c3-shadow"></div>
+          <div class="c3-beam"></div>
+          <div class="cb chassis" style="--w:46px;--l:104px;--h:14px;--z:0px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb cabin" style="--w:38px;--l:50px;--h:13px;--y:-8px;--z:13px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb spoiler" style="--w:42px;--l:8px;--h:3px;--y:-47px;--z:13px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb hl" style="--w:9px;--l:2px;--h:5px;--x:14px;--y:52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb hl" style="--w:9px;--l:2px;--h:5px;--x:-14px;--y:52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb tl" style="--w:10px;--l:2px;--h:4px;--x:14px;--y:-52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <div class="cb tl" style="--w:10px;--l:2px;--h:4px;--x:-14px;--y:-52px;--z:2px"><i class="t"></i><i class="bt"></i><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i></div>
+          <i class="wh" style="--x:25px;--y:32px"></i><i class="wh tire" style="--x:20px;--y:32px"></i><i class="wh" style="--x:25px;--y:-32px"></i><i class="wh tire" style="--x:20px;--y:-32px"></i><i class="wh" style="--x:-25px;--y:32px"></i><i class="wh tire" style="--x:-20px;--y:32px"></i><i class="wh" style="--x:-25px;--y:-32px"></i><i class="wh tire" style="--x:-20px;--y:-32px"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="cat-banner" id="cat-contact"><span class="cb-ic">📞</span><div><b class="cb-t" data-en="Contact" data-hi="संपर्क">Contact</b><small class="cb-s" data-en="Admission, address &amp; WhatsApp" data-hi="एडमिशन, पता और WhatsApp">Admission, address &amp; WhatsApp</small></div></div>
+
+<section class="sec reveal alt" id="contact">
+  <h2>Contact <span class="grad">Karein</span></h2>
+  <p class="sub">Admission aur course ki jankari ke liye</p>
+  <div class="grid contact">
+    <div class="card"><h3>Manoj Kumar Singh</h3><a class="btn sm" href="tel:+916393512412">📞 6393512412</a> <a class="btn sm wa" target="_blank" rel="noopener" href="https://wa.me/916393512412">WhatsApp</a></div>
+    <div class="card"><h3>Sudha Singh</h3><a class="btn sm" href="tel:+918467034252">📞 8467034252</a> <a class="btn sm wa" target="_blank" rel="noopener" href="https://wa.me/918467034252">WhatsApp</a></div>
+   
+    <div class="card"><h3>Address</h3><p>✧ Behind Government Girls Inter College,<br>
+✧ Sanjay Nagar Colony,<br>
+✧ Bachhrawan, Raebareli </p><p>🕘 Timing: 8:00 AM - 5:00 PM</p></div>
+  </div>
+
+  <!-- ===== Contact Flip Social Dock ===== -->
+  <div class="contact-dock-stage">
+    <p class="dock-hint">Hover karo &mdash; letter palatke social icon dikhega</p>
+    <div class="contact-dock" role="group" aria-label="Social media links">
+      <div class="dock-item" style="--c:#8418f2">
+        <a class="letter" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
+          <span class="front">C</span>
+          <span class="back"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">Facebook</span>
+      </div>
+      <div class="dock-item" style="--c:#b930e1">
+        <a class="letter" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+          <span class="front">O</span>
+          <span class="back"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">Instagram</span>
+      </div>
+      <div class="dock-item" style="--c:#600ac2">
+        <a class="letter" href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <span class="front">N</span>
+          <span class="back"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">LinkedIn</span>
+      </div>
+      <div class="dock-item" style="--c:#ff1a1a">
+        <a class="letter" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+          <span class="front">T</span>
+          <span class="back"><i class="fa-brands fa-youtube" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">YouTube</span>
+      </div>
+      <div class="dock-item" style="--c:#25d366">
+        <a class="letter" href="https://wa.me/916393512412" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <span class="front">A</span>
+          <span class="back"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">WhatsApp</span>
+      </div>
+      <div class="dock-item" style="--c:#ea4335">
+        <a class="letter" href="mailto:info@example.com" target="_blank" rel="noopener" aria-label="Email">
+          <span class="front">C</span>
+          <span class="back"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">Email</span>
+      </div>
+      <div class="dock-item" style="--c:#362b40">
+        <a class="letter" href="https://x.com/" target="_blank" rel="noopener" aria-label="X / Twitter">
+          <span class="front">T</span>
+          <span class="back"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></span>
+        </a>
+        <span class="tooltip" role="tooltip">X / Twitter</span>
+      </div>
     </div>
   </div>
 </section>
@@ -3063,8 +3207,8 @@
         <div class="lamp-beam" aria-hidden="true"></div>
         <svg class="lamp-svg" id="lampSvg" viewBox="0 0 200 270" aria-hidden="true" focusable="false">
           <defs>
-            <linearGradient id="lampShadeG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
-            <radialGradient id="lampBulbG" cx="50%" cy="38%" r="65%"><stop offset="0" stop-color="#fffbe6"/><stop offset=".55" stop-color="#ffd76a"/><stop offset="1" stop-color="#ffa62b"/></radialGradient>
+            <linearGradient id="lampShadeG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eea98"/><stop offset="1" stop-color="#9125eb"/></linearGradient>
+            <radialGradient id="lampBulbG" cx="50%" cy="38%" r="65%"><stop offset="0" stop-color="#e6fff5"/><stop offset=".55" stop-color="#6affc0"/><stop offset="1" stop-color="#2bff9d"/></radialGradient>
           </defs>
           <line class="lamp-wire" x1="100" y1="0" x2="100" y2="30"/>
           <g class="lamp-head" id="lampHead">
@@ -3284,85 +3428,6 @@ function googleTranslateElementInit() {
 <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <!-- Language switch ab script.js me hai (changeLanguage) -->
- <!-- Sigma Battle Arena & AI Duel Hub Tab -->
-<section id="battle-arena" class="tab-content">
-    <h2><i class="fa-solid fa-gamepad"></i> Sigma Battle Arena & AI Duel Hub</h2>
-    <p class="subtitle">Challenge Sigma Boy AI or compete live with your friend in computer syllabus modules!</p>
-
-    <div class="arena-card-container">
-        <!-- Step 1: Configuration Panel -->
-        <div id="arena-setup" class="arena-panel active">
-            <div class="form-grid">
-                <label>Player Name: <input type="text" id="p-name" placeholder="Enter Your Name"></label>
-                <label>Room Password / Code: <input type="password" id="p-pass" placeholder="Enter Room Password"></label>
-                
-                <label>Select Opponent Mode:
-                    <select id="battle-mode">
-                        <option value="bot">Play vs Sigma Boy (AI Robot)</option>
-                        <option value="friend">Play vs Friend (Live Room)</option>
-                    </select>
-                </label>
-
-                <label id="bot-diff-group">Sigma Boy Difficulty:
-                    <select id="bot-difficulty">
-                        <option value="normal">Normal (Easy Questions)</option>
-                        <option value="medium">Medium (Moderate)</option>
-                        <option value="hard">Hard (Unbeatable Sigma Boy)</option>
-                    </select>
-                </label>
-
-                <label>Select Module / Subject:
-                    <select id="quiz-module">
-                        <option value="m1">M1-R5 (IT Tools - 9 Chapters)</option>
-                        <option value="m2">M2-R5 (Web Design & Publishing - W3.CSS Focus)</option>
-                        <option value="m3">M3-R5 (Python Programming)</option>
-                        <option value="m4">M4-R5 (Internet of Things - IoT)</option>
-                    </select>
-                </label>
-
-                <label>Number of Questions:
-                    <select id="q-count">
-                        <option value="20">20 Questions</option>
-                        <option value="30">30 Questions</option>
-                        <option value="35">35 Questions</option>
-                        <option value="40">40 Questions</option>
-                        <option value="50">50 Questions</option>
-                        <option value="70">70 Questions</option>
-                        <option value="85">85 Questions</option>
-                        <option value="100">100 Questions</option>
-                        <option value="200">200 Questions</option>
-                        <option value="250">250 Questions</option>
-                    </select>
-                </label>
-            </div>
-            <button class="action-btn" onclick="startBattleArena()">Start Battle Arena 🚀</button>
-        </div>
-
-        <!-- Step 2: Live Quiz Arena -->
-        <div id="arena-quiz" class="arena-panel hidden">
-            <div class="quiz-top-bar">
-                <span id="player-hud">Player: <strong id="hud-name"></strong></span>
-                <span id="timer-hud">Time Left: <strong id="hud-timer">00:00</strong></span>
-                <span id="progress-hud">Q: <strong id="hud-qnum">1</strong>/<span id="hud-qtotal">20</span></span>
-            </div>
-            
-            <div class="question-box">
-                <h3 id="question-text">Question will appear here...</h3>
-                <div id="options-container" class="options-grid">
-                    <!-- Dynamic Options -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 3: Game Over & Winner Modal / Box -->
-        <div id="arena-result" class="arena-panel hidden">
-            <div class="result-3d-box" id="result-box-content">
-                <!-- Dynamic 3D Celebration / Defeat Content -->
-            </div>
-            <button class="action-btn" onclick="resetArena()">Play Again 🔄</button>
-        </div>
-    </div>
-</section>
 <!-- Secret Sigma Command Terminal HTML -->
 <div id="sigma-terminal-overlay" class="sigma-terminal-hidden">
     <div class="sigma-terminal-window">
